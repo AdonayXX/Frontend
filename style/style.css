@@ -1,0 +1,139 @@
+body {
+    background-color: gainsboro;
+    color: #094079;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    color: #094079;
+}
+
+.form-label {
+    color: #094079;
+}
+
+.btn-primary {
+    background-color: #094079;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #072d57;
+}
+
+.form-control:focus {
+    border-color: #094079;
+    box-shadow: 0 0 0 0.2rem rgba(9, 64, 121, 0.25);
+}
+
+.navbar {
+    background-color: #094079;
+    color: white;
+}
+
+.navbar-brand:hover {
+    cursor: pointer;
+}
+
+.navbar .navbar-brand, .navbar-nav .nav-link {
+    color: white;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 350px;
+    position: fixed;
+    top: 0;
+    left: -350px;
+    background-color: #094079;
+    padding-top: 20px;
+    transition: 0.3s;
+}
+
+#items {
+    padding: 10px 30px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+}
+
+#items:hover {
+    background-color: white;
+    color: #094079;
+}
+
+.sidebar .search {
+    padding: 10px 15px;
+}
+
+.sidebar .search input {
+    width: 100%;
+    padding: 5px;
+}
+
+.main-content {
+    margin-left: 0;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    margin-top: -45px;
+}
+
+.open-sidebar .sidebar {
+    left: 0;
+}
+
+.open-sidebar .main-content {
+    margin-left: 250px;
+}
+
+#buscar {
+    border-end-end-radius: 20px;
+    border-start-end-radius: 20px;
+    border-style: none;
+}
+
+#logo {
+    height: 100px;
+    display: aline-block;
+    margin: 20px;
+}
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    pointer-events: none;
+}
+
+#toast-container .toast {
+    pointer-events: auto; 
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        left: -100%;
+    }
+
+    .open-sidebar .sidebar {
+        left: 0;
+    }
+
+    .open-sidebar .main-content {
+        margin-left: 0;
+    }
+
+    .main-content {
+        margin-top: 0;
+    }
+}
