@@ -1,3 +1,14 @@
+document.addEventListener('DOMContentLoaded', function () {
+    loadToastTemplate();
+    loadModalTemplate();
+    
+    document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
+    document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
+    document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
+    document.getElementById('cancelar').addEventListener('click', cancelar);
+    document.getElementById('actualizar').addEventListener('click', actualizar);
+});
+
 document.getElementById('registroViajesForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -21,17 +32,12 @@ document.getElementById('registroViajesForm').addEventListener('submit', functio
         });
 });
 
-function save() {
-    showToast('Registro exitoso', 'Se ha registrado el viaje exitosamente.');
-}
-
-
 function cancelar() {
-    document.getElementById('registroViajesForm').reset();
+    showModal('Cancelar', '¿Está seguro que desea cancelar el registro?', function () {
+        document.getElementById('registroViajesForm').reset();
+        showToast('Cancelación exitosa', 'Se ha cancelado el registro exitosamente.');
+    });
 }
-
-// function actualizar() {
-// }
 
 function handleEstadoChange() {
     const estado = document.getElementById('estadoViaje').value;
@@ -71,14 +77,6 @@ function getCurrentTimeFormatted() {
     const minutos = ahora.getMinutes();
     return `${horas < 10 ? '0' + horas : horas}:${minutos < 10 ? '0' + minutos : minutos}`;
 }
-document.addEventListener('DOMContentLoaded', function () {
-
-    document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
-    document.getElementById('cancelar').addEventListener('click', cancelar);
-    document.getElementById('actualizar').addEventListener('click', actualizar);
-});
 
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
@@ -109,10 +107,34 @@ function showToast(title, message) {
     });
 }
 
-function cancelar() {
+function loadModalTemplate(callback) {
+    fetch('modal-template.html')
+        .then(response => response.text())
+        .then(data => {
+            const modalContainer = document.getElementById('modal-container');
+            if (modalContainer) {
+                modalContainer.innerHTML = data;
+                if (callback) callback();
+            } else {
+                console.error('Modal container not found');
+            }
+        })
+        .catch(error => console.error('Error loading modal template:', error));
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    loadToastTemplate();
-});
-
+function showModal(title, message, confirmCallback) {
+    const modalElement = document.getElementById('common-modal');
+    if (modalElement) {
+        document.getElementById('common-modal-label').innerText = title;
+        document.getElementById('common-modal-body').innerText = message;
+        document.getElementById('common-modal-confirm-button').onclick = function () {
+            confirmCallback();
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        };
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    } else {
+        console.error('Modal element not found');
+    }
+}

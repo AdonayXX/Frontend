@@ -56,6 +56,7 @@ h1 {
     background-color: #094079;
     padding-top: 20px;
     transition: 0.3s;
+    z-index: 1;
 }
 
 #items {
