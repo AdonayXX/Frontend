@@ -19,3 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.sidebar a').forEach(function(link) {
+        link.addEventListener('click', closeSidebar);
+    });
+});
