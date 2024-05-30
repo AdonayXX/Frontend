@@ -138,3 +138,5 @@ function showModal(title, message, confirmCallback) {
         console.error('Modal element not found');
     }
 }
+
+
