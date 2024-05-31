@@ -119,6 +119,28 @@ h1 {
 #toast-container .toast {
     pointer-events: auto; 
 }
+/* Estilos Pagina home.html */
+.datosint{
+   
+    border-bottom : 1px solid #000;
+    
+}
+.datosinf{
+    border: 1px solid #000000;
+    background-color: white;
+   
+   
+}
+.img-inf img{
+    border: 2px solid #000;
+    padding: 1rem;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+
+}
+/* Fin Estilos home.html */
 
 @media (max-width: 768px) {
     .sidebar {
@@ -138,3 +160,8 @@ h1 {
         margin-top: 0;
     }
 }
+
+
+
+
+

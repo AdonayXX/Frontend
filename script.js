@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadToastTemplate();
     loadModalTemplate();
+    //Cargar desde el incio el home.html
+    loadConten('home.html', 'mainContent');
     
     document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
     document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
