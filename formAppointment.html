@@ -1,0 +1,48 @@
+
+<link rel="stylesheet" href="style/animation.css">
+<div class="container mt-5 fade-in">
+    <h1 class="mb-4 text-center">Registro de Citas</h1>
+    <form id="registroCitaForm">
+        <div class="mb-3">
+            <label for="unidad" class="form-label">Unidad</label>
+            <input type="text" id="unidad" name="unidad" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="acompanantes" class="form-label">Acompañantes</label>
+            <div id="acompanantesContainer">
+                <input type="text" id="acompanantes" name="acompanantes[]" class="form-control" placeholder="Nombre del acompañante">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="ubicacion" class="form-label">Ubicación</label>
+            <input type="text" id="ubicacion" name="ubicacion" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo de Traslado</label>
+            <textarea id="motivo" name="motivo" class="form-control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="fechaCita" class="form-label">Fecha de la Cita</label>
+            <input type="date" id="fechaCita" name="fechaCita" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="estadoCita" class="form-label">Estado de la Cita</label>
+            <select id="estadoCita" name="estadoCita" class="form-select" required>
+                <option value="Iniciada">Iniciada</option>
+                <option value="Cerrada">Cerrada</option>
+            </select>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-primary me-2" data-toggle="tooltip" data-placement="top" title="Guardar Cita">Guardar</button>
+                </div>
+            </div>
+            <div class="col-6"> 
+                <div class="d-flex justify-content-end me-2">
+                    <button type="button" class="btn btn-danger me-2" data-toggle="tooltip" data-placement="top" title="Cancelar Cita" onclick="cancelar()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
