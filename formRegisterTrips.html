@@ -1,62 +1,63 @@
-<link rel="stylesheet" href="style/animation.css">
-<div class="container mt-5 fade-in">
-    <h1 class="mb-4 text-center">Registro de Viajes</h1>
-    <form id="registroViajesForm">
-        <div class="mb-3">
-            <label for="citasAsociadas" class="form-label">Citas Asociadas</label>
-            <select id="citasAsociadas" class="form-select"></select>
-        </div>
-        <div class="mb-3">
-            <label for="choferAsignado" class="form-label">Chofer Asignado</label>
-            <select id="choferAsignado" class="form-select"></select>
-        </div>
-        <div class="mb-3">
-            <label for="capacidadRestante" class="form-label">Capacidad Restante</label>
-            <input type="number" id="capacidadRestante" class="form-control" readonly>
-        </div>
-        <div class="mb-3">
-            <label for="estadoViaje" class="form-label">Estado del Viaje</label>
-            <select id="estadoViaje" class="form-select" onclick="handleEstadoChange()">
-                <option>Abierto</option>
-                <option>En curso</option>
-                <option>Cerrado</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="kilometrajeInicial" class="form-label">Kilometraje Inicial</label>
-            <input type="number" id="kilometrajeInicial" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="kilometrajeFinal" class="form-label">Kilometraje Final</label>
-            <input type="number" id="kilometrajeFinal" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="duracionViaje" class="form-label">Hora de inicio</label>
-            <input type="time" id="horaInicio" class="form-control" readonly>
-        </div>
-        <div class="mb-3">
-            <label for="duracionViaje" class="form-label">Hora de finalización</label>
-            <input type="time" id="horaFin" class="form-control" readonly>
-        </div>
-        <div class="mb-3">
-            <label for="consumoCombustible" class="form-label">Consumo de Combustible</label>
-            <input type="number" id="consumoCombustible" class="form-control">
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <div class="d-flex justify-content-start">
-                    <button type="submit" class="btn btn-primary me-2" data-toggle="tooltip"
-                        data-placement="top" title="Guardar Viaje" onclick="save()">Guardar</button>
-                    <button type="button" class="btn btn-primary me-2" data-toggle="tooltip"
-                        data-placement="top" title="Actualizar Viaje" onclick="actualizar()">Actualizar</button>
+ <div class="container mt-5 fade-in">
+        <h1 class="mb-4 text-center">Registro de Viajes</h1>
+        <form id="registroViajesForm" class="p-4 border rounded-3 bg-light">
+            <div class="mb-3">
+                <label for="citasAsociadas" class="form-label"><i class="bi bi-calendar-check"></i> Citas Asociadas</label>
+                <select id="citasAsociadas" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label for="choferAsignado" class="form-label"><i class="bi bi-person"></i> Chofer Asignado</label>
+                <select id="choferAsignado" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label for="capacidadRestante" class="form-label"><i class="bi bi-truck"></i> Capacidad Restante</label>
+                <input type="number" id="capacidadRestante" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="estadoViaje" class="form-label"><i class="bi bi-info-circle"></i> Estado del Viaje</label>
+                <select id="estadoViaje" class="form-select" onclick="handleEstadoChange()">
+                    <option>Abierto</option>
+                    <option>En curso</option>
+                    <option>Cerrado</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="kilometrajeInicial" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje Inicial</label>
+                <input type="number" id="kilometrajeInicial" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="kilometrajeFinal" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje Final</label>
+                <input type="number" id="kilometrajeFinal" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="horaInicio" class="form-label"><i class="bi bi-clock"></i> Hora de inicio</label>
+                <input type="datetime-local" id="horaInicio" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="horaFin" class="form-label"><i class="bi bi-clock-fill"></i> Hora de finalización</label>
+                <input type="datetime-local" id="horaFin" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="consumoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Consumo de Combustible</label>
+                <input type="number" id="consumoCombustible" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Viaje">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Viaje" onclick="actualizar()">
+                            <i class="bi bi-pencil-square"></i> Actualizar
+                        </button>
+                    </div>
+                </div>
+                <div class="col-6"> 
+                    <div class="d-flex justify-content-end me-2">
+                        <button type="button" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar Viaje" onclick="cancelar()">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="col-6"> 
-                <div class="d-flex justify-content-end me-2">
-                    <button type="button" class="btn btn-danger me-2" data-toggle="tooltip" data-placement="top"
-                        title="Cancelar Viaje" onclick="cancelar()">Cancelar</button>
-                </div>
-            </div>
-    </form>
-    <script src="script.js"></script>
-</div>
+        </form>
