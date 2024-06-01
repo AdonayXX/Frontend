@@ -120,6 +120,10 @@ h1 {
     pointer-events: auto; 
 }
 /* Estilos Pagina home.html */
+.homecont{
+    margin-top: 2%;
+    background-color: white;
+}
 .datosint{
    
     border-bottom : 1px solid #000;
