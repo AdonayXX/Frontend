@@ -1,48 +1,42 @@
-
-<link rel="stylesheet" href="style/animation.css">
 <div class="container mt-5 fade-in">
     <h1 class="mb-4 text-center">Registro de Citas</h1>
-    <form id="registroCitaForm">
+    <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
         <div class="mb-3">
-            <label for="unidad" class="form-label">Unidad</label>
+            <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
             <input type="text" id="unidad" name="unidad" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="acompanantes" class="form-label">Acompañantes</label>
+            <label for="acompanantes" class="form-label"><i class="bi bi-people"></i> Acompañantes</label>
             <div id="acompanantesContainer">
-                <input type="text" id="acompanantes" name="acompanantes[]" class="form-control" placeholder="Nombre del acompañante">
+                <input type="text" id="acompanante1" name="acompanantes[]" class="form-control" placeholder="Nombre del acompañante">
             </div>
         </div>
         <div class="mb-3">
-            <label for="ubicacion" class="form-label">Ubicación</label>
+            <label for="ubicacion" class="form-label"><i class="bi bi-geo-alt"></i> Ubicación</label>
             <input type="text" id="ubicacion" name="ubicacion" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="motivo" class="form-label">Motivo de Traslado</label>
+            <label for="motivo" class="form-label"><i class="bi bi-file-earmark-text"></i> Motivo de Traslado</label>
             <textarea id="motivo" name="motivo" class="form-control" required></textarea>
         </div>
         <div class="mb-3">
-            <label for="fechaCita" class="form-label">Fecha de la Cita</label>
+            <label for="fechaCita" class="form-label"><i class="bi bi-calendar-event"></i> Fecha de la Cita</label>
             <input type="date" id="fechaCita" name="fechaCita" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="estadoCita" class="form-label">Estado de la Cita</label>
+            <label for="estadoCita" class="form-label"><i class="bi bi-info-circle"></i> Estado de la Cita</label>
             <select id="estadoCita" name="estadoCita" class="form-select" required>
                 <option value="Iniciada">Iniciada</option>
                 <option value="Cerrada">Cerrada</option>
             </select>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <div class="d-flex justify-content-start">
-                    <button type="submit" class="btn btn-primary me-2" data-toggle="tooltip" data-placement="top" title="Guardar Cita">Guardar</button>
-                </div>
-            </div>
-            <div class="col-6"> 
-                <div class="d-flex justify-content-end me-2">
-                    <button type="button" class="btn btn-danger me-2" data-toggle="tooltip" data-placement="top" title="Cancelar Cita" onclick="cancelar()">Cancelar</button>
-                </div>
-            </div>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-between">
+            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Cita">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar Cita" onclick="cancelar()">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </button>
         </div>
     </form>
 </div>
