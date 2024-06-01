@@ -1,7 +1,7 @@
 body {
     background-color: gainsboro;
     color: #094079;
-    font-family: 'Arial', sans-serif;
+     font-family: 'Manrope', sans-serif;
 }
 
 .container {
@@ -137,4 +137,17 @@ h1 {
     .main-content {
         margin-top: 0;
     }
+}
+
+.excel:hover{
+    background-color: #094079;
+    color: white;
+}
+.pdf:hover{
+    background-color: #094079;
+    color: white;
+}
+.print:hover{
+    background-color: #094079;
+    color: white;
 }

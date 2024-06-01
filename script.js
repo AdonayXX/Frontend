@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
     document.getElementById('cancelar').addEventListener('click', cancelar);
     document.getElementById('actualizar').addEventListener('click', actualizar);
+    document.getElementById('')
 });
 
 document.getElementById('registroViajesForm').addEventListener('submit', function (event) {
@@ -24,7 +25,7 @@ document.getElementById('registroViajesForm').addEventListener('submit', functio
     };
     axios.post('URL', datosDelFormulario)
         .then(response => {
-            alert('Registro exitoso');
+            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
         })
         .catch(error => {
             console.error('Error en el registro:', error);
@@ -33,7 +34,7 @@ document.getElementById('registroViajesForm').addEventListener('submit', functio
 });
 
 function cancelar() {
-    showModal('Cancelar', '¿Está seguro que desea cancelar el registro?', function () {
+    showModal('¿Cancelar?', '¿Está seguro que desea cancelar el registro?', function () {
         document.getElementById('registroViajesForm').reset();
         showToast('Cancelación exitosa', 'Se ha cancelado el registro exitosamente.');
     });

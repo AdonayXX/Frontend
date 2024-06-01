@@ -1,0 +1,59 @@
+<div class="mt-5 fade-in">
+    <h2 class="mb-4 text-center">Datos de Viajes</h2>
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Imprimir">
+            <img src="img/icons8-print.svg" alt="Print Icon">
+        </button>
+        <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Exportar a PDF">
+            <img src="img/icons8-pdf.svg" alt="PDF Icon">
+        </button>
+        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Exportar a Excel">
+            <img src="img/icons8-excel.svg" alt="Excel Icon">
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Citas Asociadas</th>
+                    <th>Chofer Asignado</th>
+                    <th>Capacidad Restante</th>
+                    <th>Estado del Viaje</th>
+                    <th>Kilometraje Inicial</th>
+                    <th>Kilometraje Final</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora de Finalización</th>
+                    <th>Consumo de Combustible</th>
+                </tr>
+            </thead>
+            <tbody id="viajesTableBody">
+                <tr>
+                    <td>12345</td>
+                    <td>Juan Pérez</td>
+                    <td>20</td>
+                    <td>Abierto</td>
+                    <td>15000</td>
+                    <td>15050</td>
+                    <td>31/05/2024 08:00</td>
+                    <td>31/05/2024 12:00</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>67890</td>
+                    <td>Maria Gómez</td>
+                    <td>15</td>
+                    <td>En curso</td>
+                    <td>20000</td>
+                    <td>0</td>
+                    <td>31/05/2024 09:00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
