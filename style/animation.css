@@ -12,3 +12,18 @@
 .fade-in {
     animation: fadeIn 0.5s ease-out forwards;
 }
+
+.shifted {
+    margin-left: 250px; /* Ajusta este valor según el ancho de tu menú */
+    transition: margin-left 0.3s ease; /* Añade una transición suave */
+}
+
+.sidebar {
+    width: 250px; /* Ancho del menú lateral */
+    /* Añade otros estilos necesarios para tu sidebar */
+}
+
+.sidebar.active {
+    left: 0;
+    /* Añade otros estilos necesarios cuando el sidebar esté activo */
+}
