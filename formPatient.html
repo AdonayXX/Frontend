@@ -1,0 +1,240 @@
+<link rel="stylesheet" href="style/animation.css">
+<div class="container mt-5 fade-in" style="max-width: 1100px;">
+    <h1 class="mb-4 text-center">Registro de Pacientes</h1>
+    <form id="perfilPacienteForm" class="bg-light p-4 border rounded-3">
+        <div class="form-section">
+            <h2>Datos del paciente:</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="primerApellido" class="form-label">Primer Apellido:</label>
+                    <input type="text" id="primerApellido" name="primerApellido" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
+                    <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="sexo" class="form-label">Género:</label>
+                    <select id="sexo" name="sexo" class="form-select">
+                        <option value="F">Femenino</option>
+                        <option value="M">Masculino</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3 text-center">
+                    <label class="form-label">Nacionalidad:</label>
+                    <br>
+                    <div class="d-flex justify-content-center align-self-center">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="costarricense" name="nacionalidad"
+                                value="costarricense">
+                            <label class="form-check-label" for="costarricense">Costarricense</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="extranjero" name="nacionalidad"
+                                value="extranjero">
+                            <label class="form-check-label" for="extranjero">Extranjero</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
+                    <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
+                        <option value="Cedula">Cédula de Identidad</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                        <option value="Licencia">Licencia de Conducir</option>
+                        <option value="DNI">Documento Nacional de Identidad (DNI)</option>
+                        <option value="TarjetaResidencia">Tarjeta de Residencia</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <label for="identificacion" class="form-label">Identificación:</label>
+                    <input type="text" id="identificacion" name="identificacion" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <label class="form-label">Prelacion:</label><br>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="prelacion">
+                        <label class="form-check-label" for="prelacion">SI</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="telefono1" class="form-label">Teléfono 1:</label>
+                    <input type="text" id="telefono1" name="telefono1" class="form-control">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="telefono2" class="form-label">Teléfono 2:</label>
+                    <input type="text" id="telefono2" name="telefono2" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="tipoSeguro" class="form-label">Tipo de Seguro:</label>
+                    <select id="tipoSeguro" name="tipoSeguro" class="form-select">
+                        <option value="Seguro por el estado">Seguro por el estado</option>
+                        <option value="Seguro privado">Seguro privado</option>
+                    </select>
+                </div>
+                <div class="col-md-5 mb-3 text-center">
+                    <label class="form-label">Encamado:</label>
+                    <br>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="temporal" name="encamado" value="temporal">
+                            <label class="form-check-label" for="temporal">Temporal</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="permante" name="encamado"
+                                value="permanente">
+                            <label class="form-check-label" for="permante">Permanente</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="noRequerido" name="encamado"
+                                value="noRequerido">
+                            <label class="form-check-label" for="noRequerido">No requerido</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección:</label>
+                    <textarea id="direccion" name="direccion" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="diagnostico" class="form-label">Diagnóstico:</label>
+                    <textarea id="diagnostico" name="diagnostico" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Acompañantes:</h2>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h5>Acompañante 1</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteNombre1" class="form-label">Nombre:</label>
+                        <input type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteTelefono1" class="form-label">Teléfono 1:</label>
+                        <input type="text" id="acompananteTelefono1" name="acompananteTelefono1" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteApellido1_1" class="form-label">Primer Apellido:</label>
+                        <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1"
+                            class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
+                        <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select">
+                            <option value="Hijo/a">Hijo/a</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Esposa/o">Esposa/o</option>
+                            <option value="Hermano/a">Hermano/a</option>
+                            <option value="Abuelo/a">Abuelo/a</option>
+                            <option value="Tío/a">Tío/a</option>
+                            <option value="Primo/a">Primo/a</option>
+                            <option value="Sobrino/a">Sobrino/a</option>
+                            <option value="Cuñado/a">Cuñado/a</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteApellido2_1" class="form-label">Segundo Apellido:</label>
+                        <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1"
+                            class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteTelefono2_1" class="form-label">Teléfono 2:</label>
+                        <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
+                            class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h5>Acompañante 2</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteNombre2" class="form-label">Nombre:</label>
+                        <input type="text" id="acompananteNombre2" name="acompananteNombre2" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteTelefono1_2" class="form-label">Teléfono 1:</label>
+                        <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
+                            class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteApellido1_2" class="form-label">Primer Apellido:</label>
+                        <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
+                            class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
+                        <select id="acompananteParentesco2" name="acompananteParentesco2" class="form-select">
+                            <option value="Hijo/a">Hijo/a</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Esposa/o">Esposa/o</option>
+                            <option value="Hermano/a">Hermano/a</option>
+                            <option value="Abuelo/a">Abuelo/a</option>
+                            <option value="Tío/a">Tío/a</option>
+                            <option value="Primo/a">Primo/a</option>
+                            <option value="Sobrino/a">Sobrino/a</option>
+                            <option value="Cuñado/a">Cuñado/a</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteApellido2_2" class="form-label">Segundo Apellido:</label>
+                        <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
+                            class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="acompananteTelefono2_2" class="form-label">Teléfono 2:</label>
+                        <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
+                            class="form-control">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Editar">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Eliminar">
+                    <i class="bi bi-trash"></i> Eliminar
+                </button>
+                <button type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Guardar">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+    </form>
+
+</div>

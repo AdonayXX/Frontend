@@ -1,7 +1,7 @@
 body {
     background-color: gainsboro;
     color: #094079;
-     font-family: 'Manrope', sans-serif;
+    font-family: 'Manrope', sans-serif;
 }
 
 .container {
@@ -11,6 +11,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
+
 
 h1 {
     color: #094079;
@@ -43,7 +44,8 @@ h1 {
     cursor: pointer;
 }
 
-.navbar .navbar-brand, .navbar-nav .nav-link {
+.navbar .navbar-brand,
+.navbar-nav .nav-link {
     color: white;
 }
 
@@ -117,8 +119,34 @@ h1 {
 }
 
 #toast-container .toast {
-    pointer-events: auto; 
+    pointer-events: auto;
 }
+/* Estilos Pagina home.html */
+.homecont{
+    margin-top: 2%;
+    background-color: white;
+}
+.datosint{
+   
+    border-bottom : 1px solid #000;
+    
+}
+.datosinf{
+    border: 1px solid #000000;
+    background-color: white;
+   
+   
+}
+.img-inf img{
+    border: 2px solid #000;
+    padding: 1rem;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+
+}
+/* Fin Estilos home.html */
 
 @media (max-width: 768px) {
     .sidebar {
@@ -139,16 +167,18 @@ h1 {
     }
 }
 
-.excel:hover{
+.excel:hover {
     background-color: #094079;
     color: white;
 }
-.pdf:hover{
-    background-color: #094079;
-    color: white;
-}
-.print:hover{
-    background-color: #094079;
-    color: white;
 
+.pdf:hover {
+    background-color: #094079;
+    color: white;
 }
+
+.print:hover {
+    background-color: #094079;
+    color: white;
+}
+
