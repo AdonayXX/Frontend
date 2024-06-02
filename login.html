@@ -16,31 +16,32 @@
                 </form>
 
                 <div class="buttons-container">
-                    <a href="" data-bs-toggle="modal" data-bs-target="#form-request"><button id="btnModal" class="form-btn" >Solicitar Vale</button></a>
+                    <a href="" data-bs-toggle="modal" data-bs-target="#form-request"><button id="btnModal"
+                            class="form-btn">Solicitar Vale</button></a>
                 </div>
                 <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
             </div>
         </div>
-
     </div>
     <!-- Modal  -->
-    <div class="modal fade" id="form-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade contenedor-Modal" id="form-request" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalLabel">Generar Solicitud</h4>
+                    <h5 class="modal-title" id="exampleModalLabel">Generar Solicitud</h5>
+                    <h6>3/06/2024</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="#" class="row needs-validation" method="get" novalidate>
                         <div class="row g-1">
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="id_Type" class="form-label">Tipo de identificación: <span
-                                        style="color: red;">*</span></label>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="id_Type" class="form-label">Unidad Programatica</label>
                                 <select class="form-select" id="id_Type" required>
                                     <option selected disabled value="">Seleccione una opción</option>
-                                    <option value="1">Nacional</option>
-                                    <option value="2">Extranjero</option>
+                                    <option value="1">2704</option>
+                                    <option value="2">2536</option>
                                 </select>
                                 <div class="valid-feedback">
                                     Completo
@@ -49,44 +50,8 @@
                                     Incompleto
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="user_Id" class="form-label">Número de identificación: <span
-                                        style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="user_Id" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row g-1">
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="user_name" class="form-label">Nombre: <span
-                                        style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="user_name" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="user_lsname" class="form-label">Primer apellido: <span
-                                        style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="user_lsname" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="user_surname" class="form-label">Segundo apellido: <span
-                                        style="color: red;">*</span></label>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="area_salud" class="form-label">Area de Salud: </label>
                                 <input type="text" class="form-control" id="user_surname" required>
                                 <div class="valid-feedback">
                                     Completo
@@ -97,9 +62,55 @@
                             </div>
                         </div>
                         <div class="row g-1">
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="b_date" class="form-label">Fecha de Nacimiento: <span
-                                        style="color: red;">*</span></label>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="user_name" class="form-label">Nombre del Solicitante:</label>
+                                <input type="text" class="form-control" id="user_name" required>
+                                <div class="valid-feedback">
+                                    Completo
+                                </div>
+                                <div class="invalid-feedback">
+                                    Incompleto
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="user_surname" class="form-label">Servicios:</label>
+                                <input type="text" class="form-control" id="user_surname" required>
+                                <div class="valid-feedback">
+                                    Completo
+                                </div>
+                                <div class="invalid-feedback">
+                                    Incompleto
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="user_name" class="form-label">Lugar de Salida: </label>
+                                <input type="text" class="form-control" id="user_name" required>
+                                <div class="valid-feedback">
+                                    Completo
+                                </div>
+                                <div class="invalid-feedback">
+                                    Incompleto
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="user_surname" class="form-label">Lugar de Destino:</label>
+                                <input type="text" class="form-control" id="user_surname" required>
+                                <div class="valid-feedback">
+                                    Completo
+                                </div>
+                                <div class="invalid-feedback">
+                                    Incompleto
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-1">
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <label for="b_date" class="form-label">Fecha para la Solicitud: </label>
                                 <input type="date" class="form-control" min="1910-02-01" id="b_date"
                                     placeholder="dd/mm/aaaa" required>
                                 <div class="valid-feedback">
@@ -109,13 +120,40 @@
                                     Incompleto
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="user_gen" class="form-label">Género: <span
-                                        style="color: red;">*</span></label>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-sm-12 col-md-4 col-lg-3">
+                                <label for="user_gen" class="form-label">Hora de salida: </label>
                                 <select class="form-select" id="user_gen" required>
+                                    <option selected disabled value="">Seleccionar</option>
+                                    <option value="1">7:00 a.m</option>
+                                    <option value="2">8:00 a.m</option>
+                                    <option value="2">9:00 a.m</option>
+                                </select>
+                                <label for="user_gen" class="form-label">Hora de Regreso:</label>
+                                <select class="form-select" id="user_gen" required>
+                                    <option selected disabled value="">Seleccionar</option>
+                                    <option value="1">2:00 p.m</option>
+                                    <option value="2">3:00 p.m</option>
+                                    <option value="2">4:00 p.m</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Completo
+                                </div>
+                                <div class="invalid-feedback">
+                                    Incompleto
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-1">
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="id_Type" class="form-label">Acompañante 1</label>
+                                <select class="form-select" id="id_Type" required>
                                     <option selected disabled value="">Seleccione una opción</option>
-                                    <option value="1">Masculino</option>
-                                    <option value="2">Femenino</option>
+                                    <option value="1">Alvaro Alvarez</option>
+                                    <option value="2">Kiara Picado</option>
+                                    <option value="2">David Duarte</option>
+                                    <option value="2">Isaac Valerin</option>
                                 </select>
                                 <div class="valid-feedback">
                                     Completo
@@ -124,35 +162,14 @@
                                     Incompleto
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <label for="user_phone" class="form-label">Teléfono celular: <span
-                                        style="color: red;">*</span></label>
-                                <input type="tel" class="form-control" id="user_phone" placeholder="####-####" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row g-1">
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="user_mail" class="form-label">Correo electronico: <span
-                                        style="color: red;">*</span></label>
-                                <input type="email" class="form-control" id="user_mail" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="tbxprovincia" class="form-label">Provincia: <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select" id="tbxprovincia" required>
-                                    <option selected disabled value="0">--Seleccione una opción--</option>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="id_Type" class="form-label">Acompañante 2</label>
+                                <select class="form-select" id="id_Type" required>
+                                    <option selected disabled value="">Seleccione una opción</option>
+                                    <option value="1">Alvaro Alvarez</option>
+                                    <option value="2">Kiara Picado</option>
+                                    <option value="2">David Duarte</option>
+                                    <option value="2">Isaac Valerin</option>
                                 </select>
                                 <div class="valid-feedback">
                                     Completo
@@ -163,11 +180,14 @@
                             </div>
                         </div>
                         <div class="row g-1">
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="tbxcanton" class="form-label">Canton: <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select" id="tbxcanton" required>
-                                    <option selected disabled value="0">--Seleccione una opción--</option>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="id_Type" class="form-label">Acompañante 3</label>
+                                <select class="form-select" id="id_Type" required>
+                                    <option selected disabled value="">Seleccione una opción</option>
+                                    <option value="1">Alvaro Alvarez</option>
+                                    <option value="2">Kiara Picado</option>
+                                    <option value="2">David Duarte</option>
+                                    <option value="2">Isaac Valerin</option>
                                 </select>
                                 <div class="valid-feedback">
                                     Completo
@@ -176,11 +196,14 @@
                                     Incompleto
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="tbxdistrito" class="form-label">Distrito: <span
-                                        style="color: red;">*</span></label>
-                                <select class="form-select" id="tbxdistrito" required>
-                                    <option selected disabled value="0">--Seleccione una opción--</option>
+                            <div class="col-sm-12 col-md-4 col-lg-6">
+                                <label for="id_Type" class="form-label">Acompañante 4</label>
+                                <select class="form-select" id="id_Type" required>
+                                    <option selected disabled value="">Seleccione una opción</option>
+                                    <option value="1">Alvaro Alvarez</option>
+                                    <option value="2">Kiara Picado</option>
+                                    <option value="2">David Duarte</option>
+                                    <option value="2">Isaac Valerin</option>
                                 </select>
                                 <div class="valid-feedback">
                                     Completo
@@ -191,41 +214,9 @@
                             </div>
                         </div>
                         <div class="row g-1">
-                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                <label for="tbxdireccion" class="form-label">Dirección: <span
-                                        style="color: red;">*</span></label>
+                            <div class="col-sm-12 col-md-4 col-lg-12">
+                                <label for="tbxdireccion" class="form-label">Motivo:</label>
                                 <textarea class="form-control" id="tbxdireccion" rows="3" required></textarea>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row g-1 mb-2">
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="user_Pws" class="form-label">Contaseña:
-                                    <span>
-                                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
-                                            data-bs-title="Información"
-                                            data-bs-content="Su contraseña debe tener entre 8 y 20 caracteres, contener letras y números, y no debe contener espacios.">
-                                            <img src="/Multimedia/ICONOS/informacion.png" alt="">
-                                        </a>
-                                    </span>
-                                </label>
-                                <input type="password" class="form-control" id="user_Pws" required>
-                                <div class="valid-feedback">
-                                    Completo
-                                </div>
-                                <div class="invalid-feedback">
-                                    Incompleto
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <label for="user_Pws_Valid" class="form-label">Confirmar Contaseña:<span
-                                        style="color: red;">*</span></label>
-                                <input type="password" class="form-control" id="user_Pws_Valid" required>
                                 <div class="valid-feedback">
                                     Completo
                                 </div>
@@ -236,7 +227,7 @@
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" id="btn_Guardar">Guardar</button>
+                            <button type="submit" class="btn btn-primary" id="btn_Guardar">Solicitar</button>
                         </div>
                     </form>
                 </div>

@@ -108,3 +108,11 @@
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
+
+.modal-header h6{
+    margin-left: 500px;
+    margin-top: 8px;
+}
+.contenedor-Modal{
+    color: #094079;
+}
