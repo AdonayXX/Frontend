@@ -1,8 +1,8 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <div class="mt-5 fade-in">
     <h2 class="mb-4 text-center">Solicitudes de Vales</h2>
-    <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-end mb-3 me-2">
         <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
             data-bs-placement="top" title="Exportar a PDF">
             <img src="img/icons8-pdf.svg" alt="PDF Icon">
@@ -11,9 +11,13 @@ crossorigin="anonymous">
             data-bs-placement="top" title="Exportar a Excel">
             <img src="img/icons8-excel.svg" alt="Excel Icon">
         </button>
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+        </form>
     </div>
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
             <thead class="table-secondary">
                 <tr>
                     <th>ID</th>
@@ -26,20 +30,20 @@ crossorigin="anonymous">
             </thead>
             <tbody id="viajesTableBody" class="table-group-divider">
                 <tr>
-                    <td>12345</td>
-                    <td>Juan Pérez</td>
-                    <td>20</td>
-                    <td>Abierto</td>
-                    <td>15000</td>
-                    <td>15050</td>
+                    <td>01</td>
+                    <td>03/06/2024</td>
+                    <td>Isaac Felipe Valerin Mena</td>
+                    <td>Presentación de Aplicación</td>
+                    <td><span style="color: yellow; font-weight: 900; font-size: 20px;">· </span>Pendiente</td>
+                    <td><button type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
                 <tr>
-                    <td>67890</td>
-                    <td>Maria Gómez</td>
-                    <td>15</td>
-                    <td>En curso</td>
-                    <td>20000</td>
-                    <td>0</td>
+                    <td>02</td>
+                    <td>03/06/2024</td>
+                    <td>Esteban Perez</td>
+                    <td>Recoger vacunas</td>
+                    <td><span style="color: red; font-weight: 900; font-size: 20px;">· </span>Cancelado</td>
+                    <td><button type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
             </tbody>
         </table>
