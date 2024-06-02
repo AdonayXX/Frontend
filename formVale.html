@@ -3,74 +3,24 @@
 <link rel="stylesheet" href="style/style.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" onclick="toggleSidebar()">
-            <i class="bi bi-list" style="font-size: 2rem;"></i>
-        </a>
-        <a class="navbar-brand" data-toggle="tooltip" data-placement="top" title="Inicio">
-            <a href="#" onclick="loadConten('home.html', 'mainContent')" style="color: white;"><i
-                    class="bi bi-house-door" style="font-size: 2rem;"></i></a>
-        </a>
-        <img class="ms-auto" src="./img/LogoCCSS.png" alt="" style="height: 50px;">
-    </div>
-</nav>
-
-<div class="sidebar" style="height: 100vh; overflow-y: auto;">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" onclick="toggleSidebar()">
-                <i class="bi bi-list" style="font-size: 2rem;"></i>
-            </a>
-        </div>
-    </nav>
-    <div style="text-align: center;">
-        <img id="logo" src="./img/LogoCCSS.png" alt="">
-    </div>
-    <div class="input-group mb-3" style="padding: 15px;">
-        <span class="input-group-text" id="basic-addon1"
-            style="border-end-start-radius: 20px; border-start-start-radius: 20px;">
-            <i class="bi bi-search"></i>
-        </span>
-        <input id="buscar" type="text" class="form-control" placeholder="Buscar" aria-label="Buscar"
-            aria-describedby="basic-addon1">
-    </div>
-    <div style="padding-bottom: 50px;">
-
-        <a id="items" href="#" onclick="loadConten('formPatient.html', 'mainContent')"><i class="bi bi-person-add"
-                style="font-size: 1.5rem;"></i> Registro de Pacientes</a>
-        <a id="items" href="#" onclick="loadConten('formdriver.html', 'mainContent')"><i class="bi bi-person-plus"
-                style="font-size: 1.5rem;"></i> Registro de choferes</a>
-
-        <a id="items" href="#" onclick="loadConten('formAppointment.html', 'mainContent')"><i
-                class="bi bi-calendar-event" style="font-size: 1.5rem;"></i> Registro de Citas</a>
-
-
-        <a id="items" href="#"><i class="bi bi-truck-front" style="font-size: 1.5rem;"></i> Registro de Unidades</a>
-        <a id="items" href="#"><i class="bi bi-geo-alt" style="font-size: 1.5rem;"></i> Registro de Ubicaciones</a>
-        <a id="items" href="#" onclick="loadConten('dataTablePatient.html', 'mainContent')"><i
-                class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo de
-            Pacientes</a>
-        <a id="items" onclick="loadConten('formRegisterTrips.html', 'mainContent')"><i class="bi bi-map"
-                style="font-size: 1.5rem;"></i> Registro de Viajes</a> <a id="items" href="#"><i class="bi bi-receipt"
-                style="font-size: 1.5rem;"></i> Solicitudes de Vales</a>
-        <a id="items" href="#"><i class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i> Reportes
-            Varios</a>
-        <a id="items" href="#"><i class="bi bi-tools" style="font-size: 1.5rem;"></i> Registro de Mantenimiento</a>
-        <a id="items" href="#"><i class="bi bi-view-stacked" style="font-size: 1.5rem;"></i> Dashboard
-            Informativo</a>
-        <a id="items" href="#" onclick="loadConten('dataTable.html', 'mainContent')"><i class="bi bi-table"
-                style="font-size: 1.5rem;"></i> Tabla de Viajes</a>
-    </div>
-    <hr style="color: white;">
-    <a id="items" href="#"><i class="bi bi-person-vcard" style="font-size: 1.5rem;"></i> Roles de usuario</a>
-    <a id="items" href="#"><i class="bi bi-gear" style="font-size: 1.5rem;"></i> Ajustes</a>
-    <a id="items" href="#"><i class="bi bi-box-arrow-left" style="font-size: 1.5rem;"></i> Cerrar sesión</a>
-</div>
-
-<div class="container mt-5 fade-in" style="max-width: 1100px;">
+<div class="container mt-5 fade-in contenedor-Modal" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Coordinar Vale de Transporte</h1>
+    <div class="row">
+        <div class="d-flex justify-content-end mb-3 me-2">
+            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a PDF">
+                <img src="img/icons8-pdf.svg" alt="PDF Icon">
+            </button>
+            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a Excel">
+                <img src="img/icons8-excel.svg" alt="Excel Icon">
+            </button>
+            <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Imprimir">
+                <img src="img/icons8-print.svg" alt="Print Icon">
+            </button>
+        </div>
+    </div>
     <form id="perfilPacienteForm" class="bg-light p-4 border rounded-3">
         <div class="form-section">
             <div class="row">
@@ -107,16 +57,16 @@
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-5 text-black mx-2">
-                    <h4 class="text-center">Ruta</h4>
+                    <h4 class="text-center" style="color:#094079">Ruta</h4>
                     <div class="row">
                         <label for="salida" class="form-label">Salida:</label>
                         <input type="text" id="salida" name="salida" class="form-control">
-                        <label for="destino" class="form-label">Destino:</label>
+                        <label for="destino" form-label>Destino:</label>
                         <input type="text" id="destino" name="destino" class="form-control">
                     </div>
                 </div>
                 <div class="col-5 text-black mx-2">
-                    <h4 class="text-center">Destino</h4>
+                    <h4 class="text-center" style="color:#094079">Destino</h4>
                     <div class="row">
                         <label for="salida2" class="form-label">Salida:</label>
                         <input type="text" id="salida2" name="salida2" class="form-control">
@@ -129,7 +79,7 @@
                 <div class="col-3 mb-3">
                     <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
                     <input type="date" id="fechaReq" name="fechaReq" class="form-control">
-                    
+
                 </div>
                 <div class="col-9 mb-3">
                     <label for="identificacion" class="form-label">Motivo:</label>
@@ -138,57 +88,69 @@
             </div>
             <div class="row">
 
-                <div class="col-12 text-center"><h3>Acompañantes</h3></div>
+                <div class="col-12 text-center">
+                    <h3>Acompañantes</h3>
+                </div>
                 <div class="row d-flex justify-content-center m-1">
-                <div class="col-5 text-black m-1">
-                    <label for="destino2" class="form-label">Acompañante 1:</label>
-                    <input type="text" id="acompañante1" name="acompañante1" class="form-control">
+                    <div class="col-5 text-black m-1">
+                        <label for="destino2" class="form-label">Acompañante 1:</label>
+                        <input type="text" id="acompañante1" name="acompañante1" class="form-control">
+                    </div>
+                    <div class="col-5 text-black m-1">
+                        <label for="destino1" class="form-label">Acompañante 2:</label>
+                        <input type="text" id="acompañante2" name="acompañante2" class="form-control">
+                    </div>
+                    <div class="col-5 text-black m-1">
+                        <label for="destino3" class="form-label">Acompañante 3:</label>
+                        <input type="text" id="acompañante3" name="acompañante3" class="form-control">
+                    </div>
+                    <div class="col-5 text-black m-1">
+                        <label for="destino4" class="form-label">Acompañante 4:</label>
+                        <input type="text" id="acompañante4" name="acompañante4" class="form-control">
+                    </div>
                 </div>
-                <div class="col-5 text-black m-1">
-                    <label for="destino1" class="form-label">Acompañante 2:</label>
-                    <input type="text" id="acompañante2" name="acompañante2" class="form-control">
-                </div>
-                <div class="col-5 text-black m-1">
-                    <label for="destino3" class="form-label">Acompañante 3:</label>
-                    <input type="text" id="acompañante3" name="acompañante3" class="form-control">
-                </div>
-                <div class="col-5 text-black m-1">
-                    <label for="destino4" class="form-label">Acompañante 4:</label>
-                    <input type="text" id="acompañante4" name="acompañante4" class="form-control">
-                </div>
-            </div>
 
-            <div class="row">
-                <h3 class="text-center">Recursos</h3>
+                <div class="row">
+                    <h3 class="text-center">Recursos</h3>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <label for="destino2" class="form-label">Placa:</label>
+                        <input type="text" id="placa" name="placa" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label for="destino2" class="form-label">Chofer:</label>
+                        <input type="text" id="chofer" name="chofer" class="form-control">
+                    </div>
+                    <div class="col-3">
+                        <label for="destino2" class="form-label">Kilometros:</label>
+                        <input type="text" id="Kilometros" name="Kilometros" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <h3 class="text-center">Autoriza</h3>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="destino2" class="form-label">Funcionario:</label>
+                        <input type="text" id="Funcionario" name="Funcionario" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label for="destino2" class="form-label">Firma:</label>
+                        <input type="text" id="Firma" name="Firma" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="d-flex justify-content-end mb-3 me-2">
+                        <button class="btn mt-4" title="Rechazar Solicitud">
+                            <img src="img/Basurero.svg" alt="">
+                        </button>
+                        <button class="btn mt-4" title="Aceptar Icon">
+                            <img src="img/Cheked.svg" style="width: 50px; height: 50px;" alt="Aceptar icono">
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-3">
-                    <label for="destino2" class="form-label">Placa:</label>
-                    <input type="text" id="placa" name="placa" class="form-control">
-                </div>
-                <div class="col-6">
-                    <label for="destino2" class="form-label">Chofer:</label>
-                    <input type="text" id="chofer" name="chofer" class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="destino2" class="form-label">Kilometros:</label>
-                    <input type="text" id="Kilometros" name="Kilometros" class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <h3 class="text-center">Autoriza</h3>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <label for="destino2" class="form-label">Funcionario:</label>
-                    <input type="text" id="Funcionario" name="Funcionario" class="form-control">
-                </div>
-                <div class="col-6">
-                    <label for="destino2" class="form-label">Firma:</label>
-                    <input type="text" id="Firma" name="Firma" class="form-control">
-                </div>
-            </div>
-        </div>    
     </form>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -197,5 +159,4 @@
     <script src="dinamicContent.js"></script>
     <script src="script.js"></script>
     <script src="sidebar.js"></script>
-
 </div>
