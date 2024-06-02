@@ -1,10 +1,8 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+crossorigin="anonymous">
 <div class="mt-5 fade-in">
     <h2 class="mb-4 text-center">Solicitudes de Vales</h2>
     <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Imprimir">
-            <img src="img/icons8-print.svg" alt="Print Icon">
-        </button>
         <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
             data-bs-placement="top" title="Exportar a PDF">
             <img src="img/icons8-pdf.svg" alt="PDF Icon">
@@ -16,20 +14,17 @@
     </div>
     <div class="table-responsive">
         <table class="table table-bordered">
-            <thead>
+            <thead class="table-secondary">
                 <tr>
-                    <th>Citas Asociadas</th>
-                    <th>Chofer Asignado</th>
-                    <th>Capacidad Restante</th>
-                    <th>Estado del Viaje</th>
-                    <th>Kilometraje Inicial</th>
-                    <th>Kilometraje Final</th>
-                    <th>Hora de Inicio</th>
-                    <th>Hora de Finalización</th>
-                    <th>Consumo de Combustible</th>
+                    <th>ID</th>
+                    <th>Ingreso</th>
+                    <th>Solicitante</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Coordinar</th>
                 </tr>
             </thead>
-            <tbody id="viajesTableBody">
+            <tbody id="viajesTableBody" class="table-group-divider">
                 <tr>
                     <td>12345</td>
                     <td>Juan Pérez</td>
@@ -37,9 +32,6 @@
                     <td>Abierto</td>
                     <td>15000</td>
                     <td>15050</td>
-                    <td>31/05/2024 08:00</td>
-                    <td>31/05/2024 12:00</td>
-                    <td>10</td>
                 </tr>
                 <tr>
                     <td>67890</td>
@@ -48,9 +40,6 @@
                     <td>En curso</td>
                     <td>20000</td>
                     <td>0</td>
-                    <td>31/05/2024 09:00</td>
-                    <td></td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>
