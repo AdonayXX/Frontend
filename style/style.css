@@ -148,6 +148,26 @@ h1 {
 }
 /* Fin Estilos home.html */
 
+/* CSS de dataTableAppointment (centrar los iconos) */
+.full-width {
+    width: 50px;
+    margin-left: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.full-width2 {
+    width: 50px;
+    margin-left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+/* fin del CSS de dataTableAppointment */
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
