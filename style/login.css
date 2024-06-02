@@ -1,6 +1,6 @@
 .contenedor {
-    background-image: url('');
-    background-size: cover;
+    background-color: #094079;
+    height: 100%;
 }
 .logo{
     width: 150px;
