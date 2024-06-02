@@ -1,0 +1,47 @@
+<div class="container mt-5 fade-in">
+    <h1 class="mb-4 text-center">Registro de Citas</h1>
+    <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
+        <div class="mb-3">
+            <label for="nombreCompleto" class="form-label"><i class="bi bi-person"></i> Nombre completo</label>
+            <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="cedulaLicencia" class="form-label"><i class="bi bi-card-text"></i> N° de cédula y/o licencia</label>
+            <input type="text" id="cedulaLicencia" name="cedulaLicencia" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label"><i class="bi bi-telephone"></i> Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="correoElectronico" class="form-label"><i class="bi bi-envelope"></i> Correo electrónico</label>
+            <input type="email" id="correoElectronico" name="correoElectronico" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="historialConduccion" class="form-label"><i class="bi bi-file-earmark-text"></i> Historial de conducción (opcional)</label>
+            <textarea id="historialConduccion" name="historialConduccion" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="certificaciones" class="form-label"><i class="bi bi-award"></i> Certificaciones relevantes (CPR, primeros auxilios, etc)</label>
+            <textarea id="certificaciones" name="certificaciones" class="form-control"></textarea>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Chofer">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Chofer" onclick="editar()">
+                    <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Activar Chofer" onclick="activar()">
+                    <i class="bi bi-check-circle"></i> Activar
+                </button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Desactivar Chofer" onclick="desactivar()">
+                    <i class="bi bi-x-circle"></i> Desactivar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
