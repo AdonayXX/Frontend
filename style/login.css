@@ -1,13 +1,13 @@
 .contenedor {
-    background-image: url('');
-    background-size: cover;
+    background-color: #094079;
+    height: 100%;
 }
-.logo{
+
+.logo {
     width: 150px;
     height: 150px;
     display: block;
     margin: 10px auto;
-    
 }
 
 .form-container {
@@ -34,7 +34,6 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    margin-bottom: 15px;
 }
 
 .input {
@@ -129,13 +128,6 @@
     gap: 5px;
 }
 
-
-
 .login-button {
     border: 2px solid #747474;
-}
-
-.google-icon {
-    font-size: 18px;
-    margin-bottom: 1px;
 }
