@@ -192,6 +192,30 @@ h1 {
     }
 
 }
+.request-n{
+    background-color: #094079;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+
+}
+.request-y{
+    background-color: #094079;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+
+}
+
+.request-n:hover{
+    background-color: #e91010;
+    color: white;
+}
+
+.request-y:hover{
+    background-color: #02a834;
+    color: white;
+}
 
 .excel:hover {
     background-color: #094079;
