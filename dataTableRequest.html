@@ -1,24 +1,32 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<div class="mt-5 fade-in">
-    <h2 class="mb-4 text-center">Solicitudes de Vales</h2>
-    <div class="d-flex justify-content-end mb-3 me-2">
-        <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a PDF">
-            <img src="img/icons8-pdf.svg" alt="PDF Icon">
-        </button>
-        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a Excel">
-            <img src="img/icons8-excel.svg" alt="Excel Icon">
-        </button>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-        </form>
+
+<div class="fade-in">
+    <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
+        <div class="col text-center">
+            <br>
+            <h1 class="text-wrap">Solicitudes de Vales</h1>
+        </div>
+        <div class="col-sm-3 search-bar input-group m-2">
+            <input type="text" class="form-control" placeholder="Buscar...">
+        </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-bordered text-center">
-            <thead class="table-secondary">
+    <div class="mt-3 fade-in">
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Imprimir">
+                <img src="img/icons8-print.svg" alt="Print Icon">
+            </button>
+            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a PDF">
+                <img src="img/icons8-pdf.svg" alt="PDF Icon">
+            </button>
+            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a Excel">
+                <img src="img/icons8-excel.svg" alt="Excel Icon">
+            </button>
+        </div>
+    <div class="table-responsive mt-3">
+        <table class="table table-light table-hover table-striped table-bordered">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Ingreso</th>
@@ -28,15 +36,14 @@
                     <th>Coordinar</th>
                 </tr>
             </thead>
-            <tbody id="viajesTableBody" class="table-group-divider">
+            <tbody>
                 <tr>
                     <td>01</td>
                     <td>03/06/2024</td>
                     <td>Isaac Felipe Valerin Mena</td>
                     <td>Presentación de Aplicación</td>
                     <td><span style="color: yellow; font-weight: 900; font-size: 20px;">· </span>Pendiente</td>
-                    <td><a href="#" id="items" onclick="loadConten('formVale.html', 'mainContent')"><button
-                                type="button" class="btn btn-outline-secondary">Coordinar</button></td></a>
+                    <td class="text-center"><button onclick="loadConten('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
                 <tr>
                     <td>02</td>
@@ -44,8 +51,7 @@
                     <td>Esteban Perez</td>
                     <td>Recoger vacunas</td>
                     <td><span style="color: red; font-weight: 900; font-size: 20px;">· </span>Cancelado</td>
-                    <td><a href="#" id="items" onclick="loadConten('formVale.html', 'mainContent')"><button
-                                type="button" class="btn btn-outline-secondary">Coordinar</button></td></a>
+                    <td class="text-center"><button onclick="loadConten('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
             </tbody>
         </table>
