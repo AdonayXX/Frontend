@@ -1,9 +1,13 @@
 .contenedor {
-    background-color: #094079;
-    height: 100%;
-    background-image: url('');
-    background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-top: 30px;
+}
 
+body {
+    background-color: #094079;
 }
 
 .logo {
@@ -22,6 +26,8 @@
     border-radius: 10px;
     box-sizing: border-box;
     padding: 20px 30px;
+    display: block;
+    margin: 10px auto;
 }
 
 .title {
@@ -109,10 +115,11 @@
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-.modal-header h6{
+.modal-header h6 {
     margin-left: 500px;
     margin-top: 8px;
 }
-.contenedor-Modal{
+
+.contenedor-Modal {
     color: #094079;
 }
