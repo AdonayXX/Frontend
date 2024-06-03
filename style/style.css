@@ -185,6 +185,12 @@ h1 {
     .main-content {
         margin-top: 0;
     }
+
+    #items {
+        padding: 5px 0;
+        font-size: 94%;
+    }
+
 }
 
 .excel:hover {
