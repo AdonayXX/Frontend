@@ -52,7 +52,7 @@
                     <input type="text" id="telefono2" name="telefono2" class="form-control">
                 </div>
                 <div class="col-md-2 mb-3">
-                    <label class="form-label">Prelacion:</label>
+                    <label class="form-label">Prioridad:</label>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="prelacion">
                         <label class="form-check-label" for="prelacion">SI</label>
@@ -104,10 +104,27 @@
                     <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1" class="form-control"
                         placeholder="Teléfono 2">
                 </div>
+                <div class="col-md-3 mb-3">
+                    <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
+                    <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select">
+                        <option value="Hijo/a">Hijo/a</option>
+                        <option value="Padre">Padre</option>
+                        <option value="Madre">Madre</option>
+                        <option value="Esposa/o">Esposa/o</option>
+                        <option value="Hermano/a">Hermano/a</option>
+                        <option value="Abuelo/a">Abuelo/a</option>
+                        <option value="Tío/a">Tío/a</option>
+                        <option value="Primo/a">Primo/a</option>
+                        <option value="Sobrino/a">Sobrino/a</option>
+                        <option value="Cuñado/a">Cuñado/a</option>
+                        <option value="Cuñado/a">Doctor/a</option>
+                        <option value="Cuñado/a">Enfermero/a</option>
+                    </select>
+                </div>
             </div>
             <div class="row mb-2 ">
                 <label for="acompanante2" class="form-label mt-4 mb-4">Acompañante 2:</label>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <input type="text" id="acompananteNombre2" name="acompananteNombre2" class="form-control"
                         placeholder="Nombre">
                 </div>
@@ -127,6 +144,23 @@
                     <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2" class="form-control"
                         placeholder="Teléfono 2">
                 </div>
+                <div class="col-md-3 mb-3">
+                    <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
+                    <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select">
+                        <option value="Hijo/a">Hijo/a</option>
+                        <option value="Padre">Padre</option>
+                        <option value="Madre">Madre</option>
+                        <option value="Esposa/o">Esposa/o</option>
+                        <option value="Hermano/a">Hermano/a</option>
+                        <option value="Abuelo/a">Abuelo/a</option>
+                        <option value="Tío/a">Tío/a</option>
+                        <option value="Primo/a">Primo/a</option>
+                        <option value="Sobrino/a">Sobrino/a</option>
+                        <option value="Cuñado/a">Cuñado/a</option>
+                        <option value="Cuñado/a">Doctor/a</option>
+                        <option value="Cuñado/a">Enfermero/a</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -139,7 +173,7 @@
                         <option value="local">Local</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-1">
                     <label for="destino" class="form-label">Destino:</label>
                     <select id="destino" name="destino" class="form-select">
                         <option value="HNN">HNN</option>
@@ -149,7 +183,7 @@
                         <option value="ClinicaCatolica">Clínica Católica</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-1">
                     <label for="especialidad" class="form-label">Especialidad:</label>
                     <select id="especialidad" name="especialidad" class="form-select">
                         <option value="MedicinaGeneral">Medicina General</option>
@@ -159,13 +193,28 @@
                         <option value="Dermatologia">Dermatología</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="fechaCita" class="form-label">Fecha:</label>
-                    <input type="date" id="fechaCita1" name="fechaCita" class="form-control date-input">
+                <div class="col-md-3 mt-1">
+                    <label for="unidad" class="form-label">Unidad:</label>
+                    <select id="unidad" name="unidad" class="form-select">
+                        <option value="1">Unidad 1</option>
+                        <option value="2">Unidad 2</option>
+                        <option value="3">Unidad 3</option>
+                        <option value="4">Unidad 4</option>
+                        <option value="5">Unidad 5</option>
+                        <option value="6">Unidad 6</option>
+                        <option value="7">Unidad 7</option>
+                        <option value="8">Unidad 8</option>
+                        <option value="9">Unidad 9</option>
+                        <option value="10">Unidad 10</option>
+                    </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mt-1">
                     <label for="horaCita" class="form-label">Hora:</label>
                     <input type="time" id="horaCita" name="horaCita" class="form-control">
+                </div>
+                <div class="col-md-3 mt-1">
+                    <label for="fechaCita" class="form-label">Fecha:</label>
+                    <input type="date" id="fechaCita1" name="fechaCita" class="form-control date-input">
                 </div>
             </div>
         </div>
