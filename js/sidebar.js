@@ -25,5 +25,3 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', closeSidebar);
     });
 });
-
-funcionCargarToas
