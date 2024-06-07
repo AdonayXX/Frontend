@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Unidades</title>
+    <link rel="stylesheet" href="style/units.css">
+</head>
+<body>
+    <div class="mt-4 m-auto">
+        <h2 class="text-center mt-3">Registro de Unidades</h2>
+        <form id="unitForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="unitNumber">Número de Unidad</label>
+                    <input type="text" class="form-control" id="unitNumber" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="capacity">Capacidad</label>
+                    <input type="number" class="form-control" id="capacity" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="resourceType">Tipo de Recurso</label>
+                    <select multiple class="form-control" id="resourceType" required>
+                        <option value="Básico">CCSS</option>
+                        <option value="Avanzado">Cruz Roja</option>
+                        <option value="Especializado">Privado</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="initialMileage">Kilometraje Inicial</label>
+                    <input type="number" class="form-control" id="initialMileage" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="currentMileage">Kilometraje Actual</label>
+                    <input type="number" class="form-control" id="currentMileage" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="status">Estado</label>
+                    <select class="form-control" id="status" required>
+                        <option value="Activa">Activa</option>
+                        <option value="Inactiva">Inactiva</option>
+                        <option value="En Mantenimiento">En Mantenimiento</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
+        </form>
+
+        <h2 class="mt-5">Catálogo de Unidades</h2>
+        <table class="table table-bordered mt-3">
+            <thead style="background-color: #094079; color: white;">
+                <tr>
+                    <th>Número de Unidad</th>
+                    <th>Capacidad</th>
+                    <th>Tipo de Recurso</th>
+                    <th>Kilometraje Inicial</th>
+                    <th>Kilometraje Actual</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="unitTableBody">
+                <!-- Aquí se agregarán las unidades registradas -->
+            </tbody>
+        </table>
+    </div>
+    <div data-script="js/units.js"></div>
+</body>
+</html>
