@@ -20,30 +20,48 @@
             <input type="email" id="correoElectronico" name="correoElectronico" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="historialConduccion" class="form-label"><i class="bi bi-file-earmark-text"></i> Historial de conducción (opcional)</label>
-            <textarea id="historialConduccion" name="historialConduccion" class="form-control"></textarea>
+            <label for="tipoSangre" class="form-label"><i class="bi bi-droplet"></i> Tipo de sangre</label>
+            <input type="text" id="tipoSangre" name="tipoSangre" class="form-control" required>
+        </div>
+        <div class="mb-3" id="contactoEmergenciaContainer">
+            <label for="contactoEmergencia1" class="form-label"><i class="bi bi-person-plus"></i> Contacto de emergencia</label>
+            <div class="d-flex">
+                <input type="text" id="contactoEmergencia1" name="contactoEmergencia[]" class="form-control" required>
+                <button type="button" class="btn btn-outline-secondary ms-2" onclick="agregarContactoEmergencia()" data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar otro acompañante de emergencia"><i class="bi bi-plus"></i></button>
+            </div>
         </div>
         <div class="mb-3">
-            <label for="certificaciones" class="form-label"><i class="bi bi-award"></i> Certificaciones relevantes (CPR, primeros auxilios, etc)</label>
-            <textarea id="certificaciones" name="certificaciones" class="form-control"></textarea>
+            <label for="tipoLicencia" class="form-label"><i class="bi bi-card-list"></i> Tipo de licencia</label>
+            <input type="text" id="tipoLicencia" name="tipoLicencia" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="fechaVencimientoLicencia" class="form-label"><i class="bi bi-calendar"></i> Fecha de vencimiento de la licencia</label>
+            <input type="date" id="fechaVencimientoLicencia" name="fechaVencimientoLicencia" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="estadoKilometrajeInicial" class="form-label"><i class="bi bi-speedometer2"></i> Estado kilometraje inicial</label>
+            <input type="number" id="estadoKilometrajeInicial" name="estadoKilometrajeInicial" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="estadoKilometrajeFinal" class="form-label"><i class="bi bi-speedometer"></i> Estado kilometraje final</label>
+            <input type="number" id="estadoKilometrajeFinal" name="estadoKilometrajeFinal" class="form-control" required>
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-between">
             <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Chofer">
                 <i class="bi bi-save"></i> Guardar
             </button>
-            <!-- <div class="d-flex gap-2"> -->
-                <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Chofer" onclick="editar()">
-                    <i class="bi bi-pencil"></i> Editar
-                </button>
-                <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Activar Chofer" onclick="activar()">
-                    <i class="bi bi-check-circle"></i> Activar
-                </button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Desactivar Chofer" onclick="desactivar()">
-                    <i class="bi bi-x-circle"></i> Desactivar
-                </button>
-            <!-- </div> -->
+            <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Chofer" onclick="editar()">
+                <i class="bi bi-pencil"></i> Editar
+            </button>
+            <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Activar Chofer" onclick="activar()">
+                <i class="bi bi-check-circle"></i> Activar
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Desactivar Chofer" onclick="desactivar()">
+                <i class="bi bi-x-circle"></i> Desactivar
+            </button>
         </div>
     </form>
 </div>
+
 
 
