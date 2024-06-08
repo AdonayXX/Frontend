@@ -1,0 +1,34 @@
+
+
+    <div class="container">
+        <h2>REGISTRO DE UBICACIONES</h2>
+        <form>
+            <label for="destinos">DESTINOS</label>
+            <input type="text" id="destinos" name="destinos"><br>
+            
+            <div class="label-with-button">
+                <label for="especialidades">Especialidades</label>
+                <button type="button" id="addSpecialtyBtn">+</button>
+            </div>
+            <div id="checkbox-container">
+                <input type="checkbox" name="especialidades" value="odontologia"> Odontología<br>
+                <input type="checkbox" name="especialidades" value="radiografia"> Radiografía<br>
+                <input type="checkbox" name="especialidades" value="cirugias"> Cirugías<br>
+                <input type="checkbox" name="especialidades" value="general"> General<br>
+            </div>
+            
+            <button type="submit" id="saveBtn">GUARDAR</button>
+        </form>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <label for="newSpecialty">Nueva Especialidad:</label>
+            <input type="text" id="newSpecialty" name="newSpecialty">
+            <button type="button" id="saveSpecialtyBtn">Guardar</button>
+        </div>
+    </div>
+
+    <script src="modal.js"></script>
+
