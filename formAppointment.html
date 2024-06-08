@@ -1,223 +1,247 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de citas</title>
 </head>
+
 <body>
 
-<div class="container mt-5 fade-in" style="max-width: 1100px;">
-    <h1 class="mb-4 text-center">Agendar Cita</h1>
-    <form id="agendarCitaForm" class="bg-light p-4 border rounded-3">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
-                <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
-                    <option value="Cedula">Cédula Nacional</option>
-                    <option value="Asegurado">Asegurado</option>
-                    <option value="Interno">Interno</option>
-                </select>
-                
-            </div>
-            <div class="col-md-4">
-                <label for="identificacion" class="form-label">Identificación:</label>
-                <input type="text" id="identificacion" name="identificacion" class="form-control">
-            </div>
-            <div class="col-md-2">
-                <label for="fechaCita" class="form-label">Fecha:</label>
-                <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
-            </div>
-            <div class="col-md-2">
-                <label for="horaActual" class="form-label">Hora actual:</label>
-                <input type="time" id="horaActual" name="horaActual" class="form-control">
-            </div>
-        </div>
-
-        <div class="form-section mt-4">
-            <h2>Datos del paciente:</h2>
-            <div class="row mt-4">
-                <div class="col-md-4 mb-3">
-                    <label for="nombre" class="form-label">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="form-control">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="primerApellido" class="form-label">Primer Apellido:</label>
-                    <input type="text" id="primerApellido" name="primerApellido" class="form-control">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
-                    <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label for="telefono1" class="form-label">Teléfono 1:</label>
-                    <input type="text" id="telefono1" name="telefono1" class="form-control">
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="telefono2" class="form-label">Teléfono 2:</label>
-                    <input type="text" id="telefono2" name="telefono2" class="form-control">
-                </div>
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Prioridad:</label>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="prelacion">
-                        <label class="form-check-label" for="prelacion">SI</label>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <label class="form-label">Camilla:</label>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="camilla">
-                        <label class="form-check-label" for="camilla">SI</label>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="direccion" class="form-label">Dirección:</label>
-                    <textarea id="direccion" name="direccion" class="form-control"></textarea>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="diagnostico" class="form-label">Diagnostico:</label>
-                    <textarea id="diagnostico" name="diagnostico" class="form-control"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="form-section">
-        <div class="row justify-content-end">
-            <h2>Seleccione el acompañante:</h2>
-            <button type="button" id="addAcompananteBtn" class="btn btn-secondary col-1 m-1" style="background-color: #094079; border: none;"><i class="bi bi-person-plus-fill"></i> </button>
-            <button type="button" id="removeAcompananteBtn" class="btn btn-secondary col-1 m-1" style="background-color:#094079; border: none;"><i class="bi bi-person-dash-fill" ></i> </button>
-        </div>
-            <div class="companions-container d-flex flex-wrap">
-                <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
-                    <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1" class="form-control" placeholder="Teléfono 2">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
-                            <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select w-25">
-                                <option value="Hijo/a">Hijo/a</option>
-                                <option value="Padre">Padre</option>
-                                <option value="Madre">Madre</option>
-                                <option value="Esposa/o">Esposa/o</option>
-                                <option value="Hermano/a">Hermano/a</option>
-                                <option value="Abuelo/a">Abuelo/a</option>
-                                <option value="Tío/a">Tío/a</option>
-                                <option value="Primo/a">Primo/a</option>
-                                <option value="Sobrino/a">Sobrino/a</option>
-                                <option value="Cuñado/a">Cuñado/a</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
-                    <label for="acompananteNombre2" class="form-label mt-4 mb-3">Acompañante 2:</label>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteNombre2" name="acompananteNombre2" class="form-control" placeholder="Nombre">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2" class="form-control" placeholder="1° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2" class="form-control" placeholder="2° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2" class="form-control" placeholder="Teléfono 1">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2" class="form-control" placeholder="Teléfono 2">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
-                            <select id="acompananteParentesco2" name="acompananteParentesco2" class="form-select w-25">
-                                <option value="Hijo/a">Hijo/a</option>
-                                <option value="Padre">Padre</option>
-                                <option value="Madre">Madre</option>
-                                <option value="Esposa/o">Esposa/o</option>
-                                <option value="Hermano/a">Hermano/a</option>
-                                <option value="Abuelo/a">Abuelo/a</option>
-                                <option value="Tío/a">Tío/a</option>
-                                <option value="Primo/a">Primo/a</option>
-                                <option value="Sobrino/a">Sobrino/a</option>
-                                <option value="Cuñado/a">Cuñado/a</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-section">
-            <h2>Datos de la Cita:</h2>
-            <div class="row mb-3 mt-4">
-                <div class="col-md-3">
-                    <label class="form-label" for="traslado">Traslado:</label>
-                    <select id="traslado" name="traslado" class="form-select">
-                        <option value="local">Local</option>
+    <div class="container mt-5 fade-in" style="max-width: 1100px;">
+        <h1 class="mb-4 text-center">Agendar Cita</h1>
+        <form id="agendarCitaForm" class="bg-light p-4 border rounded-3">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
+                    <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
+                        <option value="Cedula">Cédula Nacional</option>
+                        <option value="Asegurado">Asegurado</option>
+                        <option value="Interno">Interno</option>
                     </select>
+
                 </div>
-                <div class="col-md-3 mt-1">
-                    <label for="destino" class="form-label">Destino:</label>
-                    <select id="destino" name="destino" class="form-select">
-                        <option value="HNN">HNN</option>
-                        <option value="CENARE">CENARE</option>
-                        <option value="ClinicaBiblica">Clínica Bíblica</option>
-                        <option value="HospitalMexico">Hospital México</option>
-                        <option value="ClinicaCatolica">Clínica Católica</option>
-                    </select>
+                <div class="col-md-4">
+                    <label for="identificacion" class="form-label">Identificación:</label>
+                    <input type="text" id="identificacion" name="identificacion" class="form-control">
                 </div>
-                <div class="col-md-3 mt-1">
-                    <label for="especialidad" class="form-label">Especialidad:</label>
-                    <select id="especialidad" name="especialidad" class="form-select">
-                        <option value="MedicinaGeneral">Medicina General</option>
-                        <option value="Pediatria">Pediatría</option>
-                        <option value="Cirugia">Cirugía</option>
-                        <option value="Cardiologia">Cardiología</option>
-                        <option value="Dermatologia">Dermatología</option>
-                    </select>
-                </div>
-                <div class="col-md-3 mt-1">
+                <div class="col-md-2">
                     <label for="fechaCita" class="form-label">Fecha:</label>
-                    <input type="date" id="fechaCita1" name="fechaCita" class="form-control date-input">
+                    <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
                 </div>
-                <div class="col-md-3 mt-1">
-                    <label for="horaCita" class="form-label">Hora:</label>
-                    <input type="time" id="horaCita" name="horaCita" class="form-control">
+                <div class="col-md-2">
+                    <label for="horaActual" class="form-label">Hora actual:</label>
+                    <input type="time" id="horaActual" name="horaActual" class="form-control">
                 </div>
-               
             </div>
-        </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Guardar Viaje">
-                <i class="bi bi-save"></i> Guardar
-            </button>
-        </div>
-    </form>
-</div>
-<script src="js/dates.js"></script>
-<script data-script="js/companions.js"></script>
+            <div class="form-section mt-4">
+                <h2>Datos del paciente:</h2>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="primerApellido" class="form-label">Primer Apellido:</label>
+                        <input type="text" id="primerApellido" name="primerApellido" class="form-control">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
+                        <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="telefono1" class="form-label">Teléfono 1:</label>
+                        <input type="text" id="telefono1" name="telefono1" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="telefono2" class="form-label">Teléfono 2:</label>
+                        <input type="text" id="telefono2" name="telefono2" class="form-control">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Prioridad:</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="prelacion">
+                            <label class="form-check-label" for="prelacion">SI</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Camilla:</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="camilla">
+                            <label class="form-check-label" for="camilla">SI</label>
+                        </div>
+                    </div>
 
-    
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label">Dirección:</label>
+                        <textarea id="direccion" name="direccion" class="form-control"></textarea>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="diagnostico" class="form-label">Diagnostico:</label>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="row align-items-center">
+                    <h2 class="col-auto">Seleccione el acompañante:</h2>
+                    <div class="col-auto ms-auto">
+                        <button type="button" id="addAcompananteBtn" class="btn btn-secondary m-1"
+                            style="background-color: #094079; border: none;">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </button>
+                        <button type="button" id="removeAcompananteBtn" class="btn btn-secondary m-1"
+                            style="background-color: #094079; border: none;">
+                            <i class="bi bi-person-dash-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="companions-container d-flex flex-wrap">
+                    <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
+                        <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteNombre1" name="acompananteNombre1"
+                                    class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1"
+                                    class="form-control" placeholder="1° Apellido">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1"
+                                    class="form-control" placeholder="2° Apellido">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
+                                    class="form-control" placeholder="Teléfono 1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
+                                    class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
+                                <select id="acompananteParentesco1" name="acompananteParentesco1"
+                                    class="form-select w-50">
+                                    <option value="Hijo/a">Hijo/a</option>
+                                    <option value="Padre">Padre</option>
+                                    <option value="Madre">Madre</option>
+                                    <option value="Esposa/o">Esposa/o</option>
+                                    <option value="Hermano/a">Hermano/a</option>
+                                    <option value="Abuelo/a">Abuelo/a</option>
+                                    <option value="Tío/a">Tío/a</option>
+                                    <option value="Primo/a">Primo/a</option>
+                                    <option value="Sobrino/a">Sobrino/a</option>
+                                    <option value="Cuñado/a">Cuñado/a</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
+                        <label for="acompananteNombre2" class="form-label mb-3">Acompañante 2:</label>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteNombre2" name="acompananteNombre2"
+                                    class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
+                                    class="form-control" placeholder="1° Apellido">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
+                                    class="form-control" placeholder="2° Apellido">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
+                                    class="form-control" placeholder="Teléfono 1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
+                                    class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
+                                <select id="acompananteParentesco2" name="acompananteParentesco2"
+                                    class="form-select w-25">
+                                    <option value="Hijo/a">Hijo/a</option>
+                                    <option value="Padre">Padre</option>
+                                    <option value="Madre">Madre</option>
+                                    <option value="Esposa/o">Esposa/o</option>
+                                    <option value="Hermano/a">Hermano/a</option>
+                                    <option value="Abuelo/a">Abuelo/a</option>
+                                    <option value="Tío/a">Tío/a</option>
+                                    <option value="Primo/a">Primo/a</option>
+                                    <option value="Sobrino/a">Sobrino/a</option>
+                                    <option value="Cuñado/a">Cuñado/a</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Datos de la Cita:</h2>
+                <div class="row mb-3 mt-5">
+                    <div class="col-md-3">
+                        <label class="form-label" for="traslado">Traslado:</label>
+                        <select id="traslado" name="traslado" class="form-select">
+                            <option value="local">Local</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="destino" class="form-label">Destino:</label>
+                        <select id="destino" name="destino" class="form-select">
+                            <option value="HNN">HNN</option>
+                            <option value="CENARE">CENARE</option>
+                            <option value="ClinicaBiblica">Clínica Bíblica</option>
+                            <option value="HospitalMexico">Hospital México</option>
+                            <option value="ClinicaCatolica">Clínica Católica</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="especialidad" class="form-label">Especialidad:</label>
+                        <select id="especialidad" name="especialidad" class="form-select">
+                            <option value="MedicinaGeneral">Medicina General</option>
+                            <option value="Pediatria">Pediatría</option>
+                            <option value="Cirugia">Cirugía</option>
+                            <option value="Cardiologia">Cardiología</option>
+                            <option value="Dermatologia">Dermatología</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="fechaCita" class="form-label">Fecha:</label>
+                        <input type="date" id="fechaCita1" name="fechaCita" class="form-control date-input">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="horaCita" class="form-label">Hora:</label>
+                        <input type="time" id="horaCita" name="horaCita" class="form-control">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Guardar Viaje">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="js/dates.js"></script>
+    <script data-script="js/companions.js"></script>
+
+
 </body>
+
 </html>
