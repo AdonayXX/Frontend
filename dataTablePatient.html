@@ -35,11 +35,11 @@
             <thead>
                 <tr>
                     <th>Nombre Completo</th>
-                    <th>Tipo Identificacion</th>
+                    <th>Tipo Identificación</th>
               
-                    <th>Identificacion</th>
+                    <th>Identificación</th>
                     <th>Prioridad</th>
-                    <th>Telefonos</th>
+                    <th>Teléfonos</th>
                    
                     <th>Tipo de seguro</th>
                     <th>Direccion</th>
@@ -124,7 +124,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header ">
-          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompalantes</h1>
+          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompañantes</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -132,9 +132,9 @@
                 <table class="table table-light table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Identificacion</th>
+                            <th>Identificación</th>
                             <th>Nombre Completo</th>
-                            <th>Telefonos</th>
+                            <th>Teléfonos</th>
                             <th>Parentesco</th>
                             <th>Acciones</th>
                         </tr>
@@ -166,7 +166,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header ">
-          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompalantes</h1>
+          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Agregar Acompañante</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body mt-1">
@@ -191,9 +191,17 @@
                             <input type="text" id="secondlastname" name="secondlastname" class="form-control" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="firstlastname" class="form-label">Parentesco:</label>
-                            <input type="text" id="firstlastname" name="firstlastname" class="form-control" required>
+                            <label for="phone1" class="form-label">Telefono 1:</label>
+                            <input type="text" id="phone1" name="phone1" class="form-control" required>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="phone2" class="form-label">Telefono 2:</label>
+                            <input type="text" id="phone2" name="phone2" class="form-control" required>
+                        </div>
+                       
+
+                    </div>
+                    <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="parentesco" class="form-label">Parentesco:</label>
                             <select id="parentesco" name="acompananteParentesco1" class="form-select" required>
