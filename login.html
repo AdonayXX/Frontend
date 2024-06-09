@@ -116,7 +116,7 @@
                             </div>
 
                             <div class="row g-1">
-                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="col-sm-12  col-md-4 col-lg-6">
                                     <label for="b_date" class="form-label">Fecha para la Solicitud: </label>
                                     <input type="date" class="form-control" min="1910-02-01" id="b_date"
                                         placeholder="dd/mm/aaaa" required>
@@ -127,9 +127,7 @@
                                         Incompleto
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label">Hora de salida: </label>
                                     <select class="form-select" id="user_gen" required>
                                         <option selected disabled value="">Seleccionar</option>
@@ -137,13 +135,7 @@
                                         <option value="2">8:00 a.m</option>
                                         <option value="2">9:00 a.m</option>
                                     </select>
-                                    <label for="user_gen" class="form-label">Hora de Regreso:</label>
-                                    <select class="form-select" id="user_gen" required>
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="1">2:00 p.m</option>
-                                        <option value="2">3:00 p.m</option>
-                                        <option value="2">4:00 p.m</option>
-                                    </select>
+                            
                                     <div class="valid-feedback">
                                         Completo
                                     </div>
@@ -152,6 +144,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="id_Type" class="form-label">Acompañante 1</label>
@@ -222,7 +215,7 @@
                             </div>
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-12">
-                                    <label for="tbxdireccion" class="form-label">Motivo:</label>
+                                    <label for="tbxdireccion" class="form-label">Detalle:</label>
                                     <textarea class="form-control" id="tbxdireccion" rows="3" required></textarea>
                                     <div class="valid-feedback">
                                         Completo
@@ -236,6 +229,7 @@
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Cancelar</button>
                                 <button type="submit" class="btn btn-primary" id="btn_Guardar">Solicitar</button>
+                                <button type="eliminar" class="btn btn-danger" id="btn_Eliminar">Eliminar</button>
                             </div>
                         </form>
                     </div>
