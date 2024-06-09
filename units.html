@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Unidades</title>
-    <link rel="stylesheet" href="style/units.css">
 </head>
 <body>
-    <div class="mt-4 m-auto">
+    <div class=" container-fluid  mt-4 m-auto fade-in">
         <h2 class="text-center mt-3">Registro de Unidades</h2>
         <form id="unitForm">
             <div class="row">
@@ -47,26 +46,63 @@
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="dekraDate">Fecha de Dekra</label>
+                    <input type="date" class="form-control" id="dekraDate" required>
+                </div>
+            </div>
+            <div id="maintenanceFields" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="maintenanceType">Tipo de Mantenimiento</label>
+                        <select class="form-control" id="maintenanceType">
+                            <option value="Fecha">Por Fecha</option>
+                            <option value="Kilometraje">Por Kilometraje</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" id="mileageField" style="display: none;">
+                    <div class="col-md-6 mb-3">
+                        <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
+                        <input type="number" class="form-control" id="maintenanceMileage">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="assignedDriver">Chófer Designado</label>
+                    <input type="text" class="form-control" id="assignedDriver">
+                </div>
+            </div>
             <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
         </form>
 
         <h2 class="mt-5">Catálogo de Unidades</h2>
-        <table class="table table-bordered mt-3">
-            <thead style="background-color: #094079; color: white;">
-                <tr>
-                    <th>Número de Unidad</th>
-                    <th>Capacidad</th>
-                    <th>Tipo de Recurso</th>
-                    <th>Kilometraje Inicial</th>
-                    <th>Kilometraje Actual</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody id="unitTableBody">
-                <!-- Aquí se agregarán las unidades registradas -->
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered mt-3">
+                <thead style="background-color: #094079; color: white;">
+                    <tr>
+                        <th>Número de Unidad</th>
+                        <th>Capacidad</th>
+                        <th>Tipo de Recurso</th>
+                        <th>Kilometraje Inicial</th>
+                        <th>Kilometraje Actual</th>
+                        <th>Estado</th>
+                        <th>Fecha de Dekra</th>
+                        <th>Tipo de Mantenimiento</th>
+                        <th>Chófer Designado</th>
+                        <th>Kilometraje de Mantenimiento</th>
+                    </tr>
+                </thead>
+                <tbody id="unitTableBody">
+                    <!-- Aquí se agregarán las unidades registradas -->
+                </tbody>
+            </table>
+        </div>
     </div>
+    <div id="toast-container"></div>
+    <div id="modal-container"></div>
     <div data-script="js/units.js"></div>
 </body>
 </html>
