@@ -39,6 +39,7 @@ async function getPatient() {
             <td>${patient.Prelacion || 'N/A'}</td>
             <td>${patient.Telefono1}-${patient.Telefono2}</td>
             <td>${patient.Tipo_seguro}</td>
+            <td>${patient.Traslado}</td>
             <td>${patient.Direccion}</td>
             <td>
               <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
