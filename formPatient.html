@@ -10,23 +10,23 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="form-control">
+                    <input required type="text" id="nombre" name="nombre" class="form-control">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
                         Apellido:</label>
-                    <input type="text" id="primerApellido" name="primerApellido" class="form-control">
+                    <input required  type="text" id="primerApellido" name="primerApellido" class="form-control">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo
                         Apellido:</label>
-                    <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
+                    <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label for="sexo" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
-                    <select id="sexo" name="sexo" class="form-select">
+                    <select required id="sexo" name="sexo" class="form-select">
                         <option value="F">Femenino</option>
                         <option value="M">Masculino</option>
                     </select>
@@ -34,7 +34,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de
                         Identificación:</label>
-                    <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
+                    <select required id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
                         <option value="Cedula">Cédula de Identidad</option>
                         <option value="Numeros de Asegurado">Numeros de Asegurado</option>
                         <option value="Interno">Interno</option>
@@ -43,10 +43,10 @@
                 <div class="col-md-3 mb-3">
                     <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
                         Identificación:</label>
-                    <input type="text" id="identificacion" name="identificacion" class="form-control">
+                    <input required type="text" id="identificacion" name="identificacion" class="form-control">
                 </div>
                 <div class="col-md-2 mb-3">
-                    <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
+                    <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prelacion:</label><br>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="prelacion">
                         <label class="form-check-label" for="prelacion">SI</label>
@@ -78,7 +78,7 @@
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label for="lugarSalida" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de salida:</label>
-                    <select id="lugarSalida" name="lugarSalida" class="form-select">
+                    <select required id="lugarSalida" name="lugarSalida" class="form-select">
                         <option value="Ruta">Ruta</option>
                         <option value="Domicilio">Domicilio</option>
                         <option value="Sede">Sede</option>
@@ -106,11 +106,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                    <textarea id="direccion" name="direccion" class="form-control"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="diagnostico" class="form-label"><i class="bi bi-file-medical"></i> Diagnóstico:</label>
-                    <textarea id="diagnostico" name="diagnostico" class="form-control"></textarea>
+                    <textarea required id="direccion" name="direccion" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-section">
