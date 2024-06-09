@@ -121,23 +121,27 @@ h1 {
 #toast-container .toast {
     pointer-events: auto;
 }
+
 /* Estilos Pagina home.html */
-.homecont{
+.homecont {
     margin-top: 2%;
     background-color: white;
 }
-.datosint{
-   
-    border-bottom : 1px solid #000;
-    
+
+.datosint {
+
+    border-bottom: 1px solid #000;
+
 }
-.datosinf{
+
+.datosinf {
     border: 1px solid #000000;
     background-color: white;
-   
-   
+
+
 }
-.img-inf img{
+
+.img-inf img {
     border: 2px solid #000;
     padding: 1rem;
     border-radius: 15px;
@@ -146,6 +150,7 @@ h1 {
     margin: auto;
 
 }
+
 /* Fin Estilos home.html */
 
 /* CSS de dataTableAppointment (centrar los iconos) */
@@ -166,6 +171,7 @@ h1 {
     align-items: center;
     padding: 0;
 }
+
 /* fin del CSS de dataTableAppointment */
 
 @media (max-width: 768px) {
@@ -192,14 +198,16 @@ h1 {
     }
 
 }
-.request-n{
+
+.request-n {
     background-color: #094079;
     color: white;
     cursor: pointer;
     margin: 5px;
 
 }
-.request-y{
+
+.request-y {
     background-color: #094079;
     color: white;
     cursor: pointer;
@@ -207,12 +215,12 @@ h1 {
 
 }
 
-.request-n:hover{
+.request-n:hover {
     background-color: #e91010;
     color: white;
 }
 
-.request-y:hover{
+.request-y:hover {
     background-color: #02a834;
     color: white;
 }
@@ -232,13 +240,22 @@ h1 {
     color: white;
 }
 
+/* INICIO del CSS de AppointmentsMade */
 .eye-icon-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .narrow-col {
     width: 80px;
 }
 
+@media(max-width: 578px) {
 
+    .eye-icon-center button {
+        height: 50px;
+        width: 50px;
+    }
+}
+/* FIN del CSS de AppointmentsMade */
