@@ -1,16 +1,17 @@
-var acompananteCount = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    var acompananteCount = 0;
 
-document.getElementById('addAcompananteBtn').addEventListener('click', function() {
-    if (acompananteCount < 2) {
-        acompananteCount++;
-        document.getElementById('contactoEmergencia' + acompananteCount).style.display = 'block';
-        document.getElementById('contactoEmergencia' + acompananteCount).querySelector('input').focus();
-    }
-});
+    document.getElementById('btnAddAcompanante').addEventListener('click', function() {
+        if (acompananteCount < 2) {
+            acompananteCount++;
+            document.getElementById('acompanante' + acompananteCount).style.display = 'block';
+        }
+    });
 
-document.getElementById('removeAcompananteBtn').addEventListener('click', function() {
-    if (acompananteCount > 0) {
-        document.getElementById('contactoEmergencia' + acompananteCount).style.display = 'none';
-        acompananteCount--;
-    }
+    document.getElementById('btnRemoveAcompanante').addEventListener('click', function() {
+        if (acompananteCount > 0) {
+            document.getElementById('acompanante' + acompananteCount).style.display = 'none';
+            acompananteCount--;
+        }
+    });
 });
