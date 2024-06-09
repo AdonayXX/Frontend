@@ -232,3 +232,13 @@ h1 {
     color: white;
 }
 
+.eye-icon-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.narrow-col {
+    width: 80px;
+}
+
+
