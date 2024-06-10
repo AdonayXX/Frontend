@@ -7,14 +7,14 @@ function loadContent(page, containerId = 'mainContent') {
             if (container) {
                 container.innerHTML = this.responseText;
 
-                var scriptSrc = container.querySelector('[data-script]');
-                if (scriptSrc) {
+                var scriptSrcs = container.querySelectorAll('[data-script]');
+                scriptSrcs.forEach(function(scriptSrc) {
                     var script = document.createElement('script');
                     script.src = scriptSrc.getAttribute('data-script');
                     document.head.appendChild(script).parentNode.removeChild(script);
-                }
+                });
             } else {
-                console.error(`Container with id ${containerId} not found`);
+                console.error('Container with id ${containerId} not found');
             }
         }
     };
