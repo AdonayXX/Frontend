@@ -145,13 +145,11 @@ document.getElementById('btn_Guardar').addEventListener('click', function (event
                 alert('Solicitud enviada correctamente.');
                 console.log(response.data);
                 // Optionally, close the modal and reset the form
-                $('#form-request').modal('hide');
-                document.querySelector('#form-request form').reset();
-                document.querySelectorAll('#form-request .is-valid').forEach(el => el.classList.remove('is-valid'));
+
             })
             .catch(function (error) {
                 // Handle error
-                alert('Hubo un error al enviar la solicitud.');
+                // alert('Hubo un error al enviar la solicitud.');
                 console.error(error);
             });
     } else {
