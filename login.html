@@ -40,11 +40,15 @@
                             <div class="col-sm-12 col-md-4 col-lg-6 ">
                                 <h4 class="modal-title" id="exampleModalLabel">Generar Solicitud</h4>
                                 <span id="date"></span>
+
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
-
+                    <div class="col-4 mt-4" style="margin-left:35px ;">
+                        <button type="submit" class="btn btn-primary" id="btn_Guardar">Mostrar Vale
+                            anterior</button>
+                    </div>
                     <div class="modal-body p-5">
                         <form action="#" class="row needs-validation" method="get" novalidate>
                             <div class="row g-1">
@@ -126,7 +130,7 @@
                                     <label for="user_gen" class="form-label">Motivo de la gira: </label>
                                     <select class="form-select" id="motivo" required>
                                         <option selected disabled value="">Seleccionar</option>
-                                        <option >Gira medica</option>
+                                        <option>Gira medica</option>
                                         <option>Otros</option>
                                     </select>
                                 </div>
@@ -201,7 +205,6 @@
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary" id="btn_Guardar">Solicitar</button>
-                        <button type="eliminar" class="btn btn-danger" id="btn_Eliminar">Eliminar</button>
                     </div>
                     </form>
                 </div>
