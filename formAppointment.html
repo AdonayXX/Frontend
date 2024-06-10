@@ -25,6 +25,7 @@
                     <label for="identificacion" class="form-label">Identificación:</label>
                     <input type="text" id="identificacion" name="identificacion" class="form-control">
                 </div>
+
                 <div class="col-md-2">
                     <label for="fechaCita" class="form-label">Fecha:</label>
                     <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
@@ -108,9 +109,11 @@
                         <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteNombre1" name="acompananteNombre1"
+                                <select type="text" id="acompananteNombre1" name="acompananteNombre1"
                                     class="form-control" placeholder="Nombre">
+                                </select>
                             </div>
+
                             <div class="col-md-4 mb-3">
                                 <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1"
                                     class="form-control" placeholder="1° Apellido">
@@ -239,7 +242,8 @@
         </form>
     </div>
     <script src="js/dates.js"></script>
-    <script data-script="js/companions.js"></script>
+    <div data-script="js/companions.js"></div>
+    <div data-script="js/appointments.js"></div>
 
 
 </body>
