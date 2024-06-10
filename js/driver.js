@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
     var acompananteCount = 0;
 
     document.getElementById('btnAddAcompanante').addEventListener('click', function() {
@@ -14,4 +13,3 @@ document.addEventListener('DOMContentLoaded', function() {
             acompananteCount--;
         }
     });
-});
