@@ -42,7 +42,7 @@ async function getPatient() {
               <td>${patient.Traslado}</td>
               <td>${patient.Direccion}</td>
               <td>
-                <button class="btn btn-outline-primary btn-sm" onclick="openAccomp(${patient.Id})" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-outline-primary btn-sm" onclick="openAccomp(${patient.IdPaciente})" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
                 <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal" data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
               </td>
               <td class="actions">
@@ -81,8 +81,11 @@ async function getAccomp(idPatient) {
     const tableBody = document.querySelector('#accomp-tbody');
    
    const accomp = accompList.filter(a => {
-    return a.Id === idPatient;
+    console.log(a.IdAcompanante, idPatient)
+    
+    return a.IdAcompanante === idPatient;
   });
+  console.log(accomp);
      if (accomp) {
      
 
