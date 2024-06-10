@@ -1,7 +1,12 @@
-<link rel="stylesheet" href="style/animation.css">
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
 <div class="container mt-5 fade-in" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Registro de Pacientes</h1>
     <form id="perfilPacienteForm" class="bg-light p-4 border rounded-3">
@@ -15,7 +20,7 @@
                 <div class="col-md-4 mb-3">
                     <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
                         Apellido:</label>
-                    <input required  type="text" id="primerApellido" name="primerApellido" class="form-control">
+                    <input required type="text" id="primerApellido" name="primerApellido" class="form-control">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo
@@ -25,10 +30,10 @@
             </div>
             <div class="row">
                 <div class="col-md-3 mb-3">
-                    <label for="sexo" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
-                    <select required id="sexo" name="sexo" class="form-select">
-                        <option value="F">Femenino</option>
-                        <option value="M">Masculino</option>
+                    <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
+                    <select required id="genero" name="genero" class="form-select">
+                        <option value="Femenino">Femenino</option>
+                        <option value="Masculino">Masculino</option>
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -227,7 +232,7 @@
                 </div>
             </div>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <button type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                <button id="guardarFormPatients" type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Guardar">
                     <i class="bi bi-save"></i> Guardar
                 </button>
@@ -235,3 +240,6 @@
     </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<div data-script="js/formPatient.js"></div>
+</body>
+</html>
