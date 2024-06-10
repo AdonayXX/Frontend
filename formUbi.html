@@ -1,0 +1,31 @@
+
+<div class="container mt-5 fade-in">
+    <h1 class="mb-4 text-center">Registro de Ubicaciones</h1>
+
+    <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
+        <div class="mb-3">
+            <label for="destino">Destino</label>
+            <input type="text" id="destinos" name="destinos" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Especialidades">Especialidades</label>
+            <button type="button" class="btn btn-outline-secondary ms-2" onclick="agregarEspecialidad()" data-bs-toggle="tooltip" data-bs-placement="top"
+             title="Agregar otra especialidade"><i class="bi bi-plus"></i></button>
+        </div>
+
+            <div id="checkbox-container">
+                <input type="checkbox" name="especialidades" value="odontologia"> Cardiología<br>
+                <input type="checkbox" name="especialidades" value="radiografia"> Pediatría<br>
+                <input type="checkbox" name="especialidades" value="cirugias"> Cirugía<br>
+                <input type="checkbox" name="especialidades" value="general"> Medicina General<br>
+            </div>
+            <br>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-between">
+                <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Chofer">
+                    <i class="bi bi-save"></i> Guardar
+        </form>
+    </div>
+
+  
+

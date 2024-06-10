@@ -1,5 +1,15 @@
 <div class="container mt-5 fade-in contenedor-Modal" style="max-width: 1100px;">
-    <h1 class="mb-4 text-center">Coordinar Vale de Transporte</h1>
+    <div id="nav" class="row align-items-center m-3">
+        <div class="col-auto">
+            <button class="btn request-y" id="btn-devolver">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+        </div>
+        <div class="col text-center">
+            <h1 class="mb-4 text-center">Coordinar Vale de Transporte</h1>
+        </div>
+    </div>
+
     <div class="row">
         <div class="d-flex justify-content-end mb-3 me-2">
             <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
@@ -24,90 +34,70 @@
                     <input type="text" id="id" name="id" class="form-control">
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
-                    <label for="fecha" class="form-label">Fecha:</label>
-                    <input type="datetime-local" id="fecha" name="fecha" class="form-control">
-                </div>
-                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
-                    <label for="up" class="form-label">UP:</label>
+                    <label for="up" class="form-label">Unidad Programática:</label>
                     <input type="text" id="up" name="up" class="form-control">
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="unidad" class="form-label">Unidad:</label>
                     <input type="text" id="unidad" name="unidad" class="form-control">
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-xl-6  mt-2">
                     <label for="solicitante" class="form-label">Solicitante:</label>
                     <input type="text" id="solicitante" name="solicitante" class="form-control">
                 </div>
-                <div class="col-xl-6 mt-2">
+            </div>
+            <div class="row">
+                <div class="col-xl-6 mt-2 ">
                     <label for="servicio" class="form-label">Servicio:</label>
                     <input type="text" id="servicio" name="servicio" class="form-control">
                 </div>
-
-            </div>
-            <div class="row datos mt-4">
-                <h3 class="text-center">Datos de la Gira</h3>
-            </div>
-            <div class="row justify-content-center align-items-center">
-                <div class="col-xl-5 text-black mx-2 mt-2">
-                    <h4 class="text-center" style="color:#094079">Ruta</h4>
-                    <div class="row">
-                        <label for="salida" class="form-label">Salida:</label>
-                        <input type="text" id="salida" name="salida" class="form-control">
-                        <label for="destino" class="mt-2 form-label">Destino:</label>
-                        <input type="text" id="destino" name="destino" class="form-control">
-                    </div>
-                </div>
-                <div class="col-xl-5 text-black mx-2 mt-2 col-sm-12">
-                    <h4 class="text-center" style="color:#094079">Destino</h4>
-                    <div class="row">
-                        <label for="salida" class="form-label">Salida:</label>
-                        <input type="text" id="salida" name="salida" class="form-control">
-                        <label for="destino" class="mt-2  form-label">Destino:</label>
-                        <input type="text" id="destino" name="destino" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="row m-3 row justify-content-center align-items-center">
-                <div class="col-xl-3 mb-3 col-sm-12">
-                    <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
-                    <input type="date" id="fechaReq" name="fechaReq" class="form-control">
-                </div>
-                <div class="col-xl-8 mb-3 col-sm-12">
-                    <label for="identificacion" class="form-label">Motivo:</label>
+                <div class="col-xl-6 col-sm-12 col-md-6 mt-2"">
+                    <label for="servicio" class="form-label">Motivo:</label>
                     <input type="text" id="motivo" name="motivo" class="form-control">
                 </div>
-            </div>
-            <div class="row">
 
+            </div>
+            <div class="row datos mt-2">
+                <h3 class="text-center mt-1">Datos de la Gira</h3>
+            </div>
+            <div class="row justify-content-center align-items-center m-3">
+                <div class="col-lg-6 text-black">
+                    <h4 class="text-center" style="color:#094079">Salida</h4>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label for="salida" class="form-label">Hora:</label>
+                            <input type="text" id="salida" name="salida" class="form-control">
+                        </div>
+                        <div class="col-xl-6 mb-3 col-sm-12">
+                            <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
+                            <input type="date" id="fechaReq" name="fechaReq" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center m-3">
+                <div class="col-sm-12 col-md-4 col-lg-12 d-flex flex-column justify-content-around text-center">
+                    <label for="tbxdireccion" class="form-label text-center">Detalle:</label>
+                    <textarea class="form-control" id="tbxdireccion" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center m-1">
                 <div class="col-xl-12 text-center">
                     <h3>Acompañantes</h3>
                 </div>
-                <div class="row d-flex justify-content-center m-1">
-                    <div class="col-xl-5 text-black m-1 col-sm-12 ">
-                        <label for="destino2" class="form-label">Acompañante 1:</label>
-                        <input type="text" id="acompañante1" name="acompañante1" class="form-control">
-                    </div>
-                    <div class="col-xl-5 text-black m-1 col-sm-12">
-                        <label for="destino1" class="form-label">Acompañante 2:</label>
-                        <input type="text" id="acompañante2" name="acompañante2" class="form-control">
-                    </div>
-                    <div class="col-xl-5 text-black m-1 col-sm-12">
-                        <label for="destino3" class="form-label">Acompañante 3:</label>
-                        <input type="text" id="acompañante3" name="acompañante3" class="form-control">
-                    </div>
-                    <div class="col-xl-5 text-black m-1 col-sm-12">
-                        <label for="destino4" class="form-label">Acompañante 4:</label>
-                        <input type="text" id="acompañante4" name="acompañante4" class="form-control">
-                    </div>
+                <div class="col-xl-5 text-black m-1 col-sm-12">
+                    <label for="destino2" class="form-label">Acompañante 1:</label>
+                    <input type="text" id="acompañante1" name="acompañante1" class="form-control">
+                </div>
+                <div class="col-xl-5 text-black m-1 col-sm-12">
+                    <label for="destino1" class="form-label">Acompañante 2:</label>
+                    <input type="text" id="acompañante2" name="acompañante2" class="form-control">
                 </div>
 
                 <div class="row mt-3">
                     <h3 class="text-center">Recursos</h3>
                 </div>
-                <div class="row mt-3">
+                <div class="row d-flex justify-content-center m-1">
                     <div class="col-xl-3 col-sm-12">
                         <label for="destino2" class="form-label">Placa:</label>
                         <input type="text" id="placa" name="placa" class="form-control">
@@ -115,10 +105,6 @@
                     <div class="col-xl-6 col-sm-12">
                         <label for="destino2" class="form-label">Chofer:</label>
                         <input type="text" id="chofer" name="chofer" class="form-control">
-                    </div>
-                    <div class="col-xl-3 col-sm-12">
-                        <label for="destino2" class="form-label">Kilometros:</label>
-                        <input type="text" id="Kilometros" name="Kilometros" class="form-control">
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -136,14 +122,16 @@
                 </div>
                 <div class="row mt-3">
                     <div class="d-flex justify-content-center mb-3 me-2 col-sm-12">
-                        <button class="btn mt-4 fs-5 request-n" title="Rechazar Solicitud">
+                        <button class="btn mt-4 fs-5 request-n" title="Rechazar Solicitud" id="btn-rechazarSoli">
                             <i class="bi bi-trash"></i>
                         </button>
-                        <button class="btn mt-4 fs-5 request-y" title="Aceptar Solicitud">
+                        <button class="btn mt-4 fs-5 request-y" title="Aceptar Solicitud" id="btn-agregarSoli">
                             <i class="bi bi-check"></i>
                         </button>
                     </div>
                 </div>
             </div>
     </form>
+    <div id="toast-container"></div>
+    <script src="/js/vales.js"></script>
 </div>
