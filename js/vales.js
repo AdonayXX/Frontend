@@ -1,3 +1,4 @@
+
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
         .then(response => response.text())
@@ -24,13 +25,16 @@ function showToast(title, message) {
         console.error('Toast element not found');
     }
 }
+document.getElementById('btn-rechazarSoli').onclick = function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+    loadToastTemplate(function() {
+        showToast('Solicitud Rechazada', 'La solicitud ha sido rechazada correctamente.');
+    });
+};
 
-document.getElementById('btn-rechazarSoli').addEventListener('click', function() {
-    showToast('Solicitud Rechazada', 'La solicitud ha sido rechazada correctamente.');
-});
-document.getElementById('btn-agregarSoli').addEventListener('click', function() {
-    showToast('Solicitud Agregada', 'La solicitud ha sido agregada correctamente.');
-});
-document.getElementById('btn-devolver').addEventListener('click', function() {
-    window.location.href = 'dataTableRequest.html';
-});
+document.getElementById('btn-agregarSoli').onclick = function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+    loadToastTemplate(function() {
+        showToast('Solicitud Aceptada', 'La solicitud ha sido aceptada correctamente.');
+    });
+};

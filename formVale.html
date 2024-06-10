@@ -1,7 +1,7 @@
 <div class="container mt-5 fade-in contenedor-Modal" style="max-width: 1100px;">
     <div id="nav" class="row align-items-center m-3">
         <div class="col-auto">
-            <button class="btn request-y" id="btn-devolver">
+            <button class="btn request-y" id="btn-devolver" onclick="loadContent('dataTableRequest.html', 'mainContent')">
                 <i class="bi bi-arrow-left"></i>
             </button>
         </div>
@@ -51,7 +51,7 @@
                     <label for="servicio" class="form-label">Servicio:</label>
                     <input type="text" id="servicio" name="servicio" class="form-control">
                 </div>
-                <div class="col-xl-6 col-sm-12 col-md-6 mt-2"">
+                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="servicio" class="form-label">Motivo:</label>
                     <input type="text" id="motivo" name="motivo" class="form-control">
                 </div>
@@ -132,6 +132,7 @@
                 </div>
             </div>
     </form>
-    <div id="toast-container"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="/js/vales.js"></script>
 </div>
