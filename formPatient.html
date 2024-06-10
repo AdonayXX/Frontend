@@ -1,7 +1,10 @@
-<link rel="stylesheet" href="style/animation.css">
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Pacientes</title>
+</head>
+<body>
 <div class="container mt-5 fade-in" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Registro de Pacientes</h1>
     <form id="perfilPacienteForm" class="bg-light p-4 border rounded-3">
@@ -25,10 +28,10 @@
             </div>
             <div class="row">
                 <div class="col-md-3 mb-3">
-                    <label for="sexo" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
-                    <select required id="sexo" name="sexo" class="form-select">
-                        <option value="F">Femenino</option>
-                        <option value="M">Masculino</option>
+                    <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
+                    <select required id="genero" name="sexo" class="form-select">
+                        <option value="Femenino">Femenino</option>
+                        <option value="Masculino">Masculino</option>
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
@@ -36,7 +39,7 @@
                         Identificación:</label>
                     <select required id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
                         <option value="Cedula">Cédula de Identidad</option>
-                        <option value="Numeros de Asegurado">Numeros de Asegurado</option>
+                        <option value="Numero de Asegurado">Numeros de Asegurado</option>
                         <option value="Interno">Interno</option>
                     </select>
                 </div>
@@ -68,11 +71,11 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                    <input type="text" id="telefono1" name="telefono1" class="form-control">
+                    <input type="number" id="telefono1" name="telefono1" class="form-control">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
-                    <input type="text" id="telefono2" name="telefono2" class="form-control">
+                    <input type="number" id="telefono2" name="telefono2" class="form-control">
                 </div>
             </div>
             <div class="row">
@@ -159,12 +162,12 @@
                     <div class="col-md-3 mb-3">
                         <label for="acompananteTelefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono
                             1:</label>
-                        <input type="text" id="acompananteTelefono1" name="acompananteTelefono1" class="form-control">
+                        <input type="number" id="acompananteTelefono1" name="acompananteTelefono1" class="form-control">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="acompananteTelefono2_1" class="form-label"><i class="bi bi-telephone"></i> Teléfono
                             2:</label>
-                        <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
+                        <input type="number" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
                             class="form-control">
                     </div>
                 </div>
@@ -234,4 +237,6 @@
             </div>
     </form>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<div data-script="js/formPatient.js"></div>
+</body>
+</html>

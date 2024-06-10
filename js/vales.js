@@ -25,16 +25,72 @@ function showToast(title, message) {
         console.error('Toast element not found');
     }
 }
-document.getElementById('btn-rechazarSoli').onclick = function(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-    loadToastTemplate(function() {
-        showToast('Solicitud Rechazada', 'La solicitud ha sido rechazada correctamente.');
-    });
-};
 
-document.getElementById('btn-agregarSoli').onclick = function(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-    loadToastTemplate(function() {
-        showToast('Solicitud Aceptada', 'La solicitud ha sido aceptada correctamente.');
-    });
-};
+
+//Parte de Generar Solicitud de Vales. 
+let acompananteCount = 0;
+
+document.getElementById('addCompanion').addEventListener('click', function () {
+    if (acompananteCount < 5) {
+        acompananteCount++;
+        const acompDiv = document.getElementById('acompanante' + acompananteCount);
+        if (acompDiv) {
+            acompDiv.style.display = 'block';
+        }
+    } else {
+        alert("No se pueden agregar mas de 5 acompañantes");
+    }
+});
+
+document.getElementById('removeCompanion').addEventListener('click', function () {
+    if (acompananteCount > 0) {
+        const acompDiv = document.getElementById('acompanante' + acompananteCount);
+        if (acompDiv) {
+            acompDiv.style.display = 'none';
+        }
+        acompananteCount--;
+    }
+});
+//funcion para obtener la fecha y hora
+document.addEventListener("DOMContentLoaded", function () {
+    var today = new Date();
+    var formattedDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+    document.getElementById('date').textContent = formattedDate;
+});
+
+
+
+
+//Funciones para cargar API
+var url = 'http://localhost:56336/';
+AxiosData();
+function AxiosData() {
+    axios.get(`${url}api/acompanantes`)
+        .then(response => {
+            console.log(response.data);
+            LlenarAcompanante(response.data);
+            LlenarUP(response.data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+function LlenarAcompanante(data) {
+    let body = '';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value = ${data[index].id}>${data[index].Nombre}</option>`;
+    }
+    document.getElementById('acompananteNombre1').innerHTML = body;
+    document.getElementById('acompananteNombre2').innerHTML = body;
+    document.getElementById('acompananteNombre3').innerHTML = body;
+    document.getElementById('acompananteNombre4').innerHTML = body;
+    document.getElementById('acompananteNombre5').innerHTML = body;
+}
+function LlenarUP(data) {
+    let body = '';
+    for (let index = 0; index < array.length; index++) {
+        body += `<option value = ${data[index].id}>${data[index].UnidadProgramatica}</option>`;
+    }
+    document.getElementById('Up').innerHTML = body;
+}

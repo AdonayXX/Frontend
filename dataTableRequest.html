@@ -25,11 +25,11 @@
             </button>
         </div>
     <div class="table-responsive mt-3">
-        <table class="table table-light table-hover table-striped table-bordered">
+        <table class="table table-light table-hover table-striped table-bordered text-center">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Ingreso</th>
+                    <th>Fecha Solicitada</th>
                     <th>Solicitante</th>
                     <th>Motivo</th>
                     <th>Estado</th>
@@ -42,7 +42,7 @@
                     <td>03/06/2024</td>
                     <td>Isaac Felipe Valerin Mena</td>
                     <td>Presentación de Aplicación</td>
-                    <td><span style="color: yellow; font-weight: 900; font-size: 20px;">· </span>Pendiente</td>
+                    <td><span style="color: orange; font-weight: 900; font-size: 12px;">! </span>Pendiente</td>
                     <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
                 <tr>
@@ -50,9 +50,26 @@
                     <td>03/06/2024</td>
                     <td>Esteban Perez</td>
                     <td>Recoger vacunas</td>
-                    <td><span style="color: red; font-weight: 900; font-size: 20px;">· </span>Cancelado</td>
+                    <td><span style="color: red; font-weight: 900; font-size:12px;">× </span>Cancelado</td>
                     <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
                 </tr>
+                <tr>
+                    <td>03</td>
+                    <td>03/06/2024</td>
+                    <td>Esteban Perez</td>
+                    <td>Recoger vacunas</td>
+                    <td><span style="color: green; font-weight: 900; font-size:12px;">✓ </span>Completado</td>
+                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
+                </tr>
+                <tr>
+                    <td>04</td>
+                    <td>03/06/2024</td>
+                    <td>Esteban Perez</td>
+                    <td>Recoger vacunas</td>
+                    <td><span style="color: blue; font-weight: 900; font-size:12px;">֎ </span>Asignado</td>
+                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
+                </tr>
+
             </tbody>
         </table>
     </div>
