@@ -25,7 +25,7 @@ async function getPatient() {
           const row = `
               <tr>
                   <td><input type="checkbox" /></td>
-                  <td>${viaje.Nombre}</td>
+                  <td>${viaje.Paciente}</td>
                   <td>${viaje.LugarSalida}</td>
                   <td>${viaje.LugarDestino}</td>
                   <td>${viaje.Condicion}</td>
