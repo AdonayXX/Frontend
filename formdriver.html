@@ -24,7 +24,7 @@
         
         <div class="form-section">
             <div class="row align-items-center">
-                <h2 class="col-auto">Seleccione el acompañante:</h2>
+                <h2 class="col-auto">Seleccione el contacto de emergencia:</h2>
                 <div class="col-auto ms-auto">
                     <button type="button" id="btnAddAcompanante" class="btn btn-secondary m-1" style="background-color: #094079; border: none;">
                         <i class="bi bi-person-plus-fill"></i>
@@ -36,7 +36,7 @@
             </div>
             <div class="companions-container d-flex flex-wrap">
                 <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
-                    <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
+                    <label for="acompananteNombre1" class="form-label mt-1 mb-3">Contacto de emergencia 1:</label>
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <input type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
-                    <label for="acompananteNombre2" class="form-label mb-3">Acompañante 2:</label>
+                    <label for="acompananteNombre2" class="form-label mb-3">Contacto de emergencia 2:</label>
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <input type="text" id="acompananteNombre2" name="acompananteNombre2" class="form-control" placeholder="Nombre">
@@ -115,14 +115,6 @@
         <div class="mb-3">
             <label for="fechaVencimientoLicencia" class="form-label"><i class="bi bi-calendar"></i> Fecha de vencimiento de la licencia</label>
             <input type="date" id="fechaVencimientoLicencia" name="fechaVencimientoLicencia" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="estadoKilometrajeInicial" class="form-label"><i class="bi bi-speedometer2"></i> Estado kilometraje inicial</label>
-            <input type="number" id="estadoKilometrajeInicial" name="estadoKilometrajeInicial" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="estadoKilometrajeFinal" class="form-label"><i class="bi bi-speedometer"></i> Estado kilometraje final</label>
-            <input type="number" id="estadoKilometrajeFinal" name="estadoKilometrajeFinal" class="form-control" required>
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-between">
             <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Chofer">
