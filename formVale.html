@@ -1,15 +1,16 @@
 <div class="container mt-5 fade-in contenedor-Modal" style="max-width: 1100px;">
     <div id="nav" class="row align-items-center m-3">
         <div class="col-auto">
-            <button class="btn request-y" id="btn-devolver" onclick="loadContent('dataTableRequest.html', 'mainContent')">
+            <a id="items" href="#" onclick="loadContent('dataTableRequest.html', 'mainContent')">
+            <button class="btn request-y" id="btn-devolver">
                 <i class="bi bi-arrow-left"></i>
             </button>
+            </a>
         </div>
         <div class="col text-center">
             <h1 class="mb-4 text-center">Coordinar Vale de Transporte</h1>
         </div>
     </div>
-
     <div class="row">
         <div class="d-flex justify-content-end mb-3 me-2">
             <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"

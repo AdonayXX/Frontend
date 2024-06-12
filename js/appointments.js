@@ -18,8 +18,13 @@ async function getPacienteCita(identificacion) {
         document.getElementById('telefono1').value = paciente.Telefono1 || '';
         document.getElementById('telefono2').value = paciente.Telefono2 || '';
         document.getElementById('direccion').value = paciente.Direccion || '';
+
+        showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
+
+        
     } catch (error) {
         console.error('Error fetching patient data:', error);
+        showToast('Error', 'Error al obtener los datos del paciente.')
     }
 }
 

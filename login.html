@@ -40,11 +40,15 @@
                             <div class="col-sm-12 col-md-4 col-lg-6 ">
                                 <h4 class="modal-title" id="exampleModalLabel">Generar Solicitud</h4>
                                 <span id="date"></span>
+
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
-
+                    <div class="col-4 mt-4" style="margin-left:35px ;">
+                        <button type="submit" class="btn btn-primary" id="btn-mostrar">Mostrar Vale
+                            anterior</button>
+                    </div>
                     <div class="modal-body p-5">
                         <form action="#" class="row needs-validation" method="get" novalidate>
                             <div class="row g-1">
@@ -62,7 +66,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="area_salud" class="form-label">Unidad: </label>
-                                    <input type="text" class="form-control" id="user_surname" required>
+                                    <input type="text" class="form-control" id="unidad" required>
                                     <div class="valid-feedback">
                                         Completo
                                     </div>
@@ -74,7 +78,7 @@
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_name" class="form-label">Nombre del Solicitante:</label>
-                                    <input type="text" class="form-control" id="user_name" required>
+                                    <input type="text" class="form-control" id="nameSoli" required>
                                     <div class="valid-feedback">
                                         Completo
                                     </div>
@@ -85,8 +89,9 @@
 
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_surname" class="form-label">Servicios:</label>
-                                    <select class="form-select" id="user_gen" required>
+                                    <select class="form-select" id="service" required>
                                         <option selected disabled value="">Seleccionar</option>
+                                        <option>Enfermeria</option>
                                     </select>
 
                                 </div>
@@ -94,7 +99,7 @@
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_name" class="form-label">Lugar de Salida: </label>
-                                    <input type="text" class="form-control" id="user_name" required>
+                                    <input type="text" class="form-control" id="lugarSa" required>
                                     <div class="valid-feedback">
                                         Completo
                                     </div>
@@ -103,8 +108,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_surname" class="form-label">Lugar de Destino:</label>
-                                    <input type="text" class="form-control" id="user_surname" required>
+                                    <label for="lugarDes" class="form-label">Lugar de Destino:</label>
+                                    <input type="text" class="form-control" id="lugarDes" required>
                                 </div>
                             </div>
 
@@ -116,16 +121,17 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label">Hora de salida: </label>
-                                    <select class="form-select" id="user_gen" required>
-                                        <option selected disabled value="">Seleccionar</option>
-                                    </select>
+                                    <input type="time" class="form-control" id="hora_salida" required>
+
                                 </div>
                             </div>
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label">Motivo de la gira: </label>
-                                    <select class="form-select" id="user_gen" required>
+                                    <select class="form-select" id="motivo" required>
                                         <option selected disabled value="">Seleccionar</option>
+                                        <option>Gira medica</option>
+                                        <option>Otros</option>
                                     </select>
                                 </div>
                             </div>
@@ -199,7 +205,6 @@
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary" id="btn_Guardar">Solicitar</button>
-                        <button type="eliminar" class="btn btn-danger" id="btn_Eliminar">Eliminar</button>
                     </div>
                     </form>
                 </div>

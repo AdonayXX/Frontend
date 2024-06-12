@@ -11,34 +11,23 @@
     <div class="container mt-5 fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Agendar Cita</h1>
         <form id="agendarCitaForm" class="bg-light p-4 border rounded-3">
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
-                    <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
-                        <option value="Cedula">Cédula Nacional</option>
-                        <option value="Asegurado">Asegurado</option>
-                        <option value="Interno">Interno</option>
-                    </select>
-
-                </div>
-                <div class="col-md-4">
-                    <label for="identificacion" class="form-label">Identificación:</label>
-                    <input type="text" id="identificacion" name="identificacion" class="form-control">
-                </div>
-
-                <div class="col-md-2">
-                    <label for="fechaCita" class="form-label">Fecha:</label>
-                    <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
-                </div>
-                <div class="col-md-2">
-                    <label for="horaActual" class="form-label">Hora actual:</label>
-                    <input type="time" id="horaActual" name="horaActual" class="form-control">
-                </div>
-            </div>
-
-            <div class="form-section mt-4">
+            <div class="form-section mt-1">
                 <h2>Datos del paciente:</h2>
-                <div class="row mt-4">
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-4 mt-2">
+                        <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
+                        <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
+                            <option value="Cedula">Cédula Nacional</option>
+                            <option value="Asegurado">Asegurado</option>
+                            <option value="Interno">Interno</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <label for="identificacion" class="form-label">Identificación:</label>
+                        <input type="text" id="identificacion" name="identificacion" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-2">
                     <div class="col-md-4 mb-3">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" id="nombre" name="nombre" class="form-control">
@@ -94,14 +83,25 @@
                 <div class="row align-items-center">
                     <h2 class="col-auto">Seleccione el acompañante:</h2>
                     <div class="col-auto ms-auto">
-                        <button type="button" id="addAcompananteBtn" class="btn btn-secondary m-1"
-                            style="background-color: #094079; border: none;">
-                            <i class="bi bi-person-plus-fill"></i>
+                        <button  id="addAcompananteBtn"  type="button" class="btn btn-outline-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path
+                                    d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                            </svg>
                         </button>
-                        <button type="button" id="removeAcompananteBtn" class="btn btn-secondary m-1"
-                            style="background-color: #094079; border: none;">
-                            <i class="bi bi-person-dash-fill"></i>
+                        <button type="button" class="btn btn-outline-danger" id="removeAcompananteBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                fill="currentColor" class="bi bi-person-fill-dash" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path
+                                    d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                            </svg>
                         </button>
+
                     </div>
                 </div>
                 <div class="companions-container d-flex flex-wrap">
@@ -109,31 +109,30 @@
                         <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <select type="text" id="acompananteNombre1" name="acompananteNombre1"
-                                    class="form-control" placeholder="Nombre">
-                                </select>
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1"
-                                    class="form-control" placeholder="1° Apellido">
+                                <select type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre"></select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1"
-                                    class="form-control" placeholder="2° Apellido">
+                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
-                                    class="form-control" placeholder="Teléfono 1">
+                                <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
-                                    class="form-control" placeholder="Teléfono 2">
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
+                            </div>
+                            <div  id="acompanantePhone" class="col-md-4 mb-3" style="display: none;">
+                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1" class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-4 mb-3 d-flex justify-content-start">
+                                <button type="button" id="PhoneBtn1" class="btn btn-secondary" style="background-color: #094079; border: none;">
+                                    <i class="bi bi-telephone-plus-fill"></i>
+                                </button>
+                                
+                                
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
-                                <select id="acompananteParentesco1" name="acompananteParentesco1"
-                                    class="form-select w-50">
+                                <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select w-50">
                                     <option value="Hijo/a">Hijo/a</option>
                                     <option value="Padre">Padre</option>
                                     <option value="Madre">Madre</option>
@@ -148,12 +147,14 @@
                             </div>
                         </div>
                     </div>
+                
                     <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
                         <label for="acompananteNombre2" class="form-label mb-3">Acompañante 2:</label>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteNombre2" name="acompananteNombre2"
+                                <select type="text" id="acompananteNombre2" name="acompananteNombre2"
                                     class="form-control" placeholder="Nombre">
+                                </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
@@ -163,13 +164,19 @@
                                 <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
                                     class="form-control" placeholder="2° Apellido">
                             </div>
+
                             <div class="col-md-4 mb-3">
                                 <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
                                     class="form-control" placeholder="Teléfono 1">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div id="acompanantePhone2" class="col-md-4 mb-3" style="display: none;">
                                 <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
                                     class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-4 mb-3 d-flex justify-content-start">
+                                <button type="button" id="PhoneBtn2" class="btn btn-secondary" style="background-color: #094079; border: none;">
+                                    <i class="bi bi-telephone-plus-fill"></i>
+                                </button>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
@@ -244,6 +251,8 @@
     <script src="js/dates.js"></script>
     <div data-script="js/companions.js"></div>
     <div data-script="js/appointments.js"></div>
+    <div data-script="js/companionsPhone.js"></div>
+
 
 
 </body>
