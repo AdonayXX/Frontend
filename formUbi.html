@@ -1,0 +1,143 @@
+<style>
+    th,
+    td {
+        text-align: center;
+    }
+
+    #btnEliminarEspe {
+        width: 50px;
+    }
+</style>
+
+<div class="container mt-5 fade-in">
+    <h1 class="mb-4 text-center">Registro de Ubicaciones</h1>
+
+    <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
+        <div class="mb-3">
+            <h4 style="text-align: center;">Destinos</h4>
+            <div class="input-group">
+                <select id="destinos" name="destinos" class="form-control" required>
+                    <option value="hospital1">Hospital 1</option>
+                    <option value="hospital2">Hospital 2</option>
+                    <option value="hospital3">Hospital 3</option>
+                </select>
+                <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
+                    data-bs-target="#AgregarUbiModal">
+                    <i class="bi bi-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <h4 style="text-align: center;">Buscar</h4>
+        <input id="buscarEspe" type="text" class="form-control" placeholder="Buscar especialidad..."
+            aria-label="Buscar especialidad" aria-describedby="basic-addon1" style="width: 100%;">
+        <br>
+
+        <div class="table-responsive">
+            <table class="table table-light table-striped table-hover table-bordered" id="tableTrips">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Especialidad</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="viajesTableBody">
+                    <tr>
+                        <td><input type="checkbox" id="seleccionarEspe" /></td>
+                        <td>Cardiología</td>
+                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
+                                    class="bi bi-trash"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="seleccionarEspe" /></td>
+                        <td>Terapia Física</td>
+                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
+                                    class="bi bi-trash"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="seleccionarEspe" /></td>
+                        <td>Enfermeria</td>
+                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
+                                    class="bi bi-trash"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mb-3">
+            <div style=" text-align: center;">
+                Agregar Especialidad
+                <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
+                    data-bs-target="#AgregarEspeModal">
+                    <i class="bi bi-plus"></i>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-center">
+            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Guardar Chofer">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="AgregarUbiModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel">Agregar Ubicación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3" style="text-align: center;">
+                    <h3>Ingrese la nueva ubicación</h3>
+                    <br>
+                    <input type="text" id="AgregarUbi" class="form-control" placeholder="Ingrese la ubicación..."
+                        required>
+                    <br>
+                    <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                        id="BtnGuardarUbi">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AgregarEspeModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel">Agregar Especialidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3" style="text-align: center;">
+                    <h3>Ingrese la nueva especialidad</h3>
+                    <br>
+                    <input type="text" id="AgregarEspe" class="form-control" placeholder="Ingrese la especialidad..."
+                        required>
+                    <br>
+                    <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                        id="BtnGuardarEspe">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

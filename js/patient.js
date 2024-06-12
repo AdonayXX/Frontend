@@ -1,3 +1,6 @@
+
+getPatient(); 
+
 document.getElementById('searchPatient').addEventListener('keyup', function() {
     let input = document.getElementById('searchPatient').value.toLowerCase();
     let table = document.getElementById('tablePatient');
@@ -17,44 +20,138 @@ document.getElementById('searchPatient').addEventListener('keyup', function() {
 });
 
 
-async function getPatient() {
+  async function getAccomp() {
     try {
-      const API_URL = 'http://localhost:56336/api/paciente';
+      const API_URL = 'http://localhost:18026/api/acompanante';
       const response = await axios.get(API_URL);
-      console.log(response.data);
+      const accompList = response.data.acompanantes;
+      return accompList;
+     
+     
+     
+    
+    } catch (error) {
+      console.error('There has been a problem:', error);
+    }
+  }
+  function fillAccomp(accompList, idPatient) {
+    try {
+        const tableBody = document.querySelector('#accomp-tbody');
+        tableBody.innerHTML = ''; 
+        const accompFiltered = accompList.filter(accomp => accomp.IdPaciente === idPatient);
   
-      const patient = response.data.pacientes;
-      const tableBody = document.querySelector('#patient-body');
+        if (accompFiltered.length > 0) {
+            accompFiltered.forEach(accomp => {
+                const row = `
+                    <tr>
+                        <td>${accomp.Identificacion}</td>
+                        <td>${accomp.Nombre} ${accomp.Apellido1} ${accomp.Apellido2}</td>
+                        <td>${accomp.Telefono1}-${accomp.Telefono2}</td>
+                        <td>${accomp.Parentesco}</td>
+                        <td class="actions">
+                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        } else {
   
+            console.log(`No se encontraron acompañantes para el paciente con ID: ${idPatient}`);
+        }
+    } catch (error) {
+        console.error('There has been a problem:', error);
+    }
+  }
   
+
+
+function fillPatient(patientList){
+  try {
+    const tableBody = document.querySelector('#patient-body');
+    const patient = patientList.filter(a => {
+      return a.Estado === "Activo" ;
+    });
+    if (patient) {
       tableBody.innerHTML = '';
-  
+      const fragment = document.createDocumentFragment();
+
       patient.forEach(patient => {
-        const row = `
+        const row =  document.createElement('tr');
+        
+        row.innerHTML =  `
           <tr>
             <td>${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td>${patient.Tipo_identificacion} </td>
             <td>${patient.Identificacion}</td>
             <td>${patient.Genero}</td>
-            <td>${patient.Prelacion || 'N/A'}</td>
+           <td>${patient.Prelacion ? 'Si' : 'No'}</td>
             <td>${patient.Telefono1}-${patient.Telefono2}</td>
             <td>${patient.Tipo_seguro}</td>
             <td>${patient.Traslado}</td>
             <td>${patient.Direccion}</td>
             <td>
-              <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
+              <button class="btn btn-outline-primary btn-sm" onclick="openAccomp(${patient.IdPaciente})" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
               <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal" data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
             </td>
             <td class="actions">
-              <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn btn-outline-primary btn-sm" onclick="patientEdit(${patient.Id})"><i class="bi bi-pencil-square"></i></button>
               <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
             </td>
           </tr>
         `;
-        tableBody.innerHTML += row;
+        fragment.appendChild(row);
       });
+      tableBody.appendChild(fragment);
+     
+   } else {
+     throw new Error('Erro al cargar los pacientes');
+   }
+    
+  } catch (error) {
+    console.error('There has been a problem:', error);
+    
+  }
+ 
+
+}
+
+
+
+
+async function getPatient() {
+    try {
+      const API_URL = 'http://localhost:18026/api/paciente';
+      const response = await axios.get(API_URL);
+      const patientList = response.data.pacientes;
+
+      fillPatient(patientList);
+      
+        
+  
+  
+     
     } catch (error) {
       console.error('There has been a problem:', error);
     }
   }
-  getPatient();  
+   
+
+
+  window.openAccomp =  async function(idPatient) {
+
+
+    getAccomp().then(accompList => fillAccomp(accompList, idPatient));
+   
+ 
+   
+ 
+};
+
+window.patientEdit = function (idPatient){
+  loadContent('formPatient.html', 'mainContent');
+
+
+
+
+}
