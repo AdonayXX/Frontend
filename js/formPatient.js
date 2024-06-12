@@ -2,6 +2,7 @@
         event.preventDefault();
         console.log("Formulario enviado")
 
+<<<<<<< Updated upstream
         const formData = new FormData(event.target);
         const personaData = {
             Nombre: formData.get('nombre'),
@@ -17,6 +18,31 @@
             Direccion: formData.get('direccion'),
             Latitud: 0,
             Longitud: 0
+=======
+  async function showPerson(pe5rsonId){
+    try{ 
+       
+        const API_URL = 'http://localhost:56336/api/persona';
+        const response = await axios.get(API_URL);
+        const personList = response.data.personas;
+       
+        const person = personList.find(p => p.Identificacion === personId);
+    if (person) {
+        let personId =person.Id
+        const form = document.querySelector('#perfilPacienteForm');
+     const selectedRadioButton = document.querySelector('input[name="encamado"]:checked');
+     let selectedValue;
+
+     if (selectedRadioButton) {
+         selectedValue = selectedRadioButton.value;
+     } 
+        const patientData ={
+            IdPersona: person.Id,
+            Criticidad: "Baja",
+            Encamado: selectedValue,
+            Traslado: form.lugarSalida.value,
+            Estado: "Activo"
+>>>>>>> Stashed changes
         };
         console.log('Datos de la persona:', personaData);
         // Enviar datos a la tabla persona
