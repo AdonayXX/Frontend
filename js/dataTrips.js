@@ -1,3 +1,5 @@
+"use strict";
+
 document.getElementById('searchTrips').addEventListener('keyup', function() {
   let input = document.getElementById('searchTrips').value.toLowerCase();
   let rows = Array.from(document.getElementById('tableTrips').getElementsByTagName('tr'));
