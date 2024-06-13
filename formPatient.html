@@ -36,6 +36,7 @@
                             <option selected disabled value="">Seleccionar</option>
                             <option value="Femenino">Femenino</option>
                             <option value="Masculino">Masculino</option>
+                            <option value="No definido">No Definido</option>
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -95,29 +96,18 @@
                             <option value="Sede">Sede</option>
                         </select>
                     </div>
-                    <div class="col-md-4 mb-3 text-center">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label"><i class="bi bi-bed"></i> Encamado:</label>
-                        <br>
-                        <div class="d-flex flex-wrap justify-content-center">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="temporal" name="encamado"
-                                    value="temporal">
-                                <label class="form-check-label" for="temporal">Temporal</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="permante" name="encamado"
-                                    value="permanente">
-                                <label class="form-check-label" for="permante">Permanente</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="noRequerido" name="encamado"
-                                    value="noRequerido">
-                                <label class="form-check-label" for="noRequerido">No requerido</label>
-                            </div>
-                        </div>
+                        <select required id="encamado" name="encamado" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="temporal">Temporal</option>
+                            <option value="permante">Permanente</option>
+                            <option value="noRequerido">No requerido</option>
+                        </select>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="tipoSangre" class="form-label"><i class="bi bi-gender-ambiguous"></i> Tipo de sangre:</label>
+                        <label for="tipoSangre" class="form-label"><i class="bi bi-gender-ambiguous"></i> Tipo de
+                            sangre:</label>
                         <select required id="tipoSangre" name="tipoSangre" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
                             <option value="A+">A+</option>
@@ -151,14 +141,24 @@
             <div class="form-section">
                 <div class="row align-items-center">
                     <h2 class="col-auto">Seleccione el acompañante:</h2>
-                    <div class="col-auto ms-auto">
-                        <button type="button" id="addAcompananteBtn" class="btn btn-secondary m-1"
-                            style="background-color: #094079; border: none;">
-                            <i class="bi bi-person-plus-fill"></i>
+                    <div class="col-auto ms-auto" style="margin-bottom: 10px;">
+                        <button id="addAcompananteBtn" type="button" class="btn btn-outline-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path
+                                    d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                            </svg>
                         </button>
-                        <button type="button" id="removeAcompananteBtn" class="btn btn-secondary m-1"
-                            style="background-color: #094079; border: none;">
-                            <i class="bi bi-person-dash-fill"></i>
+                        <button type="button" class="btn btn-outline-danger" id="removeAcompananteBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                class="bi bi-person-fill-dash" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path
+                                    d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -179,17 +179,30 @@
                                     class="form-control" placeholder="2° Apellido">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
-                                    class="form-control" placeholder="Teléfono 1">
+                                <input type="text" id="acompananteIdentificacion1" name="acompananteIdentificacion1"
+                                    class="form-control" placeholder="Identificación">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
+                                <input type="number" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
+                                    class="form-control" placeholder="Teléfono 1">
+                            </div>
+                            <div id="acompanantePhone" class="col-md-4 mb-3" style="display: none;">
+                                <input type="number" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
                                     class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-4 mb-3 d-flex justify-content-start">
+                                <button type="button" id="PhoneBtn1" class="btn btn-secondary"
+                                    style="background-color: #094079; border: none;">
+                                    <i class="bi bi-telephone-plus-fill"></i>
+                                </button>
+
+
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
                                 <select id="acompananteParentesco1" name="acompananteParentesco1"
                                     class="form-select w-50">
+                                    <option selected disabled value="">Seleccionar</option>
                                     <option value="Hijo/a">Hijo/a</option>
                                     <option value="Padre">Padre</option>
                                     <option value="Madre">Madre</option>
@@ -220,17 +233,28 @@
                                     class="form-control" placeholder="2° Apellido">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
-                                    class="form-control" placeholder="Teléfono 1">
+                                <input type="text" id="acompananteIdentificacion2" name="acompananteIdentificacion2"
+                                    class="form-control" placeholder="Identificación">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
+                                <input type="number" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
+                                    class="form-control" placeholder="Teléfono 1">
+                            </div>
+                            <div id="acompanantePhone2" class="col-md-4 mb-3" style="display: none;">
+                                <input type="number" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
                                     class="form-control" placeholder="Teléfono 2">
+                            </div>
+                            <div class="col-md-4 mb-3 d-flex justify-content-start">
+                                <button type="button" id="PhoneBtn2" class="btn btn-secondary"
+                                    style="background-color: #094079; border: none;">
+                                    <i class="bi bi-telephone-plus-fill"></i>
+                                </button>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
                                 <select id="acompananteParentesco2" name="acompananteParentesco2"
                                     class="form-select w-25">
+                                    <option selected disabled value="">Seleccionar</option>
                                     <option value="Hijo/a">Hijo/a</option>
                                     <option value="Padre">Padre</option>
                                     <option value="Madre">Madre</option>
@@ -249,14 +273,16 @@
             </div>
 
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <button id="guardarFormPatients" type="submit" class="btn btn-success" data-bs-toggle="tooltip"
+                <button id="guardarFormPatients" type="button" class="btn btn-success" data-bs-toggle="tooltip"
                     data-bs-placement="top" title="Guardar">
                     <i class="bi bi-save"></i> Guardar
                 </button>
             </div>
         </form>
     </div>
-    <script data-script="js/companions.js"></script>
+    <div data-script="js/companions.js"></div>
+    <div data-script="js/formPatient.js"></div>
+    <div data-script="js/pruebaPatient.js"></div>
 </body>
 
 </html>

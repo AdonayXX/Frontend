@@ -1,4 +1,3 @@
-
 getPatient(); 
 
 document.getElementById('searchPatient').addEventListener('keyup', function() {
