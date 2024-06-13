@@ -8,7 +8,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
 async function getPacienteCita(identificacion) {
     try {
-        const API_URL = `http://localhost:56336/api/citaPaciente/${identificacion}`;
+        const API_URL = `http://localhost:18026/api/paciente/${identificacion}`;
         const response = await axios.get(API_URL);
         const paciente = response.data.paciente; // Acceder a la propiedad 'paciente' del objeto de respuesta
 
