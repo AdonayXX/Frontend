@@ -30,6 +30,7 @@ async function getPatient() {
                   <td>${viaje.LugarDestino}</td>
                   <td>${viaje.Condicion}</td>
                   <td>${viaje.HoraCita}</td>
+                  <td>${viaje.fechacita}</td>
                   <td>${viaje.Ruta}</td>
                   <td>${viaje.Posicion}</td>
                   <td>
