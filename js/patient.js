@@ -77,6 +77,8 @@ function fillPatient(patientList){
 
       patient.forEach(patient => {
         const row =  document.createElement('tr');
+        const telefonoCompleto = (patient.Telefono2 !== 0) ? `${patient.Telefono1}-${patient.Telefono2}` : `${patient.Telefono1}`;
+
         
         row.innerHTML =  `
           <tr>
@@ -85,7 +87,7 @@ function fillPatient(patientList){
             <td>${patient.Identificacion}</td>
             <td>${patient.Genero}</td>
            <td>${patient.Prelacion ? 'Si' : 'No'}</td>
-            <td>${patient.Telefono1}-${patient.Telefono2}</td>
+            <td>${telefonoCompleto}</td>
             <td>${patient.Tipo_seguro}</td>
             <td>${patient.Traslado}</td>
             <td>${patient.Direccion}</td>
@@ -102,6 +104,13 @@ function fillPatient(patientList){
         fragment.appendChild(row);
       });
       tableBody.appendChild(fragment);
+      $(document).ready( function () {
+        $('#tablePatient').DataTable({
+          ordering:false,
+          searching: false,
+         
+        });
+      } );
      
    } else {
      throw new Error('Erro al cargar los pacientes');
