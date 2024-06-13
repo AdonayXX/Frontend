@@ -9,7 +9,7 @@
             <input type="text" class="form-control" id="searchTrips" placeholder="Buscar...">
         </div>
     </div>
-    
+
     <div class="row mb-3">
         <div class="col-md-4">
             <label for="unidades" class="form-label">Unidades</label>
@@ -20,6 +20,7 @@
                 <option value="3">Unidad 3</option>
             </select>
         </div>
+
         <div class="col-md-4">
             <label for="fechaInicio" class="form-label">Fecha Inicio</label>
             <input type="date" id="fechaInicio" class="form-control">
@@ -28,6 +29,18 @@
             <button class="btn btn-primary" onclick="realizarViajes()">Confirmar</button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label for="unidades" class="form-label">Chóferes</label>
+            <select id="unidades" class="form-select">
+                <option selected>Seleccionar Chófer...</option>
+                <option value="1">Juan</option>
+                <option value="2">Pepe</option>
+                <option value="3">Luis</option>
+            </select>
+        </div>
+    </div>
+
 
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
@@ -70,7 +83,8 @@
                     <td>En ruta</td>
                     <td>Camilla</td>
                     <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ausenteModal">Ausente</button>
+                        <button class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#ausenteModal">Ausente</button>
                     </td>
                 </tr>
                 <tr>
@@ -83,7 +97,8 @@
                     <td>A domicilio</td>
                     <td>Sentado</td>
                     <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ausenteModal">Ausente</button>
+                        <button class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#ausenteModal">Ausente</button>
                     </td>
                 </tr>
             </tbody>
