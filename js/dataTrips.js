@@ -1,3 +1,5 @@
+"use strict";
+
 document.getElementById('searchTrips').addEventListener('keyup', function() {
   let input = document.getElementById('searchTrips').value.toLowerCase();
   let rows = Array.from(document.getElementById('tableTrips').getElementsByTagName('tr'));
@@ -30,6 +32,7 @@ async function getPatient() {
                   <td>${viaje.LugarDestino}</td>
                   <td>${viaje.Condicion}</td>
                   <td>${viaje.HoraCita}</td>
+                  <td>${viaje.fechacita}</td>
                   <td>${viaje.Ruta}</td>
                   <td>${viaje.Posicion}</td>
                   <td>

@@ -26,12 +26,13 @@
                         <label for="identificacion" class="form-label">Identificación:</label>
                         <input type="text" id="identificacion" name="identificacion" class="form-control">
                     </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-4 mt-2">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" id="nombre" name="nombre" class="form-control">
                     </div>
+                </div>
+                <div class="row mt-2">
+                  
                     <div class="col-md-4 mb-3">
                         <label for="primerApellido" class="form-label">Primer Apellido:</label>
                         <input type="text" id="primerApellido" name="primerApellido" class="form-control">
@@ -40,15 +41,25 @@
                         <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
                         <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-3 mb-3">
                         <label for="telefono1" class="form-label">Teléfono 1:</label>
                         <input type="text" id="telefono1" name="telefono1" class="form-control">
                     </div>
+                </div>
+                <div class="row">
+                   
                     <div class="col-md-3 mb-3">
                         <label for="telefono2" class="form-label">Teléfono 2:</label>
                         <input type="text" id="telefono2" name="telefono2" class="form-control">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="condicion" class="form-label">Condición:</label>
+                        <select id="condicion" name="condicion" class="form-select">
+                            <option value="Estable">Estable</option>
+                            <option value="Grave">Grave</option>
+                            <option value="Critico">Crítico</option>
+
+                        </select>
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Prioridad:</label>
@@ -108,42 +119,24 @@
                     <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
                         <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <select type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre"></select>
+                            <div class="col-md-3 mb-3">
+                                <select type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
+                                    <option disabled selected value>Seleccionar Acompañante</option>
+                                </select>
+                                
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
+                            <div class="col-md-3 mb-3">
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfonos">
                             </div>
-                            <div  id="acompanantePhone" class="col-md-4 mb-3" style="display: none;">
-                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1" class="form-control" placeholder="Teléfono 2">
-                            </div>
-                            <div class="col-md-4 mb-3 d-flex justify-content-start">
-                                <button type="button" id="PhoneBtn1" class="btn btn-secondary" style="background-color: #094079; border: none;">
-                                    <i class="bi bi-telephone-plus-fill"></i>
-                                </button>
-                                
-                                
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
-                                <select id="acompananteParentesco1" name="acompananteParentesco1" class="form-select w-50">
-                                    <option value="Hijo/a">Hijo/a</option>
-                                    <option value="Padre">Padre</option>
-                                    <option value="Madre">Madre</option>
-                                    <option value="Esposa/o">Esposa/o</option>
-                                    <option value="Hermano/a">Hermano/a</option>
-                                    <option value="Abuelo/a">Abuelo/a</option>
-                                    <option value="Tío/a">Tío/a</option>
-                                    <option value="Primo/a">Primo/a</option>
-                                    <option value="Sobrino/a">Sobrino/a</option>
-                                    <option value="Cuñado/a">Cuñado/a</option>
-                                </select>
+                            <div class="col-md-2 mb-3">
+                                <label for="" class="form-label">Parentesco:</label>
+                                <input type="text"  id="acompananteParentesco1" name="acompananteParentesco1"class="form-control" placeholder="Parentesco">
                             </div>
                         </div>
                     </div>
@@ -151,48 +144,30 @@
                     <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
                         <label for="acompananteNombre2" class="form-label mb-3">Acompañante 2:</label>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <select type="text" id="acompananteNombre2" name="acompananteNombre2"
                                     class="form-control" placeholder="Nombre">
+                                    <option disabled selected value>Seleccionar Acompañante</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
                                     class="form-control" placeholder="1° Apellido">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
                                     class="form-control" placeholder="2° Apellido">
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
-                                    class="form-control" placeholder="Teléfono 1">
+                                    class="form-control" placeholder="Teléfonos">
                             </div>
-                            <div id="acompanantePhone2" class="col-md-4 mb-3" style="display: none;">
-                                <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
-                                    class="form-control" placeholder="Teléfono 2">
-                            </div>
-                            <div class="col-md-4 mb-3 d-flex justify-content-start">
-                                <button type="button" id="PhoneBtn2" class="btn btn-secondary" style="background-color: #094079; border: none;">
-                                    <i class="bi bi-telephone-plus-fill"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
-                                <select id="acompananteParentesco2" name="acompananteParentesco2"
-                                    class="form-select w-25">
-                                    <option value="Hijo/a">Hijo/a</option>
-                                    <option value="Padre">Padre</option>
-                                    <option value="Madre">Madre</option>
-                                    <option value="Esposa/o">Esposa/o</option>
-                                    <option value="Hermano/a">Hermano/a</option>
-                                    <option value="Abuelo/a">Abuelo/a</option>
-                                    <option value="Tío/a">Tío/a</option>
-                                    <option value="Primo/a">Primo/a</option>
-                                    <option value="Sobrino/a">Sobrino/a</option>
-                                    <option value="Cuñado/a">Cuñado/a</option>
-                                </select>
+                          
+                          
+                            <div class="col-md-2 mb-3">
+                                <label for="" class="form-label">Parentesco:</label>
+                                <input type="text"  id="acompananteParentesco2" name="acompananteParentesco2"class="form-control" placeholder="Parentesco">
                             </div>
                         </div>
                     </div>
@@ -211,6 +186,7 @@
                     <div class="col-md-3 mt-1">
                         <label for="destino" class="form-label">Destino:</label>
                         <select id="destino" name="destino" class="form-select">
+                            <option disabled selected value> -- Seleccione un destino -- </option>
                             <option value="HNN">HNN</option>
                             <option value="CENARE">CENARE</option>
                             <option value="ClinicaBiblica">Clínica Bíblica</option>
@@ -221,6 +197,7 @@
                     <div class="col-md-3 mt-1">
                         <label for="especialidad" class="form-label">Especialidad:</label>
                         <select id="especialidad" name="especialidad" class="form-select">
+                            <option disabled selected value> -- Seleccione una especialidad -- </option>
                             <option value="MedicinaGeneral">Medicina General</option>
                             <option value="Pediatria">Pediatría</option>
                             <option value="Cirugia">Cirugía</option>

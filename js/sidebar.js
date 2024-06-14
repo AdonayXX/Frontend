@@ -1,9 +1,16 @@
 function toggleSidebar() {
     document.body.classList.toggle('open-sidebar');
+
 }
 
 function closeSidebar() {
     document.body.classList.remove('open-sidebar');
+    const searchModules= document.getElementById('searchmodules');
+    searchModules.value = '';
+    let items = document.querySelectorAll('#items');
+    items.forEach(function(item) {
+        item.style.display = '';
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
