@@ -28,6 +28,10 @@
                 <option value="3">Destino 3</option>
             </select>
         </div>
+        <div class="col-md-4">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input type="date" id="fecha" class="form-control">
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-light table-striped table-hover table-bordered">
@@ -47,7 +51,8 @@
                     <td>Lugar 3</td>
                     <td>10:00 am</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm full-width"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-primary btn-sm full-width" data-bs-toggle="modal"
+                            data-bs-target="#acompModal"><i class="bi bi-eye"></i></button>
                     </td>
                 </tr>
                 <tr>
@@ -56,11 +61,50 @@
                     <td>Lugar 3</td>
                     <td>02:00 pm</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm full-width"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-primary btn-sm full-width" data-bs-toggle="modal"
+                            data-bs-target="#acompModal"><i class="bi bi-eye"></i></button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
+</div>
+<br>
+<div class="row text-end">
+    <div class="col-md-12 mt-auto col-sm-12">
+        <button class="btn btn-primary" onclick="">Iniciar Viaje</button>
+        <button class="btn btn-danger" onclick="">Finalizar Viaje</button>
+    </div>
+</div>
+<div class="modal fade" id="acompModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="acompModalLabel">Acompañantes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="table-responsive">
+                        <table class="table table-light table-bordered">
+                            <tbody id="acompTableBody">
+                                <tr>
+                                    <td>Acompañante 1</td>
+                                </tr>
+                                <tr>
+                                    <td>Acompañante 2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+    <div data-script="js/dataTrips.js"></div>
 </div>
