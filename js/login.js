@@ -26,9 +26,45 @@ function showToast(title, message) {
     }
 }
 
-
-//Parte de Generar Solicitud de Vales. 
 let acompananteCount = 0;
+
+//Funcion para cargar API
+var url = 'http://localhost:56336/';
+AxiosData();
+function AxiosData() {
+    axios.get(`${url}api/acompanantes`)
+        .then(response => {
+            console.log(response.data);
+            LlenarAcompanante(response.data);
+
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    axios.get(`${url}api/unidadProgramaticas`)
+        .then(function (response) {
+            const unidades = response.data;
+            const unidadProgramaticaSelect = document.getElementById('Up');
+            // Clear existing options except the first one
+            unidadProgramaticaSelect.innerHTML = '<option selected disabled value="">Seleccione una opción</option>';
+
+            // Populate the select with options from the API response
+            unidades.forEach(function (unidad) {
+                const option = document.createElement('option');
+                option.value = unidad.id; // Adjust according to your data structure
+                option.textContent = unidad.IdUnidadProgramatica; // Adjust according to your data structure
+                unidadProgramaticaSelect.appendChild(option);
+            });
+        })
+        .catch(function (error) {
+            console.error('Error al obtener los datos:', error);
+            alert('Hubo un error al cargar las opciones de unidad programática.');
+        });
+});
+
 
 document.getElementById('addCompanion').addEventListener('click', function () {
     if (acompananteCount < 5) {
@@ -58,24 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('date').textContent = formattedDate;
 });
 
-
-
-
-//Funciones para cargar API
-var url = 'http://localhost:56336/';
-AxiosData();
-function AxiosData() {
-    axios.get(`${url}api/acompanantes`)
-        .then(response => {
-            console.log(response.data);
-            LlenarAcompanante(response.data);
-
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-}
-
 function LlenarAcompanante(data) {
     let body = '';
     for (let index = 0; index < data.length; index++) {
@@ -87,29 +105,29 @@ function LlenarAcompanante(data) {
     document.getElementById('acompananteNombre4').innerHTML = body;
     document.getElementById('acompananteNombre5').innerHTML = body;
 }
-document.addEventListener('DOMContentLoaded', function () {
-    axios.get(`${url}api/unidadProgramaticas`)
-        .then(function (response) {
-            const unidades = response.data;
-            const unidadProgramaticaSelect = document.getElementById('Up');
 
-            // Clear existing options except the first one
-            unidadProgramaticaSelect.innerHTML = '<option selected disabled value="">Seleccione una opción</option>';
+function validateModalForm() {
+    // Get all input and select elements within the modal form
+    const inputs = document.querySelectorAll('#form-request input, #form-request textarea, #form-request select');
+    let isValid = true;
 
-            // Populate the select with options from the API response
-            unidades.forEach(function (unidad) {
-                const option = document.createElement('option');
-                option.value = unidad.id; // Adjust according to your data structure
-                option.textContent = unidad.IdUnidadProgramatica; // Adjust according to your data structure
-                unidadProgramaticaSelect.appendChild(option);
-            });
-        })
-        .catch(function (error) {
-            console.error('Error al obtener los datos:', error);
-            alert('Hubo un error al cargar las opciones de unidad programática.');
-        });
-});
+    // Loop through each input element
+    inputs.forEach(input => {
+        // Check if the input is empty
+        if (input.value.trim() === '' || input.value === null) {
+            // If empty, set isValid to false and highlight the input
+            isValid = false;
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+        } else {
+            // If not empty, remove any previous highlight
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+        }
+    });
 
+    return isValid;
+}
 
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
@@ -139,7 +157,6 @@ document.getElementById('btn_Guardar').addEventListener('click', function (event
             Acompanante5: null,
             Estado: 'P' // Example value for Estado
         };
-
         // Send data to the API using Axios
         axios.post(`${url}api/vales`, formData)
             .then(function (response) {
@@ -159,26 +176,4 @@ document.getElementById('btn_Guardar').addEventListener('click', function (event
     }
 
 });
-function validateModalForm() {
-    // Get all input and select elements within the modal form
-    const inputs = document.querySelectorAll('#form-request input, #form-request textarea, #form-request select');
-    let isValid = true;
-
-    // Loop through each input element
-    inputs.forEach(input => {
-        // Check if the input is empty
-        if (input.value.trim() === '' || input.value === null) {
-            // If empty, set isValid to false and highlight the input
-            isValid = false;
-            input.classList.add('is-invalid');
-            input.classList.remove('is-valid');
-        } else {
-            // If not empty, remove any previous highlight
-            input.classList.remove('is-invalid');
-            input.classList.add('is-valid');
-        }
-    });
-
-    return isValid;
-}
 
