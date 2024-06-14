@@ -48,14 +48,11 @@ async function getPatient() {
 }
 getPatient();
 
-function exportToPDF() {
-  // Implementa la lógica para exportar a PDF
-}
+// function exportToPDF() {
+// }
 
-function exportToExcel() {
-  // Implementa la lógica para exportar a Excel
-}
+// function exportToExcel() {
+// }
 
-function realizarViajes() {
-  // Implementa la lógica para realizar viajes
-}
+// function realizarViajes() {
+// }
