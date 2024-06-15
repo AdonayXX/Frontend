@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(function (error) {
             console.error('Error al obtener los datos:', error);
-            showToast("Error", "Problema al cargar las unidades programaticas")
         });
 });
 
@@ -170,6 +169,6 @@ document.getElementById('btn_Guardar').addEventListener('click', function (event
                 console.error(error);
             });
     } else {
-        alert('Por favor, complete todos los campos requeridos.');
+        showToast("Error", "Debe llenar todos los campos antes de hacer la solicitud");
     }
 });
