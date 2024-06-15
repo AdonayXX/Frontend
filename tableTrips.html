@@ -31,8 +31,8 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-            <label for="unidades" class="form-label">Chóferes</label>
-            <select id="unidades" class="form-select">
+            <label for="choferes" class="form-label">Chóferes</label>
+            <select id="choferes" class="form-select">
                 <option selected>Seleccionar Chófer...</option>
                 <option value="1">Juan</option>
                 <option value="2">Pepe</option>
@@ -68,42 +68,13 @@
                     <th>Condición</th>
                     <th>Hora Cita</th>
                     <th>Fecha Cita</th>
-                    <th>Ruta</th>
-                    <th>Posición</th>
+                    <th>Traslado</th>
+                    <th>Camilla</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="viajesTableBody">
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>Juan Pérez</td>
-                    <td>Sede</td>
-                    <td>Lugar B</td>
-                    <td>Estable</td>
-                    <td>08:00a.m</td>
-                    <td>2024-06-14</td>
-                    <td>En ruta</td>
-                    <td>Camilla</td>
-                    <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#ausenteModal">Ausente</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>Felipe Chacón</td>
-                    <td>Lugar C</td>
-                    <td>Lugar D</td>
-                    <td>Crítico</td>
-                    <td>09:00p.m</td>
-                    <td>2024-06-14</td>
-                    <td>A domicilio</td>
-                    <td>Sentado</td>
-                    <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#ausenteModal">Ausente</button>
-                    </td>
-                </tr>
+                <!-- Se cargan los datos de los viajes -->
             </tbody>
         </table>
     </div>
