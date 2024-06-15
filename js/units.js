@@ -1,10 +1,11 @@
 "use strict";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadUnidades();
+    showTotalCapacity();
 });
 
-document.getElementById('7').addEventListener('submit', function(event) {
+document.getElementById('7').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const unitNumber = document.getElementById('unitNumber').value;
@@ -17,7 +18,11 @@ document.getElementById('7').addEventListener('submit', function(event) {
     const maintenanceType = status === 3 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
     const driver = document.getElementById('assignedDriver').value;
     const mileage = maintenanceType === 2 ? parseInt(document.getElementById('maintenanceMileage').value, 10) : null;
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
+    const capacityTotal = capacityChairs + capacityBeds;
 
+    
     if (initialMileage < 0 || currentMileage < 0 || capacity <= 0 || driver === '') {
         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
         return;
@@ -33,15 +38,15 @@ document.getElementById('7').addEventListener('submit', function(event) {
     }
 
     const unidadData = {
-        idTipoUnidad: 1, 
+        idTipoUnidad: 1,
         idTipoRecurso: resourceType,
         idFrecuenciaCambio: maintenanceType,
         capacidadTotal: capacity,
-        capacidadCamas: 2, 
-        capacidadSillas: 4, 
+        capacidadCamas: 2,
+        capacidadSillas: 4,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: 0, 
+        adelanto: 0,
         idEstado: status
     };
 
@@ -50,7 +55,7 @@ document.getElementById('7').addEventListener('submit', function(event) {
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             document.getElementById('7').reset();
-            loadUnidades(); 
+            loadUnidades();
         })
         .catch(error => {
             console.error('Error al crear la unidad:', error);
@@ -58,7 +63,7 @@ document.getElementById('7').addEventListener('submit', function(event) {
         });
 });
 
-document.getElementById('status').addEventListener('change', function() {
+document.getElementById('status').addEventListener('change', function () {
     const maintenanceFields = document.getElementById('maintenanceFields');
     if (parseInt(this.value, 10) === 3) {
         maintenanceFields.style.display = 'block';
@@ -67,7 +72,7 @@ document.getElementById('status').addEventListener('change', function() {
     }
 });
 
-document.getElementById('maintenanceType').addEventListener('change', function() {
+document.getElementById('maintenanceType').addEventListener('change', function () {
     const mileageField = document.getElementById('mileageField');
     const dateField = document.getElementById('dateField');
     mileageField.style.display = this.value === '2' ? 'block' : 'none';
@@ -125,7 +130,7 @@ function loadUnidades() {
             console.log('Unidades:', response.data);
             const unidades = response.data.unidades;
             const tableBody = document.getElementById('unitTableBody');
-            tableBody.innerHTML = ''; 
+            tableBody.innerHTML = '';
 
             unidades.forEach(unidad => {
                 const newRow = document.createElement('tr');
