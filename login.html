@@ -24,8 +24,8 @@
             </form>
 
             <div class="buttons-container">
-                <a href="" data-bs-toggle="modal" data-bs-target="#form-request"><button id="btnModal"
-                        class="form-btn">Solicitar Vale</button></a>
+                <a href="" data-bs-toggle="modal" data-bs-target="#form-request"><button id="btnModal" class="form-btn"
+                        onclick="SolicitarVale()">Solicitar Vale</button></a>
             </div>
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
         </div>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="col-4 mt-4" style="margin-left:35px ;">
-                        <button type="submit" class="btn btn-primary" id="btn-mostrar">Mostrar Vale
+                        <button type="submit" class="btn btn-primary" id="btn-mostrar">Mostrar Solicitud
                             anterior</button>
                     </div>
                     <div class="modal-body p-5">
@@ -57,22 +57,12 @@
                                     <select class="form-select" id="Up" required>
                                         <option selected disabled value="">Seleccione una opción</option>
                                     </select>
-                                    <div class="valid-feedback">
-                                        Completo
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Incompleto
-                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="area_salud" class="form-label">Unidad: </label>
-                                    <input type="text" class="form-control" id="unidad" required>
-                                    <div class="valid-feedback">
-                                        Completo
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Incompleto
-                                    </div>
+                                    <label for="user_gen" class="form-label">Motivo de la gira: </label>
+                                    <select class="form-select" id="motivo" required>
+                                        <option selected disabled value="">Seleccionar</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row g-1">
@@ -88,17 +78,16 @@
                                 </div>
 
                                 <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_surname" class="form-label">Servicios:</label>
+                                    <label for="service" class="form-label">Servicios:</label>
                                     <select class="form-select" id="service" required>
                                         <option selected disabled value="">Seleccionar</option>
                                     </select>
-
                                 </div>
                             </div>
                             <div class="row g-1">
-                                <div class="col-sm-12 col-md-4 col-lg-6">
+                                <!-- <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_name" class="form-label">Lugar de Salida: </label>
-                                    <select class="form-select" id="service" required>
+                                    <select class="form-select" id="lugarSa" required>
                                         <option selected disabled value="">Seleccionar</option>
                                     </select>
                                     <div class="valid-feedback">
@@ -107,10 +96,10 @@
                                     <div class="invalid-feedback">
                                         Incompleto
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="lugarDes" class="form-label">Lugar de Destino:</label>
-                                    <select class="form-select" id="service" required>
+                                    <select class="form-select" id="lugarDes" required>
                                         <option selected disabled value="">Seleccionar</option>
                                     </select>
                                 </div>
@@ -126,16 +115,6 @@
                                     <label for="user_gen" class="form-label">Hora de salida: </label>
                                     <input type="time" class="form-control" id="hora_salida" required>
 
-                                </div>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_gen" class="form-label">Motivo de la gira: </label>
-                                    <select class="form-select" id="motivo" required>
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option>Gira medica</option>
-                                        <option>Otros</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="row sectionCompanion">
