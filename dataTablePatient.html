@@ -155,7 +155,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive-xxl mt-1">
+                    <div class="table-responsive-xxl mt-1" id="tableComp"style="display: none;"> 
                         <table class="table table-light table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
@@ -174,6 +174,9 @@
 
                     </div>
 
+                    <div id="messageNoComp" class="text-center text-muted" style="display: none;">
+                        No hay pacientes registrados
+                    </div>
                 </div>
 
             </div>
@@ -208,16 +211,16 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="secondlastname" class="form-label">Segundo Apellido:</label>
-                                <input type="text" id="secondlastname" name="secondlastname" class="form-control"
+                                <input type="text" id="secondlastname" name="secondlastname"  class="form-control"
                                     required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="phone1" class="form-label">Telefono 1:</label>
-                                <input type="number" id="phone1" name="phone1" class="form-control" required>
+                                <input type="number" id="phone1" name="phone1" class="form-control"  required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="phone2" class="form-label">Telefono 2:</label>
-                                <input type="number" id="phone2" name="phone2" class="form-control" required>
+                                <input type="number" id="phone2" name="phone2" class="form-control" placeholder="(Opcional)" required>
                             </div>
 
 
@@ -236,6 +239,7 @@
                                     <option value="Primo/a">Primo/a</option>
                                     <option value="Sobrino/a">Sobrino/a</option>
                                     <option value="Cuñado/a">Cuñado/a</option>
+                                    <option value="Cuñado/a">Otro</option>
                                 </select>
                             </div>
 
@@ -243,7 +247,9 @@
                         <div class="row justify-content-end">
                             <div class="col-md-3 mt-3 ">
                                 <button id="saveCompanient" type="button" class="btn btn-primary">Guardar</button>
+                                <button id="saveChangesCompanion" style="display: none;" type="button" class="btn btn-primary">Guardar</button>
                             </div>
+                           
                         </div>
 
 
@@ -260,6 +266,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade mt-5" id="confirmDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de Eliminación</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="bodyConfirm">
+                        <!-- El contenido se actualizará dinámicamente -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+   
+    
+
+  
     <div data-script="js/patient.js"></div>
 </body>
 
