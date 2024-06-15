@@ -30,14 +30,13 @@ function showToast(title, message) {
 
 let acompananteCount = 0;
 //Funcion para cargar API
-var url = 'http://localhost:56336/';
+var url = 'https://backend-transporteccss.onrender.com/';
 AxiosData();
 function AxiosData() {
-    axios.get(`${url}api/acompanantes`)
+    axios.get(`${url}api/funcionarios`)
         .then(response => {
             console.log(response.data);
             LlenarAcompanante(response.data);
-
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -172,3 +171,67 @@ document.getElementById('btn_Guardar').addEventListener('click', function (event
         showToast("Error", "Debe llenar todos los campos antes de hacer la solicitud");
     }
 });
+
+//Token para el Login
+const loginUser = async () => {
+    const response = await fetch(`${url}api/user/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            identificador: '223456789', // Puede ser el correo o la identificación
+            Contrasena: 'securePassword1'
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al iniciar sesión');
+    }
+
+    const data = await response.json();
+    return data.token; // Supón que el token viene en la propiedad token
+};
+
+// Llama a la función y almacena el token
+loginUser()
+    .then(token => {
+        localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
+        console.log('Token guardado:', token);
+    })
+    .catch(error => {
+        console.error('Error al obtener el token:', error);
+    });
+
+//mandar el token
+const fetchProtectedData = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.error('Token no disponible');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${url}api/vales`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Acceso no autorizado');
+        }
+
+        const data = await response.json();
+        console.log('Datos protegidos:', data);
+    } catch (error) {
+        console.error('Error al acceder a la ruta protegida:', error);
+    }
+};
+
+fetchProtectedData();
+
+
+
