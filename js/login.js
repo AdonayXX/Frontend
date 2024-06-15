@@ -14,19 +14,21 @@ function loadToastTemplate(callback) {
 }
 
 function showToast(title, message) {
-    const toastElement = document.getElementById('common-toast');
-    if (toastElement) {
-        document.getElementById('common-toast-title').innerText = title;
-        document.getElementById('common-toast-body').innerText = message;
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-    } else {
-        console.error('Toast element not found');
-    }
+    loadToastTemplate(() => {
+        const toastElement = document.getElementById('common-toast');
+        if (toastElement) {
+            document.getElementById('common-toast-title').innerText = title;
+            document.getElementById('common-toast-body').innerText = message;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        } else {
+            console.error('Toast element not found');
+        }
+    });
 }
 
-let acompananteCount = 0;
 
+let acompananteCount = 0;
 //Funcion para cargar API
 var url = 'http://localhost:56336/';
 AxiosData();
@@ -47,20 +49,17 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(function (response) {
             const unidades = response.data;
             const unidadProgramaticaSelect = document.getElementById('Up');
-            // Clear existing options except the first one
             unidadProgramaticaSelect.innerHTML = '<option selected disabled value="">Seleccione una opción</option>';
-
-            // Populate the select with options from the API response
             unidades.forEach(function (unidad) {
                 const option = document.createElement('option');
-                option.value = unidad.id; // Adjust according to your data structure
-                option.textContent = unidad.IdUnidadProgramatica; // Adjust according to your data structure
+                option.value = unidad.id;
+                option.textContent = unidad.IdUnidadProgramatica;
                 unidadProgramaticaSelect.appendChild(option);
             });
         })
         .catch(function (error) {
             console.error('Error al obtener los datos:', error);
-            alert('Hubo un error al cargar las opciones de unidad programática.');
+            showToast("Error", "Problema al cargar las unidades programaticas")
         });
 });
 
@@ -73,7 +72,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
             acompDiv.style.display = 'block';
         }
     } else {
-        alert("No se pueden agregar mas de 5 acompañantes");
+        showToast("Error", "No se pueden agregar mas de 5 acompañantes");
     }
 });
 
