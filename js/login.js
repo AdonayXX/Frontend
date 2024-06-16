@@ -321,7 +321,6 @@ const loginUser = async (identificador, Contrasena) => {
 //         console.error('Error al obtener el token:', error);
 //     });
 
-
 const handleLogin = async () => {
     const userEmail = document.getElementById('userEmail').value;
     const userPassword = document.getElementById('userPassword').value;
@@ -340,7 +339,3 @@ const handleLogin = async () => {
     }
 };
 document.getElementById('loginButton').addEventListener('click', handleLogin);
-
-
-
-
