@@ -1,7 +1,6 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadUnidades();
     showTotalCapacity();
 });
 
@@ -123,34 +122,68 @@ function showToast(title, message) {
         }
     });
 }
-
 function loadUnidades() {
     axios.get('https://backend-transporteccss.onrender.com/api/unidades')
         .then(response => {
-            console.log('Unidades:', response.data);
             const unidades = response.data.unidades;
             const tableBody = document.getElementById('unitTableBody');
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = ''; 
 
             unidades.forEach(unidad => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${unidad.id}</td>
+                    <td>${unidad.numeroUnidad}</td>
                     <td>${unidad.capacidadTotal}</td>
-                    <td>${unidad.idTipoRecurso}</td>
+                    <td>${getNombreRecurso(unidad.idTipoRecurso)}</td>
                     <td>${unidad.kilometrajeInicial}</td>
                     <td>${unidad.kilometrajeActual}</td>
-                    <td>${unidad.idEstado}</td>
-                    <td>${unidad.idFrecuenciaCambio}</td>
-                    <td>${unidad.capacidadCamas}</td>
-                    <td>${unidad.capacidadSillas}</td>
-                    <td>${unidad.adelanto}</td>
+                    <td>${getNombreEstado(unidad.idEstado)}</td>
+                    <td>${unidad.fechaDekra ? new Date(unidad.fechaDekra).toLocaleDateString() : 'N/A'}</td>
+                    <td>${getNombreFrecuenciaCambio(unidad.idFrecuenciaCambio)}</td>
+                    <td>${getNombreChofer(unidad.choferDesignado)}</td>
+                    <td>${unidad.kilometrajeMantenimiento || 'N/A'}</td>
                 `;
                 tableBody.appendChild(newRow);
             });
         })
         .catch(error => {
             console.error('Error al obtener las unidades:', error);
-            showToast('Error', 'Error al obtener las unidades.');
+            showToast('Error', 'Error al cargar las unidades: ' + error.message);
         });
+}
+loadUnidades();
+
+function getNombreRecurso(id) {
+    const recursos = {
+        1: 'CCSS',
+        2: 'Cruz Roja',
+        3: 'Privado',
+        4: 'Taxi',
+        5: 'Moto'
+    };
+    return recursos[id] || 'Desconocido';
+}
+
+function getNombreEstado(id) {
+    const estados = {
+        1: 'Activa',
+        2: 'Inactiva',
+        3: 'En Mantenimiento',
+        4: 'Operativa',
+        5: 'Desechada'
+    };
+    return estados[id] || 'Desconocido';
+}
+
+function getNombreFrecuenciaCambio(id) {
+    const frecuencias = {
+        1: 'Diaria',
+        2: 'Semanal',
+        5: 'Mensual'
+    };
+    return frecuencias[id] || 'No Aplica';
+}
+
+function getNombreChofer(id) {
+    return `Chofer ${id}`;
 }
