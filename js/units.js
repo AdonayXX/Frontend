@@ -1,7 +1,49 @@
 'use strict';
 
+//FUNCIONN PARA JALAR LOS DATITOS DE EL TIPO DE RECURSO
+async function loadTiposRecurso() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoRecurso');
+        const tiposRecurso = response.data.tiporecurso;
+        const recursoMap = {};
+
+        tiposRecurso.forEach(recurso => {
+            recursoMap[recurso.idTipoRecurso] = recurso.recurso;
+        });
+
+        return recursoMap;
+    } catch (error) {
+        console.error('Error al obtener los tipos de recurso:', error);
+        return {};
+    }
+}
+
+//FUNCION PARA JALAR  EL ESTADOOO DE LA UNIDAD
+async function loadEstadosUnidad() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
+        const estadosUnidad = response.data.estadosUnidad;
+        const estadoMap = {};
+
+        estadosUnidad.forEach(estado => {
+            estadoMap[estado.idEstado] = estado.estado;
+        });
+
+        return estadoMap;
+    } catch (error) {
+        console.error('Error al obtener los estados de unidad:', error);
+        return {};
+    }
+}
+
+//CARGAAA Y ACTUALIZA
 async function loadUnidades() {
     try {
+        const [recursoMap, estadoMap] = await Promise.all([
+            loadTiposRecurso(),
+            loadEstadosUnidad()
+        ]);
+
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
         const unidades = response.data.unidades;
         const tableBody = document.getElementById('unitTableBody');
@@ -13,12 +55,12 @@ async function loadUnidades() {
             row.innerHTML = `
                 <td>${unidad.numeroUnidad}</td>
                 <td>${unidad.capacidadTotal}</td>
-                <td>${getNombreRecurso(unidad.idTipoRecurso)}</td>
+                <td>${recursoMap[unidad.idTipoRecurso] || 'Desconocido'}</td>
                 <td>${unidad.kilometrajeInicial}</td>
                 <td>${unidad.kilometrajeActual}</td>
-                <td>${getNombreEstado(unidad.idEstado)}</td>
+                <td>${estadoMap[unidad.idEstado] || 'Desconocido'}</td>
                 <td>${new Date(unidad.fechaDekra).toLocaleDateString()}</td>
-                <td>${getNombreFrecuenciaCambio(unidad.idFrecuenciaCambio)}</td>
+                <td>N/A</td>
                 <td>${unidad.choferDesignado}</td>
                 <td>${unidad.adelanto}</td>
             `;
@@ -30,35 +72,4 @@ async function loadUnidades() {
     }
 }
 
-function getNombreRecurso(id) {
-    const recursos = {
-        1: 'CCSS',
-        2: 'Cruz Roja',
-        3: 'Privado',
-        4: 'Taxi',
-        5: 'Moto'
-    };
-    return recursos[id] || 'Desconocido';
-}
-
-function getNombreEstado(id) {
-    const estados = {
-        1: 'Activa',
-        2: 'Inactiva',
-        3: 'En Mantenimiento',
-        4: 'Operativa',
-        5: 'Desechada'
-    };
-    return estados[id] || 'Desconocido';
-}
-
-function getNombreFrecuenciaCambio(id) {
-    const frecuencias = {
-        1: 'Diaria',
-        2: 'Semanal',
-        5: 'Mensual'
-    };
-    return frecuencias[id] || 'No Aplica';
-}
-
-loadUnidades();
+ loadUnidades();
