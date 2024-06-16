@@ -122,6 +122,7 @@ function showToast(title, message) {
         }
     });
 }
+
 function loadUnidades() {
     axios.get('https://backend-transporteccss.onrender.com/api/unidades')
         .then(response => {

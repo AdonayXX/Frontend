@@ -28,8 +28,6 @@
                             <option value="1">CCSS</option>
                             <option value="2">Cruz Roja</option>
                             <option value="3">Privado</option>
-                            <option value="4">Taxi</option>
-                            <option value="5">Moto</option>
                         </select>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="addResourceType">+</button>
@@ -57,6 +55,25 @@
                     </select>
                 </div>
             </div>
+            <div id="maintenanceFields" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="maintenanceType">Tipo de Mantenimiento</label>
+                        <select class="form-control" id="maintenanceType">
+                            <option value="1">Por Fecha</option>
+                            <option value="2">Por Kilometraje</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
+                        <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
+                        <input type="number" class="form-control" id="maintenanceMileage">
+                    </div>
+                    <div class="col-md-6 mb-3" id="dateField" style="display: none;">
+                        <label for="maintenanceDate">Fecha de Mantenimiento</label>
+                        <input type="date" class="form-control" id="maintenanceDate">
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="capacityChairs">Capacidad de Sillas</label>
@@ -75,39 +92,21 @@
                     <input type="date" class="form-control" id="dekraDate" required>
                 </div>
             </div>
-            <div id="maintenanceFields" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="maintenanceType">Tipo de Mantenimiento</label>
-                        <select class="form-control" id="maintenanceType">
-                            <option value="1">Por Fecha</option>
-                            <option value="2">Por Kilometraje</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
-                        <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
-                        <input type="number" class="form-control" id="maintenanceMileage">
-                    </div>
-                    <div class="col-md-6 mb-3" id="dateField" style="display: none;">
-                        <label for="maintenanceDate">Fecha de mantenimiento</label>
-                        <input type="date" class="form-control" id="maintenanceDate">
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="assignedDriver">Chófer Designado</label>
                     <input type="text" class="form-control" id="assignedDriver">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="frecuencyChange">Frecuencia de cambio</label>
-                    <select name="" id="" class="form-control">
-                        <option value="1">Por Fecha (Cada 22 días) </option>
-                        <option value="2">Por Kilometraje (cada 7000 kilómetros)</option>
-                        <option value="3">Por Fecha y Kilometraje</option>
-
+                    <label for="unitType">Tipo de Unidad</label>
+                    <select class="form-control" id="unitType" required>
+                        <option value="">Seleccione tipo...</option>
+                        <option value="1">Ambulancia</option>
+                        <option value="2">Taxi</option>
+                        <option value="3">4x4</option>
+                        <option value="4">Buseta</option>
+                        <option value="5">Moto</option>
                     </select>
-
                 </div>
             </div>
             <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
