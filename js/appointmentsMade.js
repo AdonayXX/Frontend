@@ -84,22 +84,24 @@ async function loadCitas() {
         tableBody.innerHTML = '';
 
         citas.forEach(cita => {
-            const row = document.createElement('tr');
+            if (cita.estadoCita === 'Iniciada') {
+                const row = document.createElement('tr');
 
-            row.innerHTML = `
-                <td>${cita.idCita}</td>
-                <td>${cita.nombreCompletoPaciente}</td>
-                <td>${cita.fechaCita}</td>
-                <td>${cita.horaCita}</td>
-                <td>${cita.ubicacionDestino}</td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(13)">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </td>
-            `;
+                row.innerHTML = `
+                    <td>${cita.idCita}</td>
+                    <td>${cita.nombreCompletoPaciente}</td>
+                    <td>${cita.fechaCita}</td>
+                    <td>${cita.horaCita}</td>
+                    <td>${cita.ubicacionDestino}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(${12})">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                `;
 
-            tableBody.appendChild(row);
+                tableBody.appendChild(row);
+            }
         });
 
         filterTable('');
@@ -107,6 +109,7 @@ async function loadCitas() {
         console.error('Error al obtener las citas:', error);
     }
 }
+
 
 async function getAcompanantes(idPaciente) {
     try {
