@@ -1,34 +1,43 @@
 "use strict";
-document.addEventListener('DOMContentLoaded', function() {
-    getPatient();
+
+document.getElementById('searchTrips').addEventListener('keyup', function () {
+  let input = document.getElementById('searchTrips').value.toLowerCase();
+  let rows = Array.from(document.getElementById('tableTrips').getElementsByTagName('tr'));
+
+  rows.filter((row, index) => {
+    if (index === 0) return;
+    let cells = Array.from(row.getElementsByTagName('td'));
+    let match = cells.some(cell => cell.innerText.toLowerCase().includes(input));
+    row.style.display = match ? '' : 'none';
+  });
 });
 
-async function getPatient() {
+async function getCitas() {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/viaje';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/viajeCita';
     const response = await axios.get(API_URL);
     console.log(response.data);
 
-    const viajes = response.data.viaje;
+    const viajes = response.data.citas;
     const tableBody = document.querySelector('#viajesTableBody');
 
     tableBody.innerHTML = '';
 
     viajes.forEach(viaje => {
-      const fecha = new Date(viaje.FechaCita);
+      const fecha = new Date(viaje.fechaCita);
       const formattedFechaCita = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
 
       const row = `
         <tr>
           <td><input type="checkbox"></td>
-          <td>${viaje.idPaciente}</td>
-          <td>${viaje.LugarSalida}</td>
+          <td>${viaje.Paciente}</td>
+          <td>${viaje.ubicacionOrigen}</td>
           <td>${viaje.idUbicacionDestino}</td>
-          <td>${viaje.Condicion}</td>
-          <td>${viaje.HoraCita}</td>
+          <td>${viaje.condicionCita}</td>
+          <td>${viaje.horaCita}</td>
           <td>${formattedFechaCita}</td>
           <td>${viaje.Traslado}</td>
-          <td>${viaje.Camilla}</td>
+          <td>${viaje.camilla}</td>
           <td>
             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ausenteModal">Ausente</button>
           </td>
@@ -37,38 +46,46 @@ async function getPatient() {
       tableBody.innerHTML += row;
     });
   } catch (error) {
-    console.error('There has been a problem:', error);
+    console.error('Error al obtener las citas:', error);
   }
-
 }
 
-function loadToastTemplate(callback) {
-    fetch('toast-template.html')
-        .then(response => response.text())
-        .then(data => {
-            const toastContainer = document.getElementById('toast-container');
-            if (toastContainer) {
-                toastContainer.innerHTML = data;
-                if (callback) callback();
-            } else {
-                console.error('Toast container not found');
-            }
-        })
-        .catch(error => console.error('Error loading toast template:', error));
-}
+async function getUnidades() {
+  try {
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/viajeUnidades';
+    const response = await axios.get(API_URL);
+    console.log(response.data);
 
-function showToast(title, message) {
-    loadToastTemplate(() => {
-        const toastElement = document.getElementById('common-toast');
-        if (toastElement) {
-            document.getElementById('common-toast-title').innerText = title;
-            document.getElementById('common-toast-body').innerText = message;
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
-        } else {
-            console.error('Toast element not found');
-        }
+    const unidades = response.data.unidades;
+    const selectBody = document.querySelector('#unidades');
+
+    selectBody.innerHTML = '';
+
+    const defaultOption = document.createElement('option');
+    defaultOption.textContent = 'Seleccionar Unidad...';
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    selectBody.appendChild(defaultOption);
+
+    unidades.forEach(unidad => {
+      const option = document.createElement('option');
+      option.value = unidad.id;
+      option.textContent = `${unidad.tipo.toUpperCase()} ${unidad.id}`;
+      selectBody.appendChild(option);
     });
+  } catch (error) {
+    console.error('Error al obtener las unidades:', error);
+  }
 }
 
+getCitas();
+getUnidades();
 
+// function exportToPDF() {
+// }
+
+// function exportToExcel() {
+// }
+
+// function realizarViajes() {
+// }
