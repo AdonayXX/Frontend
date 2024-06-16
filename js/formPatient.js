@@ -52,7 +52,7 @@ function addPersona() {
 //2
 async function addPerson(personaData) {
   try {
-      const API_URL = 'http://localhost:18026/api/persona';
+      const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
       const response = await axios.get(API_URL);
       const listaPersonas = response.data.personas;
       const personaEncontrada = listaPersonas.find(persona => persona.Identificacion === personaData.Identificacion);
@@ -72,7 +72,7 @@ async function addPerson(personaData) {
 //3
 async function addPeople(personaData) {
   try {
-      const API_URL = 'http://localhost:18026/api/persona';
+      const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
       const response = await axios.post(API_URL, personaData);
       console.log(response.data);
       console.log(response.data.persona.insertId);
@@ -104,7 +104,7 @@ function addPatient(IdPersonaCreada) {
 //5
 async function obtenerPaciente(IdPersonaCreada) {
   try {
-      const API_URL = 'http://localhost:18026/api/paciente';
+      const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
       const response = await axios.get(API_URL);
       const listaPacientes = response.data.pacientes;
       console.log(listaPacientes);
@@ -123,7 +123,7 @@ async function obtenerPaciente(IdPersonaCreada) {
 //6
 async function agregarPaciente(pacienteData) {
   try {
-      const API_URL = 'http://localhost:18026/api/paciente';
+      const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
       const response = await axios.post(API_URL, pacienteData);
       const listaPacientes = response.data;
       console.log(listaPacientes);
@@ -241,7 +241,7 @@ function addCompanion(idPaciente) {
 //8: Verifica si el acompañante ya está registrado
 async function obtenerAcompanante(companionData){
   try {
-    const API_URL = 'http://localhost:18026/api/acompanante';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
     const response = await axios.get(API_URL);
     const listaAcompanantes = response.data.acompanantes;
     console.log(listaAcompanantes);
@@ -262,7 +262,7 @@ async function obtenerAcompanante(companionData){
 async function agregarAcompanante(companionData) {
   try {
     console.log(companionData);
-    const API_URL = 'http://localhost:18026/api/acompanante';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
     const response = await axios.post(API_URL, companionData);
     console.log(response.data);
   } catch (error) {
