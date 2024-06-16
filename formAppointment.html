@@ -10,7 +10,7 @@
 
     <div class="container mt-5 fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Agendar Cita</h1>
-        <form id="agendarCitaForm" class="bg-light p-4 border rounded-3">
+        <form name="formAppointment" id="2" class="bg-light p-4 border rounded-3">
             <div class="form-section mt-1">
                 <h2>Datos del paciente:</h2>
                 <div class="row mb-3 mt-3">
@@ -55,9 +55,9 @@
                     <div class="col-md-3 mb-3">
                         <label for="condicion" class="form-label">Condición:</label>
                         <select id="condicion" name="condicion" class="form-select">
-                            <option value="Estable">Estable</option>
-                            <option value="Grave">Grave</option>
-                            <option value="Critico">Crítico</option>
+                            <option value="Verde">Verde</option>
+                            <option value="Amarillo">Amarillo</option>
+                            <option value="Rojo">Rojo</option>
 
                         </select>
                     </div>
@@ -180,18 +180,18 @@
                     <div class="col-md-3">
                         <label class="form-label" for="traslado">Traslado:</label>
                         <select id="traslado" name="traslado" class="form-select">
-                            <option value="local">Local</option>
+                            <option value="Local">Local</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
                         <label for="destino" class="form-label">Destino:</label>
                         <select id="destino" name="destino" class="form-select">
                             <option disabled selected value> -- Seleccione un destino -- </option>
-                            <option value="HNN">HNN</option>
-                            <option value="CENARE">CENARE</option>
+                            <option value="HEBB">HEBB</option>
+                            <!-- <option value="CENARE">CENARE</option>
                             <option value="ClinicaBiblica">Clínica Bíblica</option>
-                            <option value="HospitalMexico">Hospital México</option>
-                            <option value="ClinicaCatolica">Clínica Católica</option>
+                            <option value="HospitalMexico">Hospital México</option> //ESPERAR A RUTA DE UBICACIONES
+                            <option value="ClinicaCatolica">Clínica Católica</option> -->
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
@@ -199,15 +199,15 @@
                         <select id="especialidad" name="especialidad" class="form-select">
                             <option disabled selected value> -- Seleccione una especialidad -- </option>
                             <option value="MedicinaGeneral">Medicina General</option>
-                            <option value="Pediatria">Pediatría</option>
-                            <option value="Cirugia">Cirugía</option>
+                            <!-- <option value="Pediatria">Pediatría</option>
+                            <option value="Cirugia">Cirugía</option>      // ESPERAR A RUTA DE ESPECIALIDADES
                             <option value="Cardiologia">Cardiología</option>
-                            <option value="Dermatologia">Dermatología</option>
+                            <option value="Dermatologia">Dermatología</option> -->
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
                         <label for="fechaCita" class="form-label">Fecha:</label>
-                        <input type="date" id="fechaCita1" name="fechaCita" class="form-control date-input">
+                        <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
                     </div>
                     <div class="col-md-3 mt-1">
                         <label for="horaCita" class="form-label">Hora:</label>
@@ -218,8 +218,8 @@
             </div>
 
             <div class="text-center">
-                <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Guardar Viaje">
+                <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Guardar Viaje" id="btnGuardar">
                     <i class="bi bi-save"></i> Guardar
                 </button>
             </div>
