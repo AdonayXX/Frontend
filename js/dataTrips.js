@@ -1,15 +1,6 @@
 "use strict";
-
-document.getElementById('searchTrips').addEventListener('keyup', function() {
-  let input = document.getElementById('searchTrips').value.toLowerCase();
-  let rows = Array.from(document.getElementById('tableTrips').getElementsByTagName('tr'));
-
-  rows.filter((row, index) => {
-    if (index === 0) return;
-    let cells = Array.from(row.getElementsByTagName('td'));
-    let match = cells.some(cell => cell.innerText.toLowerCase().includes(input));
-    row.style.display = match ? '' : 'none';
-  });
+document.addEventListener('DOMContentLoaded', function() {
+    getPatient();
 });
 
 async function getPatient() {
@@ -48,14 +39,36 @@ async function getPatient() {
   } catch (error) {
     console.error('There has been a problem:', error);
   }
+
 }
-getPatient();
 
-// function exportToPDF() {
-// }
+function loadToastTemplate(callback) {
+    fetch('toast-template.html')
+        .then(response => response.text())
+        .then(data => {
+            const toastContainer = document.getElementById('toast-container');
+            if (toastContainer) {
+                toastContainer.innerHTML = data;
+                if (callback) callback();
+            } else {
+                console.error('Toast container not found');
+            }
+        })
+        .catch(error => console.error('Error loading toast template:', error));
+}
 
-// function exportToExcel() {
-// }
+function showToast(title, message) {
+    loadToastTemplate(() => {
+        const toastElement = document.getElementById('common-toast');
+        if (toastElement) {
+            document.getElementById('common-toast-title').innerText = title;
+            document.getElementById('common-toast-body').innerText = message;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        } else {
+            console.error('Toast element not found');
+        }
+    });
+}
 
-// function realizarViajes() {
-// }
+

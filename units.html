@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Unidades</title>
 </head>
+
 <body>
-    <div class=" container-fluid  mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
+    <div class="container-fluid mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
         <h2 class="text-center mt-3">Registro de Unidades</h2>
-        <form id="unitForm">
+        <form id="7">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="unitNumber">Número de Unidad</label>
@@ -21,14 +23,18 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="resourceType">Tipo de Recurso</label>
-                    <select multiple class="form-control" id="resourceType" required>
-                        <option value="CCSS">CCSS</option>
-                        <option value="CruzRoja">Cruz Roja</option>
-                        <option value="Privado">Privado</option>
-                        <option value="Pickup">Pickup</option>
-                        <option value="Moto">Moto</option>
-
-                    </select>
+                    <div class="input-group">
+                        <select class="form-control" id="resourceType" required>
+                            <option value="1">CCSS</option>
+                            <option value="2">Cruz Roja</option>
+                            <option value="3">Privado</option>
+                            <option value="4">Taxi</option>
+                            <option value="5">Moto</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="addResourceType">+</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="initialMileage">Kilometraje Inicial</label>
@@ -43,13 +49,27 @@
                 <div class="col-md-6 mb-3">
                     <label for="status">Estado</label>
                     <select class="form-control" id="status" required>
-                        <option value="Activa">Activa</option>
-                        <option value="Inactiva">Inactiva</option>
-                        <option value="En Mantenimiento">En Mantenimiento</option>
+                        <option value="1">Activa</option>
+                        <option value="2">Inactiva</option>
+                        <option value="3">En Mantenimiento</option>
+                        <option value="4">Operativa</option>
+                        <option value="5">Desechada</option>
                     </select>
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="capacityChairs">Capacidad de Sillas</label>
+                    <input type="number" class="form-control" id="capacityChairs" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="capacityBed">Capacidad de Camillas</label>
+                    <input type="number" class="form-control" id="capacityBed" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="totalCapacity">Capacidad Total</label>
+                    <input type="number" class="form-control" id="totalCapacity" readonly>
+                </div>
                 <div class="col-md-6 mb-3">
                     <label for="dekraDate">Fecha de Dekra</label>
                     <input type="date" class="form-control" id="dekraDate" required>
@@ -60,15 +80,17 @@
                     <div class="col-md-6 mb-3">
                         <label for="maintenanceType">Tipo de Mantenimiento</label>
                         <select class="form-control" id="maintenanceType">
-                            <option value="Fecha">Por Fecha</option>
-                            <option value="Kilometraje">Por Kilometraje</option>
+                            <option value="1">Por Fecha</option>
+                            <option value="2">Por Kilometraje</option>
                         </select>
                     </div>
-                </div>
-                <div class="row" id="mileageField" style="display: none;">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
                         <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
                         <input type="number" class="form-control" id="maintenanceMileage">
+                    </div>
+                    <div class="col-md-6 mb-3" id="dateField" style="display: none;">
+                        <label for="maintenanceDate">Fecha de mantenimiento</label>
+                        <input type="date" class="form-control" id="maintenanceDate">
                     </div>
                 </div>
             </div>
@@ -76,6 +98,16 @@
                 <div class="col-md-6 mb-3">
                     <label for="assignedDriver">Chófer Designado</label>
                     <input type="text" class="form-control" id="assignedDriver">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="frecuencyChange">Frecuencia de cambio</label>
+                    <select name="" id="" class="form-control">
+                        <option value="1">Por Fecha (Cada 22 días) </option>
+                        <option value="2">Por Kilometraje (cada 7000 kilómetros)</option>
+                        <option value="3">Por Fecha y Kilometraje</option>
+
+                    </select>
+
                 </div>
             </div>
             <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
@@ -108,4 +140,5 @@
     <div id="modal-container"></div>
     <div data-script="js/units.js"></div>
 </body>
+
 </html>
