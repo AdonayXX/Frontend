@@ -1,3 +1,4 @@
+var url = 'https://backend-transporteccss.onrender.com/';
 async function getVales() {
     try {
         const response = await axios.get(`${url}api/vales`);
@@ -26,5 +27,23 @@ async function getVales() {
         console.error('Hubo un problema con la operación de obtención:', error);
        
     }
-    getVales();
 }
+    getVales();
+    document.getElementById('searchVale').addEventListener('keyup', function () {
+        let input = document.getElementById('searchVale').value.trim().toLowerCase();
+        let table = document.getElementById('tableRequest');
+        let rows = table.getElementsByTagName('tr');
+    
+        for (let i = 0; i < rows.length; i++) {
+            let dateCell = rows[i].getElementsByTagName('td')[1]; 
+            if (dateCell) {
+                let dateText = dateCell.textContent || dateCell.innerText;
+                if (dateText.toLowerCase().includes(input)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+    });
+    

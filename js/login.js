@@ -1,4 +1,4 @@
-
+//funciones dinamicas
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
         .then(response => response.text())
@@ -8,7 +8,7 @@ function loadToastTemplate(callback) {
                 toastContainer.innerHTML = data;
                 if (callback) callback();
             } else {
-                console.error('Toast container not found' );
+                console.error('Toast container not found');
             }
         })
         .catch(error => console.error('Error loading toast template:', error));
@@ -220,7 +220,68 @@ function validateModalForm() {
     return isValid;
 }
 
+function GuardarDatos() {
+    if (!validateModalForm()) {
+        console.error('Formulario no válido');
+        showToast("Error", "Se deben llenar todos los campos");
+        return;
+    }
+    let Acompanante1 = document.getElementById('acompananteNombre1').value;
+    let Acompanante2 = document.getElementById('acompananteNombre2').value;
+    let Acompanante3 = document.getElementById('acompananteNombre3').value;
+    let Acompanante4 = document.getElementById('acompananteNombre4').value;
+    let Acompanante5 = document.getElementById('acompananteNombre5').value;
+    const IdUnidadProgramatica = document.getElementById('Up').value;
+    const ServicioID = document.getElementById('service').value;
+    const MotivoID = document.getElementById('motivo').value;
+    const DestinoId = document.getElementById('lugarDes').value;
+    const Detalle = document.getElementById('detalle').value;
+    const NombreSolicitante = document.getElementById('nameSoli').value;
+    const Estado = 1;
+    const Hora_Salida = document.getElementById('hora_salida').value;
+    const Fecha_Solicitud = document.getElementById('b_date').value;
+    const Unidad = document.getElementById('uni').value;
 
+
+    function adjustToNullIfContainsNull(value) {
+        if (typeof value === 'string' && value.toLowerCase().includes('null')) {
+            value = null;
+        }
+        return value;
+    }
+
+    Acompanante1 = adjustToNullIfContainsNull(Acompanante1);
+    Acompanante2 = adjustToNullIfContainsNull(Acompanante2);
+    Acompanante3 = adjustToNullIfContainsNull(Acompanante3);
+    Acompanante4 = adjustToNullIfContainsNull(Acompanante4);
+    Acompanante5 = adjustToNullIfContainsNull(Acompanante5);
+
+    const datos = {
+        NombreSolicitante: NombreSolicitante,
+        Unidad: Unidad,
+        DestinoId: DestinoId,
+        MotivoID: MotivoID,
+        ServicioID: ServicioID,
+        Fecha_Solicitud: Fecha_Solicitud,
+        Hora_Salida: Hora_Salida,
+        Detalle: Detalle,
+        EstadoValeID: Estado,
+        IdUnidadProgramatica: IdUnidadProgramatica,
+        Acompanante1: Acompanante1,
+        Acompanante2: Acompanante2,
+        Acompanante3: Acompanante3,
+        Acompanante4: Acompanante4,
+        Acompanante5: Acompanante5
+    };
+    axios.post(`${url}api/vales`, datos)
+        .then(response => {
+            console.log('Datos guardados exitosamente:', response.data);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Hubo un problema al guardar los datos:', error);
+        });
+}
 
 
 
