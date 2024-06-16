@@ -1,3 +1,21 @@
+document.getElementById('searchPatient').addEventListener('keyup', function () {
+    let input = document.getElementById('searchPatient').value.toLowerCase();
+    let table = document.getElementById('TableAppointment');
+    let rows = table.getElementsByTagName('tr');
+  
+    for (let i = 1; i < rows.length; i++) {
+      let cells = rows[i].getElementsByTagName('td');
+      let match = false;
+      for (let j = 0; j < cells.length; j++) {
+        if (cells[j].innerText.toLowerCase().includes(input)) {
+          match = true;
+          break;
+        }
+      }
+      rows[i].style.display = match ? '' : 'none';
+    }
+  });
+
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
@@ -15,7 +33,7 @@ async function loadCitas() {
                 <td>${cita.horaCita}</td>
                 <td>${cita.ubicacionDestino}</td>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(12)">
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(13)">
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
