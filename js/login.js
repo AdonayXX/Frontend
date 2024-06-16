@@ -33,7 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var formattedDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
     document.getElementById('date').textContent = formattedDate;
 });
+//establece que no se puedan elegir fechas anteriores 
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');  // Meses son 0-indexados, por eso se suma 1
+const day = String(today.getDate()).padStart(2, '0');  // Obtener día del mes
 
+const formattedDate = `${year}-${month}-${day}`;
+document.getElementById('b_date').min = formattedDate;
 //Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
@@ -81,9 +88,9 @@ function ObtenerFuncionarios() {
 }
 
 function LlenarAcompanante(data) {
-    let body = '';
+    let body = '<option selected disabled value="null">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value = ${data[index].id}>${data[index].Nombre}</option>`;
+        body += `<option value = ${data[index].IdFuncionario}>${data[index].Nombre}</option>`;
     }
     document.getElementById('acompananteNombre1').innerHTML = body;
     document.getElementById('acompananteNombre2').innerHTML = body;
@@ -105,7 +112,7 @@ function ObtenerUnidades() {
 }
 
 function LlenarUnidadesProgramaticas(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
     }
@@ -125,7 +132,7 @@ function ObtenerServicios() {
 }
 
 function LlenarServicios(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value = ${data[index].ServicioID}>${data[index].Descripcion}</option>`;
     }
@@ -145,7 +152,7 @@ function ObtenerMotivo() {
 }
 
 function LlenarMotivo(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value = ${data[index].id}>${data[index].descripcion}</option>`;
     }
@@ -165,7 +172,7 @@ function LlenarMotivo(data) {
 // }
 
 // function LlenarSalida(data) {
-//     let body = '';
+//     let body = '<option selected disabled value="">Seleccione una opción</option>';
 //     for (let index = 0; index < data.length; index++) {
 //         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
 //     }
@@ -185,7 +192,7 @@ function ObtenerDestino() {
 }
 
 function LlenarDestino(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
     }
@@ -212,6 +219,7 @@ function validateModalForm() {
 
     return isValid;
 }
+
 
 
 
