@@ -124,33 +124,4 @@ function showToast(title, message) {
     });
 }
 
-function loadUnidades() {
-    axios.get('https://backend-transporteccss.onrender.com/api/unidades')
-        .then(response => {
-            console.log('Unidades:', response.data);
-            const unidades = response.data.unidades;
-            const tableBody = document.getElementById('unitTableBody');
-            tableBody.innerHTML = '';
 
-            unidades.forEach(unidad => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${unidad.id}</td>
-                    <td>${unidad.capacidadTotal}</td>
-                    <td>${unidad.idTipoRecurso}</td>
-                    <td>${unidad.kilometrajeInicial}</td>
-                    <td>${unidad.kilometrajeActual}</td>
-                    <td>${unidad.idEstado}</td>
-                    <td>${unidad.idFrecuenciaCambio}</td>
-                    <td>${unidad.capacidadCamas}</td>
-                    <td>${unidad.capacidadSillas}</td>
-                    <td>${unidad.adelanto}</td>
-                `;
-                tableBody.appendChild(newRow);
-            });
-        })
-        .catch(error => {
-            console.error('Error al obtener las unidades:', error);
-            showToast('Error', 'Error al obtener las unidades.');
-        });
-}
