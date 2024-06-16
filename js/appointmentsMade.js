@@ -1,44 +1,83 @@
-async function mostrarCitas() {
+document.getElementById('searchPatient').addEventListener('keyup', function () {
+    let input = document.getElementById('searchPatient').value.toLowerCase();
+    let table = document.getElementById('TableAppointment');
+    let rows = table.getElementsByTagName('tr');
+  
+    for (let i = 1; i < rows.length; i++) {
+      let cells = rows[i].getElementsByTagName('td');
+      let match = false;
+      for (let j = 0; j < cells.length; j++) {
+        if (cells[j].innerText.toLowerCase().includes(input)) {
+          match = true;
+          break;
+        }
+      }
+      rows[i].style.display = match ? '' : 'none';
+    }
+  });
+
+async function loadCitas() {
     try {
-        const API_URL = 'http://localhost:56336/api/citas';
-        const response = await axios.get(API_URL);
-        console.log(response.data);
-
-        const citas = response.data.citas;
-        const tableBody = document.querySelector("#viajesTableBody");
-
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
+        const citas = response.data;
+        const tableBody = document.getElementById('viajesTableBody');
         tableBody.innerHTML = '';
 
         citas.forEach(cita => {
-            const row = `
-                <tr>
-                    <td>${cita.Cedula}</td>
-                    <td>${cita.Paciente}</td>
-                    <td>${cita.Fecha}</td>
-                    <td>${cita.Destino}</td>
-                    <td class="narrow-col">
-                        <button class="btn btn-outline-primary btn-sm" onclick="MostrarAcompanante('${cita.Acompanante.Nombre}', '${cita.Acompanante.Apellido1}', '${cita.Acompanante.Apellido2}', '${cita.Acompanante.Telefono1}', '${cita.Acompanante.Telefono2}', '${cita.Acompanante.Parentesco}')" data-bs-toggle="modal" data-bs-target="#ausenteModal">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </td>
-                </tr>
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${cita.idCita}</td>
+                <td>${cita.nombreCompletoPaciente}</td>
+                <td>${cita.fechaCita}</td>
+                <td>${cita.horaCita}</td>
+                <td>${cita.ubicacionDestino}</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(13)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
             `;
-            tableBody.innerHTML += row;
+
+            tableBody.appendChild(row);
         });
     } catch (error) {
-        console.error('Ha habido un problema:', error);
+        console.error('Error al obtener las citas:', error);
     }
 }
 
-function MostrarAcompanante(nombre, apellido1, apellido2, telefono1, telefono2, parentesco) {
-    const modal = document.getElementById("ausenteModal");
-    modal.querySelector(".modal-body").innerHTML = `
-        <p><strong>Nombre:</strong> ${nombre} ${apellido1} ${apellido2}</p>
-        <p><strong>Telefono1 :</strong> ${telefono1}</p>
-        <p><strong>Telefono2 :</strong> ${telefono2}</p>
-        <p><strong>Parentesco:</strong> ${parentesco}</p>
-    `;
-    $('#ausenteModal').modal('show');
+async function getAcompanantes(idPaciente) {
+    try {
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/paciente/acompanantes`);
+        const pacientes = response.data.pacientes;
+
+        const pacienteSeleccionado = pacientes.find(paciente => paciente.IdPaciente === parseInt(idPaciente));
+
+        if (!pacienteSeleccionado) {
+            console.error(`No se encontró un paciente con id ${idPaciente}`);
+            return;
+        }
+
+        const acompanantes = pacienteSeleccionado.acompanantes;
+        const tableBody = document.getElementById('AcompananteTableBody');
+        tableBody.innerHTML = '';
+
+        acompanantes.forEach(acompanante => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${acompanante.Nombre}</td>
+                <td>${acompanante.Apellido1} ${acompanante.Apellido2}</td>
+                <td>${acompanante.Telefono1} / ${acompanante.Telefono2}</td>
+                <td>${acompanante.Parentesco}</td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error al obtener los acompañantes:', error);
+        showToast(error, 'Error al obtener los acompañantes:');
+    }
 }
 
-mostrarCitas();
+loadCitas();
