@@ -8,13 +8,13 @@ function loadToastTemplate(callback) {
                 toastContainer.innerHTML = data;
                 if (callback) callback();
             } else {
-                console.error('Toast container not found');
+                console.error('Toast container no encontrado');
             }
         })
-        .catch(error => console.error('Error loading toast template:', error));
+        .catch(error => console.error('Error al cargar la plantilla de toast:', error));
 }
 
-function showToast(title, message) {
+function showToast(title, message, reloadCallback) {
     loadToastTemplate(() => {
         const toastElement = document.getElementById('common-toast');
         if (toastElement) {
@@ -22,11 +22,18 @@ function showToast(title, message) {
             document.getElementById('common-toast-body').innerText = message;
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
+            setTimeout(() => {
+                toast.hide();
+                if (reloadCallback) {
+                    reloadCallback();
+                }
+            }, 2000);
         } else {
-            console.error('Toast element not found');
+            console.error('Toast element no encontrado');
         }
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     var today = new Date();
@@ -282,6 +289,58 @@ function GuardarDatos() {
             console.error('Hubo un problema al guardar los datos:', error);
         });
 }
+
+
+var error;
+//Login
+// fetchLogin.js
+const loginUser = async (identificador, Contrasena) => {
+    try {
+        const response = await axios.post(`${url}api/user/login`, {
+            identificador,
+            Contrasena
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data.token; // Supón que el token viene en la propiedad token
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        throw new Error('Error al iniciar sesión');
+    }
+};
+// // Llama a la función y almacena el token
+// loginUser()
+//     .then(token => {
+//         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
+//         console.log('Token guardado:', token);
+//     })
+//     .catch(error => {
+//         console.error('Error al obtener el token:', error);
+//     });
+
+
+const handleLogin = async () => {
+    const userEmail = document.getElementById('userEmail').value;
+    const userPassword = document.getElementById('userPassword').value;
+
+    try {
+        const token = await loginUser(userEmail, userPassword);
+        console.log('Token:', token);
+        window.location.href = 'Index.html'; // Redirigir al usuario
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        showToast("Error", "Usuario o Contraseña incorrectos", () => {
+            setTimeout(() => {
+                location.reload();
+            }, 0); // Ajusta el tiempo de espera según sea necesario (3000 ms = 3 segundos)
+        });
+    }
+};
+document.getElementById('loginButton').addEventListener('click', handleLogin);
+
 
 
 
