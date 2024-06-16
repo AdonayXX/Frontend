@@ -1,253 +1,475 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Tabla Pacientes</title>
- 
+
 
 </head>
+
 <body>
-<div class="fade-in">
-    <div class=" row justify-content-between align-items-center border-bottom m-2 p-2">
-        <div class="col text-center">
-            <br>
-            <h1 class="text-wrap">Catálogo de Pacientes</h1>
-        </div>
-
-        <div class=" col-sm-3 search-bar input-group m-2">
-            <input type="text" class="form-control" id="searchPatient" placeholder="Buscar...">
-        </div>
-    </div>
-    <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Imprimir">
-            <img src="img/icons8-print.svg" alt="Print Icon">
-        </button>
-        <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a PDF">
-            <img src="img/icons8-pdf.svg" alt="PDF Icon">
-        </button>
-        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a Excel">
-            <img src="img/icons8-excel.svg" alt="Excel Icon">
-        </button>
-    </div>
-    <div class="table-responsive-xxl mt-3">
-        <table class=" table table-light table-striped table-hover table-bordered" id="tablePatient">
-            <thead>
-                <tr>
-                    <th>Nombre Completo</th>
-                    <th>Tipo Identificación</th>
-                   
-              
-                    <th>Identificación</th>
-                    <th>Genero</th>
-                    <th>Prioridad</th>
-                    <th>Teléfonos</th>
-                   
-                    <th>Tipo de seguro</th>
-                    <th>Lugar Salida</th>
-                    <th>Direccion</th>
-
-                    <th>Acompañante</th>
-                    <th>Acciones</th>
-
-                </tr>
-            </thead>
-            <tbody id="patient-body">
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    
-               
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                   
-
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                   
-
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal" data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
-
-                    </td>
-                    <td class="actions">
-                        <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                  
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                   
-
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-outline-success btn-sm "  data-bs-toggle="modal" data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
-                    </td>
-                    <td class="actions">
-                        <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                  
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                 
-
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-
-
-
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-outline-success btn-sm "  data-bs-toggle="modal" data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
-                    </td>
-                    <td class="actions">
-                        <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
-
-   
-  
-</div>
-<!-- Modal -->
-<div class="modal fade mt-5 " id="showAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompañantes</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="table-responsive-xxl mt-1">
-                <table class="table table-light table-striped table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Identificación</th>
-                            <th>Nombre Completo</th>
-                            <th>Teléfonos</th>
-                            <th>Parentesco</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="accomp-tbody">
-                      
-                    </tbody>
-
-                </table>
-
+    <div class="fade-in">
+        <div class=" row justify-content-between align-items-center border-bottom m-2 p-2">
+            <div class="col text-center">
+                <br>
+                <h1 class="text-wrap">Catálogo de Pacientes</h1>
             </div>
-        
+
+            <div class=" col-sm-3 search-bar input-group m-2">
+                <input type="text" class="form-control" id="searchPatient" placeholder="Buscar...">
+            </div>
         </div>
-      
-      </div>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Imprimir">
+                <img src="img/icons8-print.svg" alt="Print Icon">
+            </button>
+            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a PDF">
+                <img src="img/icons8-pdf.svg" alt="PDF Icon">
+            </button>
+            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a Excel">
+                <img src="img/icons8-excel.svg" alt="Excel Icon">
+            </button>
+        </div>
+        <div class="table-responsive-xxl mt-3">
+            <table class=" table table-light table-striped table-hover table-bordered" id="tablePatient">
+                <thead>
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Tipo Identificación</th>
+
+
+                        <th>Identificación</th>
+                        <th>Genero</th>
+                        <th>Prioridad</th>
+                        <th>Teléfonos</th>
+
+                        <th>Tipo de seguro</th>
+                        <th>Lugar Salida</th>
+                        <th>Direccion</th>
+
+                        <th>Acompañante</th>
+                        <th>Acciones</th>
+
+                    </tr>
+                </thead>
+                <tbody id="patient-body">
+                    <tr>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal"
+                                data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal"
+                                data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
+
+                        </td>
+                        <td class="actions">
+                            <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal"
+                                data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal"
+                                data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
+                        </td>
+                        <td class="actions">
+                            <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+                        <td>-------------</td>
+                        <td>-------------</td>
+                        <td>-------------</td>
+
+
+
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" id="ShowTableAccomp" data-bs-toggle="modal"
+                                data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal"
+                                data-bs-target="#addAccomp"><i class="bi bi-person-plus"></i></button>
+                        </td>
+                        <td class="actions">
+                            <button class="btn btn-outline-primary btn-sm "><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-outline-danger btn-sm "><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
     </div>
-  </div>
-  <div class="modal fade mt-5" id="addAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 " id="staticBackdropLabel">Agregar Acompañante</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body mt-1">
-            <form action="" id="perfilPacienteForm" class="bg-light p-4 border rounded-3">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="identification" class="form-label">Identificación:</label>
-                        <input type="text" id="identification" name="identification" class="form-control" required>
+    <!-- Modal -->
+    <div class="modal fade mt-5 " id="showAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 " id="staticBackdropLabel">Acompañantes</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive-xxl mt-1" id="tableComp" style="display: none;">
+                        <table class="table table-light table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Teléfonos</th>
+                                    <th>Parentesco</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accomp-tbody">
+
+                            </tbody>
+
+                        </table>
+
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" id="name" name="Nombre" class="form-control" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="firstlastname" class="form-label">Primer Apellido:</label>
-                        <input type="text" id="firstlastname" name="firstlastname" class="form-control" required>
+
+                    <div id="messageNoComp" class="text-center text-muted" style="display: none;">
+                        No hay pacientes registrados
                     </div>
                 </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="secondlastname" class="form-label">Segundo Apellido:</label>
-                            <input type="text" id="secondlastname" name="secondlastname" class="form-control" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="phone1" class="form-label">Telefono 1:</label>
-                            <input type="text" id="phone1" name="phone1" class="form-control" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="phone2" class="form-label">Telefono 2:</label>
-                            <input type="text" id="phone2" name="phone2" class="form-control" required>
-                        </div>
-                       
 
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="parentesco" class="form-label">Parentesco:</label>
-                            <select id="parentesco" name="acompananteParentesco1" class="form-select" required>
-                                <option value="Hijo/a">Hijo/a</option>
-                                <option value="Padre">Padre</option>
-                                <option value="Madre">Madre</option>
-                                <option value="Esposa/o">Esposa/o</option>
-                                <option value="Hermano/a">Hermano/a</option>
-                                <option value="Abuelo/a">Abuelo/a</option>
-                                <option value="Tío/a">Tío/a</option>
-                                <option value="Primo/a">Primo/a</option>
-                                <option value="Sobrino/a">Sobrino/a</option>
-                                <option value="Cuñado/a">Cuñado/a</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <div class="row justify-content-end">
-                        <div class="col-md-3 mt-3 ">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                    </div>
-
-                    
-
-                    
-               
-
-            </form>
-            
-        
+            </div>
         </div>
-       
-      
-      </div>
     </div>
-  </div>
-  <div data-script="js/patient.js"></div>
-</body>
-</html>
+    <div class="modal fade mt-5" id="addAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompañante</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-1">
+                    <form action="" id="formEditComp" class="bg-light p-4 border rounded-3">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="identification" class="form-label">Identificación:</label>
+                                <input type="text" id="identification" name="identification" class="form-control"
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="name" class="form-label">Nombre:</label>
+                                <input type="text" id="name" name="Nombre" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="firstlastname" class="form-label">Primer Apellido:</label>
+                                <input type="text" id="firstlastname" name="firstlastname" class="form-control"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="secondlastname" class="form-label">Segundo Apellido:</label>
+                                <input type="text" id="secondlastname" name="secondlastname" class="form-control"
+                                    required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="phone1" class="form-label">Telefono 1:</label>
+                                <input type="number" id="phone1" name="phone1" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="phone2" class="form-label">Telefono 2:</label>
+                                <input type="number" id="phone2" name="phone2" class="form-control"
+                                    placeholder="(Opcional)" required>
+                            </div>
 
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="parentesco" class="form-label">Parentesco:</label>
+                                <select id="parentesco" name="acompananteParentesco1" class="form-select" required>
+                                    <option selected disabled value="">Seleccionar...</option>
+                                    <option value="Hijo/a">Hijo/a</option>
+                                    <option value="Padre">Padre</option>
+                                    <option value="Madre">Madre</option>
+                                    <option value="Esposa/o">Esposa/o</option>
+                                    <option value="Hermano/a">Hermano/a</option>
+                                    <option value="Abuelo/a">Abuelo/a</option>
+                                    <option value="Tío/a">Tío/a</option>
+                                    <option value="Primo/a">Primo/a</option>
+                                    <option value="Sobrino/a">Sobrino/a</option>
+                                    <option value="Cuñado/a">Cuñado/a</option>
+                                    <option value="Otro">Otro</option>
+                                 
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-md-3 mt-3 ">
+                                <button id="saveCompanient" type="button" class="btn btn-primary">Guardar</button>
+                                <button id="saveChangesCompanion" style="display: none;" type="button"
+                                    class="btn btn-success">Guardar Cambios</button>
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade mt-5" id="confirmDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de Eliminación</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="bodyConfirm">
+                        <!-- El contenido se actualizará dinámicamente -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade mt-5" id="editPatient" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container  fade-in" style="max-width: 1100px;">
+                        <h1 class="mb-4 text-center">Editar Paciente</h1>
+                        <form id="formEditPatient" method="post" class="bg-light p-4 border rounded-3">
+                           
+                            <div class="form-section">
+                             
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="nombre" class="form-label"><i class="bi bi-person"></i>
+                                            Nombre:</label>
+                                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="15">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="primerApellido" class="form-label"><i
+                                                class="bi bi-person-badge"></i> Primer
+                                            Apellido:</label>
+                                        <input required type="text" id="primerApellido" name="primerApellido" maxlength="15"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="segundoApellido" class="form-label"><i
+                                                class="bi bi-person-badge"></i> Segundo
+                                            Apellido:</label>
+                                        <input required type="text" id="segundoApellido" name="segundoApellido" maxlength="15"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i>
+                                            Género:</label>
+                                        <select required id="genero" name="genero" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Femenino">Femenino</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="No definido">No Definido</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="tipoIdentificacion" class="form-label"><i
+                                                class="bi bi-card-list"></i> Tipo de
+                                            Identificación:</label>
+                                        <select required id="tipoIdentificacion" name="tipoIdentificacion"
+                                            class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Cedula">Cédula de Identidad</option>
+                                            <option value="Numeros de Asegurado">Numeros de Asegurado</option>
+                                            <option value="Interno">Interno</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
+                                            Identificación:</label>
+                                        <input required type="text" id="identificacion" name="identificacion" maxlength="15"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-2 mb-3">
+                                        <label class="form-label"><i class="bi bi-exclamation-circle"></i>
+                                            Prioridad:</label><br>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="prioridad" >
+                                            <label class="form-check-label" for="prioridad">SI</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de
+                                            Seguro:</label>
+                                        <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Asalariado">Asalariado</option>
+                                            <option value="Independiente">Trabajador Independiente</option>
+                                            <option value="Voluntario">Voluntario</option>
+                                            <option value="Pensionado">Pensionado</option>
+                                            <option value="Beneficio Familiar">Beneficio Familiar</option>
+                                            <option value="Seguro por el Estado">Seguro por el Estado</option>
+                                            <option value="Cargo al Estado">Protección con cargo al Estado</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i>
+                                            Teléfono 1:</label>
+                                        <input type="number" id="telefono1" name="telefono1" class="form-control" maxlength="15">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i>
+                                            Teléfono 2:</label>
+                                        <input type="number" id="telefono2" name="telefono2" class="form-control" maxlength="15">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="lugarSalida" class="form-label"><i class="bi bi-geo-alt"></i> Lugar
+                                            de
+                                            salida:</label>
+                                        <select required id="lugarSalida" name="lugarSalida" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Ruta">Ruta</option>
+                                            <option value="Domicilio">Domicilio</option>
+                                            <option value="Sede">Sede</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i class="bi bi-bed"></i> Encamado:</label>
+                                        <select required id="encamado" name="encamado" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="temporal">Temporal</option>
+                                            <option value="permante">Permanente</option>
+                                            <option value="noRequerido">No requerido</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="tipoSangre" class="form-label"><i
+                                                class="bi bi-gender-ambiguous"></i> Tipo de
+                                            sangre:</label>
+                                        <select required id="tipoSangre" name="tipoSangre" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <label for="latitud" class="form-label"><i class="bi bi-house"></i>
+                                            Latitud:</label>
+                                        <input type="number" step="any" required id="latitud" name="latitud" maxlength="200"
+                                            class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="longitud" class="form-label"><i class="bi bi-house"></i>
+                                            Longitud:</label>
+                                        <input type="number" step="any" required id="longitud" name="longitud"
+                                            class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label"><i class="bi bi-house"></i>
+                                            Dirección:</label>
+                                        <textarea required id="direccion" name="direccion"
+                                            class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <div class="col-md-4">
+                                       <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" id="confirmEditBtn" class="btn btn-primary m-2">Guardar Cambios</button>
+                                </div>
+                             
+
+                            </div>
+                           
+                        </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div data-script="js/patient.js"></div>
+</body>
+
+</html>
