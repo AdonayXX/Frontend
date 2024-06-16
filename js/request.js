@@ -9,10 +9,12 @@ async function getVales() {
         tableBody.innerHTML = '';
 
         vales.forEach(vale => {
+            const fechaSolicitud = new Date(vale.Fecha_Solicitud);
+            const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
             const row = `
                 <tr>
                     <td>${vale.IdVale}</td>
-                    <td>${vale.Fecha_Solicitud}</td>
+                    <td>${fechaFormateada}</td>
                     <td>${vale.NombreSolicitante}</td>
                     <td>${vale.Motivo}</td>
                     <td>${vale.EstadoVale}</td> 
