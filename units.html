@@ -15,18 +15,14 @@
                     <label for="unitNumber">Número de Unidad</label>
                     <input type="text" class="form-control" id="unitNumber" required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="capacity">Capacidad</label>
-                    <input type="number" class="form-control" id="capacity" required>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="resourceType">Tipo de Recurso</label>
                     <div class="input-group">
                         <select class="form-control" id="resourceType" required>
-                            <option value="1">CCSS</option>
-                            <option value="2">Cruz Roja</option>
+                            <option value="2">CCSS</option>
+                            <option value="1">Cruz Roja</option>
                             <option value="3">Privado</option>
                         </select>
                         <div class="input-group-append">
@@ -35,43 +31,25 @@
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="initialMileage">Kilometraje Inicial</label>
-                    <input type="number" class="form-control" id="initialMileage" required>
+                    <label for="unitType">Tipo de Unidad</label>
+                    <select class="form-control" id="unitType" required>
+                        <option value="">Seleccione tipo...</option>
+                        <option value="6">Ambulancia</option>
+                        <option value="2">Taxi</option>
+                        <option value="3">4x4</option>
+                        <option value="4">Buseta</option>
+                        <option value="5">Moto</option>
+                    </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="currentMileage">Kilometraje Actual</label>
-                    <input type="number" class="form-control" id="currentMileage" required>
+                    <label for="initialMileage">Kilometraje Inicial</label>
+                    <input type="number" class="form-control" id="initialMileage" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="status">Estado</label>
-                    <select class="form-control" id="status" required>
-                        <option value="1">Activa</option>
-                        <option value="2">Inactiva</option>
-                        <option value="3">En Mantenimiento</option>
-                        <option value="4">Operativa</option>
-                        <option value="5">Desechada</option>
-                    </select>
-                </div>
-            </div>
-            <div id="maintenanceFields" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="maintenanceType">Tipo de Mantenimiento</label>
-                        <select class="form-control" id="maintenanceType">
-                            <option value="1">Por Fecha</option>
-                            <option value="2">Por Kilometraje</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
-                        <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
-                        <input type="number" class="form-control" id="maintenanceMileage">
-                    </div>
-                    <div class="col-md-6 mb-3" id="dateField" style="display: none;">
-                        <label for="maintenanceDate">Fecha de Mantenimiento</label>
-                        <input type="date" class="form-control" id="maintenanceDate">
-                    </div>
+                    <label for="currentMileage">Kilometraje Actual</label>
+                    <input type="number" class="form-control" id="currentMileage" required>
                 </div>
             </div>
             <div class="row">
@@ -81,7 +59,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="capacityBed">Capacidad de Camillas</label>
-                    <input type="number" class="form-control" id="capacityBed" required>
+                    <input type="number" class="form-control" id="capacityBeds" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="totalCapacity">Capacidad Total</label>
@@ -98,15 +76,32 @@
                     <input type="text" class="form-control" id="assignedDriver">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="unitType">Tipo de Unidad</label>
-                    <select class="form-control" id="unitType" required>
-                        <option value="">Seleccione tipo...</option>
-                        <option value="1">Ambulancia</option>
-                        <option value="2">Taxi</option>
-                        <option value="3">4x4</option>
-                        <option value="4">Buseta</option>
-                        <option value="5">Moto</option>
+                    <label for="status">Estado</label>
+                    <select class="form-control" id="status" required>
+                        <option value="4">Activa</option>
+                        <option value="6">Inactiva</option>
+                        <option value="10">En Mantenimiento</option>
+                        <option value="4">Desechada</option>
                     </select>
+                </div>
+                <div id="maintenanceFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maintenanceType">Tipo de Mantenimiento</label>
+                            <select class="form-control" id="maintenanceType">
+                                <option value="2">Por Fecha</option>
+                                <option value="5">Por Kilometraje</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
+                            <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
+                            <input type="number" class="form-control" id="maintenanceMileage">
+                        </div>
+                        <div class="col-md-6 mb-3" id="dateField" style="display: none;">
+                            <label for="maintenanceDate">Fecha de Mantenimiento</label>
+                            <input type="date" class="form-control" id="maintenanceDate">
+                        </div>
+                    </div>
                 </div>
             </div>
             <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
@@ -126,7 +121,6 @@
                         <th>Fecha de Dekra</th>
                         <th>Tipo de Mantenimiento</th>
                         <th>Chófer Designado</th>
-                        <th>Kilometraje de Mantenimiento</th>
                     </tr>
                 </thead>
                 <tbody id="unitTableBody">

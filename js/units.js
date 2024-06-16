@@ -7,22 +7,20 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('7').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    const unitNumber = document.getElementById('unitNumber').value;
-    const capacity = parseInt(document.getElementById('capacity').value, 10);
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    const unitType = parseInt(document.getElementById('unitType').value, 10);
     const resourceType = parseInt(document.getElementById('resourceType').value, 10);
     const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
     const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
     const status = parseInt(document.getElementById('status').value, 10);
-    const dekraDate = document.getElementById('dekraDate').value;
-    const maintenanceType = status === 3 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
-    const driver = document.getElementById('assignedDriver').value;
-    const mileage = maintenanceType === 2 ? parseInt(document.getElementById('maintenanceMileage').value, 10) : null;
+    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
-    const capacityTotal = capacityChairs + capacityBeds;
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
+    const totalCapacity = capacityChairs + capacityBeds;
 
-    
-    if (initialMileage < 0 || currentMileage < 0 || capacity <= 0 || driver === '') {
+    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
         return;
     }
@@ -32,22 +30,23 @@ document.getElementById('7').addEventListener('submit', function (event) {
         return;
     }
 
-    if (!validateCapacity(capacity, resourceType)) {
-        return;
-    }
-
     const unidadData = {
-        idTipoUnidad: 1,
+        idTipoUnidad: unitType,
         idTipoRecurso: resourceType,
         idFrecuenciaCambio: maintenanceType,
-        capacidadTotal: capacity,
-        capacidadCamas: 2,
-        capacidadSillas: 4,
+        numeroUnidad: unitNumber,
+        choferDesignado: driver,
+        fechaDekra: dekraDate,
+        capacidadTotal: totalCapacity,
+        capacidadCamas: capacityBeds,
+        capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
         adelanto: 0,
         idEstado: status
     };
+
+    console.log('Datos a enviar:', unidadData);
 
     axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
         .then(response => {
@@ -62,20 +61,16 @@ document.getElementById('7').addEventListener('submit', function (event) {
         });
 });
 
-document.getElementById('status').addEventListener('change', function () {
-    const maintenanceFields = document.getElementById('maintenanceFields');
-    if (parseInt(this.value, 10) === 3) {
-        maintenanceFields.style.display = 'block';
-    } else {
-        maintenanceFields.style.display = 'none';
-    }
-});
-
 document.getElementById('maintenanceType').addEventListener('change', function () {
     const mileageField = document.getElementById('mileageField');
     const dateField = document.getElementById('dateField');
-    mileageField.style.display = this.value === '2' ? 'block' : 'none';
-    dateField.style.display = this.value === '1' ? 'block' : 'none';
+    mileageField.style.display = this.value === '5' ? 'block' : 'none';
+    dateField.style.display = this.value === '2' ? 'block' : 'none';
+});
+
+document.getElementById('status').addEventListener('change', function () {
+    const maintenanceFields = document.getElementById('maintenanceFields');
+    maintenanceFields.style.display = this.value === '10' ? 'block' : 'none';
 });
 
 function validateCapacity(capacity, resourceType) {
@@ -123,37 +118,6 @@ function showToast(title, message) {
     });
 }
 
-function loadUnidades() {
-    axios.get('https://backend-transporteccss.onrender.com/api/unidades')
-        .then(response => {
-            const unidades = response.data.unidades;
-            const tableBody = document.getElementById('unitTableBody');
-            tableBody.innerHTML = ''; 
-
-            unidades.forEach(unidad => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${unidad.numeroUnidad}</td>
-                    <td>${unidad.capacidadTotal}</td>
-                    <td>${getNombreRecurso(unidad.idTipoRecurso)}</td>
-                    <td>${unidad.kilometrajeInicial}</td>
-                    <td>${unidad.kilometrajeActual}</td>
-                    <td>${getNombreEstado(unidad.idEstado)}</td>
-                    <td>${unidad.fechaDekra ? new Date(unidad.fechaDekra).toLocaleDateString() : 'N/A'}</td>
-                    <td>${getNombreFrecuenciaCambio(unidad.idFrecuenciaCambio)}</td>
-                    <td>${getNombreChofer(unidad.choferDesignado)}</td>
-                    <td>${unidad.kilometrajeMantenimiento || 'N/A'}</td>
-                `;
-                tableBody.appendChild(newRow);
-            });
-        })
-        .catch(error => {
-            console.error('Error al obtener las unidades:', error);
-            showToast('Error', 'Error al cargar las unidades: ' + error.message);
-        });
-}
-/////// GET
-//FUNCIONN PARA JALAR LOS DATITOS DE EL TIPO DE RECURSO
 async function loadTiposRecurso() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoRecurso');
@@ -171,7 +135,6 @@ async function loadTiposRecurso() {
     }
 }
 
-//FUNCION PARA JALAR  EL ESTADOOO DE LA UNIDAD
 async function loadEstadosUnidad() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
@@ -189,12 +152,29 @@ async function loadEstadosUnidad() {
     }
 }
 
-//CARGAAA Y ACTUALIZA
+async function loadFrecuenciaCambio() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/frecuenciaCambio');
+        const frecuenciaCambio = response.data.frecuenciacambios;
+        const frecuenciaMap = {};
+
+        frecuenciaCambio.forEach(tipo => {
+            frecuenciaMap[tipo.idFrecuenciaCambio] = tipo.tipo;
+        });
+
+        return frecuenciaMap;
+    } catch (error) {
+        console.error('Error al obtener los estados de unidad:', error);
+        return {};
+    }
+}
+
 async function loadUnidades() {
     try {
-        const [recursoMap, estadoMap] = await Promise.all([
+        const [recursoMap, estadoMap, frecuenciaMap] = await Promise.all([
             loadTiposRecurso(),
-            loadEstadosUnidad()
+            loadEstadosUnidad(),
+            loadFrecuenciaCambio()
         ]);
 
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
@@ -211,11 +191,10 @@ async function loadUnidades() {
                 <td>${recursoMap[unidad.idTipoRecurso] || 'Desconocido'}</td>
                 <td>${unidad.kilometrajeInicial}</td>
                 <td>${unidad.kilometrajeActual}</td>
-                <td>${estadoMap[unidad.idEstado] || 'Desconocido'}</td>
+                <td>${(estadoMap[unidad.idEstado] || 'Desconocido').toUpperCase()}</td>
                 <td>${new Date(unidad.fechaDekra).toLocaleDateString()}</td>
-                <td>N/A</td>
+                <td>${frecuenciaMap[unidad.idFrecuenciaCambio] || 'N/A'}</td>
                 <td>${unidad.choferDesignado}</td>
-                <td>${unidad.adelanto}</td>
             `;
 
             tableBody.appendChild(row);
@@ -225,4 +204,4 @@ async function loadUnidades() {
     }
 }
 
- loadUnidades();
+loadUnidades();
