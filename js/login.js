@@ -33,7 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var formattedDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
     document.getElementById('date').textContent = formattedDate;
 });
+//establece que no se puedan elegir fechas anteriores 
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');  // Meses son 0-indexados, por eso se suma 1
+const day = String(today.getDate()).padStart(2, '0');  // Obtener día del mes
 
+const formattedDate = `${year}-${month}-${day}`;
+document.getElementById('b_date').min = formattedDate;
 //Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
@@ -81,9 +88,9 @@ function ObtenerFuncionarios() {
 }
 
 function LlenarAcompanante(data) {
-    let body = '';
+    let body = '<option selected disabled value="null">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value = ${data[index].id}>${data[index].Nombre}</option>`;
+        body += `<option value = ${data[index].IdFuncionario}>${data[index].Nombre}</option>`;
     }
     document.getElementById('acompananteNombre1').innerHTML = body;
     document.getElementById('acompananteNombre2').innerHTML = body;
@@ -105,7 +112,7 @@ function ObtenerUnidades() {
 }
 
 function LlenarUnidadesProgramaticas(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
     }
@@ -125,7 +132,7 @@ function ObtenerServicios() {
 }
 
 function LlenarServicios(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value = ${data[index].ServicioID}>${data[index].Descripcion}</option>`;
     }
@@ -145,7 +152,7 @@ function ObtenerMotivo() {
 }
 
 function LlenarMotivo(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value = ${data[index].id}>${data[index].descripcion}</option>`;
     }
@@ -165,7 +172,7 @@ function LlenarMotivo(data) {
 // }
 
 // function LlenarSalida(data) {
-//     let body = '';
+//     let body = '<option selected disabled value="">Seleccione una opción</option>';
 //     for (let index = 0; index < data.length; index++) {
 //         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
 //     }
@@ -185,7 +192,7 @@ function ObtenerDestino() {
 }
 
 function LlenarDestino(data) {
-    let body = '';
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
     }
@@ -216,31 +223,63 @@ function validateModalForm() {
 function GuardarDatos() {
     if (!validateModalForm()) {
         console.error('Formulario no válido');
+        showToast("Error", "Se deben llenar todos los campos");
         return;
     }
+    let Acompanante1 = document.getElementById('acompananteNombre1').value;
+    let Acompanante2 = document.getElementById('acompananteNombre2').value;
+    let Acompanante3 = document.getElementById('acompananteNombre3').value;
+    let Acompanante4 = document.getElementById('acompananteNombre4').value;
+    let Acompanante5 = document.getElementById('acompananteNombre5').value;
+    const IdUnidadProgramatica = document.getElementById('Up').value;
+    const ServicioID = document.getElementById('service').value;
+    const MotivoID = document.getElementById('motivo').value;
+    const DestinoId = document.getElementById('lugarDes').value;
+    const Detalle = document.getElementById('detalle').value;
+    const NombreSolicitante = document.getElementById('nameSoli').value;
+    const Estado = 1;
+    const Hora_Salida = document.getElementById('hora_salida').value;
+    const Fecha_Solicitud = document.getElementById('b_date').value;
+    const Unidad = document.getElementById('uni').value;
 
-    const data = {
-        acompanante1: document.getElementById('acompananteNombre1').value,
-        acompanante2: document.getElementById('acompananteNombre2').value,
-        acompanante3: document.getElementById('acompananteNombre3').value,
-        acompanante4: document.getElementById('acompananteNombre4').value,
-        acompanante5: document.getElementById('acompananteNombre5').value,
-        unidadProgramatica: document.getElementById('Up').value,
-        servicio: document.getElementById('service').value,
-        motivo: document.getElementById('motivo').value,
-        lugarDestino: document.getElementById('lugarDes').value,
-        fechaSolicitud: document.getElementById('b_date').value,
-        horaSalida: document.getElementById('hora_salida').value
+
+    function adjustToNullIfContainsNull(value) {
+        if (typeof value === 'string' && value.toLowerCase().includes('null')) {
+            value = null;
+        }
+        return value;
+    }
+
+    Acompanante1 = adjustToNullIfContainsNull(Acompanante1);
+    Acompanante2 = adjustToNullIfContainsNull(Acompanante2);
+    Acompanante3 = adjustToNullIfContainsNull(Acompanante3);
+    Acompanante4 = adjustToNullIfContainsNull(Acompanante4);
+    Acompanante5 = adjustToNullIfContainsNull(Acompanante5);
+
+    const datos = {
+        NombreSolicitante: NombreSolicitante,
+        Unidad: Unidad,
+        DestinoId: DestinoId,
+        MotivoID: MotivoID,
+        ServicioID: ServicioID,
+        Fecha_Solicitud: Fecha_Solicitud,
+        Hora_Salida: Hora_Salida,
+        Detalle: Detalle,
+        EstadoValeID: Estado,
+        IdUnidadProgramatica: IdUnidadProgramatica,
+        Acompanante1: Acompanante1,
+        Acompanante2: Acompanante2,
+        Acompanante3: Acompanante3,
+        Acompanante4: Acompanante4,
+        Acompanante5: Acompanante5
     };
-
-    axios.post(`${url}api/vales`, data)
+    axios.post(`${url}api/vales`, datos)
         .then(response => {
             console.log('Datos guardados exitosamente:', response.data);
-
+            location.reload();
         })
         .catch(error => {
             console.error('Hubo un problema al guardar los datos:', error);
-            // Aquí puedes añadir código para manejar el error, como mostrar una notificación de error al usuario
         });
 }
 
