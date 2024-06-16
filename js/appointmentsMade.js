@@ -12,70 +12,6 @@ let currentPage = 1;
 let rowsPerPage = 5;
 let filteredRows = [];
 
-function filterTable(searchTerm) {
-    let table = document.getElementById('TableAppointment');
-    let rows = table.getElementsByTagName('tr');
-    let selectedDate = document.getElementById('fechaCita').value;
-
-    filteredRows = [];
-    for (let i = 1; i < rows.length; i++) {
-        let cells = rows[i].getElementsByTagName('td');
-        let match = false;
-        for (let j = 0; j < cells.length; j++) {
-            if (cells[j].innerText.toLowerCase().includes(searchTerm)) {
-                match = true;
-            }
-        }
-        let dateMatch = selectedDate === '' || cells[2].innerText === selectedDate;
-
-        if (match && dateMatch) {
-            rows[i].style.display = '';
-            filteredRows.push(rows[i]);
-        } else {
-            rows[i].style.display = 'none';
-        }
-    }
-
-    paginateTable();
-}
-
-function changeRowsPerPage() {
-    rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
-    currentPage = 1;
-    paginateTable();
-}
-
-function paginateTable() {
-    let table = document.getElementById('TableAppointment');
-    let rows = table.getElementsByTagName('tr');
-    let totalRows = filteredRows.length;
-
-    for (let i = 1; i < rows.length; i++) {
-        rows[i].style.display = 'none';
-    }
-
-    for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < totalRows; i++) {
-        filteredRows[i].style.display = '';
-    }
-}
-
-function nextPage() {
-    let totalRows = filteredRows.length;
-    let totalPages = Math.ceil(totalRows / rowsPerPage);
-
-    if (currentPage < totalPages) {
-        currentPage++;
-        paginateTable();
-    }
-}
-
-function previousPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        paginateTable();
-    }
-}
-
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
@@ -84,7 +20,7 @@ async function loadCitas() {
         tableBody.innerHTML = '';
 
         citas.forEach(cita => {
-            if (cita.estadoCita === 'Iniciada') {
+            if (cita.estadoCita === 'Finalizado') {
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
@@ -94,7 +30,7 @@ async function loadCitas() {
                     <td>${cita.horaCita}</td>
                     <td>${cita.ubicacionDestino}</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(${12})">
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(12)">
                             <i class="bi bi-eye"></i>
                         </button>
                     </td>
@@ -109,7 +45,6 @@ async function loadCitas() {
         console.error('Error al obtener las citas:', error);
     }
 }
-
 
 async function getAcompanantes(idPaciente) {
     try {
@@ -145,4 +80,89 @@ async function getAcompanantes(idPaciente) {
     }
 }
 
-loadCitas();
+function filterTable(searchTerm) {
+    let table = document.getElementById('TableAppointment');
+    let rows = table.getElementsByTagName('tr');
+    let selectedDate = document.getElementById('fechaCita').value.toLowerCase();
+
+    filteredRows = [];
+    for (let i = 1; i < rows.length; i++) {
+        let cells = rows[i].getElementsByTagName('td');
+        let match = false;
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j].innerText.toLowerCase().includes(searchTerm)) {
+                match = true;
+            }
+        }
+        let dateMatch = selectedDate === '' || cells[2].innerText.toLowerCase() === selectedDate;
+
+        if (match && dateMatch) {
+            rows[i].style.display = '';
+            filteredRows.push(rows[i]);
+        } else {
+            rows[i].style.display = 'none';
+        }
+    }
+
+    currentPage = 1;
+    paginateTable();
+}
+
+function paginateTable() {
+    let table = document.getElementById('TableAppointment');
+    let rows = table.getElementsByTagName('tr');
+    let totalRows = filteredRows.length;
+
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+    }
+
+    for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < totalRows; i++) {
+        filteredRows[i].style.display = '';
+    }
+}
+
+function nextPage() {
+    let totalRows = filteredRows.length;
+    let totalPages = Math.ceil(totalRows / rowsPerPage);
+
+    if (currentPage < totalPages) {
+        currentPage++;
+        paginateTable();
+    }
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        paginateTable();
+    }
+}
+
+function changeRowsPerPage() {
+    rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
+    currentPage = 1;
+    paginateTable();
+}
+
+function paginateTable() {
+    let table = document.getElementById('TableAppointment');
+    let rows = table.getElementsByTagName('tr');
+    let totalRows = filteredRows.length;
+
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+    }
+
+    for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < totalRows; i++) {
+        filteredRows[i].style.display = '';
+    }
+}
+
+
+async function loadCitasAndFilter() {
+    await loadCitas();
+    filterTable('');
+}
+
+loadCitasAndFilter();
