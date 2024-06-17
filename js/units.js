@@ -1,18 +1,29 @@
 'use strict';
 
-let selectedUnitId = null;
-
-loadUnidades();
-
-document.getElementById('7').addEventListener('submit', function (event) {
+document.getElementById('unitsForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    handleSubmit();
+    postUnidad();
 });
 
-document.getElementById('updateButton').addEventListener('click', function (event) {
+document.getElementById('update-unit-button').addEventListener('click', function (event) {
     event.preventDefault();
-    handleUpdate();
+    updateUnidad();
 });
+
+document.getElementById('clearFormButton').addEventListener('click', function () {
+    clearForm();
+});
+
+function clearForm() {
+    document.getElementById('unitsForm').reset();
+    document.getElementById('unitNumber').disabled = false;
+    document.getElementById('maintenanceFields').style.display = 'none';
+    document.getElementById('mileageField').style.display = 'none';
+    document.getElementById('dateField').style.display = 'none';
+    document.getElementById('clearFormButton').style.display = 'none';
+    document.getElementById('update-unit-button').disabled = true;
+    document.getElementById('submit-unit-button').disabled = false;
+}
 
 document.getElementById('maintenanceType').addEventListener('change', function () {
     const mileageField = document.getElementById('mileageField');
@@ -161,28 +172,9 @@ async function loadUnidades() {
     }
 }
 
-function loadFormData(unidad) {
-    selectedUnitId = unidad.id;
+loadUnidades();
 
-    document.getElementById('unitNumber').value = unidad.numeroUnidad;
-    document.getElementById('unitNumber').disabled = true;
-    document.getElementById('unitType').value = unidad.idTipoUnidad;
-    document.getElementById('resourceType').value = unidad.idTipoRecurso;
-    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
-    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
-    document.getElementById('status').value = unidad.idEstado;
-    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-    document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
-    document.getElementById('assignedDriver').value = unidad.choferDesignado;
-    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
-    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
-
-    const event = new Event('change');
-    document.getElementById('status').dispatchEvent(event);
-    document.getElementById('maintenanceType').dispatchEvent(event);
-}
-
-function handleSubmit() {
+function postUnidad() {
     const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
     const unitType = parseInt(document.getElementById('unitType').value, 10);
     const resourceType = parseInt(document.getElementById('resourceType').value, 10);
@@ -228,7 +220,7 @@ function handleSubmit() {
         .then(response => {
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-            document.getElementById('7').reset();
+            document.getElementById('unitsForm').reset();
             loadUnidades();
         })
         .catch(error => {
@@ -237,61 +229,82 @@ function handleSubmit() {
         });
 }
 
-// function handleUpdate() {
-//     if (!selectedUnitId) {
-//         showToast('Error', 'No hay una unidad seleccionada para actualizar.');
-//         return;
-//     }
+function loadFormData(unidad) {
+    document.getElementById('unitNumber').value = unidad.numeroUnidad;
+    document.getElementById('unitNumber').disabled = true;
+    document.getElementById('unitType').value = unidad.idTipoUnidad;
+    document.getElementById('resourceType').value = unidad.idTipoRecurso;
+    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
+    document.getElementById('status').value = unidad.idEstado;
+    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+    document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
+    document.getElementById('assignedDriver').value = unidad.choferDesignado;
+    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
+    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
+    document.getElementById('totalCapacity').value = unidad.capacidadTotal;
 
-//     const unitType = parseInt(document.getElementById('unitType').value, 10);
-//     const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-//     const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-//     const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-//     const status = parseInt(document.getElementById('status').value, 10);
-//     const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-//     const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
-//     const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-//     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-//     const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
-//     const totalCapacity = capacityChairs + capacityBeds;
+    const event = new Event('change');
+    document.getElementById('status').dispatchEvent(event);
+    document.getElementById('maintenanceType').dispatchEvent(event);
+    document.getElementById('clearFormButton').style.display = 'inline-block';
+    document.getElementById('update-unit-button').disabled = false;
+    document.getElementById('submit-unit-button').disabled = true;
+}
 
-//     if (initialMileage < 0 || currentMileage < 0 || driver === '') {
-//         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
-//         return;
-//     }
+function updateUnidad() {
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    const unitType = parseInt(document.getElementById('unitType').value, 10);
+    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
+    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
+    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
+    const status = parseInt(document.getElementById('status').value, 10);
+    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
+    const totalCapacity = capacityChairs + capacityBeds;
 
-//     if (currentMileage < initialMileage) {
-//         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
-//         return;
-//     }
+    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
+        showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
+        return;
+    }
 
-//     const unidadData = {
-//         idTipoUnidad: unitType,
-//         idTipoRecurso: resourceType,
-//         idFrecuenciaCambio: maintenanceType,
-//         choferDesignado: driver,
-//         fechaDekra: dekraDate,
-//         capacidadTotal: totalCapacity,
-//         capacidadCamas: capacityBeds,
-//         capacidadSillas: capacityChairs,
-//         kilometrajeInicial: initialMileage,
-//         kilometrajeActual: currentMileage,
-//         adelanto: 0,
-//         idEstado: status
-//     };
+    if (currentMileage < initialMileage) {
+        showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+        return;
+    }
 
-//     console.log('Datos a enviar para actualizar:', unidadData);
+    const unidadData = {
+        idTipoUnidad: unitType,
+        idTipoRecurso: resourceType,
+        idFrecuenciaCambio: maintenanceType,
+        numeroUnidad: unitNumber,
+        choferDesignado: driver,
+        fechaDekra: dekraDate,
+        capacidadTotal: totalCapacity,
+        capacidadCamas: capacityBeds,
+        capacidadSillas: capacityChairs,
+        kilometrajeInicial: initialMileage,
+        kilometrajeActual: currentMileage,
+        adelanto: 0,
+        idEstado: status
+    };
 
-//     axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${selectedUnitId}`, unidadData)
-//         .then(response => {
-//             console.log('Unidad actualizada:', response.data);
-//             showToast('Actualización exitosa', 'La actualización se ha realizado exitosamente.');
-//             document.getElementById('7').reset();
-//             loadUnidades();
-//             selectedUnitId = null;
-//         })
-//         .catch(error => {
-//             console.error('Error al actualizar la unidad:', error);
-//             showToast('Error', 'Error al actualizar la unidad.');
-//         });
-// }
+    console.log('Datos a enviar para actualizar:', unidadData);
+
+    axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
+        .then(response => {
+            clearForm();
+            console.log('Unidad actualizada:', response.data);
+            showToast('Actualización exitosa', 'La unidad se ha actualizado exitosamente.');
+            document.getElementById('unitsForm').reset();
+            document.getElementById('unitNumber').disabled = false;
+            loadUnidades();
+        })
+        .catch(error => {
+            console.error('Error al actualizar la unidad:', error);
+            showToast('Error', 'Error al actualizar la unidad.');
+        });
+}

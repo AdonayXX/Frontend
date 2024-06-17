@@ -9,11 +9,14 @@
 <body>
     <div class="container-fluid mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
         <h2 class="text-center mt-3">Registro de Unidades</h2>
-        <form id="7">
+        <form id="unitsForm">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="unitNumber">Número de Unidad</label>
                     <input type="text" class="form-control" id="unitNumber" required>
+                </div>
+                <div class="col-md-6 mb-3 text-end">
+                    <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i class="bi bi-x-lg"></i></button>
                 </div>
             </div>
             <div class="row">
@@ -21,8 +24,8 @@
                     <label for="resourceType">Tipo de Recurso</label>
                     <div class="input-group">
                         <select class="form-control" id="resourceType" required>
-                            <option value="2">CCSS</option>
-                            <option value="1">Cruz Roja</option>
+                            <option value="1">CCSS</option>
+                            <option value="2">Cruz Roja</option>
                             <option value="3">Privado</option>
                         </select>
                         <div class="input-group-append">
@@ -34,11 +37,11 @@
                     <label for="unitType">Tipo de Unidad</label>
                     <select class="form-control" id="unitType" required>
                         <option value="">Seleccione tipo...</option>
-                        <option value="6">Ambulancia</option>
-                        <option value="2">Taxi</option>
+                        <option value="5">Ambulancia</option>
+                        <option value="8">Taxi</option>
                         <option value="3">4x4</option>
                         <option value="4">Buseta</option>
-                        <option value="5">Moto</option>
+                        <option value="3">Moto</option>
                     </select>
                 </div>
             </div>
@@ -78,10 +81,10 @@
                 <div class="col-md-6 mb-3">
                     <label for="status">Estado</label>
                     <select class="form-control" id="status" required>
-                        <option value="4">Activa</option>
-                        <option value="6">Inactiva</option>
+                        <option value="1">Activa</option>
+                        <option value="4">Inactiva</option>
                         <option value="10">En Mantenimiento</option>
-                        <option value="4">Desechada</option>
+                        <option value="3">Desechada</option>
                     </select>
                 </div>
                 <div id="maintenanceFields" style="display: none;">
@@ -89,8 +92,8 @@
                         <div class="col-md-6 mb-3">
                             <label for="maintenanceType">Tipo de Mantenimiento</label>
                             <select class="form-control" id="maintenanceType">
-                                <option value="2">Por Fecha</option>
-                                <option value="5">Por Kilometraje</option>
+                                <option value="5">Por Fecha</option>
+                                <option value="2">Por Kilometraje</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
@@ -104,13 +107,12 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
-            <button id="updateButton" type="submit" class="btn text-white" style="background-color: #094079;">Actualizar Unidad</button>
+            <button type="submit" id="submit-unit-button" class="btn text-white" style="background-color: #094079; border-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';">Registrar Unidad</button>
+            <button type="submit" id="update-unit-button" class="btn btn-primary text-white" style="background-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';" disabled>Actualizar Unidad</button>
         </form>
-
         <h2 class="mt-5">Catálogo de Unidades</h2>
         <div class="table-responsive">
-            <table class="table table-bordered mt-3">
+            <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
                 <thead style="background-color: #094079; color: white;">
                     <tr>
                         <th>Número de Unidad</th>
