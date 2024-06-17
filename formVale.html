@@ -32,29 +32,29 @@
             <div class="row">
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="id" class="form-label">ID:</label>
-                    <input type="text" id="input-id" name="id" class="form-control">
+                    <input type="text" id="input-id" name="id" class="form-control" disabled>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="up" class="form-label">Unidad Programática:</label>
-                    <input type="text" id="input-up" name="up" class="form-control">
+                    <input type="text" id="input-up" name="up" class="form-control" disabled>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="unidad" class="form-label">Unidad:</label>
-                    <input type="text" id="input-unidad" name="unidad" class="form-control">
+                    <input type="text" id="input-unidad" name="unidad" class="form-control" disabled>
                 </div>
-                <div class="col-xl-6  mt-2">
+                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="solicitante" class="form-label">Solicitante:</label>
-                    <input type="text" id="input-solicitante" name="solicitante" class="form-control">
+                    <input type="text" id="input-solicitante" name="solicitante" class="form-control" disabled>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-6 mt-2 ">
+                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="servicio" class="form-label">Servicio:</label>
-                    <input type="text" id="input-servicio" name="servicio" class="form-control">
+                    <input type="text" id="input-servicio" name="servicio" class="form-control" disabled>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="servicio" class="form-label">Motivo:</label>
-                    <input type="text" id="input-motivo" name="motivo" class="form-control">
+                    <input type="text" id="input-motivo" name="motivo" class="form-control" disabled>
                 </div>
 
             </div>
@@ -66,58 +66,73 @@
                     <h4 class="text-center" style="color:#094079">Salida</h4>
                     <div class="row justify-content-center">
                         <div class="col-sm-12 col-md-6 col-lg-6">
-                            <label for="user_gen" class="form-label">Hora </label>
-                                <input type="time" class="form-control" id="input-horaSalida" required>
+                            <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
+                            <input type="date" id="input-fechaReq" name="fechaReq" class="form-control" disabled>
                         </div>
                         <div class="col-xl-6 mb-3 col-sm-12">
-                            <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
-                            <input type="date" id="input-fechaReq" name="fechaReq" class="form-control">
+                            <label for="user_gen" class="form-label">Hora </label>
+                            <input type="time" class="form-control" id="input-horaSalida" disabled>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="row justify-content-center align-items-center m-3">
                 <div class="col-sm-12 col-md-4 col-lg-12 d-flex flex-column justify-content-around text-center">
                     <label for="tbxdireccion" class="form-label text-center">Detalle:</label>
-                    <textarea class="form-control" id="txa-detalle" rows="3" required></textarea>
+                    <textarea class="form-control" id="txa-detalle" rows="3" disabled></textarea>
                 </div>
             </div>
             <div class="row d-flex justify-content-center m-1">
                 <div class="col-xl-12 text-center">
                     <h3>Acompañantes</h3>
                 </div>
-                <div class="col-xl-5 text-black m-1 col-sm-12" style="display: none;">
+                <div class="col-xl-5 text-black m-1 col-sm-12" id="div1" style="display: none;">
                     <label for="destino2" class="form-label">Acompañante 1:</label>
-                    <input type="text" id="input-acompanante1" name="acompañante1" class="form-control">
+                    <input type="text" id="input-acompanante1" name="acompañante1" class="form-control" disabled>
                 </div>
-                <div class="col-xl-5 text-black m-1 col-sm-12" style="display: none;">
+                <div class="col-xl-5 text-black m-1 col-sm-12" id="div2" style="display: none;">
                     <label for="destino1" class="form-label">Acompañante 2:</label>
-                    <input type="text" id="input-acompanante2" name="acompañante2" class="form-control">
+                    <input type="text" id="input-acompanante2" name="acompañante2" class="form-control" disabled>
                 </div>
-                <div class="col-xl-5 text-black m-1 col-sm-12" style="display: none;">
+                <div class="col-xl-5 text-black m-1 col-sm-12" id="div3" style="display: none;">
                     <label for="destino1" class="form-label">Acompañante 3:</label>
-                    <input type="text" id="input-acompanante3" name="acompañante2" class="form-control">
+                    <input type="text" id="input-acompanante3" name="acompañante2" class="form-control" disabled>
                 </div>
-                <div class="col-xl-5 text-black m-1 col-sm-12" style="display: none;">
+                <div class="col-xl-5 text-black m-1 col-sm-12" id="div4" style="display: none;">
                     <label for="destino1" class="form-label">Acompañante 4:</label>
-                    <input type="text" id="input-acompanante4" name="acompañante2" class="form-control">
+                    <input type="text" id="input-acompanante4" name="acompañante2" class="form-control" disabled>
                 </div>
-                <div class="col-xl-5 text-black m-1 col-sm-12" style="display: none;">
+                <div class="col-xl-5 text-black m-1 col-sm-12" id="div5" style="display: none;">
                     <label for="destino1" class="form-label">Acompañante 5:</label>
-                    <input type="text" id="input-acompanante5" name="acompañante2" class="form-control">
+                    <input type="text" id="input-acompanante5" name="acompañante2" class="form-control" disabled>
                 </div>
 
                 <div class="row mt-3">
-                    <h3 class="text-center">Recursos</h3>
+                    <h3 class="text-center">Datos de Chofer</h3>
                 </div>
                 <div class="row d-flex justify-content-center m-1">
                     <div class="col-xl-3 col-sm-12">
                         <label for="destino2" class="form-label">Placa:</label>
-                        <input type="text" id="input-placa" name="placa" class="form-control">
+                        <select class="form-select" id="select-placa" required>
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="">555-555</option>
+                            <option value="">666-555</option>
+                            <option value="">777-555</option>
+                            <option value="">888-555</option>
+                            <option value="">999-555</option>
+                        </select>
                     </div>
                     <div class="col-xl-6 col-sm-12">
                         <label for="destino2" class="form-label">Chofer:</label>
-                        <input type="text" id="input-chofer" name="chofer" class="form-control">
+                        <select class="form-select" id="select-chofer" required>
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="">Juanito Alimaña</option>
+                            <option value="">Pablo Escobar Gaviria</option>
+                            <option value="">Emerson Centeno Chaves</option>
+                            <option value="">Marcela Negrinni</option>
+                            <option value="">Erling Maland</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -125,12 +140,19 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-xl-6">
-                        <label for="destino2" class="form-label">Funcionario:</label>
-                        <input type="text" id="input-funcionario" name="Funcionario" class="form-control">
+                        <label for="destino2" class="form-label">Encargado:</label>
+                        <select class="form-select" id="select-encargado" required>
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="">Juanito Alimaña</option>
+                            <option value="">Pablo Escobar Gaviria</option>
+                            <option value="">Emerson Centeno Chaves</option>
+                            <option value="">Marcela Negrinni</option>
+                            <option value="">Erling Maland</option>
+                        </select>
                     </div>
                     <div class="col-xl-6">
                         <label for="destino2" class="form-label">Firma:</label>
-                        <input type="text" id="input-firma" name="Firma" class="form-control">
+                        <input type="text" id="input-firma" name="Firma" class="form-control" required>
                     </div>
                 </div>
                 <div class="row mt-3">
