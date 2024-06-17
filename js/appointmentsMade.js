@@ -1,4 +1,3 @@
-
 loadCitas();
 
 async function loadCitas() {
@@ -25,8 +24,8 @@ async function loadCitas() {
                 },
                 caseInsensitive: true,
                 smart: true
-
             });
+
             $('#searchAppointment').on('keyup', function () {
                 let inputValue = $(this).val().toLowerCase();
                 table.search(inputValue).draw();
@@ -52,7 +51,7 @@ function renderTable(citas) {
                 <td class="text-center">${cita.horaCita}</td>
                 <td class="text-center">${cita.ubicacionDestino}</td>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(${12})">
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
@@ -61,40 +60,33 @@ function renderTable(citas) {
             tableBody.appendChild(row);
         }
     });
-
 }
 
-async function getAcompanantes(idPaciente) {
+function getAcompanantes(cita) {
+    console.log(cita);
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/paciente/acompanantes`);
-        const pacientes = response.data.pacientes;
-
-        const pacienteSeleccionado = pacientes.find(paciente => paciente.IdPaciente === parseInt(idPaciente));
-
-        if (!pacienteSeleccionado) {
-            console.error(`No se encontró un paciente con id ${idPaciente}`);
-            return;
-        }
-
-        const acompanantes = pacienteSeleccionado.acompanantes;
+        const acompanantes = [cita.nombreCompletoAcompanante1, cita.nombreCompletoAcompanante2];
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
 
+        let hasAcompanantes = false;
+
         acompanantes.forEach(acompanante => {
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td>${acompanante.Nombre}</td>
-                <td>${acompanante.Apellido1} ${acompanante.Apellido2}</td>
-                <td>${acompanante.Telefono1} / ${acompanante.Telefono2}</td>
-                <td>${acompanante.Parentesco}</td>
-            `;
-
-            tableBody.appendChild(row);
+            if (acompanante) {
+                hasAcompanantes = true;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${acompanante}</td>`;
+                tableBody.appendChild(row);
+            }
         });
+
+        if (!hasAcompanantes) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>No hay datos para mostrar.</td>`;
+            tableBody.appendChild(row);
+        }
     } catch (error) {
         console.error('Error al obtener los acompañantes:', error);
         showToast(error, 'Error al obtener los acompañantes:');
     }
 }
-
