@@ -1,64 +1,17 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function () {
-    showTotalCapacity();
-});
+let selectedUnitId = null;
+
+loadUnidades();
 
 document.getElementById('7').addEventListener('submit', function (event) {
     event.preventDefault();
+    handleSubmit();
+});
 
-    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
-    const unitType = parseInt(document.getElementById('unitType').value, 10);
-    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-    const status = parseInt(document.getElementById('status').value, 10);
-    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
-    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
-    const totalCapacity = capacityChairs + capacityBeds;
-
-    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
-        showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
-        return;
-    }
-
-    if (currentMileage < initialMileage) {
-        showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
-        return;
-    }
-
-    const unidadData = {
-        idTipoUnidad: unitType,
-        idTipoRecurso: resourceType,
-        idFrecuenciaCambio: maintenanceType,
-        numeroUnidad: unitNumber,
-        choferDesignado: driver,
-        fechaDekra: dekraDate,
-        capacidadTotal: totalCapacity,
-        capacidadCamas: capacityBeds,
-        capacidadSillas: capacityChairs,
-        kilometrajeInicial: initialMileage,
-        kilometrajeActual: currentMileage,
-        adelanto: 0,
-        idEstado: status
-    };
-
-    console.log('Datos a enviar:', unidadData);
-
-    axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
-        .then(response => {
-            console.log('Unidad creada:', response.data);
-            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-            document.getElementById('7').reset();
-            loadUnidades();
-        })
-        .catch(error => {
-            console.error('Error al crear la unidad:', error);
-            showToast('Error', 'Error al crear la unidad.');
-        });
+document.getElementById('updateButton').addEventListener('click', function (event) {
+    event.preventDefault();
+    handleUpdate();
 });
 
 document.getElementById('maintenanceType').addEventListener('change', function () {
@@ -82,7 +35,7 @@ function validateCapacity(capacity, resourceType) {
         showToast('Error', 'La capacidad de una pickup no puede ser mayor a 5.');
         return false;
     }
-    if (resourceType === 5 && capacity > 2) {
+    if (resourceType === 5 && capacidad > 2) {
         showToast('Error', 'La capacidad de una moto no puede ser mayor a 2.');
         return false;
     }
@@ -209,6 +162,8 @@ async function loadUnidades() {
 }
 
 function loadFormData(unidad) {
+    selectedUnitId = unidad.id;
+
     document.getElementById('unitNumber').value = unidad.numeroUnidad;
     document.getElementById('unitNumber').disabled = true;
     document.getElementById('unitType').value = unidad.idTipoUnidad;
@@ -227,4 +182,116 @@ function loadFormData(unidad) {
     document.getElementById('maintenanceType').dispatchEvent(event);
 }
 
-loadUnidades();
+function handleSubmit() {
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    const unitType = parseInt(document.getElementById('unitType').value, 10);
+    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
+    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
+    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
+    const status = parseInt(document.getElementById('status').value, 10);
+    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
+    const totalCapacity = capacityChairs + capacityBeds;
+
+    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
+        showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
+        return;
+    }
+
+    if (currentMileage < initialMileage) {
+        showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+        return;
+    }
+
+    const unidadData = {
+        idTipoUnidad: unitType,
+        idTipoRecurso: resourceType,
+        idFrecuenciaCambio: maintenanceType,
+        numeroUnidad: unitNumber,
+        choferDesignado: driver,
+        fechaDekra: dekraDate,
+        capacidadTotal: totalCapacity,
+        capacidadCamas: capacityBeds,
+        capacidadSillas: capacityChairs,
+        kilometrajeInicial: initialMileage,
+        kilometrajeActual: currentMileage,
+        adelanto: 0,
+        idEstado: status
+    };
+
+    console.log('Datos a enviar:', unidadData);
+
+    axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
+        .then(response => {
+            console.log('Unidad creada:', response.data);
+            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
+            document.getElementById('7').reset();
+            loadUnidades();
+        })
+        .catch(error => {
+            console.error('Error al crear la unidad:', error);
+            showToast('Error', 'Error al crear la unidad.');
+        });
+}
+
+// function handleUpdate() {
+//     if (!selectedUnitId) {
+//         showToast('Error', 'No hay una unidad seleccionada para actualizar.');
+//         return;
+//     }
+
+//     const unitType = parseInt(document.getElementById('unitType').value, 10);
+//     const resourceType = parseInt(document.getElementById('resourceType').value, 10);
+//     const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
+//     const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
+//     const status = parseInt(document.getElementById('status').value, 10);
+//     const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+//     const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+//     const driver = parseInt(document.getElementById('assignedDriver').value, 10);
+//     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+//     const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
+//     const totalCapacity = capacityChairs + capacityBeds;
+
+//     if (initialMileage < 0 || currentMileage < 0 || driver === '') {
+//         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
+//         return;
+//     }
+
+//     if (currentMileage < initialMileage) {
+//         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+//         return;
+//     }
+
+//     const unidadData = {
+//         idTipoUnidad: unitType,
+//         idTipoRecurso: resourceType,
+//         idFrecuenciaCambio: maintenanceType,
+//         choferDesignado: driver,
+//         fechaDekra: dekraDate,
+//         capacidadTotal: totalCapacity,
+//         capacidadCamas: capacityBeds,
+//         capacidadSillas: capacityChairs,
+//         kilometrajeInicial: initialMileage,
+//         kilometrajeActual: currentMileage,
+//         adelanto: 0,
+//         idEstado: status
+//     };
+
+//     console.log('Datos a enviar para actualizar:', unidadData);
+
+//     axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${selectedUnitId}`, unidadData)
+//         .then(response => {
+//             console.log('Unidad actualizada:', response.data);
+//             showToast('Actualización exitosa', 'La actualización se ha realizado exitosamente.');
+//             document.getElementById('7').reset();
+//             loadUnidades();
+//             selectedUnitId = null;
+//         })
+//         .catch(error => {
+//             console.error('Error al actualizar la unidad:', error);
+//             showToast('Error', 'Error al actualizar la unidad.');
+//         });
+// }
