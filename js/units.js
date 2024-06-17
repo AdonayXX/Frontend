@@ -197,11 +197,34 @@ async function loadUnidades() {
                 <td>${unidad.choferDesignado}</td>
             `;
 
+            row.addEventListener('click', function () {
+                loadFormData(unidad);
+            });
+
             tableBody.appendChild(row);
         });
     } catch (error) {
         console.error('Error al obtener las unidades:', error);
     }
+}
+
+function loadFormData(unidad) {
+    document.getElementById('unitNumber').value = unidad.numeroUnidad;
+    document.getElementById('unitNumber').disabled = true;
+    document.getElementById('unitType').value = unidad.idTipoUnidad;
+    document.getElementById('resourceType').value = unidad.idTipoRecurso;
+    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
+    document.getElementById('status').value = unidad.idEstado;
+    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+    document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
+    document.getElementById('assignedDriver').value = unidad.choferDesignado;
+    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
+    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
+
+    const event = new Event('change');
+    document.getElementById('status').dispatchEvent(event);
+    document.getElementById('maintenanceType').dispatchEvent(event);
 }
 
 loadUnidades();
