@@ -1,168 +1,66 @@
-document.getElementById('searchPatient').addEventListener('keyup', function () {
-    let input = document.getElementById('searchPatient').value.toLowerCase();
-    filterTable(input);
-});
 
-document.getElementById('fechaCita').addEventListener('change', function () {
-    let input = document.getElementById('searchPatient').value.toLowerCase();
-    filterTable(input);
-});
-
-let currentPage = 1;
-let rowsPerPage = 5;
-let filteredRows = [];
+loadCitas();
 
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
+        console.log("Hola Mundo")
         const citas = response.data;
-        const tableBody = document.getElementById('viajesTableBody');
-        tableBody.innerHTML = '';
-
-        citas.forEach(cita => {
-            if (cita.estadoCita === 'Finalizado') {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${cita.idCita}</td>
-                    <td>${cita.nombreCompletoPaciente}</td>
-                    <td>${cita.fechaCita}</td>
-                    <td>${cita.horaCita}</td>
-                    <td>${cita.ubicacionDestino}</td>
-                    <td>
-                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(12)">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </td>
-                `;
-
-                tableBody.appendChild(row);
+        $(document).ready(function () {
+            console.log("entro")
+            if ($.fn.DataTable.isDataTable('#TableAppointment')) {
+                $('#TableAppointment').DataTable().destroy();
             }
-        });
+            renderTable(citas);
 
-        filterTable('');
+            let table = $('#TableAppointment').DataTable({
+                dom: "<'row'<'col-sm-6'l>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row '<'col-sm-6'i><'col-sm-6'p>>",
+                ordering: false,
+                searching: true,
+                paging: true,
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+                },
+                caseInsensitive: true,
+                smart: true
+
+            });
+            $('#searchAppointment').on('keyup', function () {
+                let inputValue = $(this).val().toLowerCase();
+                table.search(inputValue).draw();
+            });
+        })
     } catch (error) {
         console.error('Error al obtener las citas:', error);
     }
 }
 
-async function getAcompanantes(idPaciente) {
-    try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/paciente/acompanantes`);
-        const pacientes = response.data.pacientes;
+function renderTable(citas) {
+    const tableBody = document.getElementById('viajesTableBody');
+    tableBody.innerHTML = '';
 
-        const pacienteSeleccionado = pacientes.find(paciente => paciente.IdPaciente === parseInt(idPaciente));
-
-        if (!pacienteSeleccionado) {
-            console.error(`No se encontró un paciente con id ${idPaciente}`);
-            return;
-        }
-
-        const acompanantes = pacienteSeleccionado.acompanantes;
-        const tableBody = document.getElementById('AcompananteTableBody');
-        tableBody.innerHTML = '';
-
-        acompanantes.forEach(acompanante => {
+    citas.forEach(cita => {
+        if (cita.estadoCita === 'Finalizado') {
             const row = document.createElement('tr');
 
             row.innerHTML = `
-                <td>${acompanante.Nombre}</td>
-                <td>${acompanante.Apellido1} ${acompanante.Apellido2}</td>
-                <td>${acompanante.Telefono1} / ${acompanante.Telefono2}</td>
-                <td>${acompanante.Parentesco}</td>
+                <td class="text-center">${cita.idCita}</td>
+                <td class="text-center">${cita.nombreCompletoPaciente}</td>
+                <td class="text-center">${cita.fechaCita}</td>
+                <td class="text-center">${cita.horaCita}</td>
+                <td class="text-center">${cita.ubicacionDestino}</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(${cita.idPaciente})">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
             `;
 
             tableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error al obtener los acompañantes:', error);
-        showToast(error, 'Error al obtener los acompañantes:');
-    }
-}
-
-function filterTable(searchTerm) {
-    let table = document.getElementById('TableAppointment');
-    let rows = table.getElementsByTagName('tr');
-    let selectedDate = document.getElementById('fechaCita').value.toLowerCase();
-
-    filteredRows = [];
-    for (let i = 1; i < rows.length; i++) {
-        let cells = rows[i].getElementsByTagName('td');
-        let match = false;
-        for (let j = 0; j < cells.length; j++) {
-            if (cells[j].innerText.toLowerCase().includes(searchTerm)) {
-                match = true;
-            }
         }
-        let dateMatch = selectedDate === '' || cells[2].innerText.toLowerCase() === selectedDate;
+    });
 
-        if (match && dateMatch) {
-            rows[i].style.display = '';
-            filteredRows.push(rows[i]);
-        } else {
-            rows[i].style.display = 'none';
-        }
-    }
-
-    currentPage = 1;
-    paginateTable();
 }
 
-function paginateTable() {
-    let table = document.getElementById('TableAppointment');
-    let rows = table.getElementsByTagName('tr');
-    let totalRows = filteredRows.length;
-
-    for (let i = 1; i < rows.length; i++) {
-        rows[i].style.display = 'none';
-    }
-
-    for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < totalRows; i++) {
-        filteredRows[i].style.display = '';
-    }
-}
-
-function nextPage() {
-    let totalRows = filteredRows.length;
-    let totalPages = Math.ceil(totalRows / rowsPerPage);
-
-    if (currentPage < totalPages) {
-        currentPage++;
-        paginateTable();
-    }
-}
-
-function previousPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        paginateTable();
-    }
-}
-
-function changeRowsPerPage() {
-    rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
-    currentPage = 1;
-    paginateTable();
-}
-
-function paginateTable() {
-    let table = document.getElementById('TableAppointment');
-    let rows = table.getElementsByTagName('tr');
-    let totalRows = filteredRows.length;
-
-    for (let i = 1; i < rows.length; i++) {
-        rows[i].style.display = 'none';
-    }
-
-    for (let i = (currentPage - 1) * rowsPerPage; i < currentPage * rowsPerPage && i < totalRows; i++) {
-        filteredRows[i].style.display = '';
-    }
-}
-
-
-async function loadCitasAndFilter() {
-    await loadCitas();
-    filterTable('');
-}
-
-loadCitasAndFilter();
