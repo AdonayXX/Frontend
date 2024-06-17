@@ -1,75 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Unidades</title>
 </head>
+
 <body>
-    <div class=" container-fluid  mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
+    <div class="container-fluid mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
         <h2 class="text-center mt-3">Registro de Unidades</h2>
-        <form id="unitForm">
+        <form id="unitsForm">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="unitNumber">Número de Unidad</label>
                     <input type="text" class="form-control" id="unitNumber" required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="capacity">Capacidad</label>
-                    <input type="number" class="form-control" id="capacity" required>
+                <div class="col-md-6 mb-3 text-end">
+                    <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i class="bi bi-x-lg"></i></button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="resourceType">Tipo de Recurso</label>
-                    <select multiple class="form-control" id="resourceType" required>
-                        <option value="CCSS">CCSS</option>
-                        <option value="CruzRoja">Cruz Roja</option>
-                        <option value="Privado">Privado</option>
-                        <option value="Pickup">Pickup</option>
-                        <option value="Moto">Moto</option>
-
+                    <div class="input-group">
+                        <select class="form-control" id="resourceType" required>
+                            <option value="1">CCSS</option>
+                            <option value="2">Cruz Roja</option>
+                            <option value="3">Privado</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="addResourceType">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="unitType">Tipo de Unidad</label>
+                    <select class="form-control" id="unitType" required>
+                        <option value="">Seleccione tipo...</option>
+                        <option value="5">Ambulancia</option>
+                        <option value="8">Taxi</option>
+                        <option value="3">4x4</option>
+                        <option value="4">Buseta</option>
+                        <option value="3">Moto</option>
                     </select>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="initialMileage">Kilometraje Inicial</label>
                     <input type="number" class="form-control" id="initialMileage" required>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="currentMileage">Kilometraje Actual</label>
                     <input type="number" class="form-control" id="currentMileage" required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="status">Estado</label>
-                    <select class="form-control" id="status" required>
-                        <option value="Activa">Activa</option>
-                        <option value="Inactiva">Inactiva</option>
-                        <option value="En Mantenimiento">En Mantenimiento</option>
-                    </select>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
+                    <label for="capacityChairs">Capacidad de Sillas</label>
+                    <input type="number" class="form-control" id="capacityChairs" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="capacityBed">Capacidad de Camillas</label>
+                    <input type="number" class="form-control" id="capacityBeds" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="totalCapacity">Capacidad Total</label>
+                    <input type="number" class="form-control" id="totalCapacity" readonly>
+                </div>
+                <div class="col-md-6 mb-3">
                     <label for="dekraDate">Fecha de Dekra</label>
                     <input type="date" class="form-control" id="dekraDate" required>
-                </div>
-            </div>
-            <div id="maintenanceFields" style="display: none;">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="maintenanceType">Tipo de Mantenimiento</label>
-                        <select class="form-control" id="maintenanceType">
-                            <option value="Fecha">Por Fecha</option>
-                            <option value="Kilometraje">Por Kilometraje</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row" id="mileageField" style="display: none;">
-                    <div class="col-md-6 mb-3">
-                        <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
-                        <input type="number" class="form-control" id="maintenanceMileage">
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -77,13 +78,41 @@
                     <label for="assignedDriver">Chófer Designado</label>
                     <input type="text" class="form-control" id="assignedDriver">
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label for="status">Estado</label>
+                    <select class="form-control" id="status" required>
+                        <option value="1">Activa</option>
+                        <option value="4">Inactiva</option>
+                        <option value="10">En Mantenimiento</option>
+                        <option value="3">Desechada</option>
+                    </select>
+                </div>
+                <div id="maintenanceFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maintenanceType">Tipo de Mantenimiento</label>
+                            <select class="form-control" id="maintenanceType">
+                                <option value="5">Por Fecha</option>
+                                <option value="2">Por Kilometraje</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
+                            <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
+                            <input type="number" class="form-control" id="maintenanceMileage">
+                        </div>
+                        <div class="col-md-6 mb-3" id="dateField" style="display: none;">
+                            <label for="maintenanceDate">Fecha de Mantenimiento</label>
+                            <input type="date" class="form-control" id="maintenanceDate">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn text-white" style="background-color: #094079;">Registrar Unidad</button>
+            <button type="submit" id="submit-unit-button" class="btn text-white" style="background-color: #094079; border-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';">Registrar Unidad</button>
+            <button type="submit" id="update-unit-button" class="btn btn-primary text-white" style="background-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';" disabled>Actualizar Unidad</button>
         </form>
-
         <h2 class="mt-5">Catálogo de Unidades</h2>
         <div class="table-responsive">
-            <table class="table table-bordered mt-3">
+            <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
                 <thead style="background-color: #094079; color: white;">
                     <tr>
                         <th>Número de Unidad</th>
@@ -95,7 +124,6 @@
                         <th>Fecha de Dekra</th>
                         <th>Tipo de Mantenimiento</th>
                         <th>Chófer Designado</th>
-                        <th>Kilometraje de Mantenimiento</th>
                     </tr>
                 </thead>
                 <tbody id="unitTableBody">
@@ -108,4 +136,5 @@
     <div id="modal-container"></div>
     <div data-script="js/units.js"></div>
 </body>
+
 </html>
