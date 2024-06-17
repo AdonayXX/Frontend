@@ -42,7 +42,7 @@ function renderTable(citas) {
     tableBody.innerHTML = '';
 
     citas.forEach(cita => {
-        if (cita.estadoCita === 'Finalizado') {
+        if (cita.estadoCita === 'Finalizada' && cita.ausente !== null) {
             const row = document.createElement('tr');
 
             row.innerHTML = `
