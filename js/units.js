@@ -17,6 +17,9 @@ document.getElementById('clearFormButton').addEventListener('click', function ()
 function clearForm() {
     document.getElementById('unitsForm').reset();
     document.getElementById('unitNumber').disabled = false;
+    document.getElementById('unitType').disabled = false;
+    document.getElementById('resourceType').disabled = false;
+    document.getElementById('initialMileage').disabled = false;
     document.getElementById('maintenanceFields').style.display = 'none';
     document.getElementById('mileageField').style.display = 'none';
     document.getElementById('dateField').style.display = 'none';
@@ -233,8 +236,11 @@ function loadFormData(unidad) {
     document.getElementById('unitNumber').value = unidad.numeroUnidad;
     document.getElementById('unitNumber').disabled = true;
     document.getElementById('unitType').value = unidad.idTipoUnidad;
+    document.getElementById('unitType').disabled = true;
     document.getElementById('resourceType').value = unidad.idTipoRecurso;
+    document.getElementById('resourceType').disabled = true;
     document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+    document.getElementById('initialMileage').disabled = true;
     document.getElementById('currentMileage').value = unidad.kilometrajeActual;
     document.getElementById('status').value = unidad.idEstado;
     document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
