@@ -14,5 +14,33 @@ async function loadDestinations() {
         console.error('Error al obtener los destinos:', error);
     }
 }
-
 loadDestinations()
+
+async function loadEspecialidades() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
+        const especialidad = response.data.especialidad;
+        const tableBody = document.getElementById('espe');
+        tableBody.innerHTML = '';
+
+        especialidad.forEach(espe => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+              <td><input type="checkbox" id="seleccionarEspe"/></td>
+                <td>${espe.Especialidad}</td>
+                 <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
+                 class="bi bi-trash"></i></button></td>
+            `;
+
+            tableBody.appendChild(row);
+
+        });
+    } catch (error) {
+        console.error('Error al cargar las especialidades:', error);
+
+    }
+
+}
+
+loadEspecialidades() 

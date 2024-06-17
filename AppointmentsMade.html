@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="./style/style.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/appointmentsMade.js"></script>
+
 </head>
 
 <style>
@@ -18,18 +20,16 @@
         text-align: center;
     }
 
-    @media(max-width:449px) {
+    @media(max-width: 449px) {
         #labelfila {
             margin-top: 10px;
         }
-
     }
 
-    @media(max-width:507px) {
+    @media(max-width: 507px) {
         #botones {
             margin-top: 15px;
         }
-
     }
 </style>
 
@@ -42,7 +42,7 @@
             </div>
 
             <div class="col-sm-3 search-bar input-group m-2">
-                <input type="text" class="form-control" placeholder="Buscar..." id="searchPatient">
+                <input type="text" class="form-control" placeholder="Buscar..." id="searchAppointment">
             </div>
         </div>
 
@@ -78,42 +78,65 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6 d-flex align-items-center" id="labelfila">
-                <label for="rowsPerPage" class="form-label me-2">Filas por página</label>
-                <select id="rowsPerPage" class="form-select" onchange="changeRowsPerPage()" style="width: auto;">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-            </div>
-        </div>
 
 
-        <div class="table-responsive" id="TableAppointment">
-            <table class="table table-light table-striped table-hover table-bordered">
-                <thead>
+        <div class="table-responsive">
+            <table class="table table-light table-striped table-hover table-bordered" id="TableAppointment"
+                style="margin-left: 20px;">
+                <thead class="text-center">
                     <tr>
-                        <th>IdCita</th>
-                        <th>Paciente</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Destino</th>
-                        <th class="narrow-col">Ver Más</th>
+                        <th class="text-center">IdCita</th>
+                        <th class="text-center">Paciente</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Hora</th>
+                        <th class="text-center">Destino</th>
+                        <th class="narrow-col">Acompañante/s</th>
                     </tr>
                 </thead>
                 <tbody id="viajesTableBody">
-                    <!-- Acá se cargaran los datos de la cita -->
+                    <!-- Acá se cargarán los datos de la cita -->
+                    <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+
+
                 </tbody>
             </table>
         </div>
-
-        <div class="d-flex justify-content-center" id="botones">
-            <button class="btn btn-secondary" onclick="previousPage()"
-                style="margin-right: 40px; background-color: #094079;">Anterior</button>
-            <button class="btn btn-secondary" onclick="nextPage()" style="background-color: #094079;">Siguiente</button>
-        </div>
+        <br>
 
     </div>
 
@@ -140,7 +163,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="AcompananteTableBody">
-                                    <!-- Acá se cargaran los datos de la cita -->
+                                    <!-- Acá se cargarán los datos de los acompañantes -->
                                 </tbody>
                             </table>
                         </div>
