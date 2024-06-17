@@ -21,7 +21,7 @@ async function getVales() {
                     <td>${vale.Motivo}</td>
                     <td>${vale.EstadoVale}</td> 
                     <td class="text-center">
-                        <button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button>
+                        <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-secondary">Coordinar</button>
                     </td>
                 </tr>
             `;
@@ -51,3 +51,9 @@ async function getVales() {
         }
     });
     
+    function handleCoordinateButton(idVale) {
+        sessionStorage.setItem('selectedIdVale', idVale);
+        loadContent('formVale.html', 'mainContent');
+    }
+
+
