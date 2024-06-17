@@ -69,20 +69,33 @@ function getAcompanantes(cita) {
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
 
+        const infoAdicional = [
+            { label: 'Ubicación Origen', value: cita.ubicacionOrigen },
+            { label: 'Ubicación Destino', value: cita.ubicacionDestino },
+            { label: 'Especialidad', value: cita.especialidad },
+            { label: 'Fecha Cita', value: cita.fechaCita }
+        ];
+
+        infoAdicional.forEach(info => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td><strong>${info.label}:</strong></td><td>${info.value || 'No disponible'}</td>`;
+            tableBody.appendChild(row);
+        });
+
         let hasAcompanantes = false;
 
         acompanantes.forEach(acompanante => {
             if (acompanante) {
                 hasAcompanantes = true;
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${acompanante}</td>`;
+                row.innerHTML = `<td><strong>Acompañante:</strong></td><td>${acompanante}</td>`;
                 tableBody.appendChild(row);
             }
         });
 
         if (!hasAcompanantes) {
             const row = document.createElement('tr');
-            row.innerHTML = `<td>No hay datos para mostrar.</td>`;
+            row.innerHTML = `<td colspan="2">No existen acompañantes asignados a esta cita  .</td>`;
             tableBody.appendChild(row);
         }
     } catch (error) {
