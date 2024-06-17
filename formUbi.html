@@ -16,10 +16,8 @@
         <div class="mb-3">
             <h4 style="text-align: center;">Destinos</h4>
             <div class="input-group">
-                <select id="destinos" name="destinos" class="form-control" required>
-                    <option value="hospital1">Hospital 1</option>
-                    <option value="hospital2">Hospital 2</option>
-                    <option value="hospital3">Hospital 3</option>
+                <select id="select-destinos" name="destinos" class="form-control" required>
+                    <!-- Acá se cargaran los destino -->
                 </select>
                 <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
                     data-bs-target="#AgregarUbiModal">
@@ -42,25 +40,8 @@
                         <th>Eliminar</th>
                     </tr>
                 </thead>
-                <tbody id="viajesTableBody">
-                    <tr>
-                        <td><input type="checkbox" id="seleccionarEspe" /></td>
-                        <td>Cardiología</td>
-                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
-                                    class="bi bi-trash"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" id="seleccionarEspe" /></td>
-                        <td>Terapia Física</td>
-                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
-                                    class="bi bi-trash"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" id="seleccionarEspe" /></td>
-                        <td>Enfermeria</td>
-                        <td><button class="btn btn-outline-danger btn-sm" id="btnEliminarEspe"><i
-                                    class="bi bi-trash"></i></button></td>
-                    </tr>
+                <tbody id="espe">
+
                 </tbody>
             </table>
         </div>
@@ -86,6 +67,7 @@
 </div>
 
 <!-- Modal -->
+<!-- Modal Agregar Ubicación -->
 <div class="modal fade" id="AgregarUbiModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -101,7 +83,12 @@
                     <input type="text" id="AgregarUbi" class="form-control" placeholder="Ingrese la ubicación..."
                         required>
                     <br>
-                    <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                    <h3>Ingrese la abreviación del destino</h3>
+                    <br>
+                    <input type="text" id="AgregarAbre" class="form-control" placeholder="Ingrese la abreviación..."
+                        required>
+                    <br>
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
                         id="BtnGuardarUbi">
                         <i class="bi bi-save"></i> Guardar
                     </button>
@@ -113,6 +100,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="AgregarEspeModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -141,3 +129,4 @@
         </div>
     </div>
 </div>
+<div data-script="js/destinations.js"></div>
