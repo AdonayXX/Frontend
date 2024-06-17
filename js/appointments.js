@@ -39,6 +39,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 return true;
             } else {
                 showToast('Error', 'No se encontró ningún paciente con esa identificación.');
+                limpiarCampos();
                 return false; 
             }
         } catch (error) {
@@ -48,59 +49,49 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         }
     }
     
+    async function getAcompanantes(identificacion) {
+        try {
+            const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/${identificacion}`;
+            const responseAcompanante = await axios.get(API_URL_ACOMPANANTE);
+            acompanantes = responseAcompanante.data.acompanantes;
 
-async function getAcompanantes(identificacion) {
-    try {
-        const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/${identificacion}`;
-        const responseAcompanante = await axios.get(API_URL_ACOMPANANTE);
-        acompanantes = responseAcompanante.data.acompanantes;
+            const acompanante1Select = document.getElementById('acompananteNombre1');
+            const acompanante2Select = document.getElementById('acompananteNombre2');
 
+            acompanante1Select.innerHTML = '<option value="">Seleccionar Acompañante</option>';
+            acompanante2Select.innerHTML = '<option value="">Seleccionar Acompañante</option>';
 
-        const acompanante1Select = document.getElementById('acompananteNombre1');
-        const acompanante2Select = document.getElementById('acompananteNombre2');
+            if (acompanantes && acompanantes.length > 0) {
+                acompanantes.forEach(acompanante => {
+                    const option = document.createElement('option');
+                    option.text = acompanante.Nombre;
+                    option.value = acompanante.Nombre;
+                    acompanante1Select.add(option);
+                    acompanante2Select.add(option.cloneNode(true));
+                });
 
-        acompanante1Select.innerHTML = '<option value="">Seleccionar Acompañante</option>';
-        acompanante2Select.innerHTML = '<option value="">Seleccionar Acompañante</option>';
+                acompanante2Select.disabled = true;
 
-        acompanantes.forEach(acompanante => {
-            const option = document.createElement('option');
-            option.text = acompanante.Nombre;
-            option.value = acompanante.Nombre;
-            acompanante1Select.add(option);
-            acompanante2Select.add(option.cloneNode(true));
-        });
-
-        acompanante2Select.disabled = true;
-
-        if (acompanantes.length > 0) {
-            setTimeout(() => {
-                showToast('Acompañantes', 'Acompañantes cargados correctamente.');
-            }, 1000);
-        } else {
-            // showToast('Acompañantes', 'No se encontraron acompañantes para este paciente.');
+                setTimeout(() => {
+                    showToast('Acompañantes', 'Acompañantes cargados correctamente.');
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    showToast('Acompañantes', 'No se encontraron acompañantes para este paciente.');
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Error fetching companions data:', error);
+            showToast('Error', 'Error al obtener los datos de los acompañantes.');
         }
-    } catch (error) {
-        // console.error('Error fetching companions data:', error);
-        // //CONTROLAR ERROR ASI , CUANDO NO HAY ACOMPAÑANTES PARA PACIENTE. !!CAMBIAR
-        // showToast('Error', 'Error al obtener los datos de los acompañantes.');
-     
-        setTimeout(() => {
-            showToast('Acompañantes', 'No se encontraron acompañantes para este paciente.');
-        }, 1000);
-
     }
-}
-
-
-function showAcompananteDetails(event, nombreField, apellido1Field, apellido2Field, telefonoField, parentescoField) {
-    const selectedOption = event.target.value;
-    if (selectedOption === "") {
-        nombreField.value = '';
-        apellido1Field.value = '';
-        apellido2Field.value = '';
-        telefonoField.value = '';
-        parentescoField.value = '';
-    } else {
+    function showAcompananteDetails(event, nombreField, apellido1Field, apellido2Field, telefonoField, parentescoField) {
+        const selectedOption = event.target.value;
+        if (!acompanantes || acompanantes.length === 0) {
+            showToast('Acompañantes', 'No se encontraron acompañantes para este paciente.');
+            return;
+        }
+    
         const acompanante = acompanantes.find(acompanante => acompanante.Nombre === selectedOption);
         if (acompanante) {
             nombreField.value = acompanante.Nombre || '';
@@ -108,9 +99,11 @@ function showAcompananteDetails(event, nombreField, apellido1Field, apellido2Fie
             apellido2Field.value = acompanante.Apellido2 || '';
             telefonoField.value = `${acompanante.Telefono1} / ${acompanante.Telefono2}` || '';
             parentescoField.value = acompanante.Parentesco || '';
+        } else {
+            showToast('Acompañantes', 'No se encontró información para el acompañante seleccionado.');
         }
     }
-}
+    
 function handleAcompanante1Change(event) {
     const acompanante2Select = document.getElementById('acompananteNombre2');
     const selectedValue1 = event.target.value;
@@ -127,8 +120,8 @@ function handleAcompanante1Change(event) {
         option.disabled = option.value === selectedValue1;
     });
 
-    if (acompanantes.length === 2) {
-        acompanante2Select.disabled = acompanantes[0].Nombre !== selectedValue1 && acompanantes[1].Nombre !== selectedValue1;
+    if (acompanantes && acompanantes.length === 2) {
+       acompanante2Select.disabled = acompanantes[0].Nombre !== selectedValue1 && acompanantes[1].Nombre !== selectedValue1;
     }
 
     showAcompananteDetails(event, document.getElementById('acompananteNombre1'), document.getElementById('acompananteApellido1_1'), document.getElementById('acompananteApellido2_1'),  document.getElementById('acompananteTelefono1_1'), document.getElementById('acompananteParentesco1'));
@@ -193,9 +186,6 @@ function limpiarCampos() {
     acompanantes = [];
 }
 
-
-    
-
 async function guardarCita() {
     if (!idPaciente) {
         // showToast('Error', 'No se ha obtenido el IdPaciente.');
@@ -208,15 +198,18 @@ async function guardarCita() {
     const horaCita = `${horaCitaInput}:00`;
     const idUbicacionDestino = document.getElementById('destino').value; 
 
-
     if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino) {
         showToast('Error', 'Por favor, complete todos los campos requeridos.');
+        document.getElementById('btnGuardar').disabled = false;
         return;
     }
+
     const acompanante1Nombre = document.getElementById('acompananteNombre1').value;
     const acompanante2Nombre = document.getElementById('acompananteNombre2').value;
-    const idAcompanante1 = acompanantes.find(acompanante => acompanante.Nombre === acompanante1Nombre)?.IdAcompanante || null;
-    const idAcompanante2 = acompanantes.find(acompanante => acompanante.Nombre === acompanante2Nombre)?.IdAcompanante || null;
+
+    const idAcompanante1 = acompanante1Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante1Nombre)?.IdAcompanante : null;
+    const idAcompanante2 = acompanante2Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante2Nombre)?.IdAcompanante : null;
+
     const idEspecialidad = 805;          
     const ubicacionOrigen = document.getElementById('traslado').value;
     const camillaCheckbox = document.getElementById('camilla');
@@ -239,21 +232,20 @@ async function guardarCita() {
         "fechaCita": fechaCita,
         "horaCita": horaCita
     };
- 
 
     try {
         const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
         showToast('Cita', 'Cita guardada correctamente.');
-     setTimeout(() => {
-        loadContent('formAppointment.html', 'mainContent');
-    }, 1450);
-       
-
+        setTimeout(() => {
+            loadContent('formAppointment.html', 'mainContent');
+        }, 1450);
     } catch (error) {
         console.error('Error saving appointment:', error);
+        document.getElementById('btnGuardar').disabled = false;
         showToast('Error', 'Error al guardar la cita.');
     }
 }
+
   function populateDestinos() {
     const selectDestino = document.getElementById('destino');
 
@@ -274,6 +266,7 @@ async function guardarCita() {
 
 document.getElementById('btnGuardar').addEventListener('click', async function (event) {
     event.preventDefault();
+    this.disabled = true; 
     await guardarCita();
     
 });
