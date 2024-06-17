@@ -23,7 +23,7 @@
             <input type="date" id="fechaInicio" class="form-control">
         </div>
         <div class="col-md-4 mt-auto col-sm-12">
-            <button class="btn btn-primary" onclick="realizarViajes()">Confirmar</button>
+            <button class="btn btn-primary" onclick="crearViajes()">Confirmar</button>
         </div>
     </div>
     <div class="row">
@@ -105,3 +105,24 @@
     </div>
     <div data-script="js/dataTrips.js"></div>
 </div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirmar Creación de Viajes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Está seguro de que desea crear viajes para las siguientes citas?</p>
+          <ul id="citasSeleccionadasList"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

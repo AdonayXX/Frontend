@@ -1,5 +1,6 @@
 "use strict";
 
+
 document.getElementById('searchTrips').addEventListener('keyup', function () {
   let input = document.getElementById('searchTrips').value.toLowerCase();
   let rows = Array.from(document.getElementById('tableTrips').getElementsByTagName('tr'));
@@ -16,20 +17,22 @@ async function getCitas() {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/viajeCita';
     const response = await axios.get(API_URL);
-    console.log(response.data);
-
     const viajes = response.data.citas;
     const tableBody = document.querySelector('#viajesTableBody');
 
     tableBody.innerHTML = '';
 
-    viajes.forEach(viaje => {
-      const fecha = new Date(viaje.fechaCita);
-      const formattedFechaCita = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+    const today = new Date();
+    const filteredViajes = viajes.filter(viaje => {
+      const viajeDate = new Date(viaje.fechaCita);
+      return viajeDate >= today;
+    });
 
+    filteredViajes.forEach(viaje => {
+      const formattedFechaCita = formatISODate(viaje.fechaCita); 
       const row = `
-        <tr>
-          <td><input type="checkbox"></td>
+        <tr data-paciente="${viaje.idPaciente}" data-idcita="${viaje.idCita}" data-ubicaciondestino="${viaje.idUbicacionDestino}" data-condicion="${viaje.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${viaje.horaCita}" data-traslado="${viaje.Traslado}" data-camilla="${viaje.camilla}" data-lugarsalida="${viaje.ubicacionOrigen}">
+          <td><input type="checkbox" class="cita-checkbox" value="${viaje.idCita}"></td>
           <td>${viaje.Paciente}</td>
           <td>${viaje.ubicacionOrigen}</td>
           <td>${viaje.idUbicacionDestino}</td>
@@ -54,8 +57,6 @@ async function getUnidades() {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/viajeUnidades';
     const response = await axios.get(API_URL);
-    console.log(response.data);
-
     const unidades = response.data.unidades;
     const selectBody = document.querySelector('#unidades');
 
@@ -69,8 +70,8 @@ async function getUnidades() {
 
     unidades.forEach(unidad => {
       const option = document.createElement('option');
-      option.value = unidad.id;
-      option.textContent = `${unidad.tipo.toUpperCase()} ${unidad.id}`;
+      option.value = unidad.numeroUnidad; // Usar el número de unidad en lugar del ID
+      option.textContent = `${unidad.numeroUnidad}`;
       selectBody.appendChild(option);
     });
   } catch (error) {
@@ -78,14 +79,90 @@ async function getUnidades() {
   }
 }
 
+function formatISODate(isoDate) {
+  const date = new Date(isoDate);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getCitasSeleccionadas() {
+  const checkboxes = document.querySelectorAll('.cita-checkbox:checked');
+  const citasSeleccionadas = Array.from(checkboxes).map(checkbox => {
+    const row = checkbox.closest('tr');
+    return {
+      idCita: checkbox.value,
+      idPaciente: row.dataset.paciente,
+      idUbicacionDestino: row.dataset.ubicaciondestino,
+      condicion: row.dataset.condicion,
+      fechaCita: row.dataset.fechacita,
+      horaCita: row.dataset.horacita,
+      traslado: row.dataset.traslado,
+      camilla: row.dataset.camilla,
+      lugarSalida: row.dataset.lugarsalida 
+    };
+  });
+  return citasSeleccionadas;
+}
+
+async function crearViajes() {
+  const citasSeleccionadas = getCitasSeleccionadas();
+  if (citasSeleccionadas.length === 0) {
+    alert("Seleccione al menos una cita para crear un viaje.");
+    return;
+  }
+
+  const idUnidadElement = document.getElementById('unidades');
+  const fechaInicioElement = document.getElementById('fechaInicio');
+
+  if (!idUnidadElement || !fechaInicioElement) {
+    console.error('Algunos elementos del formulario no se encontraron.');
+    alert('Por favor, complete todos los campos del formulario.');
+    return;
+  }
+
+  const idUnidad = idUnidadElement.value;
+  const fechaInicio = fechaInicioElement.value;
+
+  for (const cita of citasSeleccionadas) {
+    const nuevoViaje = {
+      idUnidad: idUnidad,
+      FechaInicio: fechaInicio,
+      idCita: cita.idCita,
+      idPaciente: cita.idPaciente,
+      LugarSalida: cita.lugarSalida, 
+      idUbicacionDestino: cita.idUbicacionDestino,
+      Condicion: cita.condicion,
+      EstadoCita: "Iniciada",
+      FechaCita: cita.fechaCita, 
+      HoraCita: cita.horaCita,
+      Traslado: cita.traslado,
+      Camilla: cita.camilla
+    };
+
+
+
+    const url = 'https://backend-transporteccss.onrender.com/api/viaje';
+
+    console.log('Datos que se enviarán en la solicitud POST:', JSON.stringify(nuevoViaje, null, 2));
+
+    try {
+      const response = await axios.post(url, nuevoViaje);
+      console.log('Viaje creado exitosamente:', response.data);
+    } catch (error) {
+      if (error.response) {
+        console.error('Error al crear el viaje:', error.response.data);
+        console.error('Código de estado:', error.response.status);
+        console.error('Headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No se recibió respuesta del servidor:', error.request);
+      } else {
+        console.error('Error al configurar la solicitud:', error.message);
+      }
+    }
+  }
+}
+
 getCitas();
 getUnidades();
-
-// function exportToPDF() {
-// }
-
-// function exportToExcel() {
-// }
-
-// function realizarViajes() {
-// }
