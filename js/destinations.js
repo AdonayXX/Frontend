@@ -19,7 +19,7 @@ loadDestinations()
 async function loadEspecialidades() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
-        const especialidad = response.data.especialidad;
+        const especialidad = response.data;
         const tableBody = document.getElementById('espe');
         tableBody.innerHTML = '';
 
