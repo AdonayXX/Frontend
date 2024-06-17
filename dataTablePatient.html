@@ -145,13 +145,11 @@
 
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade mt-5 " id="showAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade mt-5" id="showAccomp" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 " id="staticBackdropLabel">Acompañantes</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Acompañantes</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -167,21 +165,20 @@
                                 </tr>
                             </thead>
                             <tbody id="accomp-tbody">
-
+                                <!-- Aquí se llenará dinámicamente con datos -->
                             </tbody>
-
                         </table>
-
                     </div>
-
+    
                     <div id="messageNoComp" class="text-center text-muted" style="display: none;">
                         No hay pacientes registrados
                     </div>
+                
                 </div>
-
             </div>
         </div>
     </div>
+    
     <div class="modal fade mt-5" id="addAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg ">
@@ -298,7 +295,7 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modalFormEdit">
                     <div class="container  fade-in" style="max-width: 1100px;">
                         <h1 class="mb-4 text-center">Editar Paciente</h1>
                         <form id="formEditPatient" method="post" class="bg-light p-4 border rounded-3">
@@ -433,13 +430,13 @@
                                     <div class="mb-3">
                                         <label for="latitud" class="form-label"><i class="bi bi-house"></i>
                                             Latitud:</label>
-                                        <input type="number" step="any" required id="latitud" name="latitud" maxlength="200"
+                                        <input type="number" step="any" id="latitud" name="latitud" maxlength="200"
                                             class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label for="longitud" class="form-label"><i class="bi bi-house"></i>
                                             Longitud:</label>
-                                        <input type="number" step="any" required id="longitud" name="longitud"
+                                        <input type="number" step="any"  id="longitud" name="longitud"
                                             class="form-control">
                                     </div>
                                     <div class="mb-3">
@@ -453,7 +450,7 @@
                             <div class="row justify-content-end">
                                 <div class="col-md-4">
                                        <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" id="confirmEditBtn" class="btn btn-primary m-2">Guardar Cambios</button>
+                                        <button type="submit" id="confirmEditBtn" class="btn btn-primary m-2">Guardar Cambios</button>
                                 </div>
                              
 
@@ -465,11 +462,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
-
-
-
-        <div data-script="js/patient.js"></div>
+<div data-script="js/patient.js"></div>
 </body>
 
 </html>
