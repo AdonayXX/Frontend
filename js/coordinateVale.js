@@ -47,29 +47,29 @@
     }
 
     function acompanantes(vale) {
-        if (vale.Acompanante1 != "null") {
+        if (vale.Acompanante1 != null) {
             const acompDiv1 = document.getElementById('input-acompanante1');
             const div1 = document.getElementById('div1');
             div1.style.display = 'block';
             acompDiv1.value = vale.NombreAcompanante1;
         }
-        if (vale.Acompanante2 != "null") {
+        if (vale.Acompanante2 != null) {
             const acompDiv1 = document.getElementById('input-acompanante2');
             const div1 = document.getElementById('div2');
             div1.style.display = 'block';
             acompDiv1.value = vale.NombreAcompanante2;
         }
-        if (vale.Acompanante3 != "null") {
+        if (vale.Acompanante3 != null) {
             const acompDiv1 = document.getElementById('input-acompanante3');
             acompDiv1.style.display = 'block';
             acompDiv1.value = vale.NombreAcompanante1;
         }
-        if (vale.Acompanante4 != "null") {
+        if (vale.Acompanante4 != null) {
             const acompDiv1 = document.getElementById('input-acompanante4');
             acompDiv1.style.display = 'block';
             acompDiv1.value = vale.NombreAcompanante1;
         }
-        if (vale.Acompanante5 != "null") {
+        if (vale.Acompanante5 != null) {
             const acompDiv1 = document.getElementById('input-acompanante5');
             acompDiv1.style.display = 'block';
             acompDiv1.value = vale.NombreAcompanante1;
@@ -84,26 +84,23 @@
     document.getElementById('input-fechaReq').min = formattedDate;
 
 
-    function addCoordinate() {
+    async function addCoordinate() {
         try {
             const coordinate = {
                 IdVale: idVale,
-                IdUnidad: document.getElementById('select-placa').value,
-                IdChofer: document.getElementById('select-chofer').value,
-                IdFuncionario: document.getElementById('select-encargado').value,
-                Observaciones: "Coordinando el vale " + idVale
+                IdUnidad: document.getElementById('select-placa').selectedIndex,
+                IdChofer: document.getElementById('select-chofer').selectedIndex,
+                IdFuncionario: document.getElementById('select-encargado').selectedIndex,
+                Observaciones: "Agregando datos"
             };
-            axios.post(`${url}api/revicionVale`, coordinate)
-                .then(response => {
-                    console.log('Datos guardados exitosamente:', response.data);
-                    location.reload();
-                    showToast("Guardando", "Los datos se han guardado de manera exitosa")
-                })
-                .catch(error => {
-                    console.error('Hubo un problema al guardar los datos:', error);
-                });
-
-
+            try {
+                await axios.get(`${url}api/revicionVale`, coordinate);
+                showToast('Datos Agregados', 'Los datos se han guardado correctamente');
+                console.log(coordinate);
+            } catch (error) {
+                console.error('Error al guardar datos', error);
+                showToast('Error', 'Error al guardar la cita.');
+            }
         } catch (error) {
             console.error('Error fetching vale data:', error);
         }
