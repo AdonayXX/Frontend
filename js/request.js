@@ -2,7 +2,9 @@ var url = 'https://backend-transporteccss.onrender.com/';
 async function getVales() {
     try {
         const response = await axios.get(`${url}api/vales`);
-        const vales = response.data; 
+        const data = response.data; 
+        const vales = data.vales;
+
         console.log("Datos de los vales:", vales);
         
         const tableBody = document.querySelector('#tableRequest'); 
