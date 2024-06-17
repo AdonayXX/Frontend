@@ -24,33 +24,33 @@
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="identificacion" class="form-label">Identificación:</label>
-                        <input type="text" id="identificacion" name="identificacion" class="form-control">
+                        <input type="text" id="identificacion" name="identificacion" class="form-control" >
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control">
+                        <input type="text" id="nombre" name="nombre" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="row mt-2">
                   
                     <div class="col-md-4 mb-3">
                         <label for="primerApellido" class="form-label">Primer Apellido:</label>
-                        <input type="text" id="primerApellido" name="primerApellido" class="form-control">
+                        <input type="text" id="primerApellido" name="primerApellido" class="form-control" readonly>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
-                        <input type="text" id="segundoApellido" name="segundoApellido" class="form-control">
+                        <input type="text" id="segundoApellido" name="segundoApellido" class="form-control" readonly>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="telefono1" class="form-label">Teléfono 1:</label>
-                        <input type="text" id="telefono1" name="telefono1" class="form-control">
+                        <input type="text" id="telefono1" name="telefono1" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="row">
                    
                     <div class="col-md-3 mb-3">
                         <label for="telefono2" class="form-label">Teléfono 2:</label>
-                        <input type="text" id="telefono2" name="telefono2" class="form-control">
+                        <input type="text" id="telefono2" name="telefono2" class="form-control" readonly>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="condicion" class="form-label">Condición:</label>
@@ -80,12 +80,12 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="direccion" class="form-label">Dirección:</label>
-                        <textarea id="direccion" name="direccion" class="form-control"></textarea>
+                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="diagnostico" class="form-label">Diagnostico:</label>
-                        <textarea id="diagnostico" name="diagnostico" class="form-control"></textarea>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" required></textarea>
                     </div>
                 </div>
             </div>
@@ -187,22 +187,14 @@
                         <label for="destino" class="form-label">Destino:</label>
                         <select id="destino" name="destino" class="form-select">
                             <option disabled selected value> -- Seleccione un destino -- </option>
-                            <option value="HEBB">HEBB</option>
-                            <!-- <option value="CENARE">CENARE</option>
-                            <option value="ClinicaBiblica">Clínica Bíblica</option>
-                            <option value="HospitalMexico">Hospital México</option> //ESPERAR A RUTA DE UBICACIONES
-                            <option value="ClinicaCatolica">Clínica Católica</option> -->
                         </select>
                     </div>
+                
                     <div class="col-md-3 mt-1">
                         <label for="especialidad" class="form-label">Especialidad:</label>
                         <select id="especialidad" name="especialidad" class="form-select">
                             <option disabled selected value> -- Seleccione una especialidad -- </option>
-                            <option value="MedicinaGeneral">Medicina General</option>
-                            <!-- <option value="Pediatria">Pediatría</option>
-                            <option value="Cirugia">Cirugía</option>      // ESPERAR A RUTA DE ESPECIALIDADES
-                            <option value="Cardiologia">Cardiología</option>
-                            <option value="Dermatologia">Dermatología</option> -->
+                            <option value="MedicinaGeneral">REGISTROS MEDICOS</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
