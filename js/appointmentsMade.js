@@ -3,34 +3,32 @@ loadCitas();
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
-        console.log("Hola Mundo")
         const citas = response.data;
-        $(document).ready(function () {
-            console.log("entro")
-            if ($.fn.DataTable.isDataTable('#TableAppointment')) {
-                $('#TableAppointment').DataTable().destroy();
-            }
-            renderTable(citas);
+        renderTable(citas);
 
-            let table = $('#TableAppointment').DataTable({
-                dom: "<'row'<'col-sm-6'l>" +
-                    "<'row'<'col-sm-12't>>" +
-                    "<'row '<'col-sm-6'i><'col-sm-6'p>>",
-                ordering: false,
-                searching: true,
-                paging: true,
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-                },
-                caseInsensitive: true,
-                smart: true
-            });
+        let table = $('#TableAppointment').DataTable({
+            dom: "<'row'<'col-sm-6'l>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row '<'col-sm-6'i><'col-sm-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true
+        });
 
-            $('#searchAppointment').on('keyup', function () {
-                let inputValue = $(this).val().toLowerCase();
-                table.search(inputValue).draw();
-            });
-        })
+        $('#searchAppointment').on('keyup', function () {
+            let inputValue = $(this).val().toLowerCase();
+            table.search(inputValue).draw();
+        });
+
+        $('#fechaCita').on('change', function () {
+            let fechaInput = $('#fechaCita').val();
+            table.column(2).search(fechaInput).draw();
+        });
     } catch (error) {
         console.error('Error al obtener las citas:', error);
     }
@@ -42,6 +40,8 @@ function renderTable(citas) {
 
     citas.forEach(cita => {
         if (cita.estadoCita === 'Finalizada' && cita.ausente !== null) {
+            showToast('¡Éxitos!', 'Citas cargadas correctamente.');
+
             const row = document.createElement('tr');
 
             row.innerHTML = `
@@ -56,8 +56,8 @@ function renderTable(citas) {
                     </button>
                 </td>
             `;
-
             tableBody.appendChild(row);
+
         }
     });
 }
@@ -83,7 +83,6 @@ function getAcompanantes(cita) {
         });
 
         let hasAcompanantes = false;
-
         acompanantes.forEach(acompanante => {
             if (acompanante) {
                 hasAcompanantes = true;
@@ -95,7 +94,7 @@ function getAcompanantes(cita) {
 
         if (!hasAcompanantes) {
             const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="2">No existen acompañantes asignados a esta cita  .</td>`;
+            row.innerHTML = `<td colspan="2">No existen acompañantes asignados a esta cita.</td>`;
             tableBody.appendChild(row);
         }
     } catch (error) {
