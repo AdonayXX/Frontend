@@ -34,6 +34,7 @@
         }
     }
 
+    //Funcion para agregar el simbolo segun el estado en la tabla
     function processStatus(status){
         switch (status) {
             case "Pendiente":
