@@ -1,37 +1,34 @@
-
 loadCitas();
 
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
-        console.log("Hola Mundo")
         const citas = response.data;
-        $(document).ready(function () {
-            console.log("entro")
-            if ($.fn.DataTable.isDataTable('#TableAppointment')) {
-                $('#TableAppointment').DataTable().destroy();
-            }
-            renderTable(citas);
+        renderTable(citas);
 
-            let table = $('#TableAppointment').DataTable({
-                dom: "<'row'<'col-sm-6'l>" +
-                    "<'row'<'col-sm-12't>>" +
-                    "<'row '<'col-sm-6'i><'col-sm-6'p>>",
-                ordering: false,
-                searching: true,
-                paging: true,
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-                },
-                caseInsensitive: true,
-                smart: true
+        let table = $('#TableAppointment').DataTable({
+            dom: "<'row'<'col-sm-6'l>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row '<'col-sm-6'i><'col-sm-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true
+        });
 
-            });
-            $('#searchAppointment').on('keyup', function () {
-                let inputValue = $(this).val().toLowerCase();
-                table.search(inputValue).draw();
-            });
-        })
+        $('#searchAppointment').on('keyup', function () {
+            let inputValue = $(this).val().toLowerCase();
+            table.search(inputValue).draw();
+        });
+
+        $('#fechaCita').on('change', function () {
+            let fechaInput = $('#fechaCita').val();
+            table.column(2).search(fechaInput).draw();
+        });
     } catch (error) {
         console.error('Error al obtener las citas:', error);
     }
@@ -42,7 +39,9 @@ function renderTable(citas) {
     tableBody.innerHTML = '';
 
     citas.forEach(cita => {
-        if (cita.estadoCita === 'Finalizado') {
+        if (cita.estadoCita === 'Finalizada' && cita.ausente !== null) {
+            showToast('¡Éxitos!', 'Citas cargadas correctamente.');
+
             const row = document.createElement('tr');
 
             row.innerHTML = `
@@ -52,49 +51,54 @@ function renderTable(citas) {
                 <td class="text-center">${cita.horaCita}</td>
                 <td class="text-center">${cita.ubicacionDestino}</td>
                 <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick="getAcompanantes(${12})">
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
             `;
-
             tableBody.appendChild(row);
+
         }
     });
-
 }
 
-async function getAcompanantes(idPaciente) {
+function getAcompanantes(cita) {
+    console.log(cita);
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/paciente/acompanantes`);
-        const pacientes = response.data.pacientes;
-
-        const pacienteSeleccionado = pacientes.find(paciente => paciente.IdPaciente === parseInt(idPaciente));
-
-        if (!pacienteSeleccionado) {
-            console.error(`No se encontró un paciente con id ${idPaciente}`);
-            return;
-        }
-
-        const acompanantes = pacienteSeleccionado.acompanantes;
+        const acompanantes = [cita.nombreCompletoAcompanante1, cita.nombreCompletoAcompanante2];
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
 
-        acompanantes.forEach(acompanante => {
+        const infoAdicional = [
+            { label: 'Ubicación Origen', value: cita.ubicacionOrigen },
+            { label: 'Ubicación Destino', value: cita.ubicacionDestino },
+            { label: 'Especialidad', value: cita.especialidad },
+            { label: 'Fecha Cita', value: cita.fechaCita }
+        ];
+
+        infoAdicional.forEach(info => {
             const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td>${acompanante.Nombre}</td>
-                <td>${acompanante.Apellido1} ${acompanante.Apellido2}</td>
-                <td>${acompanante.Telefono1} / ${acompanante.Telefono2}</td>
-                <td>${acompanante.Parentesco}</td>
-            `;
-
+            row.innerHTML = `<td><strong>${info.label}:</strong></td><td>${info.value || 'No disponible'}</td>`;
             tableBody.appendChild(row);
         });
+
+        let hasAcompanantes = false;
+        acompanantes.forEach(acompanante => {
+            if (acompanante) {
+                hasAcompanantes = true;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td><strong>Acompañante:</strong></td><td>${acompanante}</td>`;
+                tableBody.appendChild(row);
+            }
+        });
+
+        if (!hasAcompanantes) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="2">No existen acompañantes asignados a esta cita.</td>`;
+            tableBody.appendChild(row);
+        }
     } catch (error) {
         console.error('Error al obtener los acompañantes:', error);
         showToast(error, 'Error al obtener los acompañantes:');
     }
 }
-

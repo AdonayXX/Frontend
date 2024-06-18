@@ -48,19 +48,11 @@
 
         <div class="row mb-3" style="justify-content: center; text-align: center;">
             <div class="col-md-4">
-                <label for="unidades" class="form-label">Unidades</label>
-                <select id="unidades" class="form-select">
-                    <option selected>Seleccionar Unidad...</option>
-                    <option value="1">Unidad 1</option>
-                    <option value="2">Unidad 2</option>
-                    <option value="3">Unidad 3</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="fechaInicio" class="form-label">Fecha Cita</label>
-                <input type="date" id="fechaCita" class="form-control">
+                <label for="fechaCita" class="form-label">Buscar por Fecha</label>
+                <input type="date" id="fechaCita" class="form-control" style="text-align: center;">
             </div>
         </div>
+        
         <div class="row mt-3">
             <div class="col d-flex justify-content-end">
                 <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
@@ -90,7 +82,7 @@
                         <th class="text-center">Fecha</th>
                         <th class="text-center">Hora</th>
                         <th class="text-center">Destino</th>
-                        <th class="narrow-col">Acompañante/s</th>
+                        <th class="narrow-col">Información</th>
                     </tr>
                 </thead>
                 <tbody id="viajesTableBody">
@@ -142,28 +134,24 @@
 
     <!-- Modal -->
     <div class="modal fade" id="AcompananteModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-l">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                    <h5 class="modal-title" id="ausenteModalLabel">Información Adicional</h5>
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Información Adicional</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3" style="text-align: center;">
-                        <h3>Acompañante/s</h3>
                         <div class="table-responsive">
                             <table class="table table-light table-striped table-hover table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Apellidos</th>
-                                        <th>Teléfono/s</th>
-                                        <th>Parentesco</th>
                                     </tr>
+                                    <br>
                                 </thead>
                                 <tbody id="AcompananteTableBody">
-                                    <!-- Acá se cargarán los datos de los acompañantes -->
+                                    <!-- Acá se cargarán los datos -->
                                 </tbody>
                             </table>
                         </div>

@@ -45,7 +45,7 @@ function addPersona() {
       "Longitud": longitud,
       "Tipo_sangre": tipoSangre
   }
-
+console.log(personaData);
   addPerson(personaData);
     
   } catch (error) {
@@ -92,7 +92,7 @@ async function addPeople(personaData) {
 
 //4
 function addDataPatient(IdPersonaCreada) {
-  const prioridad = document.querySelector('#prioridad').checked;
+  const prioridad = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
   const lugarSalida = document.querySelector('#lugarSalida').value;
   const encamado = document.querySelector('#encamado').value;
 
@@ -145,7 +145,7 @@ async function addPatient(pacienteData) {
 
 
 function addCompanion(idPaciente) {
-  const numAcompanantes = 2; // Número máximo de acompañantes a manejar
+  const numAcompanantes = 2; // 
   
   for (let i = 1; i <= numAcompanantes; i++) {
     const acompananteNombre = document.querySelector(`#acompananteNombre${i}`).value.trim();
@@ -265,7 +265,7 @@ async function addComp(companionData) {
       togglePhone(phonebtn2, acompananteTelefono2_2Div);
   });
 
-  // Inicializa el estilo de los botones
+
   cambiarEstiloBoton(PhoneBtn, acompananteTelefono2_1Div);
   cambiarEstiloBoton(phonebtn2, acompananteTelefono2_2Div);
 })();

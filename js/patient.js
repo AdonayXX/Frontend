@@ -1,48 +1,48 @@
  getPatientComp();
- 
-document.getElementById('searchPatient').addEventListener('keyup', function () {
-  let input = document.getElementById('searchPatient').value.toLowerCase();
-  let table = document.getElementById('tablePatient');
-  let rows = table.getElementsByTagName('tr');
-
-  for (let i = 1; i < rows.length; i++) {
-    let cells = rows[i].getElementsByTagName('td');
-    let match = false;
-    for (let j = 0; j < cells.length; j++) {
-      if (cells[j].innerText.toLowerCase().includes(input)) {
-        match = true;
-        break;
-      }
-    }
-    rows[i].style.display = match ? '' : 'none';
-  }
-});
 async function getPatientComp() {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
     const response = await axios.get(API_URL);
     const listPatientComp = response.data.pacientes;
+    
     $(document).ready(function () {
       if ($.fn.DataTable.isDataTable('#tablePatient')) {
         $('#tablePatient').DataTable().destroy();
       }
     fillPatientComp(listPatientComp);
-        //Tabla con paginacion
-       
-          $('#tablePatient').DataTable({
+        let table = $('#tablePatient').DataTable({
+            dom: "<'row'<'col-md-6'l>" +
+                 "<'row'<'col-md-12't>>" +
+                 "<'row justify-content-between'<'col-md-5'i><'col-md-5'p>>", 
             ordering: false,
-            searching: false,
+            searching: true,
+            paging: true,
             language: {
               url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-            }
+            },
+            caseInsensitive: true,
+            smart: true
     
           });
+            $('#searchPatient').on('keyup', function () {
+              let inputValue = $(this).val().toLowerCase(); 
+              table.search(inputValue).draw();
+            });
+
+         
+         
         });
+      
    
 
   } catch (error) {
-    console.error('There has been a problem:', error);
-    showToast('Ups!','Ocurrio un problema al llenar la tabla')
+  
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        console.error('Error específico:', errorMessage);
+        showToast('Ups!', errorMessage);
+
+      } 
   }
 }
 function fillAccomp(acompanantes) {
@@ -59,7 +59,7 @@ function fillAccomp(acompanantes) {
 
     } else {
       tableComp.style.display = 'block';
-      noAcompanantesMessage.style.display = 'none'
+      noAcompanantesMessage.style.display = 'none';
       acompanantes.forEach(accomp => {
         const telefonoCompleto = (accomp.Telefono2 !== 0) ? `${accomp.Telefono1}-${accomp.Telefono2}` : `${accomp.Telefono1}`;
         const row = `
@@ -76,8 +76,7 @@ function fillAccomp(acompanantes) {
         tableBody.innerHTML += row;
 
       });
-
-
+    
 
 
     }
@@ -105,23 +104,23 @@ function fillPatientComp(listPatientComp) {
         const row = document.createElement('tr');
         const telefonoCompleto = (patient.Telefono2 !== 0) ? `${patient.Telefono1}-${patient.Telefono2}` : `${patient.Telefono1}`;
         const nombreCompleto = `${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}`;
-
-
-
+        
+        const cantidadAcompanantes = patient.acompanantes.length;
+          
         row.innerHTML = `
           <tr>
             <td>${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td>${patient.Tipo_identificacion} </td>
             <td>${patient.Identificacion}</td>
             <td>${patient.Genero}</td>
-           <td>${patient.Prelacion ? 'Si' : 'No'}</td>
+           <td>${patient.Prioridad ? 'Si' : 'No'}</td>
             <td>${telefonoCompleto}</td>
             <td>${patient.Tipo_seguro}</td>
             <td>${patient.Traslado}</td>
             <td>${patient.Direccion}</td>
             <td>
-              <button class="btn btn-outline-primary btn-sm" data-acompanantes='${JSON.stringify(patient.acompanantes)}' onclick='openAccomp(this)' id="ShowTableAccomp" data-bs-toggle="modal" data-bs-target="#showAccomp"><i class="bi bi-eye"></i></button>
-              <button class="btn btn-outline-success btn-sm " data-bs-toggle="modal" data-bs-target="#addAccomp" onclick="companionAdd(${patient.IdPaciente})"><i class="bi bi-person-plus"></i></button>
+              <button class="btn btn-outline-primary btn-sm" data-acompanantes='${JSON.stringify(patient.acompanantes)}' onclick='openAccomp(this)'><i class="bi bi-eye"></i></button>
+              <button class="btn btn-outline-success btn-sm btnAddComp" data-bs-toggle="modal" data-bs-target="#addAccomp" onclick="companionAdd(${patient.IdPaciente})"><i class="bi bi-person-plus"></i></button>
             </td>
             <td class="actions">
               <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square" data-pacientes='${JSON.stringify(patient)}' onclick = "patientEdit(this)"></i></button>
@@ -130,7 +129,14 @@ function fillPatientComp(listPatientComp) {
           </tr>
         `;
         fragment.appendChild(row);
+ 
+        const btnAddComp = row.querySelector('.btnAddComp');
+        if (cantidadAcompanantes >= 2) {
+          btnAddComp.disabled = true;
+        }
+      
       });
+     
       tableBody.appendChild(fragment);
    
 
@@ -154,22 +160,23 @@ function fillPatientComp(listPatientComp) {
 window.openAccomp = async function (button) {
 
   const acompanantes = JSON.parse(button.getAttribute('data-acompanantes'));
-
+  let modalAcomp = new bootstrap.Modal(document.getElementById('showAccomp'), {
+  });
+  modalAcomp.show();
+  
   
   fillAccomp(acompanantes);
-
-
 
 };
 
 window.editAccomp = function (button) {
   const acompanantes = JSON.parse(button.getAttribute('data-EditCompanion'));
- 
-  let modal = new bootstrap.Modal(document.getElementById('addAccomp'), {
-    backdrop: 'static',
-    keyboard: false
+  document.querySelector('#showAccomp .btn-close').click();
+  let modalAcomp = new bootstrap.Modal(document.getElementById('addAccomp'), {
   });
-  modal.show();
+  modalAcomp.show();
+  
+
   document.querySelector("#saveCompanient").style.display = 'none';
   document.querySelector("#saveChangesCompanion").style.display = 'block';
   
@@ -199,53 +206,93 @@ window.editAccomp = function (button) {
     };
   
     addEditedCompanion(companionData, IdAcompanante);
-    getPatientComp();
-    modal.hide();
+   
+    
   });
   async function addEditedCompanion(companionData, IdAcompanante) {
+    
     try {
+      
+      
       const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
       const response = await axios.put(API_URL, companionData);
+      modalAcomp.hide();
       document.querySelector('#formEditComp').reset();
+      showToast('Acompañante','Se han guardado los cambios')
+      setTimeout(function() {
+        loadContent('dataTablePatient.html', 'mainContent');
+    }, 1000);
     } catch (error) {
-      console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error('Error específico:', errorMessage);
+      alert(errorMessage);
+    } else {
+      console.error('Ha ocurrido un problema:', error);
+      alert("Ocurrió un problema");
     }
+  }
+
+      
   }
   
 }
 
 
+
 window.patientEdit = function (button) {
-  const pacientes = JSON.parse(button.getAttribute('data-pacientes'));
+  let pacientes = JSON.parse(button.getAttribute('data-pacientes'));
 
   let modal = new bootstrap.Modal(document.getElementById('editPatient'), {
     backdrop: 'static',
     keyboard: false
   });
+  
+
+
   modal.show();
 
-  document.getElementById('nombre').value = pacientes.Nombre;
-  document.getElementById('primerApellido').value = pacientes.Apellido1;
-  document.getElementById('segundoApellido').value = pacientes.Apellido2;
-  document.getElementById('genero').value = pacientes.Genero;
-  document.getElementById('tipoIdentificacion').value = pacientes.Tipo_identificacion;
-  document.getElementById('identificacion').value = pacientes.Identificacion;
-  document.getElementById('tipoSeguro').value = pacientes.Tipo_seguro;
-  document.getElementById('telefono1').value = pacientes.Telefono1;
-  document.getElementById('telefono2').value = pacientes.Telefono2;
-  document.getElementById('tipoSangre').value = pacientes.Tipo_sangre;
-  document.getElementById('latitud').value = pacientes.Latitud;
-  document.getElementById('longitud').value = pacientes.Longitud;
-  document.getElementById('direccion').value = pacientes.Direccion;
-  document.getElementById('prioridad').checked = pacientes.Prioridad;
-  document.getElementById('lugarSalida').value = pacientes.Traslado;
-  document.getElementById('encamado').value = pacientes.Encamado;
+ document.getElementById('formEditPatient').reset();
 
+ llenarcampos(pacientes);
   const IdPaciente = pacientes.IdPaciente;
   const IdPersona = pacientes.IdPersona;
 
-  document.querySelector("#confirmEditBtn").addEventListener('click', function () {
-    const personaData = {
+  document.querySelector('#formEditPatient').addEventListener('submit', function(event){
+    event.preventDefault();
+    sendEditPatient(IdPersona);
+    
+  
+  }); 
+  async function editPatientPerson(personaData,pacienteData){
+    try {
+      const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
+      const responsePersona = await axios.put(API_URL_PERSONA, personaData);
+      const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
+      const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData);
+      console.log(responsePersona);
+      console.log(responsePaciente);
+     
+      modal.hide();
+      showToast('Paciente','Se han guardado los cambios')
+      setTimeout(function() {
+        loadContent('dataTablePatient.html', 'mainContent');
+    }, 1000);
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        console.error('Error específico:', errorMessage);
+        alert(errorMessage);
+      } else {
+        console.error('Ha ocurrido un problema:', error);
+        alert("Ocurrió un problema");
+      }
+    } 
+
+  }
+  function sendEditPatient(IdPersona){
+
+    personaData = {
       Nombre: document.getElementById('nombre').value,
       Apellido1: document.getElementById('primerApellido').value,
       Apellido2: document.getElementById('segundoApellido').value,
@@ -253,55 +300,53 @@ window.patientEdit = function (button) {
       Tipo_identificacion: document.getElementById('tipoIdentificacion').value,
       Genero: document.getElementById('genero').value,
       Telefono1: document.getElementById('telefono1').value,
-      Telefono2: document.getElementById('telefono2').value,
+      Telefono2: document.getElementById('telefono2').value ||0,
       Tipo_seguro: document.getElementById('tipoSeguro').value,
       Direccion: document.getElementById('direccion').value,
-      Latitud: document.getElementById('latitud').value,
-      Longitud: document.getElementById('longitud').value,
+      Latitud: document.getElementById('latitud').value||0,
+      Longitud: document.getElementById('longitud').value ||0,
       Tipo_sangre: document.getElementById('tipoSangre').value
     };
   
-    const pacienteData = {
+    pacienteData = {
       IdPersona: IdPersona,
       Criticidad: "null",
       Encamado: document.getElementById('encamado').value,
       Traslado: document.getElementById('lugarSalida').value,
-      Prioridad: document.getElementById('prioridad').checked,
+      Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
       Estado: "Activo"
     };
-   
-    addEditedPerson(personaData, IdPersona);
-    agregarPaciente(pacienteData, IdPaciente);
-    
+  
+    editPatientPerson(personaData,pacienteData);
    
    
-  });
-  async function agregarPaciente(pacienteData, IdPaciente) {
-    try {
-      const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
-      const response = await axios.put(API_URL, pacienteData);
-      console.log(response.data);
-      document.querySelector('#formEditPatient').reset();
-      getPatientComp();
-      modal.hide();
-      showToast('Paciente Editado', 'El registro se ha realizado exitosamente.');
-    } catch (error) {
-      showToast('Ups!', 'Revisa los campos solicitados');
-     
-    }
   }
-}
+  function llenarcampos(pacientes){
+    document.querySelector('#primerApellido').value = pacientes.Apellido1|| '';
+    document.querySelector('#nombre').value = pacientes.Nombre|| '';
+    document.querySelector('#segundoApellido').value = pacientes.Apellido2|| '';
+    document.querySelector('#genero').value = pacientes.Genero|| '';
+    document.querySelector('#tipoIdentificacion').value = pacientes.Tipo_identificacion|| '';
+    document.querySelector('#identificacion').value = pacientes.Identificacion|| '';
+    document.querySelector('#tipoSeguro').value = pacientes.Tipo_seguro|| '';
+    document.querySelector('#telefono1').value = pacientes.Telefono1|| '';
+    document.querySelector('#telefono2').value = pacientes.Telefono2|| '';
+    document.querySelector('#tipoSangre').value = pacientes.Tipo_sangre|| '';
+    document.querySelector('#latitud').value = pacientes.Latitud|| '';
+    document.querySelector('#longitud').value = pacientes.Longitud|| '';
+    document.querySelector('#direccion').value = pacientes.Direccion|| '';
+    document.querySelector('#prioridad').checked = pacientes.Prioridad|| '';
+    document.querySelector('#lugarSalida').value = pacientes.Traslado|| '';
+    document.querySelector('#encamado').value = pacientes.Encamado|| '';
+  
+  }
+   
+   
+  }
 
-//3
-async function addEditedPerson(personaData, IdPersona) {
-  try {
-    const API_URL = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
-    const response = await axios.put(API_URL, personaData);
-    
-  } catch (error) {
-    showToast('Ups!', 'la identificación debe ser única, revisa los demás campos');
-  }
-}
+  
+
+
 
 
 
@@ -348,10 +393,16 @@ async function deletePatient(patientId) {
   }
 }
 
-// Función para capturar y mostrar el ID del paciente
+
 window.companionAdd = function (idPatient) {
+    
+  
+  
   document.querySelector("#saveCompanient").style.display = 'block';
   document.querySelector("#saveChangesCompanion").style.display = 'none';
+  
+  
+
   document.getElementById('name').value = "";
   document.getElementById('firstlastname').value = "";
   document.getElementById('secondlastname').value = "";
@@ -362,7 +413,7 @@ window.companionAdd = function (idPatient) {
   document.querySelector("#saveCompanient").addEventListener('click', function () {
 
     addCompanion(idPatient);
-    modal.hide();
+   
   });
 
 }
@@ -370,6 +421,7 @@ window.companionAdd = function (idPatient) {
 
 
 function addCompanion(idPacienteCapturado) {
+
 
 
   const acompananteNombre = document.querySelector(`#name`).value.trim();
@@ -405,23 +457,20 @@ function addCompanion(idPacienteCapturado) {
 //8: Verifica si el acompañante ya está registrado
 async function obtenerAcompanante(companionData) {
   try {
+  
     const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes/';
     const response = await axios.get(API_URL);
     const listaAcompanantes = response.data.acompanantes;
     const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente);
     if (acompananteEncontrado) {
+      alert("Acompañante ya registrado");
+     
+     ;
 
-      if (acompananteEncontrado.Estado === 'Activo') {
-
-       
-      } else {
-
-       
-      }
-    } else if (!acompananteEncontrado) {
-      agregarAcompanante(companionData);
-
+    }else{
+      agregarAcompanante(companionData)
     }
+
 
 
   } catch (error) {
@@ -437,8 +486,21 @@ async function agregarAcompanante(companionData) {
     const response = await axios.post(API_URL, companionData);
     console.log(response.data);
     showToast('Acompañante Registrado', 'El registro se ha realizado exitosamente.');
-    getPatientComp();
+    setTimeout(function() {
+      loadContent('dataTablePatient.html', 'mainContent');
+  }, 1000);
+  
   } catch (error) {
-    console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error('Error específico:', errorMessage);
+      alert(errorMessage);
+    } else {
+      console.error('Ha ocurrido un problema:', error);
+      alert("Ocurrió un problema");
+    }
   }
 }
+
+
+
