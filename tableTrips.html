@@ -14,10 +14,7 @@
         <div class="col-md-4">
             <label for="unidades" class="form-label">Unidades</label>
             <select id="unidades" class="form-select">
-                <option selected>Seleccionar Unidad...</option>
-                <option value="1">Unidad 1</option>
-                <option value="2">Unidad 2</option>
-                <option value="3">Unidad 3</option>
+                <!-- Se cargan las unidades -->
             </select>
         </div>
 
@@ -26,13 +23,13 @@
             <input type="date" id="fechaInicio" class="form-control">
         </div>
         <div class="col-md-4 mt-auto col-sm-12">
-            <button class="btn btn-primary" onclick="realizarViajes()">Confirmar</button>
+            <button class="btn btn-primary" onclick="crearViajes()">Confirmar</button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <label for="unidades" class="form-label">Chóferes</label>
-            <select id="unidades" class="form-select">
+            <label for="choferes" class="form-label">Chóferes</label>
+            <select id="choferes" class="form-select">
                 <option selected>Seleccionar Chófer...</option>
                 <option value="1">Juan</option>
                 <option value="2">Pepe</option>
@@ -68,72 +65,67 @@
                     <th>Condición</th>
                     <th>Hora Cita</th>
                     <th>Fecha Cita</th>
-                    <th>Ruta</th>
-                    <th>Posición</th>
+                    <th>Traslado</th>
+                    <th>Camilla</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="viajesTableBody">
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>Juan Pérez</td>
-                    <td>Sede</td>
-                    <td>Lugar B</td>
-                    <td>Estable</td>
-                    <td>08:00a.m</td>
-                    <td>2024-06-14</td>
-                    <td>En ruta</td>
-                    <td>Camilla</td>
-                    <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#ausenteModal">Ausente</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>Felipe Chacón</td>
-                    <td>Lugar C</td>
-                    <td>Lugar D</td>
-                    <td>Crítico</td>
-                    <td>09:00p.m</td>
-                    <td>2024-06-14</td>
-                    <td>A domicilio</td>
-                    <td>Sentado</td>
-                    <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#ausenteModal">Ausente</button>
-                    </td>
-                </tr>
+                <!-- Se cargan los datos de los viajes/citas -->
             </tbody>
         </table>
     </div>
 </div>
 
 <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="ausenteModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel">Motivo de Ausencia</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="motivoAusencia" class="form-label">Seleccionar Motivo</label>
-                    <select id="motivoAusencia" class="form-select">
-                        <option value="1">Se durmió</option>
-                        <option value="2">Se murió</option>
-                        <option value="3">Se extravió</option>
-                        <option value="4">Otra razón</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#094079; color: white;">
+          <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+          <h5 class="modal-title" id="ausenteModalLabel">Motivo de Ausencia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="motivoAusencia" class="form-label">Seleccionar Motivo</label>
+            <select id="motivoAusencia" class="form-select">
+              <option value="Se durmió">Se durmió</option>
+              <option value="Se murió">Se murió</option>
+              <option value="Se extravió">Se extravió</option>
+              <option value="Otra razón">Otra razón</option>
+            </select>
+          </div>
+          <input type="hidden" id="ausenteCitaId">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarAusenciaBtn">Guardar</button>
+        </div>
+      </div>
     </div>
-    <div data-script="js/dataTrips.js"></div>
-</div>
+  </div>
+  
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #094079;" > 
+            <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+          <h5 class="modal-title text-white" id="confirmModalLabel">Confirmar Creación de Viajes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Está seguro de que desea crear viajes para las siguientes citas?</p>
+          <ul id="citasSeleccionadasList"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-script="js/dataTrips.js"></div>

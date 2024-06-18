@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadModalTemplate();
     //Cargar desde el incio el home.html
     loadContent('home.html', 'mainContent');
-    
+
     document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
     document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
     document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
@@ -95,7 +95,6 @@ function loadToastTemplate(callback) {
         })
         .catch(error => console.error('Error loading toast template:', error));
 }
-
 function showToast(title, message) {
     loadToastTemplate(() => {
         const toastElement = document.getElementById('common-toast');
@@ -104,6 +103,9 @@ function showToast(title, message) {
             document.getElementById('common-toast-body').innerText = message;
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
+            setTimeout(() => {
+                toast.hide();
+            }, 3000);
         } else {
             console.error('Toast element not found');
         }
