@@ -111,5 +111,22 @@
         addCoordinate();
     })
 
+    function obtIdVale (){
+        const idForm = document.getElementById('input-id')
+    }
+
+    async function cancelRequest(){
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
+
+    const btnCancel = document.getElementById('btn-rechazarSoli');
+    btnCancel.addEventListener('click', function(){
+        cancelRequest();
+    });
 
 })();

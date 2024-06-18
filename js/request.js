@@ -41,7 +41,7 @@
                 return '<span style="color: orange; ">! </span>'  + status;
             break;
             case "Cancelado":
-                return '<span style="color: red; ">x </span>' + status
+                return '<span style="color: red; ">x </span>' + status;
             break
             default:
                 return status;
