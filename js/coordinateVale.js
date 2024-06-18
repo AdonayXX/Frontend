@@ -14,7 +14,7 @@
             const response = await axios.get(`${url}api/vales`);
             const vales = response.data.vales;
             const response2 = await axios.get(`${url}api/revicionVale`);
-            const coordinate = response.data.vales;
+            const coordinate = response2.data.vales;
 
             vales.forEach(vale => {
                 if (id === vale.IdVale) {
@@ -32,15 +32,6 @@
                     acompanantes(vale);
                 }
             });
-
-            coordinate.forEach(value => {
-                if (id === value.IdVale) {
-                    document.getElementById('select-placa').selectedIndex = value.IdUnidad;
-                    document.getElementById('select-chofer').selectedIndex = value.IdChofer;
-                    document.getElementById('select-encargado').selectedIndex = value.IdFuncionario;
-                }
-            });
-
         } catch (error) {
             console.error('Error fetching vale data:', error);
         }
@@ -88,18 +79,18 @@
         try {
             const coordinate = {
                 IdVale: idVale,
-                IdUnidad: document.getElementById('select-placa').selectedIndex,
+                IdUnidad: 5, //document.getElementById('select-placa').selectedIndex,
                 IdChofer: document.getElementById('select-chofer').selectedIndex,
                 IdFuncionario: document.getElementById('select-encargado').selectedIndex,
                 Observaciones: "Agregando datos"
             };
             try {
-                await axios.get(`${url}api/revicionVale`, coordinate);
+                await axios.post(`${url}api/revicionVale`, coordinate);
                 showToast('Datos Agregados', 'Los datos se han guardado correctamente');
                 console.log(coordinate);
             } catch (error) {
                 console.error('Error al guardar datos', error);
-                showToast('Error', 'Error al guardar la cita.');
+                showToast('Error', 'Error al guardar la la revición.');
             }
         } catch (error) {
             console.error('Error fetching vale data:', error);
@@ -107,9 +98,12 @@
     }
 
     const btnAdd = document.getElementById('btn-agregarSoli');
-    btnAdd.addEventListener('click', function() {
+    function handleClick() {
         addCoordinate();
-    })
+        btnAdd.removeEventListener('click',handleClick);
+        console.log('No se repite');
+    }
+    btnAdd.addEventListener('click',handleClick);
 
 
 })();
