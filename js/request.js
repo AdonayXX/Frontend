@@ -33,6 +33,7 @@ async function getVales() {
     }
 }
     getVales();
+    
     document.getElementById('searchVale').addEventListener('keyup', function () {
         let input = document.getElementById('searchVale').value.trim().toLowerCase();
         let table = document.getElementById('tableRequest');
