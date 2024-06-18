@@ -21,7 +21,7 @@
                         <td>${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
                         <td>${vale.Motivo}</td>
-                        <td>${vale.EstadoVale}</td> 
+                        <td>${processStatus(vale.EstadoVale)}</td> 
                         <td class="text-center">
                             <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-secondary">Coordinar</button>
                         </td>
@@ -31,6 +31,19 @@
             });
         } catch (error) {
             console.error('Hubo un problema con la operación de obtención:', error);
+        }
+    }
+
+    function processStatus(status){
+        switch (status) {
+            case "Pendiente":
+                return '<span style="color: orange; ">! </span>'  + status;
+            break;
+            case "Cancelado":
+                return '<span style="color: red; ">x </span>' + status
+            break
+            default:
+                return status;
         }
     }
 
