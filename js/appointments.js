@@ -33,6 +33,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('telefono1').value = pacienteEncontrado.Telefono1 || '';
                 document.getElementById('telefono2').value = pacienteEncontrado.Telefono2 || '';
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+
+                const prioridadCheckbox = document.getElementById('prelacion');
+                prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
+
+                const origenSelect = document.getElementById('origen');
+                origenSelect.value = pacienteEncontrado.Traslado;
     
            
                 showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
@@ -180,10 +186,7 @@ function limpiarCampos() {
     document.getElementById('fechaCita').value = '';
     document.getElementById('horaCita').value = '';
 
-
     limpiarCamposAcompanantes();
-    // idPaciente = null;
-    // acompanantes = [];
 }
 
 

@@ -64,8 +64,8 @@
                     <div class="col-md-2 mb-3">
                         <label class="form-label">Prioridad:</label>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="prelacion">
-                            <label class="form-check-label" for="prelacion">SI</label>
+                            <input class="form-check-input" type="checkbox" id="prelacion" disabled>
+                        <label class="form-check-label" for="prelacion">SI</label>
                         </div>
                     </div>
                     <div class="col-md-2 mb-3">
@@ -181,6 +181,16 @@
                         <label class="form-label" for="traslado">Traslado:</label>
                         <select id="traslado" name="traslado" class="form-select">
                             <option value="Local">Local</option>
+                            <option value="Externo">Externo</option>
+                        </select>
+                    </div>
+                        <div class="col-md-3 mt-1">
+                        <label for="origen" class="form-label">Lugar de salida:</label>
+                        <select id="origen" name="origen" class="form-select">
+                            <option disabled selected value> -- Seleccione un origen -- </option>
+                            <option value="Ruta">Ruta</option>
+                            <option value="Domicilio">Domicilio</option>
+                            <option value="Sede">Sede</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
