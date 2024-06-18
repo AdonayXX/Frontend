@@ -182,9 +182,17 @@ function limpiarCampos() {
 
 
     limpiarCamposAcompanantes();
-    idPaciente = null;
-    acompanantes = [];
+    // idPaciente = null;
+    // acompanantes = [];
 }
+
+
+document.getElementById('btnGuardar').addEventListener('click', async function (event) {
+    event.preventDefault();
+    this.disabled = true; 
+    await guardarCita();
+    
+});
 
 async function guardarCita() {
     if (!idPaciente) {
@@ -236,6 +244,7 @@ async function guardarCita() {
     try {
         const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
         showToast('Cita', 'Cita guardada correctamente.');
+        limpiarCampos();
         setTimeout(() => {
             loadContent('formAppointment.html', 'mainContent');
         }, 1450);
@@ -264,11 +273,5 @@ async function guardarCita() {
         });
 }
 
-document.getElementById('btnGuardar').addEventListener('click', async function (event) {
-    event.preventDefault();
-    this.disabled = true; 
-    await guardarCita();
-    
-});
 });
 
