@@ -130,16 +130,15 @@ function getCitasSeleccionadas() {
 async function crearViajes() {
   const citasSeleccionadas = getCitasSeleccionadas();
   if (citasSeleccionadas.length === 0) {
-    alert("Seleccione al menos una cita para crear un viaje.");
+    showToast("Error", "No se seleccionaron citas para crear los viajes.");
     return;
   }
 
   const idUnidadElement = document.getElementById('unidades');
   const fechaInicioElement = document.getElementById('fechaInicio');
-
   if (!idUnidadElement || !fechaInicioElement) {
     console.error('Algunos elementos del formulario no se encontraron.');
-    alert('Por favor, complete todos los campos del formulario.');
+    showToast("Error", "Algunos elementos del formulario no se llenaron correctamente.")
     return;
   }
 
@@ -182,7 +181,7 @@ async function crearViajes() {
 
       try {
         const response = await axios.post(url, nuevoViaje);
-        console.log('Viaje creado exitosamente:', response.data);
+        showToast("Éxito", "Viaje creado exitosamente.");
       } catch (error) {
         if (error.response) {
           console.error('Error al crear el viaje:', error.response.data);
@@ -205,12 +204,15 @@ async function marcarCitaComoAusente() {
   const url = `https://backend-transporteccss.onrender.com/api/cita/${idCita}`;
   const datosAusencia = {
     ausente: motivoAusencia,
-    estadoCita: "Finalizada"
+    estadoCita: "Cancelada"
   };
 
   try {
     const response = await axios.put(url, datosAusencia);
-    console.log('Cita marcada como ausente:', response.data);
+    showToast("Éxito", "Cita marcada como ausente exitosamente.");
+    const modal = document.getElementById('ausenteModal');
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
     getCitas(); 
   } catch (error) {
     console.error('Error al marcar la cita como ausente:', error.response.data);
