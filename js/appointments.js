@@ -191,17 +191,16 @@ function limpiarCampos() {
 
 
 document.getElementById('btnGuardar').addEventListener('click', async function (event) {
+
     event.preventDefault();
     this.disabled = true; 
-    await guardarCita();
     
-});
-
-async function guardarCita() {
-    if (!idPaciente) {
-        // showToast('Error', 'No se ha obtenido el IdPaciente.');
-        return;
-    }
+ const guardarCita = async () => {
+        if (!idPaciente) {
+            showToast('Error', 'No se ha obtenido el IdPaciente.');
+            this.disabled = false;
+            return;
+        }
 
     const diagnostico = document.getElementById('diagnostico').value;
     const fechaCita = document.getElementById('fechaCita').value;
@@ -257,6 +256,9 @@ async function guardarCita() {
         showToast('Error', 'Error al guardar la cita.');
     }
 }
+await guardarCita();
+    
+});
 
   function populateDestinos() {
     const selectDestino = document.getElementById('destino');
