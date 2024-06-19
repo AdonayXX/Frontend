@@ -33,6 +33,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('telefono1').value = pacienteEncontrado.Telefono1 || '';
                 document.getElementById('telefono2').value = pacienteEncontrado.Telefono2 || '';
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+
+                const prioridadCheckbox = document.getElementById('prelacion');
+                prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
+
+                const origenSelect = document.getElementById('origen');
+                origenSelect.value = pacienteEncontrado.Traslado;
     
            
                 showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
@@ -180,17 +186,21 @@ function limpiarCampos() {
     document.getElementById('fechaCita').value = '';
     document.getElementById('horaCita').value = '';
 
-
     limpiarCamposAcompanantes();
-    idPaciente = null;
-    acompanantes = [];
 }
 
-async function guardarCita() {
-    if (!idPaciente) {
-        // showToast('Error', 'No se ha obtenido el IdPaciente.');
-        return;
-    }
+
+document.getElementById('btnGuardar').addEventListener('click', async function (event) {
+
+    event.preventDefault();
+    this.disabled = true; 
+    
+ const guardarCita = async () => {
+        if (!idPaciente) {
+            showToast('Error', 'No se ha obtenido el IdPaciente.');
+            this.disabled = false;
+            return;
+        }
 
     const diagnostico = document.getElementById('diagnostico').value;
     const fechaCita = document.getElementById('fechaCita').value;
@@ -217,6 +227,7 @@ async function guardarCita() {
     const camilla = camillaCheckbox.checked ? 'Requerido' : 'No requerido';
     const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
     const condicionCita = document.getElementById('condicion').value;
+    const salida = document.getElementById('origen').value;
  
     const citaData = {
         "idPaciente" : idPaciente,
@@ -230,12 +241,14 @@ async function guardarCita() {
         "condicionCita": condicionCita,
         "diagnostico": diagnostico,
         "fechaCita": fechaCita,
-        "horaCita": horaCita
+        "horaCita": horaCita,
+        "transladoCita": salida
     };
 
     try {
         const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
         showToast('Cita', 'Cita guardada correctamente.');
+        limpiarCampos();
         setTimeout(() => {
             loadContent('formAppointment.html', 'mainContent');
         }, 1450);
@@ -245,6 +258,9 @@ async function guardarCita() {
         showToast('Error', 'Error al guardar la cita.');
     }
 }
+await guardarCita();
+    
+});
 
   function populateDestinos() {
     const selectDestino = document.getElementById('destino');
@@ -264,11 +280,5 @@ async function guardarCita() {
         });
 }
 
-document.getElementById('btnGuardar').addEventListener('click', async function (event) {
-    event.preventDefault();
-    this.disabled = true; 
-    await guardarCita();
-    
-});
 });
 
