@@ -146,8 +146,6 @@
     });
     
     function blockBtn(){
-        const btnCancel = document.getElementById('btn-rechazarSoli');
-        const btnAdd = document.getElementById('btn-agregarSoli');
         btnCancel.disabled = true;
         btnAdd.disabled = true;
     }
