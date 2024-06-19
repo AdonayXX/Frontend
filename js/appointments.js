@@ -227,6 +227,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
     const camilla = camillaCheckbox.checked ? 'Requerido' : 'No requerido';
     const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
     const condicionCita = document.getElementById('condicion').value;
+    const salida = document.getElementById('origen').value;
  
     const citaData = {
         "idPaciente" : idPaciente,
@@ -240,7 +241,8 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         "condicionCita": condicionCita,
         "diagnostico": diagnostico,
         "fechaCita": fechaCita,
-        "horaCita": horaCita
+        "horaCita": horaCita,
+        "transladoCita": salida
     };
 
     try {
