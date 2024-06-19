@@ -89,6 +89,36 @@ async function addPeople(personaData) {
         console.error(error);
   }
 }
+document.querySelector('#telefono1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#telefono2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono1_1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono2_1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono1_2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono2_2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
 
 //4
 function addDataPatient(IdPersonaCreada) {
