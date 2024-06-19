@@ -192,23 +192,23 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="identification" class="form-label">Identificación:</label>
-                                <input type="text" id="identification" name="identification" class="form-control"
+                                <input type="text" id="identification" name="identification" class="form-control" maxlength="20"
                                     required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="name" class="form-label">Nombre:</label>
-                                <input type="text" id="name" name="Nombre" class="form-control" required>
+                                <input type="text" id="name" name="Nombre" class="form-control" required maxlength="25"> 
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="firstlastname" class="form-label">Primer Apellido:</label>
-                                <input type="text" id="firstlastname" name="firstlastname" class="form-control"
+                                <input type="text" id="firstlastname" name="firstlastname" class="form-control " maxlength="25"
                                     required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="secondlastname" class="form-label">Segundo Apellido:</label>
-                                <input type="text" id="secondlastname" name="secondlastname" class="form-control"
+                                <input type="text" id="secondlastname" name="secondlastname" class="form-control" maxlength="25"
                                     required>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -306,20 +306,20 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="nombre" class="form-label"><i class="bi bi-person"></i>
                                             Nombre:</label>
-                                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="15">
+                                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="25">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="primerApellido" class="form-label"><i
                                                 class="bi bi-person-badge"></i> Primer
                                             Apellido:</label>
-                                        <input required type="text" id="primerApellido" name="primerApellido" maxlength="15"
+                                        <input required type="text" id="primerApellido" name="primerApellido" maxlength="20"
                                             class="form-control">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="segundoApellido" class="form-label"><i
                                                 class="bi bi-person-badge"></i> Segundo
                                             Apellido:</label>
-                                        <input required type="text" id="segundoApellido" name="segundoApellido" maxlength="15"
+                                        <input required type="text" id="segundoApellido" name="segundoApellido" maxlength="20"
                                             class="form-control">
                                     </div>
                                 </div>
@@ -349,7 +349,7 @@
                                     <div class="col-md-3 mb-3">
                                         <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
                                             Identificación:</label>
-                                        <input required type="text" id="identificacion" name="identificacion" maxlength="15"
+                                        <input required type="text" id="identificacion" name="identificacion" maxlength="20"
                                             class="form-control">
                                     </div>
                                     <div class="col-md-2 mb-3">
@@ -379,12 +379,12 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i>
                                             Teléfono 1:</label>
-                                        <input type="number" id="telefono1" name="telefono1" class="form-control" maxlength="15">
+                                        <input type="number" id="telefono1" name="telefono1" class="form-control">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i>
                                             Teléfono 2:</label>
-                                        <input type="number" id="telefono2" name="telefono2" class="form-control" maxlength="15">
+                                        <input type="number" id="telefono2" name="telefono2" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -430,19 +430,19 @@
                                     <div class="mb-3">
                                         <label for="latitud" class="form-label"><i class="bi bi-house"></i>
                                             Latitud:</label>
-                                        <input type="number" step="any" id="latitud" name="latitud" maxlength="200"
+                                        <input type="number" step="any" id="latitud" name="latitud" maxlength="20"
                                             class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="longitud" class="form-label"><i class="bi bi-house"></i>
+                                        <label for="longitud" class="form-label"><i class="bi bi-house" ></i>
                                             Longitud:</label>
-                                        <input type="number" step="any"  id="longitud" name="longitud"
+                                        <input type="number" step="any"  id="longitud" name="longitud" maxlength="20"
                                             class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label for="direccion" class="form-label"><i class="bi bi-house"></i>
                                             Dirección:</label>
-                                        <textarea required id="direccion" name="direccion"
+                                        <textarea required id="direccion" name="direccion" maxlength="200"
                                             class="form-control"></textarea>
                                     </div>
                                 </div>
