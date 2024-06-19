@@ -29,6 +29,9 @@
                     document.getElementById('input-horaSalida').value = vale.Hora_Salida;
                     document.getElementById('input-fechaReq').value = fechaFormateada;
                     document.getElementById('txa-detalle').value = vale.Detalle;
+                    if (vale.EstadoValeID === 3 || vale.EstadoValeID === 5 ) {
+                        blockBtn()
+                    }
                     acompanantes(vale);
                 }
             });
@@ -121,8 +124,8 @@
             const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
             // Realiza la petición PUT para actualizar el campo
             const response = await axios.put(valUrl);
-            console.log('Campo actualizado correctamente:', response.data);
-            if (newIdEstado == 3) {
+            console.log('Campo actualizado correctamente:');
+            if (newIdEstado === 3) {
                 showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
             }else{
                 showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
@@ -142,4 +145,11 @@
         newStatus(valueId,newIdEstado);
     });
     
+    function blockBtn(){
+        const btnCancel = document.getElementById('btn-rechazarSoli');
+        const btnAdd = document.getElementById('btn-agregarSoli');
+        btnCancel.disabled = true;
+        btnAdd.disabled = true;
+    }
 })();
+
