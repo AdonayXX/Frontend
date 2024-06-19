@@ -501,6 +501,25 @@ async function agregarAcompanante(companionData) {
     }
   }
 }
-
+document.querySelector('#telefono1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#telefono2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#phone1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#phone2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+      this.value = this.value.slice(0, 8);
+  }
+});
 
 
