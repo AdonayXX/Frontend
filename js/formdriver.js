@@ -1,7 +1,8 @@
-document.getElementById('3').addEventListener('submit', function (event) {
+
+document.getElementById('formDriver').addEventListener('submit', function(event) {
     event.preventDefault();
-    addPersona();
-  });
+    addDriver();
+});
 
 async function addDriver() {
     try {
@@ -15,34 +16,35 @@ async function addDriver() {
         const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value.trim();
 
         if (!cedula || !nombre || !apellido1 || !apellido2 || !contacto || !tipoSangre || !tipoLicencia || !fechaVencimientoLicencia) {
-            showToast('Ups!', 'Por favor, rellena todos los campos solicitados.');
+            alert("Por favor, rellena todos los campos solicitados.");
             return;
         }
 
         const driverData = {
-            cedula,
-            nombre,
-            apellido1,
-            apellido2,
-            contacto,
-            tipoSangre,
-            tipoLicencia,
-            vencimientoLicencia: fechaVencimientoLicencia
+            "cedula": cedula,
+            "nombre": nombre,
+            "apellido1": apellido1,
+            "apellido2": apellido2,
+            "contacto": contacto,
+            "tipoSangre": tipoSangre,
+            "tipoLicencia": tipoLicencia,
+            "vencimientoLicencia": fechaVencimientoLicencia
         };
 
-        const API_URL = 'https://backend-transporteccss.onrender.com/api/chofer';
+        const API_URL = 'https://backend-transporteccss.onrender.com/api/chofer/';
         const response = await axios.post(API_URL, driverData);
 
         if (response.status === 200) {
-            showToast('Chofer agregado exitosamente.');
+            alert('Chofer registrado exitosamente.');
             document.getElementById('formDriver').reset();
         } else {
-            showToast('Ups!', 'No se ha podido agregar al chofer.');
+            alert('Ocurrió un problema al registrar el chofer.');
         }
     } catch (error) {
         console.error(error);
-        showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
+        alert('Ocurrió un problema durante el envío de los datos.');
     }
 }
 
 
+alert('formDriver.js loaded');
