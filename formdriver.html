@@ -18,8 +18,8 @@
             <input type="text" class="form-control" id="apellido2" name="apellido2">
         </div>
         <div class="form-group mb-3">
-            <label for="contacto" class="form-label"><i class="bi bi-envelope"></i> Contacto</label>
-            <input type="email" class="form-control" id="contacto" name="contacto">
+            <label for="contacto" class="form-label"><i class="bi bi-phone"></i> Contacto</label>
+            <input type="text" class="form-control" id="contacto" name="contacto">
         </div>
         <div class="form-group mb-3">
             <label for="tipoSangre" class="form-label"><i class="bi bi-droplet"></i> Tipo de sangre</label>
@@ -53,78 +53,48 @@
                             <input type="text" id="acompananteNombreN1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <input type="text" id="1_1acompananteApellido" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
+                            <input type="text" id="contactoEmergencia" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="1_2acompananteApellido" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="apellido1CE" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="1_1acompananteTelefono" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="2_1acompananteTelefono" name="acompananteTelefono2_1" class="form-control" placeholder="Teléfono 2">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="acompananteParentesco1" class="form-label">Parentesco:</label>
-                            <select id="acompananteParentesco_1" name="acompananteParentesco1" class="form-select w-50">
-                                <option value="Hijo/a">Hijo/a</option>
-                                <option value="Padre">Padre</option>
-                                <option value="Madre">Madre</option>
-                                <option value="Esposa/o">Esposa/o</option>
-                                <option value="Hermano/a">Hermano/a</option>
-                                <option value="Abuelo/a">Abuelo/a</option>
-                                <option value="Tío/a">Tío/a</option>
-                                <option value="Primo/a">Primo/a</option>
-                                <option value="Sobrino/a">Sobrino/a</option>
-                                <option value="Cuñado/a">Cuñado/a</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
-                    <label for="2acompananteNombre" class="form-label mb-3">Contacto de emergencia 2:</label>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="acompananteNombreN2" name="acompananteNombre2" class="form-control" placeholder="Nombre">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="1_2acompananteApellido" name="acompananteApellido1_2" class="form-control" placeholder="1° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="2_2acompananteApellido" name="acompananteApellido2_2" class="form-control" placeholder="2° Apellido">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="1_2acompananteTelefono" name="acompananteTelefono1_2" class="form-control" placeholder="Teléfono 1">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <input type="text" id="2_2acompananteTelefono" name="acompananteTelefono2_2" class="form-control" placeholder="Teléfono 2">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="acompananteParentesco2" class="form-label">Parentesco:</label>
-                            <select id="2acompananteParentesco" name="acompananteParentesco2" class="form-select w-50">
-                                <option value="Hijo/a">Hijo/a</option>
-                                <option value="Padre">Padre</option>
-                                <option value="Madre">Madre</option>
-                                <option value="Esposa/o">Esposa/o</option>
-                                <option value="Hermano/a">Hermano/a</option>
-                                <option value="Abuelo/a">Abuelo/a</option>
-                                <option value="Tío/a">Tío/a</option>
-                                <option value="Primo/a">Primo/a</option>
-                                <option value="Sobrino/a">Sobrino/a</option>
-                                <option value="Cuñado/a">Cuñado/a</option>
-                            </select>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="apellido2CE" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group mt-4">
-            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
-            <button type="button" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</button>
-            <button type="button" class="btn btn-warning"><i class="bi bi-unlock"></i> Activar</button>
-            <button type="button" class="btn btn-danger"><i class="bi bi-lock"></i> Desactivar</button>
+            <button type="button" id="btnGuardar" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
+            <button type="button" id="btnActualizar" class="btn btn-secondary"><i class="bi bi-pencil"></i> Actualizar</button>
+            <button type="button" id="btnActivar" class="btn btn-warning"><i class="bi bi-unlock"></i> Activar</button>
+            <button type="button" id="btndesactivar" class="btn btn-danger"><i class="bi bi-lock"></i> Desactivar</button>
         </div>
     </form>
+    <div>
+    <h2 class="mt-5">Catálogo de choferes</h2>
+    <div class="table-responsive">
+        <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
+            <thead style="background-color: #094079; color: white;">
+                <tr>
+                    <th>nombre</th>
+                    <th>cedula</th>
+                    <th>apellido1</th>
+                    <th>apellido2</th>
+                    <th>Contacto</th>
+                    <th>tipoSangre</th>
+                    <th>tipoLicencia</th>
+                    <th>vencimientoLicencia</th>
+                    <th>contactoEmergencia</th>
+                    <th>nombreContactoEmer</th>
+                </tr>
+            </thead>
+            <tbody id="choferTableBody">
+                <!-- Aquí se agregarán las unidades registradas -->
+            </tbody>
+        </table>
+    </div>
 </div>
 <div data-script="js/driver.js"></div>
 </body>
