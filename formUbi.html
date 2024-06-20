@@ -66,10 +66,10 @@
     </form>
 </div>
 
-<!-- Modal -->
-<!-- Modal Agregar Ubicación -->
+<!-- Modals -->
+
 <div class="modal fade" id="AgregarUbiModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
@@ -80,18 +80,39 @@
                 <div class="mb-3" style="text-align: center;">
                     <h3>Ingrese la nueva ubicación</h3>
                     <br>
-                    <input type="text" id="AgregarUbi" class="form-control" placeholder="Ingrese la ubicación..."
-                        required>
-                    <br>
-                    <h3>Ingrese la abreviación del destino</h3>
-                    <br>
-                    <input type="text" id="AgregarAbre" class="form-control" placeholder="Ingrese la abreviación..."
-                        required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="AgregarUbi" class="form-control"
+                                placeholder="Ingrese la ubicación..." required>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-md-6">
+                            <input type="text" id="AgregarAbre" class="form-control"
+                                placeholder="Ingrese la abreviación..." required>
+                        </div>
+                    </div>
                     <br>
                     <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
                         id="BtnGuardarUbi">
                         <i class="bi bi-save"></i> Guardar
                     </button>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-light table-striped table-hover table-bordered"
+                            id="TableDestinations">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="text-center">IdDestino</th>
+                                    <th class="text-center">NombreDestino</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="destinosTableBody">
+                                <!-- Acá se cargarán los datos de la cita -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -100,6 +121,7 @@
         </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" id="AgregarEspeModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
@@ -129,4 +151,45 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar esta ubicación?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="eliminarUbicacion">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarEliminarModal2" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar esta especialidad?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="eliminarEspecialidad">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div data-script="js/destinations.js"></div>
