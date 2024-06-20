@@ -14,47 +14,50 @@ document.getElementById('clearFormButton').addEventListener('click', function ()
     clearForm();
 });
 
+function updateCapacity() {
+    const unitType = document.getElementById('unitType').value;
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10) || 0;
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10) || 0;
+    let totalCapacity = 0;
+
+    if (unitType === '5') {
+        totalCapacity = capacityChairs + (capacityBeds * 2);
+        document.getElementById('capacityBeds').disabled = false;
+    } else if (unitType === '3') {
+        document.getElementById('capacityBeds').value = 0;
+        document.getElementById('capacityBeds').disabled = true;
+        totalCapacity = capacityChairs;
+    }
+    document.getElementById('totalCapacity').value = totalCapacity;
+}
+
+document.getElementById('unitType').addEventListener('change', updateCapacity);
+document.getElementById('capacityChairs').addEventListener('input', updateCapacity);
+document.getElementById('capacityBeds').addEventListener('input', updateCapacity);
+
 function clearForm() {
     document.getElementById('unitsForm').reset();
     document.getElementById('unitNumber').disabled = false;
     document.getElementById('unitType').disabled = false;
     document.getElementById('resourceType').disabled = false;
     document.getElementById('initialMileage').disabled = false;
-    document.getElementById('maintenanceFields').style.display = 'none';
-    document.getElementById('mileageField').style.display = 'none';
-    document.getElementById('dateField').style.display = 'none';
     document.getElementById('clearFormButton').style.display = 'none';
     document.getElementById('update-unit-button').disabled = true;
     document.getElementById('submit-unit-button').disabled = false;
+    document.getElementById('capacityBeds').disabled = false;
+    document.getElementById('mileageField').style.display = 'none';
+    document.getElementById('dateField').style.display = 'none';
+    document.getElementById('advanceField').style.display = 'none';
 }
 
 document.getElementById('maintenanceType').addEventListener('change', function () {
     const mileageField = document.getElementById('mileageField');
     const dateField = document.getElementById('dateField');
-    mileageField.style.display = this.value === '5' ? 'block' : 'none';
-    dateField.style.display = this.value === '2' ? 'block' : 'none';
+    const advanceField = document.getElementById('advanceField');
+    mileageField.style.display = this.value === '2' ? 'block' : 'none';
+    dateField.style.display = this.value === '5' ? 'block' : 'none';
+    advanceField.style.display = this.value === '5' || this.value === '2' ? 'block' : 'none';
 });
-
-document.getElementById('status').addEventListener('change', function () {
-    const maintenanceFields = document.getElementById('maintenanceFields');
-    maintenanceFields.style.display = this.value === '10' ? 'block' : 'none';
-});
-
-function validateCapacity(capacity, resourceType) {
-    if ((resourceType === 1 || resourceType === 2 || resourceType === 3) && capacity > 8) {
-        showToast('Error', 'La capacidad de una ambulancia, CruzRoja o Privada no puede ser mayor a 8.');
-        return false;
-    }
-    if (resourceType === 4 && capacity > 5) {
-        showToast('Error', 'La capacidad de una pickup no puede ser mayor a 5.');
-        return false;
-    }
-    if (resourceType === 5 && capacidad > 2) {
-        showToast('Error', 'La capacidad de una moto no puede ser mayor a 2.');
-        return false;
-    }
-    return true;
-}
 
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
@@ -185,11 +188,12 @@ function postUnidad() {
     const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
     const status = parseInt(document.getElementById('status').value, 10);
     const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+    const maintenanceType = parseInt(document.getElementById('maintenanceType').value, 10);
     const driver = parseInt(document.getElementById('assignedDriver').value, 10);
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
-    const totalCapacity = capacityChairs + capacityBeds;
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
+    const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);;
+    const advance = parseInt(document.getElementById('advance').value, 10);
 
     if (initialMileage < 0 || currentMileage < 0 || driver === '') {
         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
@@ -198,6 +202,16 @@ function postUnidad() {
 
     if (currentMileage < initialMileage) {
         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+        return;
+    }
+
+    if (unitType == '5' && totalCapacity > 8) {
+        showToast('Error', 'La capacidad total de una ambulancia no puede ser mayor a 8.');
+        return;
+    }
+    
+    if (unitType == '3' && totalCapacity > 5) {
+        showToast('Error', 'La capacidad total de una pickup 4x4 no puede ser mayor a 5.');
         return;
     }
 
@@ -213,7 +227,7 @@ function postUnidad() {
         capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: 0,
+        adelanto: advance,
         idEstado: status
     };
 
@@ -221,6 +235,7 @@ function postUnidad() {
 
     axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
         .then(response => {
+            clearForm();
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             document.getElementById('unitsForm').reset();
@@ -249,6 +264,7 @@ function loadFormData(unidad) {
     document.getElementById('capacityChairs').value = unidad.capacidadSillas;
     document.getElementById('capacityBeds').value = unidad.capacidadCamas;
     document.getElementById('totalCapacity').value = unidad.capacidadTotal;
+    document.getElementById('advance').value = unidad.adelanto;
 
     const event = new Event('change');
     document.getElementById('status').dispatchEvent(event);
@@ -266,11 +282,12 @@ function updateUnidad() {
     const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
     const status = parseInt(document.getElementById('status').value, 10);
     const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-    const maintenanceType = status === 10 ? parseInt(document.getElementById('maintenanceType').value, 10) : null;
+    const maintenanceType = parseInt(document.getElementById('maintenanceType').value, 10);
     const driver = parseInt(document.getElementById('assignedDriver').value, 10);
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value);
-    const totalCapacity = capacityChairs + capacityBeds;
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
+    const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
+    const advance = parseInt(document.getElementById('advance').value, 10);
 
     if (initialMileage < 0 || currentMileage < 0 || driver === '') {
         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
@@ -279,6 +296,16 @@ function updateUnidad() {
 
     if (currentMileage < initialMileage) {
         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+        return;
+    }
+
+    if (unitType == '5' && totalCapacity > 8) {
+        showToast('Error', 'La capacidad total de una ambulancia no puede ser mayor a 8.');
+        return;
+    }
+    
+    if (unitType == '3' && totalCapacity > 5) {
+        showToast('Error', 'La capacidad total de una pickup 4x4 no puede ser mayor a 5.');
         return;
     }
 
@@ -294,7 +321,7 @@ function updateUnidad() {
         capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: 0,
+        adelanto: advance,
         idEstado: status
     };
 
