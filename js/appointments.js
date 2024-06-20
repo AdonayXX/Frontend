@@ -5,6 +5,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
     let idPaciente = null;
     let acompanantes = [];
     populateDestinos();
+    populateEspecialidades();
 
 
     if (identificacion) {
@@ -185,6 +186,11 @@ function limpiarCampos() {
     document.getElementById('diagnostico').value = '';
     document.getElementById('fechaCita').value = '';
     document.getElementById('horaCita').value = '';
+    document.getElementById('especialidad').value = '';
+    document.getElementById('destino').value = '';
+    document.getElementById('origen').value = '';
+    document.getElementById('condicion').value = '';
+    
 
     limpiarCamposAcompanantes();
 }
@@ -220,7 +226,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
     const idAcompanante1 = acompanante1Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante1Nombre)?.IdAcompanante : null;
     const idAcompanante2 = acompanante2Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante2Nombre)?.IdAcompanante : null;
 
-    const idEspecialidad = 805;          
+    const idEspecialidad = document.getElementById('especialidad').value;     
     const ubicacionOrigen = document.getElementById('traslado').value;
     const camillaCheckbox = document.getElementById('camilla');
     const prioridadCheckbox = document.getElementById('prelacion');
@@ -278,7 +284,28 @@ await guardarCita();
         .catch(error => {
             console.error('Error fetching destinos:', error);
         });
-}
+
+
+    }
+
+    function populateEspecialidades() {
+        const selectEspecialidad = document.getElementById('especialidad');
+
+        axios.get('https://backend-transporteccss.onrender.com/api/especialidad')
+            .then(response => {
+                const especialidades = response.data.Especialidad;
+                especialidades.forEach(especialidad => {
+                    const option = document.createElement('option');
+                    option.value = especialidad.idEspecialidad;
+                    option.textContent = especialidad.Especialidad;
+                    selectEspecialidad.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching especialidades:', error);
+            });
+    }
+
 
 });
 
