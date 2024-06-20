@@ -184,8 +184,8 @@ function addCompanion(idPaciente) {
     const acompananteApellido1 = document.querySelector(`#acompananteApellido1_${i}`).value.trim();
     const acompananteApellido2 = document.querySelector(`#acompananteApellido2_${i}`).value.trim();
     const acompananteIdentificacion = document.querySelector(`#acompananteIdentificacion${i}`).value.trim();
-    const acompananteTelefono1 = document.querySelector(`#acompananteTelefono1_${i}`).value.trim();
-    const acompananteTelefono2 = document.querySelector(`#acompananteTelefono2_${i}`).value.trim() || 0;
+    const acompananteTelefono1 = document.querySelector(`#acompananteTelefono1Hidden_${i}`).value.trim();
+    const acompananteTelefono2 = document.querySelector(`#acompananteTelefono2Hidden_${i}`).value.trim() || 0;
     const acompananteParentesco = document.querySelector(`#acompananteParentesco${i}`).value.trim();
 
     if (acompananteNombre && acompananteApellido1 && acompananteApellido2 && acompananteIdentificacion &&
