@@ -2,7 +2,7 @@
     var acompananteCount = 0;
 
     document.getElementById('btnAddAcompanante').addEventListener('click', function() {
-        if (acompananteCount < 2) {
+        if (acompananteCount < 1) {
             acompananteCount++;
             document.getElementById('acompanante' + acompananteCount).style.display = 'block';
         }
@@ -48,63 +48,82 @@ async function loadChoferes() {
 }
 
 loadChoferes();
+
+
 document.getElementById('btnGuardar').addEventListener('click', async function (event) {
     event.preventDefault();
     this.disabled = true;
 
-    const form = document.getElementById('formChofer');
+    const guardarChofer = async () => {
+        const cedula =  document.getElementById('cedula').value;
+        const nombre = document.getElementById('nombre').value;
+        const apellido1 = document.getElementById('apellido1').value;
+        const apellido2 = document.getElementById('apellido2').value;
+        const contacto = document.getElementById('contacto').value;
+        const tipoSangre = document.getElementById('tipoSangre').value;
+        const tipoLicencia = document.getElementById('tipoLicencia').value;
+        const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value;
+        const estadoChofer = document.getElementById('estado').value;
+        const contactoEmergencia = document.getElementById('contactoEmergencia').value || null;
+        const nombreCE = document.getElementById('acompananteNombreN1').value || null;
+        const apellido1CE = document.getElementById('apellido1CE').value || null;
+        const apellido2CE = document.getElementById('apellido2CE').value || null;
 
-    const dataChofer1 = {
-        cedula: form.cedula.value,
-        nombre: form.nombre.value,
-        apellido1: form.apellido1.value,
-        apellido2: form.apellido2.value,
-        contacto: form.contacto.value,
-        tipoSangre: form.tipoSangre.value,
-        tipoLicencia: form.tipoLicencia.value,
-        vencimientoLicencia: form.fechaVencimientoLicencia.value,
-        contactoEmergencia: form.contactoEmergencia.value,
-        nombreCE: form.acompananteNombreN1.value,
-        apellido1CE: form.apellido1CE.value,
-        apellido2CE: form.apellido2CE.value,
-        estadoChofer: "Activo"
-    };
+        if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoSangre || !tipoLicencia || !fechaVencimientoLicencia) {
+            showToast('Error', 'Por favor, complete todos los campos requeridos.');
+            this.disabled = false;
+            return;
+        }
 
-    if (!dataChofer1.cedula || !dataChofer1.nombre || !dataChofer1.apellido1 || !dataChofer1.apellido2 || 
-        !dataChofer1.contacto || !dataChofer1.tipoSangre || !dataChofer1.tipoLicencia || 
-        !dataChofer1.vencimientoLicencia || !dataChofer1.contactoEmergencia || !dataChofer1.nombreCE || 
-        !dataChofer1.apellido1CE || !dataChofer1.apellido2CE) {
-        showToast('Error', 'Por favor, complete todos los campos requeridos.');
-        this.disabled = false;
-        return;
+        const choferData = {
+            "cedula": cedula,
+            "nombre": nombre,
+            "apellido1": apellido1,
+            "apellido2": apellido2,
+            "contacto": contacto,
+            "tipoSangre": tipoSangre,
+            "tipoLicencia": tipoLicencia,
+            "vencimientoLicencia": fechaVencimientoLicencia,
+            "contactoEmergencia": contactoEmergencia,
+            "nombreCE": nombreCE,
+            "apellido1CE": apellido1CE,
+            "apellido2CE": apellido2CE,
+            "estadoChofer": estadoChofer
+        };
+
+        try {
+            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData);
+
+            if (response.status === 201) {
+                showToast('Éxito', 'Chofer registrado exitosamente.');
+              
+            }
+        } catch (error) {
+            console.error('Error al registrar el chofer:', error);
+            showToast('Error', 'Error al registrar el chofer.');
+            this.disabled = false;
+        }
     }
 
-    try {
-        const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer', dataChofer1);
-        showToast('Chofer', 'Chofer guardado correctamente.');
-        limpiarCampos();
-        setTimeout(() => {
-            loadContent('formDriver.html', 'mainContent');
-        }, 1450);
-    } catch (error) {
-        console.error('Error al guardar el chofer:', error);
-        this.disabled = false;
-        showToast('Error', 'Error al guardar el chofer.');
-    }
+    await guardarChofer();
 });
+
+
+
+
 // //post
 // // const axios = require('axios');
 // let dataChofer1 = {
-//     cedula: "200760987",
-//     nombre: "Juan",
+//     cedula: 2082367743,
+//     nombre: "Martin",
 //     apellido1: "Lopez",
 //     apellido2: "Umaña",
 //     contacto: 70707655,
 //     tipoSangre: "O-",
-//     tipoLicencia: "B2",
+//     tipoLicencia: "B1",
 //     vencimientoLicencia: "2028-11-30",  // Fecha corregida
 //     contactoEmergencia: 88886564,
-//     nombreCE: "Ricardo",
+//     nombreCE: "Mario",
 //     apellido1CE: "Duran",
 //     apellido2CE: "Castro",
 //     estadoChofer: "Activo"
