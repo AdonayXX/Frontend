@@ -15,7 +15,7 @@
                 <h2>Datos del paciente:</h2>
                 <div class="row mb-3 mt-3">
                     <div class="col-md-4 mt-2">
-                        <label for="tipoIdentificacion" class="form-label">Tipo de Identificación:</label>
+                        <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de Identificación:</label>
                         <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
                             <option value="Cedula">Cédula Nacional</option>
                             <option value="Asegurado">Asegurado</option>
@@ -23,37 +23,37 @@
                         </select>
                     </div>
                     <div class="col-md-4 mt-2">
-                        <label for="identificacion" class="form-label">Identificación:</label>
+                        <label for="identificacion" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
                         <input type="text" id="identificacion" name="identificacion" class="form-control" >
                     </div>
                     <div class="col-md-4 mt-2">
-                        <label for="nombre" class="form-label">Nombre:</label>
+                        <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
                         <input type="text" id="nombre" name="nombre" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="row mt-2">
                   
                     <div class="col-md-4 mb-3">
-                        <label for="primerApellido" class="form-label">Primer Apellido:</label>
+                        <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer Apellido:</label>
                         <input type="text" id="primerApellido" name="primerApellido" class="form-control" readonly>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="segundoApellido" class="form-label">Segundo Apellido:</label>
+                        <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo Apellido:</label>
                         <input type="text" id="segundoApellido" name="segundoApellido" class="form-control" readonly>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="telefono1" class="form-label">Teléfono 1:</label>
+                        <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
                         <input type="text" id="telefono1" name="telefono1" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="row">
                    
                     <div class="col-md-3 mb-3">
-                        <label for="telefono2" class="form-label">Teléfono 2:</label>
+                        <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
                         <input type="text" id="telefono2" name="telefono2" class="form-control" readonly>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="condicion" class="form-label">Condición:</label>
+                        <label for="condicion" class="form-label"><i class="bi bi-exclamation-circle"></i> Condición:</label>
                         <select id="condicion" name="condicion" class="form-select">
                             <option value="Verde">Verde</option>
                             <option value="Amarillo">Amarillo</option>
@@ -62,14 +62,14 @@
                         </select>
                     </div>
                     <div class="col-md-2 mb-3">
-                        <label class="form-label">Prioridad:</label>
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="prelacion">
-                            <label class="form-check-label" for="prelacion">SI</label>
+                            <input class="form-check-input" type="checkbox" id="prelacion" disabled>
+                        <label class="form-check-label" for="prelacion">SI</label>
                         </div>
                     </div>
                     <div class="col-md-2 mb-3">
-                        <label class="form-label">Camilla:</label>
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Camilla:</label>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="camilla">
                             <label class="form-check-label" for="camilla">SI</label>
@@ -79,12 +79,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label">Dirección:</label>
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
                         <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="diagnostico" class="form-label">Diagnostico:</label>
+                        <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
                         <textarea id="diagnostico" name="diagnostico" class="form-control" required></textarea>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                 </div>
                 <div class="companions-container d-flex flex-wrap">
                     <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
-                        <label for="acompananteNombre1" class="form-label mt-1 mb-3">Acompañante 1:</label>
+                        <label for="acompananteNombre1" class="form-label mt-1 mb-3"><i class="bi bi-person-check"></i> Acompañante 1:</label>
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <select type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
@@ -142,7 +142,7 @@
                     </div>
                 
                     <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
-                        <label for="acompananteNombre2" class="form-label mb-3">Acompañante 2:</label>
+                        <label for="acompananteNombre2" class="form-label mb-3"> <i class="bi bi-person-check"></i> Acompañante 2:</label>
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <select type="text" id="acompananteNombre2" name="acompananteNombre2"
@@ -178,31 +178,40 @@
                 <h2>Datos de la Cita:</h2>
                 <div class="row mb-3 mt-5">
                     <div class="col-md-3">
-                        <label class="form-label" for="traslado">Traslado:</label>
+                        <label class="form-label" for="traslado"><i class="bi bi-geo"></i> Traslado:</label>
                         <select id="traslado" name="traslado" class="form-select">
                             <option value="Local">Local</option>
+                            <option value="Externo">Externo</option>
+                        </select>
+                    </div>
+                        <div class="col-md-3 mt-1">
+                        <label for="origen" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de salida:</label>
+                        <select id="origen" name="origen" class="form-select">
+                            <option disabled selected value> -- Seleccione un origen -- </option>
+                            <option value="Ruta">Ruta</option>
+                            <option value="Domicilio">Domicilio</option>
+                            <option value="Sede">Sede</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
-                        <label for="destino" class="form-label">Destino:</label>
+                        <label for="destino" class="form-label"><i class="bi bi-hospital"></i> Destino:</label>
                         <select id="destino" name="destino" class="form-select">
                             <option disabled selected value> -- Seleccione un destino -- </option>
                         </select>
                     </div>
                 
                     <div class="col-md-3 mt-1">
-                        <label for="especialidad" class="form-label">Especialidad:</label>
+                        <label for="especialidad" class="form-label"><i class="bi bi-files"></i> Especialidad:</label>
                         <select id="especialidad" name="especialidad" class="form-select">
                             <option disabled selected value> -- Seleccione una especialidad -- </option>
-                            <option value="MedicinaGeneral">REGISTROS MEDICOS</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-1">
-                        <label for="fechaCita" class="form-label">Fecha:</label>
+                        <label for="fechaCita" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha:</label>
                         <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
                     </div>
                     <div class="col-md-3 mt-1">
-                        <label for="horaCita" class="form-label">Hora:</label>
+                        <label for="horaCita" class="form-label"><i class="bi bi-stopwatch"></i> Hora:</label>
                         <input type="time" id="horaCita" name="horaCita" class="form-control">
                     </div>
 

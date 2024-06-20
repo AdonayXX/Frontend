@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Pacientes</title>
-   
-   
 </head>
 
 <body>
@@ -18,17 +16,17 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
-                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="15">
+                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="25">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
                             Apellido:</label>
-                        <input required type="text" id="primerApellido" name="primerApellido" class="form-control" maxlength="15">
+                        <input required type="text" id="primerApellido" name="primerApellido" class="form-control" maxlength="20">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo
                             Apellido:</label>
-                        <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control" maxlength="15">
+                        <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control" maxlength="20">
                     </div>
                 </div>
                 <div class="row">
@@ -54,7 +52,7 @@
                     <div class="col-md-3 mb-3">
                         <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
                             Identificación:</label>
-                        <input required type="text" id="identificacion" name="identificacion" class="form-control" maxlength="15" placeholder="Ej:111111111">
+                        <input required type="text" id="identificacion" name="identificacion" class="form-control" maxlength="20" placeholder="Ej:111111111">
                     </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
@@ -80,11 +78,11 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                        <input type="number" id="telefono1" name="telefono1" class="form-control"maxlength="15" required>
+                        <input type="number" id="telefono1" name="telefono1" class="form-control"  required>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
-                        <input type="number" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional">
+                        <input type="number" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional" maxlength="8">
                     </div>
                 </div>
                 <div class="row">
@@ -128,11 +126,11 @@
                 <div class="row">
                     <div class="mb-3">
                         <label for="direccion" class="form-label"><i class="bi bi-house"></i> Latitud:</label>
-                        <input type="number" step="any" id="latitud" name="latitud" class="form-control" placeholder="Opcional" >
+                        <input type="number" step="any" id="latitud" name="latitud" class="form-control" placeholder="Opcional" maxlength="25" >
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label"><i class="bi bi-house"></i> Longitud:</label>
-                        <input type="number" step="any"  id="longitud" name="longitud" class="form-control" placeholder="Opcional">
+                        <input type="number" step="any"  id="longitud" name="longitud" class="form-control" placeholder="Opcional" maxlength="25">
                     </div>
                     <div class="mb-3">
                         <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
@@ -171,27 +169,27 @@
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteIdentificacion1" name="acompananteIdentificacion1"
-                                    class="form-control" placeholder="Identificación" maxlength="15">
+                                    class="form-control" placeholder="Identificación" maxlength="9">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteNombre1" name="acompananteNombre1"
-                                    class="form-control" placeholder="Nombre" maxlength="15">
+                                    class="form-control" placeholder="Nombre" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1"
-                                    class="form-control" placeholder="1° Apellido" maxlength="15">
+                                    class="form-control" placeholder="1° Apellido" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1"
-                                    class="form-control" placeholder="2° Apellido" maxlength="15">
+                                    class="form-control" placeholder="2° Apellido" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="number" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
-                                    class="form-control" placeholder="Teléfono 1" maxlength="15">
+                                    class="form-control" placeholder="Teléfono 1" maxlength="8">
                             </div>
                             <div id="acompanantePhone" class="col-md-3 mb-3" style="display: none;">
                                 <input type="number" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
-                                    class="form-control" placeholder="Teléfono 2(Opcional)" maxlength="15">
+                                    class="form-control" placeholder="Teléfono 2(Opcional)" maxlength="8">
                             </div>
                             <div class="col-md-4 mb-3 d-flex justify-content-start">
                                 <button type="button" id="PhoneBtn1" class="btn btn-secondary"
@@ -226,28 +224,28 @@
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteIdentificacion2" name="acompananteIdentificacion2"
-                                    class="form-control" placeholder="Identificación" maxlength="15">
+                                    class="form-control" placeholder="Identificación" maxlength="9">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteNombre2" name="acompananteNombre2"
-                                    class="form-control" placeholder="Nombre" maxlength="15">
+                                    class="form-control" placeholder="Nombre" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
-                                    class="form-control" placeholder="1° Apellido" maxlength="15">
+                                    class="form-control" placeholder="1° Apellido" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
-                                    class="form-control" placeholder="2° Apellido" maxlength="15">
+                                    class="form-control" placeholder="2° Apellido" maxlength="25">
                             </div>
                            
                             <div class="col-md-3 mb-3">
                                 <input type="number" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
-                                    class="form-control" placeholder="Teléfono 1" maxlength="15">
+                                    class="form-control" placeholder="Teléfono 1" maxlength="8">
                             </div>
                             <div id="acompanantePhone2" class="col-md-3 mb-3" style="display: none;">
                                 <input type="number" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
-                                    class="form-control" placeholder="Teléfono 2" maxlength="15">
+                                    class="form-control" placeholder="Teléfono 2" maxlength="8">
                             </div>
                             <div class="col-md-4 mb-3 d-flex justify-content-start">
                                 <button type="button" id="PhoneBtn2" class="btn btn-secondary"

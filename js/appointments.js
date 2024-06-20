@@ -5,6 +5,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
     let idPaciente = null;
     let acompanantes = [];
     populateDestinos();
+    populateEspecialidades();
 
 
     if (identificacion) {
@@ -33,6 +34,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('telefono1').value = pacienteEncontrado.Telefono1 || '';
                 document.getElementById('telefono2').value = pacienteEncontrado.Telefono2 || '';
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+
+                const prioridadCheckbox = document.getElementById('prelacion');
+                prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
+
+                const origenSelect = document.getElementById('origen');
+                origenSelect.value = pacienteEncontrado.Traslado;
     
            
                 showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
@@ -179,18 +186,27 @@ function limpiarCampos() {
     document.getElementById('diagnostico').value = '';
     document.getElementById('fechaCita').value = '';
     document.getElementById('horaCita').value = '';
-
+    document.getElementById('especialidad').value = '';
+    document.getElementById('destino').value = '';
+    document.getElementById('origen').value = '';
+    document.getElementById('condicion').value = '';
+    
 
     limpiarCamposAcompanantes();
-    idPaciente = null;
-    acompanantes = [];
 }
 
-async function guardarCita() {
-    if (!idPaciente) {
-        // showToast('Error', 'No se ha obtenido el IdPaciente.');
-        return;
-    }
+
+document.getElementById('btnGuardar').addEventListener('click', async function (event) {
+
+    event.preventDefault();
+    this.disabled = true; 
+    
+ const guardarCita = async () => {
+        if (!idPaciente) {
+            showToast('Error', 'No se ha obtenido el IdPaciente.');
+            this.disabled = false;
+            return;
+        }
 
     const diagnostico = document.getElementById('diagnostico').value;
     const fechaCita = document.getElementById('fechaCita').value;
@@ -210,13 +226,14 @@ async function guardarCita() {
     const idAcompanante1 = acompanante1Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante1Nombre)?.IdAcompanante : null;
     const idAcompanante2 = acompanante2Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante2Nombre)?.IdAcompanante : null;
 
-    const idEspecialidad = 805;          
+    const idEspecialidad = document.getElementById('especialidad').value;     
     const ubicacionOrigen = document.getElementById('traslado').value;
     const camillaCheckbox = document.getElementById('camilla');
     const prioridadCheckbox = document.getElementById('prelacion');
     const camilla = camillaCheckbox.checked ? 'Requerido' : 'No requerido';
     const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
     const condicionCita = document.getElementById('condicion').value;
+    const salida = document.getElementById('origen').value;
  
     const citaData = {
         "idPaciente" : idPaciente,
@@ -230,12 +247,14 @@ async function guardarCita() {
         "condicionCita": condicionCita,
         "diagnostico": diagnostico,
         "fechaCita": fechaCita,
-        "horaCita": horaCita
+        "horaCita": horaCita,
+        "transladoCita": salida
     };
 
     try {
         const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
         showToast('Cita', 'Cita guardada correctamente.');
+        limpiarCampos();
         setTimeout(() => {
             loadContent('formAppointment.html', 'mainContent');
         }, 1450);
@@ -245,6 +264,9 @@ async function guardarCita() {
         showToast('Error', 'Error al guardar la cita.');
     }
 }
+await guardarCita();
+    
+});
 
   function populateDestinos() {
     const selectDestino = document.getElementById('destino');
@@ -262,13 +284,28 @@ async function guardarCita() {
         .catch(error => {
             console.error('Error fetching destinos:', error);
         });
-}
 
-document.getElementById('btnGuardar').addEventListener('click', async function (event) {
-    event.preventDefault();
-    this.disabled = true; 
-    await guardarCita();
-    
-});
+
+    }
+
+    function populateEspecialidades() {
+        const selectEspecialidad = document.getElementById('especialidad');
+
+        axios.get('https://backend-transporteccss.onrender.com/api/especialidad')
+            .then(response => {
+                const especialidades = response.data.Especialidad;
+                especialidades.forEach(especialidad => {
+                    const option = document.createElement('option');
+                    option.value = especialidad.idEspecialidad;
+                    option.textContent = especialidad.Especialidad;
+                    selectEspecialidad.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching especialidades:', error);
+            });
+    }
+
+
 });
 
