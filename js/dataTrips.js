@@ -12,6 +12,14 @@ document.getElementById('searchTrips').addEventListener('keyup', function () {
   });
 });
 
+document.getElementById('fechaInicio').addEventListener('change', function () {
+  getCitas();
+});
+
+document.getElementById('unidades').addEventListener('change', function () {
+  getCitas();
+});
+
 async function getCitas() {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/viajeCita';
@@ -21,22 +29,26 @@ async function getCitas() {
 
     tableBody.innerHTML = '';
 
+    const fechaFiltro = document.getElementById('fechaInicio').value;
+    const unidadFiltro = document.getElementById('unidades').value;
     const today = new Date();
+
     const filteredViajes = viajes.filter(viaje => {
       const viajeDate = new Date(viaje.fechaCita);
-      return viajeDate >= today;
+      return (!fechaFiltro || formatISODate(viajeDate) === fechaFiltro) &&
+             (viaje.estadoCita !== 'En Curso') &&
+             (viaje.estadoCita !== 'Iniciada' || viaje.idUnidad === unidadFiltro);
     });
 
     filteredViajes.forEach(viaje => {
       const formattedFechaCita = formatISODate(viaje.fechaCita); 
-      const formattedCondicion = formatCondicion(viaje.condicionCita); 
       const row = `
-        <tr data-paciente="${viaje.idPaciente}" data-nombrepaciente="${viaje.Paciente}" data-idcita="${viaje.idCita}" data-ubicaciondestino="${viaje.idUbicacionDestino}" data-condicion="${formattedCondicion}" data-fechacita="${formattedFechaCita}" data-horacita="${viaje.horaCita}" data-traslado="${viaje.Traslado}" data-camilla="${viaje.camilla}" data-lugarsalida="${viaje.ubicacionOrigen}">
-          <td><input type="checkbox" class="cita-checkbox" value="${viaje.idCita}"></td>
+        <tr data-paciente="${viaje.idPaciente}" data-nombrepaciente="${viaje.Paciente}" data-idcita="${viaje.idCita}" data-ubicaciondestino="${viaje.idUbicacionDestino}" data-condicion="${viaje.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${viaje.horaCita}" data-traslado="${viaje.Traslado}" data-camilla="${viaje.camilla}" data-lugarsalida="${viaje.ubicacionOrigen}" data-estado="${viaje.estadoCita}">
+          <td><input type="checkbox" class="cita-checkbox" value="${viaje.idCita}" ${viaje.estadoCita === 'Asignada' ? 'checked' : ''} ${viaje.estadoCita === 'En Curso' || viaje.estadoCita === 'Finalizada' ? 'checked disabled' : ''}></td>
           <td>${viaje.Paciente}</td>
           <td>${viaje.ubicacionOrigen}</td>
           <td>${viaje.idUbicacionDestino}</td>
-          <td>${formattedCondicion}</td>
+          <td>${viaje.condicionCita}</td>
           <td>${viaje.horaCita}</td>
           <td>${formattedFechaCita}</td>
           <td>${viaje.Traslado}</td>
@@ -50,7 +62,7 @@ async function getCitas() {
     });
 
     document.querySelectorAll('.ausenteBtn').forEach(button => {
-      button.addEventListener('click', function() {
+      button.addEventListener('click', function () {
         const idCita = this.dataset.idcita;
         document.getElementById('ausenteCitaId').value = idCita;
       });
@@ -59,6 +71,20 @@ async function getCitas() {
     console.error('Error al obtener las citas:', error);
   }
 }
+//preguntar si aquellas citas que ya fueron marcadas como ausentes no deben ser mostradas en la tabla de citas
+//preguntar si se deben quitar las citas que ya están fianlizadas o canceladas cada n tiempo
+// decirle al backend que fechaInicio es para el día siguiente de la fecha actual
+// hacer función para fechaInicio que sea para el día siguiente de la fecha actual
+
+  function fechaSiguiente() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const year = tomorrow.getUTCFullYear();
+    const month = String(tomorrow.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(tomorrow.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
 async function getUnidades() {
   try {
@@ -77,7 +103,7 @@ async function getUnidades() {
 
     unidades.forEach(unidad => {
       const option = document.createElement('option');
-      option.value = unidad.id; 
+      option.value = unidad.id;
       option.textContent = `Unidad ${unidad.numeroUnidad}`;
       selectBody.appendChild(option);
     });
@@ -94,34 +120,21 @@ function formatISODate(isoDate) {
   return `${year}-${month}-${day}`;
 }
 
-function formatCondicion(condicion) {
-  switch (condicion.toLowerCase()) {
-    case 'rojo':
-      return 'Grave';
-    case 'amarillo':
-      return 'En riesgo';
-    case 'verde':
-      return 'Estable';
-    default:
-      return condicion;
-  }
-}
-
 function getCitasSeleccionadas() {
-  const checkboxes = document.querySelectorAll('.cita-checkbox:checked');
+  const checkboxes = document.querySelectorAll('.cita-checkbox:checked:not(:disabled)');
   const citasSeleccionadas = Array.from(checkboxes).map(checkbox => {
     const row = checkbox.closest('tr');
     return {
       idCita: checkbox.value,
       idPaciente: row.dataset.paciente,
-      nombrePaciente: row.dataset.nombrepaciente, 
+      nombrePaciente: row.dataset.nombrepaciente,
       idUbicacionDestino: row.dataset.ubicaciondestino,
       condicion: row.dataset.condicion,
       fechaCita: row.dataset.fechacita,
       horaCita: row.dataset.horacita,
       traslado: row.dataset.traslado,
       camilla: row.dataset.camilla,
-      lugarSalida: row.dataset.lugarsalida 
+      lugarSalida: row.dataset.lugarsalida
     };
   });
   return citasSeleccionadas;
@@ -130,15 +143,16 @@ function getCitasSeleccionadas() {
 async function crearViajes() {
   const citasSeleccionadas = getCitasSeleccionadas();
   if (citasSeleccionadas.length === 0) {
-    showToast("Error", "No se seleccionaron citas para crear los viajes.");
+    alert("Seleccione al menos una cita para crear un viaje.");
     return;
   }
 
   const idUnidadElement = document.getElementById('unidades');
   const fechaInicioElement = document.getElementById('fechaInicio');
+
   if (!idUnidadElement || !fechaInicioElement) {
     console.error('Algunos elementos del formulario no se encontraron.');
-    showToast("Error", "Algunos elementos del formulario no se llenaron correctamente.")
+    alert('Por favor, complete todos los campos del formulario.');
     return;
   }
 
@@ -153,23 +167,24 @@ async function crearViajes() {
   const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
   confirmModal.show();
 
-  document.getElementById('confirmarViajesBtn').onclick = async function() {
+  document.getElementById('confirmarViajesBtn').onclick = async function () {
     confirmModal.hide();
-    
+
     const idUnidad = idUnidadElement.value;
-    const fechaInicio = fechaInicioElement.value;
+    const fechaInicio = fechaSiguiente();
 
     for (const cita of citasSeleccionadas) {
       const nuevoViaje = {
         idUnidad: idUnidad,
-        FechaInicio: fechaInicio,
+        FechaInicio: fechaInicio, // revisar ya que la lógica del negocio es: todo viaje es para el día siguiente. (listo)
         idCita: cita.idCita,
         idPaciente: cita.idPaciente,
-        LugarSalida: cita.lugarSalida, 
+        LugarSalida: cita.lugarSalida,
         idUbicacionDestino: cita.idUbicacionDestino,
+        EstadoViaje: "Iniciado", 
         Condicion: cita.condicion,
-        EstadoCita: "Iniciada",
-        FechaCita: cita.fechaCita, 
+        EstadoCita: "Asignada",
+        FechaCita: cita.fechaCita,
         HoraCita: cita.horaCita,
         Traslado: cita.traslado,
         Camilla: cita.camilla
@@ -181,7 +196,7 @@ async function crearViajes() {
 
       try {
         const response = await axios.post(url, nuevoViaje);
-        showToast("Éxito", "Viaje creado exitosamente.");
+        console.log('Viaje creado exitosamente:', response.data);
       } catch (error) {
         if (error.response) {
           console.error('Error al crear el viaje:', error.response.data);
@@ -204,15 +219,12 @@ async function marcarCitaComoAusente() {
   const url = `https://backend-transporteccss.onrender.com/api/cita/${idCita}`;
   const datosAusencia = {
     ausente: motivoAusencia,
-    estadoCita: "Cancelada"
+    estadoCita: "Finalizada"
   };
 
   try {
     const response = await axios.put(url, datosAusencia);
-    showToast("Éxito", "Cita marcada como ausente exitosamente.");
-    const modal = document.getElementById('ausenteModal');
-    const modalInstance = bootstrap.Modal.getInstance(modal);
-    modalInstance.hide();
+    console.log('Cita marcada como ausente:', response.data);
     getCitas(); 
   } catch (error) {
     console.error('Error al marcar la cita como ausente:', error.response.data);
