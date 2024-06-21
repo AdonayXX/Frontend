@@ -260,3 +260,26 @@ h1 {
     }
 }
 /* FIN del CSS de AppointmentsMade */
+
+/*Spinner*/
+#spinnerContainer{
+    background-color: gainsboro;
+    position: fixed;
+    top: 4%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1049;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+ 
+
+}
+.spinner-border{
+    height: 50px;
+    width: 50px;
+
+
+}
