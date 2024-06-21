@@ -102,3 +102,9 @@ function getAcompanantes(cita) {
         showToast(error, 'Error al obtener los acompañantes:');
     }
 }
+
+document.querySelector('#searchAppointment').addEventListener('input', function (e) {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+});

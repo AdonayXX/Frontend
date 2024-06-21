@@ -28,7 +28,7 @@ async function loadEspecialidades() {
         }
 
         $('#tableEspecialidades').DataTable({
-            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+            dom: "<'row'<'col-sm-6'l><'col-sm-6'>>" +
                 "<'row'<'col-sm-12't>>" +
                 "<'row'<'col-sm-12'p>>",
             ordering: false,
@@ -50,19 +50,17 @@ async function loadEspecialidades() {
             smart: true,
         });
 
+        $('#buscarEspecialidad').on('keyup', function () {
+            let inputValue = $(this).val().toLowerCase();
+            $('#tableEspecialidades').DataTable().search(inputValue).draw();
+        });
+
     } catch (error) {
         console.error('Error al obtener las especialidades:', error);
     }
 }
 
 loadEspecialidades();
-
-
-$('#buscarDestino').on('keyup', function () {
-    let inputValue = $(this).val().toLowerCase();
-    $('#tableEspecialidades').DataTable().search(inputValue).draw();
-});
-
 
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
@@ -351,14 +349,22 @@ document.querySelector('#AgregarEspe').addEventListener('input', function (e) {
     if (this.value.length > 20) {
         this.value = this.value.slice(0, 20);
     }
+
 });
 document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
-    if (this.value.length > 50) {
-        this.value = this.value.slice(0, 50);
+    if (this.value.length > 40) {
+        this.value = this.value.slice(0, 40);
     }
+
 });
 document.querySelector('#AgregarAbre').addEventListener('input', function (e) {
     if (this.value.length > 8) {
         this.value = this.value.slice(0, 8);
+    }
+});
+
+document.querySelector('#buscarEspecialidad').addEventListener('input', function (e) {
+    if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
     }
 });
