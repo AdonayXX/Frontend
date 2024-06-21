@@ -244,7 +244,7 @@ async function addComp(companionData) {
 }
 
 
-//Funcion de botones agregar pacientes
+//Funcion de botones agregar acompañante
 (function () {
   let acompananteCount = 0;
 
@@ -323,35 +323,40 @@ function applyInputMask(elementId, hiddenElementId, mask) {
   let hiddenElement = document.getElementById(hiddenElementId);
   let content = '';
 
-  inputElement.addEventListener('keydown', function(e) {
-      if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-          return;
+  inputElement.addEventListener('keydown', function (e) {
+    if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (isNumeric(e.key) && content.length < mask.length) {
+      content += e.key;
+    }
+
+    if (e.keyCode == 8) { // Backspace key
+      if (content.length > 0) {
+        content = content.substr(0, content.length - 1);
       }
-      
-      e.preventDefault();
-      
-      if (isNumeric(e.key) && content.length < mask.length) {
-          content += e.key;
-      }
-      
-      if (e.keyCode == 8) { // Backspace key
-          if (content.length > 0) {
-              content = content.substr(0, content.length - 1);
-          }
-      }
-      
-      inputElement.value = maskIt(mask, content);
-      hiddenElement.value = content.replace(/\D/g, '');
-      
-      
-      inputElement.setAttribute('data-hidden-value', hiddenElement.value);
+    }
+
+    // Validar la longitud máxima permitida (8 dígitos)
+    if (content.replace(/\D/g, '').length > 8) {
+      content = content.substring(0, 8);
+    }
+
+    inputElement.value = maskIt(mask, content);
+    hiddenElement.value = content.replace(/\D/g, '');
+
+
+    inputElement.setAttribute('data-hidden-value', hiddenElement.value);
   });
 
-  inputElement.addEventListener('input', function(e) {
-      
-      hiddenElement.value = inputElement.value.replace(/\D/g, '');
-      
-      inputElement.setAttribute('data-hidden-value', hiddenElement.value);
+  inputElement.addEventListener('input', function (e) {
+
+    hiddenElement.value = inputElement.value.replace(/\D/g, '');
+
+    inputElement.setAttribute('data-hidden-value', hiddenElement.value);
   });
 }
 
@@ -360,21 +365,24 @@ function isNumeric(char) {
 }
 
 function maskIt(pattern, value) {
-  let position = 0;
-  let masked = '';
-  
-  for (let i = 0; i < pattern.length; i++) {
-      if (pattern[i] === '0' && position < value.length) {
-          masked += value[position];
-          position++;
-      } else if (pattern[i] === '0') {
-          masked += '0';
-      } else {
-          masked += pattern[i];
-      }
+  let maskedValue = '';
+  let valueIndex = 0;
+
+  // Iterar sobre el patrón y aplicar la máscara al valor ingresado
+  for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
+    if (valueIndex >= value.length) {
+      break; // Si hemos alcanzado el final del valor, salir del bucle
+    }
+
+    if (pattern[patternIndex] === '0') {
+      maskedValue += value[valueIndex];
+      valueIndex++;
+    } else {
+      maskedValue += pattern[patternIndex];
+    }
   }
-  
-  return masked;
+
+  return maskedValue;
 }
 
 // Aplicar la máscara a los inputs
@@ -384,3 +392,89 @@ applyInputMask('acompananteTelefono1_1', 'acompananteTelefono1Hidden_1', '0000-0
 applyInputMask('acompananteTelefono2_1', 'acompananteTelefono2Hidden_1', '0000-0000');
 applyInputMask('acompananteTelefono1_2', 'acompananteTelefono1Hidden_2', '0000-0000');
 applyInputMask('acompananteTelefono2_2', 'acompananteTelefono2Hidden_2', '0000-0000');
+
+// Función para aplicar la máscara según el tipo de identificación seleccionado
+function applyMaskBasedOnType() {
+  let tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+  let identificacionInput = document.getElementById('identificacion');
+
+  switch (tipoIdentificacion) {
+    case 'Cedula':
+      // Máscara para Cédula de Identidad: 000000000
+      identificacionInput.setAttribute('data-mask', '000000000');
+      break;
+    case 'Numeros de Asegurado':
+      // Máscara para Números de Asegurado: Primeros 4 dígitos fijos 2536
+      identificacionInput.setAttribute('data-mask', '2536-000000000000000');
+      break;
+    case 'Interno':
+      // Aquí debes definir la máscara para Interno cuando esté definida
+      identificacionInput.setAttribute('data-mask', '00000000000000000000'); // Por ahora, quitar la máscara
+      break;
+    default:
+      identificacionInput.removeAttribute('data-mask');
+      break;
+  }
+
+  // Limpiar el valor del campo de identificación al cambiar el tipo de identificación
+  identificacionInput.value = '';
+
+  // Aplicar la máscara al campo de identificación según el tipo seleccionado
+  applyIdentificationMask('identificacion', identificacionInput.getAttribute('data-mask'));
+}
+
+// Función para aplicar la máscara al campo de identificación según el patrón dado
+function applyIdentificationMask(elementId, mask) {
+  let inputElement = document.getElementById(elementId);
+  if (!inputElement) return; // Salir si el elemento no está definido
+
+  let content = '';
+
+  inputElement.addEventListener('input', function () {
+    let maskedValue = maskIt(mask, this.value);
+    this.value = maskedValue;
+
+    // Validar la longitud máxima permitida (20 dígitos)
+    if (this.value.replace(/\D/g, '').length > 20) {
+      this.value = this.value.substring(0, this.value.length - 1);
+    }
+  });
+
+  inputElement.addEventListener('keydown', function (e) {
+    if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (!mask) {
+      mask = ''; // Asegurar que mask no sea null o undefined
+    }
+
+    if (isNumeric(e.key) && content.length < mask.length) {
+      content += e.key;
+    }
+
+    // Validar la longitud máxima permitida (20 dígitos)
+    if (content.replace(/\D/g, '').length > 20) {
+      content = content.substring(0, content.length - 1);
+    }
+
+    if (e.keyCode == 8) { // Backspace key
+      if (content.length > 0) {
+        content = content.substr(0, content.length - 1);
+      }
+    }
+
+    inputElement.value = maskIt(mask, content);
+  });
+}
+
+// Evento para detectar cambios en el tipo de identificación y aplicar la máscara correspondiente
+document.getElementById('tipoIdentificacion').addEventListener('change', function () {
+  applyMaskBasedOnType();
+});
+
+// Inicialmente aplicar la máscara basada en el tipo seleccionado (por si se carga la página con un valor seleccionado)
+applyMaskBasedOnType();
+applyIdentificationMask('identificacion', ''); // Llamar con una máscara inicial vacía o definida

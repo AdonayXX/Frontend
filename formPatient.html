@@ -32,13 +32,23 @@
                         <input required type="text" id="identificacion" name="identificacion" class="form-control"
                             maxlength="20" placeholder="Ej:111111111">
                     </div>
+                    <!-- Genero -->
+                    <div class="col-md-4 mb-3">
+                        <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
+                        <select required id="genero" name="genero" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="No definido">No Definido</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
                     <!-- Nombre -->
                     <div class="col-md-4 mb-3">
                         <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
                         <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="25">
                     </div>
-                </div>
-                <div class="row">
                     <!-- Apellido1 -->
                     <div class="col-md-4 mb-3">
                         <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
@@ -52,16 +62,6 @@
                             Apellido:</label>
                         <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control"
                             maxlength="20">
-                    </div>
-                    <!-- Genero -->
-                    <div class="col-md-4 mb-3">
-                        <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
-                        <select required id="genero" name="genero" class="form-select">
-                            <option selected disabled value="">Seleccionar</option>
-                            <option value="Femenino">Femenino</option>
-                            <option value="Masculino">Masculino</option>
-                            <option value="No definido">No Definido</option>
-                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -90,7 +90,7 @@
                     <!-- Telefono1 -->
                     <div class="col-md-4 mb-3">
                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                        <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="9">
+                        <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="8">
                         <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number">
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
                         <input type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional"
-                            maxlength="9">
+                            maxlength="8">
                         <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number">
                     </div>
                     <!-- <button onclick="printHiddenValues()">Imprimir Valores Ocultos</button> -->
@@ -224,13 +224,13 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
-                                    class="form-control" placeholder="Teléfono 1" maxlength="9">
+                                    class="form-control" placeholder="Teléfono 1" maxlength="8">
                                 <input type="hidden" id="acompananteTelefono1Hidden_1"
                                     name="acompananteTelefono1Hidden_1" type="number">
                             </div>
                             <div id="acompanantePhone" class="col-md-3 mb-3" style="display: none;">
                                 <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
-                                    class="form-control" placeholder="Teléfono 2(Opcional)" maxlength="9">
+                                    class="form-control" placeholder="Teléfono 2(Opcional)" maxlength="8">
                                 <input type="hidden" id="acompananteTelefono2Hidden_1"
                                     name="acompananteTelefono2Hidden_1" type="number">
 
@@ -285,13 +285,13 @@
 
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
-                                    class="form-control" placeholder="Teléfono 1" maxlength="9">
+                                    class="form-control" placeholder="Teléfono 1" maxlength="8">
                                 <input type="hidden" id="acompananteTelefono1Hidden_2"
                                     name="acompananteTelefono1Hidden_2" type="number">
                             </div>
                             <div id="acompanantePhone2" class="col-md-3 mb-3" style="display: none;">
                                 <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
-                                    class="form-control" placeholder="Teléfono 2" maxlength="9">
+                                    class="form-control" placeholder="Teléfono 2" maxlength="8">
                                 <input type="hidden" id="acompananteTelefono2Hidden_2"
                                     name="acompananteTelefono2Hidden_2" type="number">
                             </div>
