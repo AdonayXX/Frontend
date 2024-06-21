@@ -50,7 +50,7 @@
 
                         <th>Tipo de seguro</th>
                         <th>Lugar Salida</th>
-                        <th>Direccion</th>
+                        <th>Dirección</th>
 
                         <th>Acompañante</th>
                         <th>Acciones</th>
@@ -149,9 +149,10 @@
     <div class="modal fade mt-5" id="showAccomp" data-bs-backdrop="static"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Acompañantes</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Acompañantes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive-xxl mt-1" id="tableComp" style="display: none;">
@@ -184,9 +185,10 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg ">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5 " id="staticBackdropLabel">Datos Acompañante</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Datos Acompañante</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-1">
                     <form action="" id="formEditComp" class="bg-light p-4 border rounded-3">
@@ -272,9 +274,10 @@
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de Eliminación</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Confirmación de Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="bodyConfirm">
@@ -293,12 +296,13 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Editar Paciente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="modal-body" id="modalFormEdit">
                     <div class="container  fade-in" style="max-width: 1100px;">
-                        <h1 class="mb-4 text-center">Editar Paciente</h1>
                         <form id="formEditPatient" method="post" class="bg-light p-4 border rounded-3">
                            
                             <div class="form-section">
@@ -310,8 +314,8 @@
                                             Identificación:</label>
                                         <select required id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
                                             <option selected disabled value="">Seleccionar</option>
-                                            <option value="Cedula">Cédula de Identidad</option>
-                                            <option value="Numeros de Asegurado">Numeros de Asegurado</option>
+                                            <option value="Cédula de Identidad">Cédula de Identidad</option>
+                                            <option value="Número de Asegurado">Número de Asegurado</option>
                                             <option value="Interno">Interno</option>
                                         </select>
                                     </div>
@@ -320,7 +324,7 @@
                                         <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
                                             Identificación:</label>
                                         <input required type="text" id="identificacion" name="identificacion" class="form-control"
-                                            maxlength="20" placeholder="Ej:111111111">
+                                            maxlength="20" >
                                     </div>
                                     <!-- Genero -->
                                     <div class="col-md-4 mb-3">
@@ -483,6 +487,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade mt-5" id="confirmDeleteModalComp" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de Eliminación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyConfirmComp">
+                    <!-- El contenido se actualizará dinámicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDeleteBtnComp" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div data-script="js/patient.js"></div>
 </body>

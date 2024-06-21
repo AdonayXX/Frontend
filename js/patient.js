@@ -13,7 +13,7 @@ async function getPatientComp() {
       let table = $('#tablePatient').DataTable({
         dom: "<'row'<'col-md-6'l>" +
           "<'row'<'col-md-12't>>" +
-          "<'row justify-content-between'<'col-md-5'i><'col-md-5'p>>",
+          "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
         ordering: false,
         searching: true,
         paging: true,
@@ -51,25 +51,30 @@ function fillAccomp(acompanantes) {
     const noAcompanantesMessage = document.querySelector('#messageNoComp');
     const tableComp = document.querySelector('#tableComp');
     tableBody.innerHTML = '';
+    // Filtrar solo los acompañantes con estado "Activo"
+    const activeAcompanantes = acompanantes.filter(accomp => accomp.Estado === 'Activo');
 
 
-    if (acompanantes.length === 0) {
+    if (activeAcompanantes.length === 0) {
       tableComp.style.display = 'none';
       noAcompanantesMessage.style.display = 'block'
 
     } else {
       tableComp.style.display = 'block';
       noAcompanantesMessage.style.display = 'none';
-      acompanantes.forEach(accomp => {
-        const telefonoCompleto = (accomp.Telefono2 !== 0) ? `${accomp.Telefono1}-${accomp.Telefono2}` : `${accomp.Telefono1}`;
+      activeAcompanantes.forEach(accomp => {
+        const telefonoCompleto = (accomp.Telefono2 !== 0) ? `${accomp.Telefono1}/${accomp.Telefono2}` : `${accomp.Telefono1}`;
+        const nombreCompleto = `${accomp.Nombre} ${accomp.Apellido1} ${accomp.Apellido2}`;
+        const IdentificacionComp =`${accomp.Identificacion} `;
         const row = `
                     <tr>
                         <td>${accomp.Identificacion}</td>
-                        <td>${accomp.Nombre} ${accomp.Apellido1} ${accomp.Apellido2}</td>
+                        <td>${nombreCompleto}</td>
                         <td>${telefonoCompleto}</td>
                         <td>${accomp.Parentesco}</td>
                         <td class="actions">
-                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square" data-EditCompanion='${JSON.stringify(accomp)}' onclick = "editAccomp(this)" ></i></button>
+                        <button class="btn btn-outline-primary btn-sm" data-EditCompanion='${JSON.stringify(accomp)}' onclick = "editAccomp(this)" ><i class="bi bi-pencil-square"></i></button>
+                             <button class="btn btn-outline-danger btn-sm" onclick="companionDelete(${accomp.IdAcompanante}, '${nombreCompleto}', '${IdentificacionComp}')"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -102,10 +107,11 @@ function fillPatientComp(listPatientComp) {
 
 
         const row = document.createElement('tr');
-        const telefonoCompleto = (patient.Telefono2 !== 0) ? `${patient.Telefono1}-${patient.Telefono2}` : `${patient.Telefono1}`;
+        const telefonoCompleto = (patient.Telefono2 !== 0) ? `${patient.Telefono1} / ${patient.Telefono2}` : `${patient.Telefono1}`;
         const nombreCompleto = `${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}`;
+        const acompanantesActivos = patient.acompanantes.filter(acomp => acomp.Estado === 'Activo');
 
-        const cantidadAcompanantes = patient.acompanantes.length;
+        const cantidadAcompanantes = acompanantesActivos.length;
 
         row.innerHTML = `
           <tr>
@@ -123,7 +129,7 @@ function fillPatientComp(listPatientComp) {
               <button class="btn btn-outline-success btn-sm btnAddComp" data-bs-toggle="modal" data-bs-target="#addAccomp" onclick="companionAdd(${patient.IdPaciente})"><i class="bi bi-person-plus"></i></button>
             </td>
             <td class="actions">
-              <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square" data-pacientes='${JSON.stringify(patient)}' onclick = "patientEdit(this)"></i></button>
+            <button class="btn btn-outline-primary btn-sm" data-pacientes='${JSON.stringify(patient)}' onclick = "patientEdit(this)"><i class="bi bi-pencil-square"></i></button>
               <button class="btn btn-outline-danger btn-sm" onclick="patientDelete(${patient.IdPaciente}, '${nombreCompleto}', '${patient.Identificacion}')"><i class="bi bi-trash"></i>
         </button>            </td>
           </tr>
@@ -372,6 +378,8 @@ window.patientDelete = function (idPatient, nombreCompleto, identificacion) {
 
 
   let confirmBtn = document.getElementById('confirmDeleteBtn');
+
+
   confirmBtn.onclick = function () {
 
     deletePatient(idPatient);
@@ -386,10 +394,15 @@ async function deletePatient(patientId) {
   try {
     const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
     const response = await axios.delete(API_URL);
-    getPatientComp();
+    showToast('Exito','Paciente eliminado exitosamente.')
+    setTimeout(function () {
+      loadContent('dataTablePatient.html', 'mainContent');
+    }, 1000);
+    
 
   } catch (error) {
     console.error('There has been a problem deleting the patient:', error);
+    showToast('Ups!','Error al eliminar el paciente.')
   }
 }
 
@@ -527,14 +540,14 @@ function applyMaskBasedOnType() {
   let identificacionInput = document.getElementById('identificacion');
 
   switch (tipoIdentificacion) {
-    case 'Cedula':
-      identificacionInput.setAttribute('data-mask', '000000000');
+    case 'Cédula de Identidad':
+      identificacionInput.setAttribute('data-mask', '0-0000-0000');
       break;
-    case 'Numeros de Asegurado':
-      identificacionInput.setAttribute('data-mask', '2536000000000000000');
+    case 'Número de Asegurado':
+      identificacionInput.setAttribute('data-mask', '0000000000000000000000000');
       break;
     case 'Interno':
-      identificacionInput.setAttribute('data-mask', '00000000000000000000');
+      identificacionInput.setAttribute('data-mask', '2536-00000000000000000000');
       break;
     default:
       identificacionInput.removeAttribute('data-mask');
@@ -621,3 +634,81 @@ document.getElementById('tipoIdentificacion').addEventListener('change', functio
 
 applyMaskBasedOnType();
 applyIdentificationMask('identificacion', '');
+
+
+
+document.querySelectorAll('input[type="text"]').forEach(input => {
+  input.addEventListener('input', (event) => {
+    const inputValue = event.target.value;
+    event.target.value = toSentenceCase(inputValue);
+  });
+});
+
+// Función para convertir solo la primera letra de cada oración a mayúscula
+function toSentenceCase(str) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+    return c.toUpperCase();
+  });
+}
+
+document.getElementById('direccion').addEventListener('input', (event) => {
+  const inputValue = event.target.value;
+  event.target.value = toSentenceCase(inputValue);
+});
+
+async function companionDelete(IdAcompanante,nombreCompleto,Identificacion){
+  console.log(IdAcompanante,Identificacion,nombreCompleto);
+  let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModalComp'), {
+    backdrop: 'static',
+    keyboard: false
+  });
+  let bodyConfirm = document.querySelector('#bodyConfirmComp');
+
+  bodyConfirm.innerHTML = `
+    <p>¿Estás seguro de que deseas eliminar al paciente:</p>
+    <p><strong>Nombre:</strong> ${nombreCompleto}</p>
+    <p><strong>Identificación:</strong> ${Identificacion}</p>
+    <p>Esta acción no se puede deshacer.</p>
+`;
+
+
+  modal.show();
+
+
+  let confirmBtn = document.getElementById('confirmDeleteBtnComp');
+
+ confirmBtn.onclick = function () {
+
+    deleteComp(IdAcompanante);
+
+     // Cerrar el modal correctamente usando Bootstrap
+     const modalElement = document.querySelector('#showAccomp');
+     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if (modalInstance) {
+      modalInstance.hide();
+    } else {
+      const newModalInstance = new bootstrap.Modal(modalElement);
+      newModalInstance.hide();
+    }
+    modal.hide();
+
+}
+}
+async function deleteComp (IdAcompanante){
+  try {
+    const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+    const response = await axios.delete(API_URL);
+    showToast('Exito','Acompañante eliminado exitosamente.');
+   
+ 
+    setTimeout(function () {
+      loadContent('dataTablePatient.html', 'mainContent');
+    }, 1000);
+   
+
+  } catch (error) {
+    console.error('There has been a problem deleting the patient:', error);
+    showToast('Ups!','Error al eliminar el acompañante.')
+  }
+
+}

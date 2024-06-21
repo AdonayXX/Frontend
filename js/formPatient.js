@@ -399,17 +399,17 @@ function applyMaskBasedOnType() {
   let identificacionInput = document.getElementById('identificacion');
 
   switch (tipoIdentificacion) {
-    case 'Cedula':
+    case 'Cédula de Identidad':
       // Máscara para Cédula de Identidad: 000000000
-      identificacionInput.setAttribute('data-mask', '000000000');
+      identificacionInput.setAttribute('data-mask', '0-0000-0000');
       break;
-    case 'Numeros de Asegurado':
+    case 'Número de Asegurado':
       // Máscara para Números de Asegurado: Primeros 4 dígitos fijos 2536
-      identificacionInput.setAttribute('data-mask', '2536-000000000000000');
+      identificacionInput.setAttribute('data-mask', '0000000000000000000000000');
       break;
     case 'Interno':
       // Aquí debes definir la máscara para Interno cuando esté definida
-      identificacionInput.setAttribute('data-mask', '00000000000000000000'); // Por ahora, quitar la máscara
+      identificacionInput.setAttribute('data-mask', '2536-00000000000000000000'); // Por ahora, quitar la máscara
       break;
     default:
       identificacionInput.removeAttribute('data-mask');
@@ -478,3 +478,25 @@ document.getElementById('tipoIdentificacion').addEventListener('change', functio
 // Inicialmente aplicar la máscara basada en el tipo seleccionado (por si se carga la página con un valor seleccionado)
 applyMaskBasedOnType();
 applyIdentificationMask('identificacion', ''); // Llamar con una máscara inicial vacía o definida
+
+function toSentenceCase(str) {
+  return str.toLowerCase().replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+}
+
+document.querySelectorAll('input[type="text"]').forEach(input => {
+  input.addEventListener('input', (event) => {
+    const inputValue = event.target.value;
+    event.target.value = toSentenceCase(inputValue);
+  });
+});
+// Función para convertir solo la primera letra de cada oración a mayúscula
+function toSentenceCase(str) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+    return c.toUpperCase();
+  });
+}
+
+document.getElementById('direccion').addEventListener('input', (event) => {
+  const inputValue = event.target.value;
+  event.target.value = toSentenceCase(inputValue);
+});
