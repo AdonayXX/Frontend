@@ -14,66 +14,120 @@ async function loadDestinations() {
         console.error('Error al obtener los destinos:', error);
     }
 }
-loadDestinations()
+loadDestinations();
 
 async function loadEspecialidades() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
-        const especialidad = response.data.Especialidad;
-        const tableBody = document.getElementById('espe');
-        tableBody.innerHTML = '';
+        const especialidades = response.data.Especialidad;
 
-        especialidad.forEach(espe => {
-            const row = document.createElement('tr');
+        renderTableEspecialidades(especialidades);
 
-            row.innerHTML = `
-              <td><input type="checkbox" id="seleccionarEspe"/></td>
-                <td>${espe.Especialidad}</td>
-                 <td>
-                    <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal2">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            `;
+        if ($.fn.DataTable.isDataTable('#tableEspecialidades')) {
+            $('#tableEspecialidades').DataTable().destroy();
+        }
 
-            tableBody.appendChild(row);
+        $('#tableEspecialidades').DataTable({
+            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-12'p>>"
+            ,
+            ordering: false,
+            searching: true,
+            paging: true,
+            pageLength: 5,
+            lengthMenu: [5],
+            pagingType: 'simple_numbers',
+            autoWidth: false,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json',
+                paginate: {
 
+                    previous: 'Anterior',
+                    next: 'Siguiente',
+
+                },
+                info: ''
+            },
+            caseInsensitive: true,
+            smart: true,
         });
+
+
     } catch (error) {
-        console.error('Error al cargar las especialidades:', error);
-
+        console.error('Error al obtener las especialidades:', error);
     }
-
 }
 
-loadEspecialidades()
+loadEspecialidades();
+
+function renderTableEspecialidades(especialidades) {
+    const tableBody = document.getElementById('espe');
+    tableBody.innerHTML = '';
+
+    especialidades.forEach(especialidad => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="text-center"><input type="checkbox"></td>
+            <td class="text-center">${especialidad.Especialidad}</td>
+            <td>
+                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+$('#buscarDestino').on('keyup', function () {
+    let inputValue = $(this).val().toLowerCase();
+    $('#tableEspecialidades').DataTable().search(inputValue).draw();
+});
+
+
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
-    const nuevaUbicacion = document.getElementById('AgregarUbi').value;
-    const nuevaAbreviacion = document.getElementById('AgregarAbre').value;
+    const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
+    const nuevaAbreviacion = document.getElementById('AgregarAbre').value.trim();
+    const apiUrl = 'https://backend-transporteccss.onrender.com/api/destinos';
 
-    if (nuevaUbicacion) {
-        try {
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/destinos', {
+    if (!nuevaUbicacion || !nuevaAbreviacion) {
+        showToast('Error', 'Ambos campos son obligatorios');
+        return;
+    }
+
+    try {
+        const response = await axios.get(apiUrl);
+        const ubicaciones = response.data;
+
+        const ubicacionExistente = ubicaciones.find(ubi =>
+            ubi.Descripcion === nuevaUbicacion || ubi.IdDestino === nuevaAbreviacion
+        );
+
+        if (!ubicacionExistente) {
+            const postResponse = await axios.post(apiUrl, {
                 IdDestino: nuevaAbreviacion,
                 Descripcion: nuevaUbicacion
             });
 
-            console.log('Ubicación agregada:', response.data);
+            console.log('Ubicación agregada:', postResponse.data);
             loadDestinations2();
             showToast('¡Éxitos!', 'Ubicación agregada correctamente.');
 
-
             document.getElementById('AgregarUbi').value = '';
+            document.getElementById('AgregarAbre').value = '';
 
             const modalElement = document.getElementById('AgregarUbiModal');
             const modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
-        } catch (error) {
-            console.error('Error al agregar la ubicación:', error);
+        } else {
+            console.error('La ubicación ya existe');
+            showToast('Error', 'La ubicación ya existe');
         }
-    } else {
-        console.error('El campo de ubicación está vacío');
+    } catch (error) {
+        console.error('Error al agregar la ubicación:', error);
+        showToast('Error', 'Error al agregar la ubicación');
     }
 });
 
@@ -101,7 +155,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
             const postResponse = await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData);
 
             console.log('Especialidad agregada:', postResponse.data);
-            loadDestinations2();
+            loadEspecialidades();
             showToast('¡Éxitos!', 'Especialidad agregada correctamente.');
 
 
@@ -137,21 +191,6 @@ function renderTableDestinations(ubicaciones) {
             `;
         tableBody.appendChild(row);
     });
-}
-
-
-async function deleteDestination(idDestino) {
-    try {
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/destinos/${idDestino}`);
-        console.log('Ubicación eliminada:', response.data);
-
-        loadDestinations2();
-        showToast('¡Éxito!', 'Ubicación eliminada correctamente.');
-
-    } catch (error) {
-        console.error('Error al eliminar la ubicación:', error);
-        showToast('Error', 'No se pudo eliminar la ubicación.');
-    }
 }
 
 async function loadDestinations2() {
@@ -192,4 +231,20 @@ async function loadDestinations2() {
     }
 }
 
-loadDestinations2();
+loadDestinations2()
+
+
+async function deleteDestination(idDestino) {
+    try {
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/destinos/${idDestino}`);
+        console.log('Ubicación eliminada:', response.data);
+
+        loadDestinations2();
+        showToast('¡Éxito!', 'Ubicación eliminada correctamente.');
+
+    } catch (error) {
+        console.error('Error al eliminar la ubicación:', error);
+        showToast('Error', 'No se pudo eliminar la ubicación.');
+    }
+}
+
