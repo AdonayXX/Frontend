@@ -201,9 +201,9 @@ async function getFrecuenciaCambio() {
 async function getUnidades() {
     try {
         const [recursoMap, estadoMap, frecuenciaMap] = await Promise.all([
-            loadTiposRecurso(),
-            loadEstadosUnidad(),
-            loadFrecuenciaCambio()
+            getTiposRecurso(),
+            getEstadosUnidad(),
+            getFrecuenciaCambio()
         ]);
 
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
@@ -263,7 +263,7 @@ async function getUnidades() {
     }
 }
 
-loadUnidades();
+getUnidades();
 
 function postUnidad() {
     const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
@@ -324,7 +324,7 @@ function postUnidad() {
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            loadUnidades();
+            getUnidades();
         })
         .catch(error => {
             console.error('Error al crear la unidad:', error);
@@ -473,7 +473,7 @@ function updateUnidad() {
             showToast('Actualización exitosa', 'La unidad se ha actualizado exitosamente.');
             document.getElementById('unitsForm').reset();
             document.getElementById('unitNumber').disabled = false;
-            loadUnidades();
+            getUnidades();
         })
         .catch(error => {
             console.error('Error al actualizar la unidad:', error);
