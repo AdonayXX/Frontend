@@ -30,8 +30,7 @@ async function loadEspecialidades() {
         $('#tableEspecialidades').DataTable({
             dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                 "<'row'<'col-sm-12't>>" +
-                "<'row'<'col-sm-12'p>>"
-            ,
+                "<'row'<'col-sm-12'p>>",
             ordering: false,
             searching: true,
             paging: true,
@@ -42,17 +41,14 @@ async function loadEspecialidades() {
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json',
                 paginate: {
-
                     previous: 'Anterior',
                     next: 'Siguiente',
-
                 },
                 info: ''
             },
             caseInsensitive: true,
             smart: true,
         });
-
 
     } catch (error) {
         console.error('Error al obtener las especialidades:', error);
@@ -61,24 +57,6 @@ async function loadEspecialidades() {
 
 loadEspecialidades();
 
-function renderTableEspecialidades(especialidades) {
-    const tableBody = document.getElementById('espe');
-    tableBody.innerHTML = '';
-
-    especialidades.forEach(especialidad => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="text-center"><input type="checkbox"></td>
-            <td class="text-center">${especialidad.Especialidad}</td>
-            <td>
-                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
 
 $('#buscarDestino').on('keyup', function () {
     let inputValue = $(this).val().toLowerCase();
@@ -172,26 +150,48 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
     }
 });
 
-
 function renderTableDestinations(ubicaciones) {
     const tableBody = document.getElementById('destinosTableBody');
     tableBody.innerHTML = '';
 
     ubicaciones.forEach(ubicacion => {
-
         const row = document.createElement('tr');
+        const idDestinoStr = JSON.stringify(ubicacion.IdDestino);
+
         row.innerHTML = `
-                <td class="text-center">${ubicacion.IdDestino}</td>
-                <td class="text-center">${ubicacion.Descripcion}</td>
-                <td>
-                    <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            `;
+            <td class="text-center">${ubicacion.IdDestino}</td>
+            <td class="text-center">${ubicacion.Descripcion}</td>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick='createDeleteModal(${idDestinoStr})'>
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
         tableBody.appendChild(row);
     });
 }
+
+function renderTableEspecialidades(especialidades) {
+    const tableBody = document.getElementById('espe');
+    tableBody.innerHTML = '';
+
+    especialidades.forEach(especialidad => {
+        const row = document.createElement('tr');
+        const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
+
+        row.innerHTML = `
+            <td class="text-center"><input type="checkbox"></td>
+            <td class="text-center">${especialidad.Especialidad}</td>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick='createDeleteModal2(${idEspecialidadStr})'>
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
 
 async function loadDestinations2() {
     try {
@@ -233,18 +233,132 @@ async function loadDestinations2() {
 
 loadDestinations2()
 
+function createDeleteModal(idDestino) {
+    const existingModal = document.getElementById('confirmarEliminarModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = `
+        <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas eliminar esta ubicación?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="eliminarUbicacion" onclick='deleteDestination(${JSON.stringify(idDestino)})'>Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modalContainer);
+
+    const modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
+    modal.show();
+
+}
 
 async function deleteDestination(idDestino) {
     try {
         const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/destinos/${idDestino}`);
         console.log('Ubicación eliminada:', response.data);
 
-        loadDestinations2();
-        showToast('¡Éxito!', 'Ubicación eliminada correctamente.');
 
+        const modal = document.getElementById('confirmarEliminarModal');
+        if (modal) {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+                modal.remove();
+            }
+        }
+        showToast('¡Éxito!', 'Ubicación eliminada correctamente.');
     } catch (error) {
         console.error('Error al eliminar la ubicación:', error);
+
         showToast('Error', 'No se pudo eliminar la ubicación.');
+
     }
 }
 
+async function deleteEspecialidad(idEspecialidad) {
+    try {
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`);
+        console.log('Especialidad eliminada:', response.data);
+
+        const modal = document.getElementById('confirmarEliminarModal2');
+        if (modal) {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+                modal.remove();
+            }
+        }
+        showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
+
+    } catch (error) {
+        console.error('Error al eliminar la especialidad:', error);
+
+        showToast('Error', 'No se pudo eliminar la especialidad.');
+    }
+}
+
+function createDeleteModal2(idEspecialidad) {
+    const existingModal = document.getElementById('confirmarEliminarModal2');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = `
+        <div class="modal fade" id="confirmarEliminarModal2" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Estás seguro de que deseas eliminar esta especialidad?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)})'>Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modalContainer);
+
+    const modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal2'));
+    modal.show();
+}
+
+document.querySelector('#AgregarEspe').addEventListener('input', function (e) {
+    if (this.value.length > 20) {
+        this.value = this.value.slice(0, 20);
+    }
+});
+document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
+    if (this.value.length > 50) {
+        this.value = this.value.slice(0, 50);
+    }
+});
+document.querySelector('#AgregarAbre').addEventListener('input', function (e) {
+    if (this.value.length > 8) {
+        this.value = this.value.slice(0, 8);
+    }
+});
