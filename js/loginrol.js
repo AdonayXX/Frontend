@@ -1,10 +1,6 @@
-// Verificar si la sesión ha expirado al cargar la página de login
 const sessionExpired = localStorage.getItem('sessionExpired');
 if (sessionExpired === 'true') {
-    // Limpiar el estado de sesión expirada
     localStorage.removeItem('sessionExpired');
-    // Mostrar un mensaje de error o realizar alguna acción adicional
-    alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
 }
 const Api_Url = 'http://localhost:18026/';
 document.querySelector('#formLogin').addEventListener('submit', function(event){
@@ -18,7 +14,6 @@ async function handleLogin() {
 
     try {
         const token = await loginUser(userEmail, userPassword);
-        //console.log('Token:', token);
         saveTokenLS(token);
         window.location.href = 'Index.html'; // Redirigir al usuario
     } catch (error) {
@@ -44,7 +39,7 @@ function saveTokenLS(token){
     try {
     localStorage.removeItem('token');
     localStorage.setItem('token', token);
-   // console.log('Token:', token);
+
     } catch (error) {
         console.error(error);
             

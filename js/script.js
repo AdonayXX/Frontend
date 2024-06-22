@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //Verificamos si el token es valido y no ha expirado...
+    //Verificar token
     const token = localStorage.getItem('token');
     if (token) {
         setupAutoLogout(token);
     }
+    //Cerrar Sesión
+    document.querySelector('#logoutLink').addEventListener('click', ()=> {
+    console.log("Entro");
+        logout(); 
+    });
     loadToastTemplate();
     loadModalTemplate();
     //Cargar desde el incio el home.html
@@ -148,20 +153,17 @@ function showModal(title, message, confirmCallback) {
         console.error('Modal element not found');
     }
 }
-
-// Función para decodificar el token y obtener la fecha de expiración
+//DecodificarToken
 function decodeToken(token) {
     try {
-        // Aquí deberías decodificar el token y extraer la fecha de expiración
         const decodedToken = jwt_decode(token);
-        return decodedToken.exp; // Suponemos que 'exp' es el campo de expiración en el token
+        return decodedToken.exp; 
     } catch (error) {
         console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
     }
 }
-
-// Función para configurar el cierre de sesión automático
+// cierre de sesión automático
 function setupAutoLogout(token) {
     try {
         const expirationTime = decodeToken(token);
@@ -181,4 +183,14 @@ function setupAutoLogout(token) {
     } catch (error) {
         console.error('Error al configurar el cierre de sesión automático:', error);
     }
+}
+
+
+
+// Función para cerrar sesión
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.setItem('sessionExpired', 'true');
+    history.replaceState(null, '', 'login.html');
+    window.location.href = 'login.html';
 }
