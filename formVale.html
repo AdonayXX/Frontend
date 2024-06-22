@@ -39,20 +39,16 @@
                     <input type="text" id="input-up" name="up" class="form-control" readonly>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
-                    <label for="unidad" class="form-label">Unidad:</label>
-                    <input type="text" id="input-unidad" name="unidad" class="form-control" readonly>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="solicitante" class="form-label">Solicitante:</label>
                     <input type="text" id="input-solicitante" name="solicitante" class="form-control" readonly>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
                     <label for="servicio" class="form-label">Servicio:</label>
                     <input type="text" id="input-servicio" name="servicio" class="form-control" readonly>
                 </div>
-                <div class="col-xl-6 col-sm-12 col-md-6 mt-2">
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-sm-12 col-md-12 mt-2">
                     <label for="servicio" class="form-label">Motivo:</label>
                     <input type="text" id="input-motivo" name="motivo" class="form-control" readonly>
                 </div>
@@ -63,15 +59,29 @@
             </div>
             <div class="row justify-content-center align-items-center m-3">
                 <div class="col-lg-6 text-black">
-                    <h4 class="text-center" style="color:#094079">Salida</h4>
+                    <h4 class="text-center" style="color:#094079">Horario</h4>
                     <div class="row justify-content-center">
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <label for="fechaNacimiento" class="form-label">Fecha requerida:</label>
                             <input type="date" id="input-fechaReq" name="fechaReq" class="form-control" readonly>
                         </div>
-                        <div class="col-xl-6 mb-3 col-sm-12">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
                             <label for="user_gen" class="form-label">Hora </label>
                             <input type="time" class="form-control" id="input-horaSalida" readonly>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6 text-black">
+                    <h4 class="text-center" style="color:#094079">Recorrido</h4>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label for="fechaNacimiento" class="form-label">Lugar de salida:</label>
+                            <input type="text" id="input-salida" name="fechaReq" class="form-control" readonly>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label for="user_gen" class="form-label">Lugar de destino: </label>
+                            <input type="text" class="form-control" id="input-destino" readonly>
                         </div>
                     </div>
 
@@ -84,9 +94,7 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-center m-1">
-                <div class="col-xl-12 text-center">
-                    <h3>Acompañantes</h3>
-                </div>
+
                 <div class="col-xl-5 text-black m-1 col-sm-12" id="div1" style="display: none;">
                     <label for="destino2" class="form-label">Acompañante 1:</label>
                     <input type="text" id="input-acompanante1" name="acompañante1" class="form-control" readonly>
@@ -112,7 +120,7 @@
                     <h3 class="text-center">Datos de Chofer</h3>
                 </div>
                 <div class="row d-flex justify-content-center m-1">
-                    <div class="col-xl-3 col-sm-12">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <label for="destino2" class="form-label">Placa:</label>
                         <select class="form-select" id="select-placa">
                             <option selected disabled value="">Seleccionar</option>
@@ -123,15 +131,15 @@
                             <option value="">999-555</option>
                         </select>
                     </div>
-                    <div class="col-xl-6 col-sm-12">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <label for="destino2" class="form-label">Chofer:</label>
                         <select class="form-select" id="select-chofer">
                             <option selected disabled value="">Seleccionar</option>
-                            <option value="">Juanito Alimaña</option>
-                            <option value="">Pablo Escobar Gaviria</option>
-                            <option value="">Emerson Centeno Chaves</option>
-                            <option value="">Marcela Negrinni</option>
-                            <option value="">Erling Maland</option>
+                            <option value="Juanito Alimaña">Juanito Alimaña</option>
+                            <option value="Pablo Escobar Gaviria">Pablo Escobar Gaviria</option>
+                            <option value="Emerson Centeno Chaves">Emerson Centeno Chaves</option>
+                            <option value="Marcela Negrinni">Marcela Negrinni</option>
+                            <option value="Erling Maland">Erling Maland</option>
                         </select>
                     </div>
                 </div>
@@ -139,7 +147,7 @@
                     <h3 class="text-center">Autoriza</h3>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-xl-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <label for="destino2" class="form-label">Encargado:</label>
                         <select class="form-select" id="select-encargado">
                             <option selected disabled value="">Seleccionar</option>
@@ -150,7 +158,7 @@
                             <option value="">Erling Maland</option>
                         </select>
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
                         <label for="destino2" class="form-label">Firma:</label>
                         <input type="text" id="input-firma" name="Firma" class="form-control">
                     </div>

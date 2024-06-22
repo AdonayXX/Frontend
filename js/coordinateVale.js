@@ -21,14 +21,15 @@
                     const fechaSolicitud = new Date(vale.Fecha_Solicitud);
                     const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
                     document.getElementById('input-id').value = id;
-                    document.getElementById('input-up').value = vale.UnidadProgramatica;
-                    document.getElementById('input-unidad').value = vale.Unidad;
+                    document.getElementById('input-up').value = vale.NombreUnidadProgramatica;
                     document.getElementById('input-solicitante').value = vale.NombreSolicitante;
-                    document.getElementById('input-servicio').value = vale.Servicio;
-                    document.getElementById('input-motivo').value = vale.Motivo;
+                    document.getElementById('input-servicio').value = vale.NombreServicio;
+                    document.getElementById('input-motivo').value = vale.NombreMotivo;
                     document.getElementById('input-horaSalida').value = vale.Hora_Salida;
                     document.getElementById('input-fechaReq').value = fechaFormateada;
                     document.getElementById('txa-detalle').value = vale.Detalle;
+                    document.getElementById('input-salida').value = vale.NombreSalida;
+                    document.getElementById('input-destino').value = vale.NombreDestino;
                     if (vale.EstadoValeID === 3 || vale.EstadoValeID === 5 ) {
                         blockBtn()
                     }
@@ -45,46 +46,40 @@
             const acompDiv1 = document.getElementById('input-acompanante1');
             const div1 = document.getElementById('div1');
             div1.style.display = 'block';
-            acompDiv1.value = vale.NombreAcompanante1;
+            acompDiv1.value = vale.Acompanante1;
         }
         if (vale.Acompanante2 != null) {
             const acompDiv1 = document.getElementById('input-acompanante2');
             const div1 = document.getElementById('div2');
             div1.style.display = 'block';
-            acompDiv1.value = vale.NombreAcompanante2;
+            acompDiv1.value = vale.Acompanante2;
         }
         if (vale.Acompanante3 != null) {
             const acompDiv1 = document.getElementById('input-acompanante3');
             acompDiv1.style.display = 'block';
-            acompDiv1.value = vale.NombreAcompanante1;
+            acompDiv1.value = vale.Acompanante3;
         }
         if (vale.Acompanante4 != null) {
             const acompDiv1 = document.getElementById('input-acompanante4');
             acompDiv1.style.display = 'block';
-            acompDiv1.value = vale.NombreAcompanante1;
+            acompDiv1.value = vale.Acompanante4;
         }
         if (vale.Acompanante5 != null) {
             const acompDiv1 = document.getElementById('input-acompanante5');
             acompDiv1.style.display = 'block';
-            acompDiv1.value = vale.NombreAcompanante1;
+            acompDiv1.value = vale.Acompanante5;
         }
     }
-
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    document.getElementById('input-fechaReq').min = formattedDate;
-
 
     async function addCoordinate() {
         try {
             const coordinate = {
                 IdVale: idVale,
                 IdUnidad: 5, //document.getElementById('select-placa').selectedIndex,
-                IdChofer: document.getElementById('select-chofer').selectedIndex,
-                IdFuncionario: document.getElementById('select-encargado').selectedIndex,
+                IdChofer: 10, //document.getElementById('select-chofer').selectedIndex,
+                Encargado: document.getElementById('select-encargado').value,
+                FechaRevision: document.getElementById('input-fechaReq').value,
+                HoraRevision: document.getElementById('input-horaSalida').value,
                 Observaciones: "Agregando datos"
             };
             try {
@@ -140,7 +135,6 @@
     
     function blockBtn(){
         btnCancel.disabled = true;
-        btnAdd.disabled = true;
     }
 })();
 
