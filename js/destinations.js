@@ -35,7 +35,7 @@ async function loadEspecialidades() {
             searching: true,
             paging: true,
             pageLength: 5,
-            lengthMenu: [5],
+            lengthMenu: [5, 10],
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
@@ -98,6 +98,7 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             const modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
         } else {
+
             console.error('La ubicación ya existe');
             showToast('Error', 'La ubicación ya existe');
         }
@@ -108,45 +109,58 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
 });
 
 document.getElementById('BtnGuardarEspe').addEventListener('click', async () => {
-    const nuevaEspecialidad = document.getElementById('AgregarEspe').value;
+    const nuevaEspecialidad = document.getElementById('AgregarEspe').value.trim();
 
-    if (nuevaEspecialidad) {
-        try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
-            const especialidades = response.data.Especialidad;
+    if (!nuevaEspecialidad) {
+        showToast('Error', 'El campo es obligatorio.');
+        return;
+    }
 
-            let maxId = 0;
-            especialidades.forEach(especialidad => {
-                if (especialidad.idEspecialidad > maxId) {
-                    maxId = especialidad.idEspecialidad;
-                }
-            });
-            const nuevoId = maxId + 1;
-            const especialidadData = {
-                idEspecialidad: nuevoId,
-                Especialidad: nuevaEspecialidad
-            };
-            console.log('Datos a enviar:', especialidadData);
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
+        const especialidades = response.data.Especialidad;
 
-            const postResponse = await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData);
+        const especialidadExistente = especialidades.find(
+            especialidad => especialidad.Especialidad.toLowerCase() === nuevaEspecialidad.toLowerCase()
+        );
 
-            console.log('Especialidad agregada:', postResponse.data);
-            loadEspecialidades();
-            showToast('¡Éxitos!', 'Especialidad agregada correctamente.');
-
-
-            document.getElementById('AgregarEspe').value = '';
-
-            const modalElement = document.getElementById('AgregarEspeModal');
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalInstance.hide();
-        } catch (error) {
-            console.error('Error al agregar la especialidad:', error.response ? error.response.data : error.message);
+        if (especialidadExistente) {
+            showToast('Error', 'La especialidad ya existe.');
+            return;
         }
-    } else {
-        console.error('El campo de especialidad está vacío');
+
+        let maxId = 0;
+        especialidades.forEach(especialidad => {
+            if (especialidad.idEspecialidad > maxId) {
+                maxId = especialidad.idEspecialidad;
+            }
+        });
+        const nuevoId = maxId + 1;
+
+        const especialidadData = {
+            idEspecialidad: nuevoId,
+            Especialidad: nuevaEspecialidad
+        };
+        console.log('Datos a enviar:', especialidadData);
+
+        const postResponse = await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData);
+
+        console.log('Especialidad agregada:', postResponse.data);
+        loadEspecialidades();
+        showToast('¡Éxito!', 'Especialidad agregada correctamente.');
+
+        document.getElementById('AgregarEspe').value = '';
+
+        const modalElement = document.getElementById('AgregarEspeModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+        modalInstance.hide();
+
+    } catch (error) {
+        console.error('Error al agregar la especialidad:', error.response ? error.response.data : error.message);
     }
 });
+
 
 function renderTableDestinations(ubicaciones) {
     const tableBody = document.getElementById('destinosTableBody');
@@ -280,7 +294,9 @@ async function deleteDestination(idRuta) {
                 modal.remove();
             }
         }
+
         showToast('¡Éxito!', 'Ubicación eliminada correctamente.');
+
     } catch (error) {
         console.error('Error al eliminar la ubicación:', error);
 
@@ -297,6 +313,7 @@ async function deleteEspecialidad(idEspecialidad) {
         const modal = document.getElementById('confirmarEliminarModal2');
         if (modal) {
             const modalInstance = bootstrap.Modal.getInstance(modal);
+
             if (modalInstance) {
                 modalInstance.hide();
                 modal.remove();
@@ -351,15 +368,17 @@ document.querySelector('#AgregarEspe').addEventListener('input', function (e) {
     }
 
 });
+
 document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
     if (this.value.length > 40) {
         this.value = this.value.slice(0, 40);
     }
 
 });
+
 document.querySelector('#AgregarAbre').addEventListener('input', function (e) {
-    if (this.value.length > 8) {
-        this.value = this.value.slice(0, 8);
+    if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
     }
 });
 
