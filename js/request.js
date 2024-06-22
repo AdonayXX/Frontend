@@ -20,8 +20,8 @@
                         <td>${vale.IdVale}</td>
                         <td>${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
-                        <td>${vale.Motivo}</td>
-                        <td>${processStatus(vale.EstadoVale)}</td> 
+                        <td>${vale.NombreMotivo}</td>
+                        <td>${processStatus(vale.NombreEstado)}</td> 
                         <td class="text-center">
                             <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-secondary">Coordinar</button>
                         </td>
