@@ -1,4 +1,12 @@
+
 getPatientComp();
+mostrarSpinner();
+// Simular una carga o tarea que toma tiempo
+setTimeout(function() {
+  // Ocultar el spinner después de un tiempo simulado (por ejemplo, después de 3 segundos)
+  ocultarSpinner();
+}, 2000);
+
 async function getPatientComp() {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
@@ -712,3 +720,15 @@ async function deleteComp (IdAcompanante){
   }
 
 }
+
+//Spiner
+// Mostrar el spinner
+function mostrarSpinner() {
+  document.getElementById('spinnerContainer').style.display='flex';
+}
+
+// Ocultar el spinner
+function ocultarSpinner() {
+  document.getElementById('spinnerContainer').style.display = 'none';
+}
+

@@ -294,7 +294,7 @@ function GuardarDatos() {
 var error;
 //Login
 // fetchLogin.js
-const loginUser = async (identificador, Contrasena) => {
+/* const loginUser = async (identificador, Contrasena) => {
     try {
         const response = await axios.post(`${url}api/user/login`, {
             identificador,
@@ -311,7 +311,7 @@ const loginUser = async (identificador, Contrasena) => {
         throw new Error('Error al iniciar sesión');
     }
 };
-// // Llama a la función y almacena el token
+//  */// Llama a la función y almacena el token
 // loginUser()
 //     .then(token => {
 //         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
@@ -321,7 +321,7 @@ const loginUser = async (identificador, Contrasena) => {
 //         console.error('Error al obtener el token:', error);
 //     });
 
-const handleLogin = async () => {
+/* const handleLogin = async () => {
     const userEmail = document.getElementById('userEmail').value;
     const userPassword = document.getElementById('userPassword').value;
 
@@ -339,4 +339,4 @@ const handleLogin = async () => {
         });
     }
 };
-document.getElementById('loginButton').addEventListener('click', handleLogin);
+document.getElementById('loginButton').addEventListener('click', handleLogin); */

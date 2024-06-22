@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+    //Verificar token
+    const token = localStorage.getItem('token');
+    if (token) {
+        setupAutoLogout(token);
+    }
+    //Cerrar Sesión
+    document.querySelector('#logoutLink').addEventListener('click', ()=> {
+    console.log("Entro");
+        logout(); 
+    });
     loadToastTemplate();
     loadModalTemplate();
     //Cargar desde el incio el home.html
@@ -143,5 +153,44 @@ function showModal(title, message, confirmCallback) {
         console.error('Modal element not found');
     }
 }
+//DecodificarToken
+function decodeToken(token) {
+    try {
+        const decodedToken = jwt_decode(token);
+        return decodedToken.exp; 
+    } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        throw new Error('Error al decodificar el token');
+    }
+}
+// cierre de sesión automático
+function setupAutoLogout(token) {
+    try {
+        const expirationTime = decodeToken(token);
+        if (expirationTime) {
+            const currentTime = Math.floor(Date.now() / 1000);
+            const timeUntilExpiration = (expirationTime - currentTime) * 1000;
+
+            setTimeout(() => {
+                localStorage.setItem('sessionExpired', 'true');
+                
+                alert('Tu sesión ha expirado. Serás redirigido al login.');
+                localStorage.removeItem('token');
+                history.replaceState(null, '', 'login.html');
+                window.location.href = 'login.html';
+            }, timeUntilExpiration);
+        }
+    } catch (error) {
+        console.error('Error al configurar el cierre de sesión automático:', error);
+    }
+}
 
 
+
+// Función para cerrar sesión
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.setItem('sessionExpired', 'true');
+    history.replaceState(null, '', 'login.html');
+    window.location.href = 'login.html';
+}
