@@ -327,6 +327,7 @@ const handleLogin = async () => {
 
     try {
         const token = await loginUser(userEmail, userPassword);
+        localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
         console.log('Token:', token);
         window.location.href = 'Index.html'; // Redirigir al usuario
     } catch (error) {

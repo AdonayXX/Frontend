@@ -46,3 +46,41 @@ async function saveUser(userData) {
         console.error(error);
     }
 }
+
+// //Funcion para el boton de borrar usuarios
+// async function deleteButton(userId, nombreCompleto, identificacion) {
+//     let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'), {
+//         backdrop: 'static',
+//         keyboard: false
+//     });
+//     let bodyConfirm = document.querySelector('#bodyConfirm');
+
+//     bodyConfirm.innerHTML = `
+//         <p>¿Estás seguro de que deseas eliminar al usuario:</p>
+//         <p><strong>Nombre:</strong> ${nombreCompleto}</p>
+//         <p><strong>Identificación:</strong> ${identificacion}</p>
+//         <p>Esta acción no se puede deshacer.</p>`;
+
+//     modal.show();
+
+//     let confirmBtn = document.getElementById('confirmDeleteBtn');
+
+//     confirmBtn.onclick = function () {
+//         deleteUser(userId)
+//         modal.hide();
+//     };
+
+// }
+
+// //Funcion para eliminar usuarios
+// async function deleteUser(userId) {
+//     try {
+//         const API_URL = `http://localhost:18026/api/usuario/${userId}`;
+//         const response = await axios.delete(API_URL);
+//         showToast('Éxito!', 'Usuario eliminado correctamente');
+//         getUsers();
+//     } catch (error) {
+//         showToast('Ups!', 'Ocurrió un problema durante la eliminación del usuario.');
+//         console.error(error);
+//     }
+// }
