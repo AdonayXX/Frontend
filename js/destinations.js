@@ -6,7 +6,7 @@ async function loadDestinations() {
 
         destinos.forEach(destino => {
             const option = document.createElement('option');
-            option.value = destino.IdDestino;
+            option.value = destino.IdRuta;
             option.textContent = destino.Descripcion;
             select.appendChild(option);
         });
@@ -78,12 +78,12 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
         const ubicaciones = response.data;
 
         const ubicacionExistente = ubicaciones.find(ubi =>
-            ubi.Descripcion === nuevaUbicacion || ubi.IdDestino === nuevaAbreviacion
+            ubi.Descripcion === nuevaUbicacion || ubi.IdRuta === nuevaAbreviacion
         );
 
         if (!ubicacionExistente) {
             const postResponse = await axios.post(apiUrl, {
-                IdDestino: nuevaAbreviacion,
+                IdRuta: nuevaAbreviacion,
                 Descripcion: nuevaUbicacion
             });
 
@@ -154,10 +154,10 @@ function renderTableDestinations(ubicaciones) {
 
     ubicaciones.forEach(ubicacion => {
         const row = document.createElement('tr');
-        const idDestinoStr = JSON.stringify(ubicacion.IdDestino);
+        const idDestinoStr = JSON.stringify(ubicacion.IdRuta);
 
         row.innerHTML = `
-            <td class="text-center">${ubicacion.IdDestino}</td>
+            <td class="text-center">${ubicacion.IdRuta}</td>
             <td class="text-center">${ubicacion.Descripcion}</td>
             <td>
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick='createDeleteModal(${idDestinoStr})'>
@@ -266,9 +266,9 @@ function createDeleteModal(idDestino) {
 
 }
 
-async function deleteDestination(idDestino) {
+async function deleteDestination(idRuta) {
     try {
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idDestino}`);
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idRuta}`);
         console.log('Ubicación eliminada:', response.data);
 
 
