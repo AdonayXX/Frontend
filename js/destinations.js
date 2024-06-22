@@ -1,6 +1,6 @@
 async function loadDestinations() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/destinos');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutas');
         const destinos = response.data;
         const select = document.getElementById('select-destinos');
 
@@ -66,7 +66,7 @@ loadEspecialidades();
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
     const nuevaAbreviacion = document.getElementById('AgregarAbre').value.trim();
-    const apiUrl = 'https://backend-transporteccss.onrender.com/api/destinos';
+    const apiUrl = 'https://backend-transporteccss.onrender.com/api/rutas';
 
     if (!nuevaUbicacion || !nuevaAbreviacion) {
         showToast('Error', 'Ambos campos son obligatorios');
@@ -193,7 +193,7 @@ function renderTableEspecialidades(especialidades) {
 
 async function loadDestinations2() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/destinos');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutas');
         const destinos = response.data;
         renderTableDestinations(destinos);
 
@@ -268,7 +268,7 @@ function createDeleteModal(idDestino) {
 
 async function deleteDestination(idDestino) {
     try {
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/destinos/${idDestino}`);
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idDestino}`);
         console.log('Ubicación eliminada:', response.data);
 
 
