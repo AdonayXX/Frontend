@@ -77,6 +77,7 @@ function SolicitarVale() {
     ObtenerServicios();
     ObtenerMotivo();
     ObtenerDestino();
+
     //ObtenerSalida();
 }
 
@@ -143,7 +144,7 @@ function LlenarMotivo(data) {
 
 //Obtener Lugar de Salida
 function ObtenerSalida() {
-    axios.get(`${url}api/destinos`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
             console.log(response.data);
             LlenarSalida(response.data);
@@ -156,14 +157,14 @@ function ObtenerSalida() {
 function LlenarSalida(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
     }
     document.getElementById('lugarSa').innerHTML = body;
 }
 
 //Obtener Lugar Destino
 function ObtenerDestino() {
-    axios.get(`${url}api/destinos`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
             console.log(response.data);
             LlenarDestino(response.data);
@@ -176,7 +177,7 @@ function ObtenerDestino() {
 function LlenarDestino(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
     }
     document.getElementById('lugarDes').innerHTML = body;
 }
@@ -222,7 +223,7 @@ function GuardarDatos() {
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
-    const Unidad = document.getElementById('uni').value;
+   
 
 
     function adjustToNullIfContainsNull(value) {
@@ -240,7 +241,6 @@ function GuardarDatos() {
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
-        Unidad: Unidad,
         DestinoId: DestinoId,
         MotivoID: MotivoID,
         ServicioID: ServicioID,
