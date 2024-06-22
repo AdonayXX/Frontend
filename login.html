@@ -15,11 +15,11 @@
     <div class="container-fluid contenedor">
         <div id="6" name="formLogin" class="form-container">
             <p class="title">Login</p>
-            <form class="form">
-                <input id="userEmail" type="email" class="input" placeholder="Usuario">
-                <input id="userPassword" type="password" class="input" placeholder="Contraseña">
+            <form class="form" id="formLogin" method="post">
+                <input id="userEmail" type="email" class="input" placeholder="Usuario" required maxlength="30">
+                <input id="userPassword" type="password" class="input" placeholder="Contraseña" required maxlength="30">
                 
-                <button id="loginButton" type="button" class="form-btn">Iniciar Sesión</button>
+                <button id="loginButton" type="submit" class="form-btn">Iniciar Sesión</button>
             </form>
            
 
@@ -254,8 +254,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="userEmail" class="form-label"><i class="bi bi-envelope"></i> Correo:</label>
-                            <input type="email" id="userEmail" name="userEmail" class="form-control" maxlength="30"
+                            <label for="userEmailRegister" class="form-label"><i class="bi bi-envelope"></i> Correo:</label>
+                            <input type="email" id="userEmailRegister" name="userEmailRegister" class="form-control" maxlength="30"
                                 required>
                         </div>
                     </div>
@@ -276,6 +276,8 @@
         </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/login.js"></script>
-</body>
+    <script src="/js/loginrol.js"></script>
+    <script src="/js/script.js"></script>
+</body> 
 
 </html>
