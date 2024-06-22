@@ -73,38 +73,15 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
 });
 
 function SolicitarVale() {
-    ObtenerFuncionarios();
     ObtenerUnidades();
     ObtenerServicios();
     ObtenerMotivo();
     ObtenerDestino();
-    // ObtenerSalida();
+    ObtenerSalida();
 }
 
 var url = 'https://backend-transporteccss.onrender.com/';
-//Obtener Funcionarios
-function ObtenerFuncionarios() {
-    axios.get(`${url}api/funcionarios`)
-        .then(response => {
-            console.log(response.data);
-            LlenarAcompanante(response.data);
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-}
 
-function LlenarAcompanante(data) {
-    let body = '<option selected disabled value="null">Seleccione una opción</option>';
-    for (let index = 0; index < data.length; index++) {
-        body += `<option value = ${data[index].IdFuncionario}>${data[index].Nombre}</option>`;
-    }
-    document.getElementById('acompananteNombre1').innerHTML = body;
-    document.getElementById('acompananteNombre2').innerHTML = body;
-    document.getElementById('acompananteNombre3').innerHTML = body;
-    document.getElementById('acompananteNombre4').innerHTML = body;
-    document.getElementById('acompananteNombre5').innerHTML = body;
-}
 
 //Obtener Unidades
 function ObtenerUnidades() {
@@ -167,28 +144,28 @@ function LlenarMotivo(data) {
 }
 
 //Obtener Lugar de Salida
-// function ObtenerSalida() {
-//     axios.get(`${url}api/destinos`)
-//         .then(response => {
-//             console.log(response.data);
-//             LlenarSalida(response.data);
-//         })
-//         .catch(error => {
-//             console.error('There was a problem with the fetch operation:', error);
-//         });
-// }
+function ObtenerSalida() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
+            console.log(response.data);
+            LlenarSalida(response.data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
 
-// function LlenarSalida(data) {
-//     let body = '<option selected disabled value="">Seleccione una opción</option>';
-//     for (let index = 0; index < data.length; index++) {
-//         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
-//     }
-//     document.getElementById('lugarSa').innerHTML = body;
-// }
+function LlenarSalida(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarSa').innerHTML = body;
+}
 
 //Obtener Lugar Destino
 function ObtenerDestino() {
-    axios.get(`${url}api/destinos`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
             console.log(response.data);
             LlenarDestino(response.data);
@@ -201,7 +178,7 @@ function ObtenerDestino() {
 function LlenarDestino(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
     }
     document.getElementById('lugarDes').innerHTML = body;
 }
@@ -247,7 +224,7 @@ function GuardarDatos() {
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
-    const Unidad = document.getElementById('uni').value;
+   
 
 
     function adjustToNullIfContainsNull(value) {
@@ -265,7 +242,6 @@ function GuardarDatos() {
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
-        Unidad: Unidad,
         DestinoId: DestinoId,
         MotivoID: MotivoID,
         ServicioID: ServicioID,
