@@ -12,7 +12,7 @@
             const tableBody = document.querySelector('#tableRequest');
             tableBody.innerHTML = '';
 
-            vales.forEach(vale => {
+            vales.slice().reverse().forEach(vale => {
                 const fechaSolicitud = new Date(vale.Fecha_Solicitud);
                 const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
                 const row = `
