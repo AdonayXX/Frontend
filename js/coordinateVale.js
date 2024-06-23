@@ -107,9 +107,32 @@
     }
 
     const btnAdd = document.getElementById('btn-agregarSoli');
-    btnAdd.addEventListener('click', function() {
+    btnAdd.addEventListener('click', function () {
         addCoordinate();
     })
 
+    // router.put("/:id",validateSolicitudVale, authMiddleware, putMethod);
+    // router.put("actualizarEstado/:idVale/:IdEstado",authMiddleware,updateEstadoVale);
 
+    // Configura la URL y los datos a enviar
+    async function cancelRequest(valueId, newIdEstado) {
+        try {
+            const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
+            // Realiza la petición PUT para actualizar el campo
+            const response = await axios.put(valUrl);
+            console.log('Campo actualizado correctamente:', response.data);
+            return response.data; // Devuelve la respuesta en caso de necesitarla en el contexto externo
+        } catch (error) {
+            console.error('Error al actualizar el campo:', error);
+            throw error; // Propaga el error para manejarlo en el contexto externo si es necesario
+        }
+    }    
+
+    const btnCancel = document.getElementById('btn-rechazarSoli');
+    btnCancel.addEventListener('click', function () {
+        const newIdEstado = 3;
+        const valueId = document.getElementById('input-id').value;
+        cancelRequest(valueId,newIdEstado);
+    });
+    
 })();

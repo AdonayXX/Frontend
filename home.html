@@ -1,133 +1,84 @@
-<link rel="stylesheet" href="style/animation.css">
-<div class="homecont fade-in rounded-2">  
-    <!-- //Start part-1  -->
-<div class="datosint row p-2 m-4 mt-5">
-    <h3 class="text-start m-1">Bienvenido al Sistema!</h3>
-
-
-<div class=" row justify-content-center g-0">
-    <div class="datosinf col-sm-3 m-4 p-1 rounded shadow-lg ">
-       
-            <div class="row justify-content-center justify-content-md-center">
-                <div class="img-inf col p-3 text-center d-flex">
-                    <img  style="background-color: #44DC65"; src="./img/ambulancia.png" alt="">
-                </div>
-                
-                <div class="info col py-2 m-1 ">
-                    <h6 class="text-wrap text-center text-dark">Unidades Disponibles:</h6>
-                    
-                    <h3 class=" fs-2 text-wrap text-center text-dark m-2 p-1 ">5</h3>
-
-                </div>
-             </div>
-            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
       
-       
         
-    </div><div class="datosinf col-sm-3 m-4 p-1 rounded shadow-lg ">
-       
-        <div class="row justify-content-center justify-content-md-center">
-            <div class="img-inf col p-3 text-center d-flex">
-                <img style="background-color:#7098FE;" src="./img/ambulancia.png" alt="">
+    </style>
+</head>
+<body>
+    <div class="homecont fade-in rounded-2">
+        <div class="datosint row p-2 m-4 mt-5">
+            <div class="header-C ">
+                <h2 class="text-center">Bienvenido al Sistema de Gestión de Transporte</h2>
+                <div id="fecha" class="date-Home"></div>
             </div>
-            
-            <div class="info col py-2 m-1 ">
-                <h6 class="text-wrap text-center text-dark">Unidad 001-001</h6>
-                
-                <h3 class=" fs-2 text-wrap text-center text-dark m-2 p-1 ">36</h3>
-
+            <div class="datosint mt-5 mb-1"></div>
+            <!-- Detalles de Unidades -->
+            <div class="row justify-content-center g-0 mb-4">
+                <div class="row m-1 p-2">
+                    <h4 class="text-start mt-3">Detalles de Unidades</h4>
+                </div>
+                <!-- Unidad Disponible -->
+                <div class="datosinf col-sm-3 m-4 p-1 rounded shadow">
+                    <div class="row justify-content-center">
+                        <div class="img-inf col p-3 text-center d-flex align-items-center justify-content-center">
+                            <img style="background-color: #4276ad;width: 70px; height: 70px; border: none;"  src="./img/geo-alt.svg" alt="Unidad Disponible">
+                        </div>
+                        <div class="info col py-2 m-1">
+                            <h6 class="text-wrap text-center text-dark">Viajes Finalizados del Año:</h6>
+                            <h3 id="contadorViajesFinalizados" class="fs-2 text-wrap text-center text-dark m-2 p-1">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- Unidad 001-001 -->
+                <div class="datosinf col-sm-3 m-4 p-1 rounded shadow">
+                    <div class="row justify-content-center">
+                        <div class="img-inf col p-3 text-center d-flex align-items-center justify-content-center">
+                            <img style="background-color: #42ad4d;width: 70px; height: 70px; border: none;"  src="./img/calendar-check.svg" alt="Unidad 001-001">
+                        </div>
+                        <div class="info col py-2 m-1">
+                            <h6 class="text-wrap text-center text-dark">Citas Finalizadas del Año:</h6>
+                            <h3 id="contadorCitasFinalizadas" class="fs-2 text-wrap text-center text-dark m-2 p-1">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- Total Viajes -->
+                <div class="datosinf col-sm-3 m-4 p-1 rounded shadow">
+                    <div class="row justify-content-center">
+                        <div class="img-inf col p-3 text-center d-flex align-items-center justify-content-center">
+                            <img style="background-color: #ad4242; width: 70px; height: 70px; border: none;" src="./img/calendar-x.svg" alt="Total Viajes">
+                        </div>
+                        <div class="info col py-2 m-1">
+                            <h6 class="text-wrap text-center text-dark">Citas Canceladas del Año:</h6>
+                            <h3 id="contadorCitasCanceladas" class="fs-2 text-wrap text-center text-dark m-2 p-1">0</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-        
-  
-   
-    
-</div>
-<div class="datosinf col-sm-3 m-4 p-1 rounded shadow-lg ">
-       
-    <div class="row justify-content-center justify-content-md-center">
-        <div class="img-inf col p-3 text-center d-flex">
-            <img style="background-color: rgb(251, 255, 10);" src="./img/viaje.png" alt="">
         </div>
-        
-        <div class="info col py-2 m-1 ">
-            <h6 class="text-wrap text-center text-dark">Total Viajes:</h6>
-            
-            <h3 class=" fs-2 text-wrap text-center text-dark m-2 p-1 ">145</h3>
-
-        </div>
-     </div>
-    
-
-
-
-</div>
-</div> 
-</div>
-<!-- //End part-1
-//Start part-2 Proximos Viajes /Espacios Disponibles -->
-<div class=" datosint row  m-2">
-    <div class="row m-2 p-2">
-        <h5 class="text-start m-1">Proximos viajes / Espacios Disponibles</h5>
-    </div>
-<div class="row justify-content-center g-0 p-1">
-    <div class="card border-dark mb-3 m-4 shadow-lg " style="max-width: 18rem;">
-        <div class=" headerviaje card-header text-center bg-info">
-            <h5 class="fw-bolder">Unidad 001-001</h5>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title text-center">03-06-2024</h5>
-          <p class="card-text fs-5">Destino: Hospital San Juan de Dios-Hospital Mexico</p>
-          <h3 class=" fs-2 text-wrap text-center m-2 p-1 ">3</h3>
-        </div>
-      </div>
-      <div class="card border-dark mb-3 m-4 shadow-lg " style="max-width: 18rem;">
-        <div class=" headerviaje card-header text-center bg-info">
-            <h5 class="fw-bolder">Unidad 001-002</h5>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title text-center">03-06-2024</h5>
-          <p class="card-text fs-5">Destino: Hospital Enrique Baltodano</p>
-          <h3 class=" fs-2 text-wrap text-center m-2 p-1 ">4</h3>
-        </div>
-      </div>
-   </div>
-</div>  
-<!-- //End part-2
-//Start part-3 Mantenimientos -->
-
-   <div class=" datosint row  m-2">
-    <div class="row m-2 p-2">
-        <h5 class="text-start m-1">Proximos Mantenimientos</h5>
-
-    </div>
-
-    <div class="row justify-content-center g-0 p-1">
-        <div class="card border-dark mb-3 m-4 shadow-lg " style="max-width: 18rem;">
-            <div class=" headerviaje card-header bg-warning text-center">
-                <h5 class="fw-bolder">Unidad 001-002</h5>
+        <!-- Part 2: Próximos Viajes -->
+        <div class=" datosint row p-2 m-4 ">
+            <div class="row m-1 p-2">
+                <h4 class="text-start  mt-3">Próximos Viajes</h4>
             </div>
-            <div class="card-body">
-                
-              <p class="card-text fs-5 fw-bold text-center">Cambio de aceite</p>
-              <p class="card-text fs-5">Ultimo: 158 910 km</p>
-              <p class="card-text fs-5">Actual: 167 350 km</p>
-              <p class="card-text fs-5">Restante: 1560 km</p>
-             
+            <div class="row justify-content-center g-0 p-1 mb-5" id="proximosViajesContainer">  
             </div>
-          </div>
-       </div>
-</div>
-<!-- //End part-3
-
-//Start part-4 Ultimos Viajes -->
-<div class="datosint row  m-2">
-    <div class="row m-2 p-2">
-        <h5 class="text-start m-1">Ultimos Viajes Registrados</h5>
+        </div>
+        <!-- Part 3: Próximos Mantenimientos -->
+        <div class="row p-2 m-4">
+            <div class="row p-2">
+                <div class="row m-1 p-2">
+                    <h4 class="text-start mt-3">Próximos Eventos</h4>
+                </div>
+            <div class="row justify-content-center g-0 p-1" id="proximosDekra">
+            </div>
+            <div class="row justify-content-center g-0 p-1" id="proximoschoferes">
+            </div>
+        </div>
     </div>
-    <div class="row justify-content-center g-0">
-        <h6 class="text-center ">No hay datos que mostrar</h6>
-    </div>
-</div>
-<!-- End part-4     -->
-</div>
+    <div data-script="js/home.js"></div>
+</body>
+</html>

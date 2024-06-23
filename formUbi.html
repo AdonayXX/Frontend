@@ -9,7 +9,7 @@
     }
 </style>
 
-<div class="container mt-5 fade-in">
+<div class="container mt-5 fade-in" style="max-width: 644px;">
     <h1 class="mb-4 text-center">Registro de Ubicaciones</h1>
 
     <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
@@ -26,18 +26,20 @@
             </div>
         </div>
 
-        <h4 style="text-align: center;">Buscar</h4>
-        <input id="buscarEspe" type="text" class="form-control" placeholder="Buscar especialidad..."
-            aria-label="Buscar especialidad" aria-describedby="basic-addon1" style="width: 100%;">
+        <h4 class="text-center">Buscar</h4>
+        <div class="d-flex justify-content-center">
+            <input id="buscarEspecialidad" type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar"
+                style="max-width: 60%;">
+        </div>
         <br>
 
         <div class="table-responsive">
-            <table class="table table-light table-striped table-hover table-bordered" id="tableTrips">
+            <table class="table table-light table-striped table-hover table-bordered" id="tableEspecialidades">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Especialidad</th>
-                        <th>Eliminar</th>
+                        <th class="text-center">Elegir</th>
+                        <th class="text-center">Especialidad</th>
+                        <th class="text-center">Eliminar</th>
                     </tr>
                 </thead>
                 <tbody id="espe">
@@ -66,10 +68,10 @@
     </form>
 </div>
 
-<!-- Modal -->
-<!-- Modal Agregar Ubicación -->
+<!-- Modals -->
+
 <div class="modal fade" id="AgregarUbiModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
@@ -80,18 +82,40 @@
                 <div class="mb-3" style="text-align: center;">
                     <h3>Ingrese la nueva ubicación</h3>
                     <br>
-                    <input type="text" id="AgregarUbi" class="form-control" placeholder="Ingrese la ubicación..."
-                        required>
-                    <br>
-                    <h3>Ingrese la abreviación del destino</h3>
-                    <br>
-                    <input type="text" id="AgregarAbre" class="form-control" placeholder="Ingrese la abreviación..."
-                        required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="AgregarUbi" class="form-control"
+                                placeholder="Ingrese la ubicación..." required>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-md-6">
+                            <input type="text" id="AgregarAbre" class="form-control"
+                                placeholder="Ingrese la abreviación..." required>
+                        </div>
+                    </div>
                     <br>
                     <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
                         id="BtnGuardarUbi">
                         <i class="bi bi-save"></i> Guardar
                     </button>
+                    <br>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-light table-striped table-hover table-bordered"
+                            id="TableDestinations">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="text-center">IdDestino</th>
+                                    <th class="text-center">NombreDestino</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="destinosTableBody">
+                                <!-- Acá se cargarán los datos de la cita -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -100,6 +124,7 @@
         </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" id="AgregarEspeModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
@@ -129,4 +154,5 @@
         </div>
     </div>
 </div>
+
 <div data-script="js/destinations.js"></div>
