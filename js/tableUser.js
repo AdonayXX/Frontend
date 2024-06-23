@@ -166,7 +166,7 @@ function fillTableUsuarios(usuarios) {
                 <td>${roleDescription}</td>
                 <td>${usuario.Estado}</td>
                 <td class="actions">
-                <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square"></i></button>
+                <button class="btn btn-outline-primary btn-sm" data-user='${JSON.stringify(usuario)}' onclick='sendUserData(this)'><i class="bi bi-pencil-square"></i></button>
                 <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash" onclick="deleteButton('${usuario.IdUsuario}', '${nombreCompleto}', '${usuario.Identificacion}')"></i></button>            
                 </td>
               </tr>
@@ -200,6 +200,92 @@ function getRoleDescription(rol) {
   }
 
 }
+
+window.sendUserData = function (button) {
+  let user = JSON.parse(button.getAttribute('data-user'));
+  let modal = new bootstrap.Modal(document.getElementById('editUserAdmin'), {
+    backdrop: 'static',
+    keyboard: false
+  });
+  modal.show();
+
+  document.getElementById("formUserEdit").reset();
+  fillUserFields(user);
+  const userIdentification = user.Identificacion;
+
+  const form = document.querySelector("#formUserEdit");
+  form.onsubmit = function (event) {
+    event.preventDefault();
+    getEditUserData(userIdentification);
+  };
+
+  function getEditUserData(userIdentification) {
+    const password1 = document.getElementById('userPassword1Edit').value;
+    const password2 = document.getElementById('userPassword2Edit').value;
+
+    if (password1 !== password2) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+    const userData = {
+      Identificacion: userIdentification,
+      Nombre: document.getElementById('userNameEdit').value,
+      Apellido1: document.getElementById('userFirstlastnameEdit').value,
+      Apellido2: document.getElementById('userSecondlastnameEdit').value,
+      Rol: parseInt(document.getElementById('rol').value.trim()),
+      Contrasena: password1,
+      Correo: document.getElementById('userEmailEdit').value,
+      Estado: document.getElementById('userState').value
+    };
+    editUserData(userData);
+    console.log(userData);
+  }
+
+  async function editUserData(userData) {
+    try {
+      const API_URL = `http://localhost:18026/api/usuario/identificacion/${userIdentification}`;
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        showToast('Ups!', 'No se encontró el token de autenticación.');
+        return;
+      }
+
+      const response = await axios.put(API_URL, userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log(response);
+      showToast('Éxito!', 'Usuario actualizado correctamente');
+      modal.hide();
+      setTimeout(function () {
+        loadContent('dataTableUser.html', 'mainContent');
+      }, 1000);
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        console.error('Error específico:', errorMessage);
+        alert(errorMessage);
+      } else {
+        console.error('Ha ocurrido un problema:', error);
+        alert("Ocurrió un problema");
+      }
+    }
+  }
+
+  function fillUserFields(user) {
+    document.getElementById('userIdentificationEdit').value = user.Identificacion;
+    document.getElementById('userNameEdit').value = user.Nombre;
+    document.getElementById('userFirstlastnameEdit').value = user.Apellido1;
+    document.getElementById('userSecondlastnameEdit').value = user.Apellido2;
+    document.getElementById('userEmailEdit').value = user.Correo;
+    document.getElementById('rol').value = user.Rol;
+    document.getElementById('userState').value = user.Estado;
+  }
+}
+
+
 //Spiner
 // Mostrar el spinner
 function mostrarSpinner() {
@@ -215,7 +301,7 @@ function ocultarSpinner() {
 function initializePasswordValidations() {
   const passwordField1 = document.getElementById('userRegisterPassword1');
   const passwordField2 = document.getElementById('userRegisterPassword2');
-  const submitButton = document.getElementById('addUserButton'); 
+  const submitButton = document.getElementById('addUserButton');
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   let isPasswordValid = false;
@@ -234,7 +320,7 @@ function initializePasswordValidations() {
       passwordField1.setCustomValidity('');
       isPasswordValid = true;
     }
-    passwordField1.reportValidity(); 
+    passwordField1.reportValidity();
     updateSubmitButtonState();
   }
 
@@ -265,16 +351,16 @@ function initializePasswordValidations() {
   }
 
   // Evento blur para vaciar el campo si no cumple con la validación
-  passwordField1.addEventListener('blur', function() {
+  passwordField1.addEventListener('blur', function () {
     if (!isPasswordValid) {
-      passwordField1.value = ''; 
+      passwordField1.value = '';
     }
-    passwordField1.setCustomValidity(''); 
+    passwordField1.setCustomValidity('');
   });
 
-  passwordField2.addEventListener('blur', function() {
+  passwordField2.addEventListener('blur', function () {
     if (!arePasswordsMatching) {
-      passwordField2.value = ''; 
+      passwordField2.value = '';
     }
     passwordField2.setCustomValidity('');
   });
