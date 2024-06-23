@@ -14,23 +14,26 @@
             <div class="form-section">
                 <h2>Datos del paciente:</h2>
                 <div class="row">
+                    <!-- Tipo de Cedula -->
                     <div class="col-md-4 mb-3">
-                        <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
-                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="25">
+                        <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de
+                            Identificación:</label>
+                        <select required id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="Cédula de Identidad">Cédula de Identidad</option>
+                            <option value="Número de Asegurado">Número de Asegurado</option>
+                            <option value="Interno">Interno</option>
+                        </select>
                     </div>
+                    <!-- Identificación -->
                     <div class="col-md-4 mb-3">
-                        <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
-                            Apellido:</label>
-                        <input required type="text" id="primerApellido" name="primerApellido" class="form-control" maxlength="20">
+                        <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
+                            Identificación:</label>
+                        <input required type="text" id="identificacion" name="identificacion" class="form-control"
+                            maxlength="20" >
                     </div>
+                    <!-- Genero -->
                     <div class="col-md-4 mb-3">
-                        <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo
-                            Apellido:</label>
-                        <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control" maxlength="20">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
                         <label for="genero" class="form-label"><i class="bi bi-gender-ambiguous"></i> Género:</label>
                         <select required id="genero" name="genero" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
@@ -39,31 +42,31 @@
                             <option value="No definido">No Definido</option>
                         </select>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de
-                            Identificación:</label>
-                        <select required id="tipoIdentificacion" name="tipoIdentificacion" class="form-select">
-                            <option selected disabled value="">Seleccionar</option>
-                            <option value="Cedula">Cédula de Identidad</option>
-                            <option value="Numeros de Asegurado">Numeros de Asegurado</option>
-                            <option value="Interno">Interno</option>
-                        </select>
+                </div>
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-md-4 mb-3">
+                        <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
+                        <input required type="text" id="nombre" name="nombre" class="form-control" maxlength="25">
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
-                            Identificación:</label>
-                        <input required type="text" id="identificacion" name="identificacion" class="form-control" maxlength="20" placeholder="Ej:111111111">
+                    <!-- Apellido1 -->
+                    <div class="col-md-4 mb-3">
+                        <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer
+                            Apellido:</label>
+                        <input required type="text" id="primerApellido" name="primerApellido" class="form-control"
+                            maxlength="20">
                     </div>
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="prioridad">
-                            <label class="form-check-label" for="prioridad">SI</label>
-                        </div>
+                    <!-- Apellido2 -->
+                    <div class="col-md-4 mb-3">
+                        <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo
+                            Apellido:</label>
+                        <input required type="text" id="segundoApellido" name="segundoApellido" class="form-control"
+                            maxlength="20">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 mb-3">
+                    <!-- Tipo de seguro -->
+                    <div class="col-md-4 mb-3">
                         <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>
                         <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
@@ -71,41 +74,38 @@
                             <option value="Independiente">Trabajador Independiente</option>
                             <option value="Voluntario">Voluntario</option>
                             <option value="Pensionado">Pensionado</option>
+                            <option value="Leyes o Decretos">Leyes o Decretos</option>
                             <option value="Beneficio Familiar">Beneficio Familiar</option>
                             <option value="Seguro por el Estado">Seguro por el Estado</option>
                             <option value="Cargo al Estado">Protección con cargo al Estado</option>
                         </select>
                     </div>
+                    <!-- FechaVencimientoSeguro -->
+                    <div class="col-md-4 mb-3">
+                        <label for="fechaVencimientoSeguro" class="form-label"><i class="bi bi-calendar2-event"></i>
+                            Fecha de vencimiento del seguro:</label>
+                        <input type="date" id="fechaVencimientoSeguro" name="fechaVencimientoSeguro"
+                            class="form-control date-input">
+                    </div>
+                    <!-- Telefono1 -->
                     <div class="col-md-4 mb-3">
                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                        <input type="number" id="telefono1" name="telefono1" class="form-control"  required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
-                        <input type="number" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional" maxlength="8">
+                        <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="8">
+                        <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label for="lugarSalida" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de
-                            salida:</label>
-                        <select required id="lugarSalida" name="lugarSalida" class="form-select">
-                            <option selected disabled value="">Seleccionar</option>
-                            <option value="Ruta">Ruta</option>
-                            <option value="Domicilio">Domicilio</option>
-                            <option value="Sede">Sede</option>
-                        </select>
-                    </div>
+                    <!-- Telefono2 -->
                     <div class="col-md-4 mb-3">
-                        <label class="form-label"><i class="bi bi-bed"></i> Encamado:</label>
-                        <select required id="encamado" name="encamado" class="form-select">
-                            <option selected disabled value="">Seleccionar</option>
-                            <option value="temporal">Temporal</option>
-                            <option value="permante">Permanente</option>
-                            <option value="noRequerido">No requerido</option>
-                        </select>
+                        <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
+                        <input type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional"
+                            maxlength="8">
+                        <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number">
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <!-- <button onclick="printHiddenValues()">Imprimir Valores Ocultos</button> -->
+
+                    <!-- TipoSangre -->
+                    <div class="col-md-4 mb-3">
                         <label for="tipoSangre" class="form-label"><i class="bi bi-gender-ambiguous"></i> Tipo de
                             sangre:</label>
                         <select required id="tipoSangre" name="tipoSangre" class="form-select">
@@ -121,20 +121,59 @@
                             <option value="N/A">No Definido</option>
                         </select>
                     </div>
+                    <!-- LugarSalida -->
+                    <div class="col-md-4 mb-3">
+                        <label for="lugarSalida" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de
+                            salida:</label>
+                        <select required id="lugarSalida" name="lugarSalida" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="Ruta">Ruta</option>
+                            <option value="Domicilio">Domicilio</option>
+                            <option value="Sede">Sede</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Latitud:</label>
-                        <input type="number" step="any" id="latitud" name="latitud" class="form-control" placeholder="Opcional" maxlength="25" >
+                    <!-- Encamado -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="bi bi-bed"></i> Encamado:</label>
+                        <select required id="encamado" name="encamado" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="temporal">Temporal</option>
+                            <option value="permante">Permanente</option>
+                            <option value="noRequerido">No requerido</option>
+                        </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Longitud:</label>
-                        <input type="number" step="any"  id="longitud" name="longitud" class="form-control" placeholder="Opcional" maxlength="25">
+                    <!-- Prioridad -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="prioridad">
+                            <label class="form-check-label" for="prioridad">Si</label>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
+                    <!-- Direccion -->
                     <div class="mb-3">
                         <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                        <textarea required id="direccion" name="direccion" class="form-control" maxlength="200"></textarea>
+                        <textarea required id="direccion" name="direccion" class="form-control"
+                            maxlength="200"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Latitud -->
+                    <div class="col-md-4 mb-3">
+                        <label for="latitud" class="form-label"><i class="bi bi-house"></i> Latitud:</label>
+                        <input type="number" step="any" id="latitud" name="latitud" class="form-control"
+                            placeholder="Opcional" maxlength="25">
+                    </div>
+                    <!-- Longitud -->
+                    <div class="col-md-4 mb-3">
+                        <label for="longitud" class="form-label"><i class="bi bi-house"></i> Longitud:</label>
+                        <input type="number" step="any" id="longitud" name="longitud" class="form-control"
+                            placeholder="Opcional" maxlength="25">
                     </div>
                 </div>
             </div>
@@ -184,12 +223,17 @@
                                     class="form-control" placeholder="2° Apellido" maxlength="25">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <input type="number" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1"
                                     class="form-control" placeholder="Teléfono 1" maxlength="8">
+                                <input type="hidden" id="acompananteTelefono1Hidden_1"
+                                    name="acompananteTelefono1Hidden_1" type="number">
                             </div>
                             <div id="acompanantePhone" class="col-md-3 mb-3" style="display: none;">
-                                <input type="number" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
+                                <input type="text" id="acompananteTelefono2_1" name="acompananteTelefono2_1"
                                     class="form-control" placeholder="Teléfono 2(Opcional)" maxlength="8">
+                                <input type="hidden" id="acompananteTelefono2Hidden_1"
+                                    name="acompananteTelefono2Hidden_1" type="number">
+
                             </div>
                             <div class="col-md-4 mb-3 d-flex justify-content-start">
                                 <button type="button" id="PhoneBtn1" class="btn btn-secondary"
@@ -238,14 +282,18 @@
                                 <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
                                     class="form-control" placeholder="2° Apellido" maxlength="25">
                             </div>
-                           
+
                             <div class="col-md-3 mb-3">
-                                <input type="number" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
+                                <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
                                     class="form-control" placeholder="Teléfono 1" maxlength="8">
+                                <input type="hidden" id="acompananteTelefono1Hidden_2"
+                                    name="acompananteTelefono1Hidden_2" type="number">
                             </div>
                             <div id="acompanantePhone2" class="col-md-3 mb-3" style="display: none;">
-                                <input type="number" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
+                                <input type="text" id="acompananteTelefono2_2" name="acompananteTelefono2_2"
                                     class="form-control" placeholder="Teléfono 2" maxlength="8">
+                                <input type="hidden" id="acompananteTelefono2Hidden_2"
+                                    name="acompananteTelefono2Hidden_2" type="number">
                             </div>
                             <div class="col-md-4 mb-3 d-flex justify-content-start">
                                 <button type="button" id="PhoneBtn2" class="btn btn-secondary"
@@ -284,7 +332,7 @@
             </div>
         </form>
     </div>
-    
+
     <div data-script="js/formPatient.js"></div>
 
 </body>
