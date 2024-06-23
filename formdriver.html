@@ -1,53 +1,78 @@
 <div class="container mt-5 fade-in" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Registro de Chofer</h1>
     <form id="3" name="formDriver" class="bg-light p-4 border rounded-3">
-        <div class="form-group mb-3">
-            <label for="cedula" class="form-label"><i class="bi bi-card-text"></i> Cédula</label>
-            <input type="text" class="form-control" id="cedula" name="cedula">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="cedula" class="form-label"><i class="bi bi-card-text"></i> Identificación</label>
+                    <input type="text" class="form-control" id="cedula" name="cedula">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" maxlength="25">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="apellido1" class="form-label"><i class="bi bi-person"></i> Primer Apellido</label>
+                    <input type="text" class="form-control" id="apellido1" name="apellido1" maxlength="25">
+                </div>
+            </div>
         </div>
-        <div class="form-group mb-3">
-            <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre</label>
-            <input type="text" class="form-control" id="nombre" name="nombre">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="apellido2" class="form-label"><i class="bi bi-person"></i> Segundo Apellido</label>
+                    <input type="text" class="form-control" id="apellido2" name="apellido2" maxlength="25">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="contacto" class="form-label"><i class="bi bi-phone"></i> Contacto</label>
+                    <input type="text" class="form-control" id="contacto" name="contacto">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tipoSangre" class="form-label"><i class="bi bi-droplet"></i> Tipo de sangre</label>
+                    <select id="tipoSangre" name="tipoSangre" class="form-select" required>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="form-group mb-3">
-            <label for="apellido1" class="form-label"><i class="bi bi-person"></i> Primer Apellido</label>
-            <input type="text" class="form-control" id="apellido1" name="apellido1">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tipoLicencia" class="form-label"><i class="bi bi-card-checklist"></i> Tipo de Licencia</label>
+                    <input type="text" class="form-control" id="tipoLicencia" name="tipoLicencia" oninput="this.value = this.value.toUpperCase()">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="fechaVencimientoLicencia" class="form-label"><i class="bi bi-calendar"></i> Vencimiento de Licencia</label>
+                    <input type="date" class="form-control" id="fechaVencimientoLicencia" name="fechaVencimientoLicencia">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="estado" class="form-label"><i class="bi bi-person"></i> Estado</label>
+                    <select class="form-select" id="estado" name="estado">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="form-group mb-3">
-            <label for="apellido2" class="form-label"><i la="bi bi-person"></i> Segundo Apellido</label>
-            <input type="text" class="form-control" id="apellido2" name="apellido2">
-        </div>
-        <div class="form-group mb-3">
-            <label for="contacto" class="form-label"><i class="bi bi-phone"></i> Contacto</label>
-            <input type="text" class="form-control" id="contacto" name="contacto">
-        </div>
-        <div class="form-group mb-3">
-            <label for="tipoSangre" class="form-label"><i class="bi bi-droplet"></i> Tipo de sangre</label>
-            <select id="tipoSangre" name="tipoSangre" class="form-select" required>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            </select>
-        </div>
-        <div class="form-group mb-3">
-            <label for="tipoLicencia" class="form-label"><i class="bi bi-card-checklist"></i> Tipo de Licencia</label>
-            <input type="text" class="form-control" id="tipoLicencia" name="tipoLicencia">
-        </div>
-        <div class="form-group mb-3">
-            <label for="fechaVencimientoLicencia" class="form-label"><i class="bi bi-calendar"></i> Fecha de Vencimiento de Licencia</label>
-            <input type="date" class="form-control" id="fechaVencimientoLicencia" name="fechaVencimientoLicencia">
-        </div>
-        <div class="form-group mb-3">
-            <label for="estado" class="form-label"><i class="bi bi-person"></i> Estado</label>
-            <select class="form-select" id="estado" name="estado">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-            </select>
         <div class="form-section mt-4">
             <div class="row align-items-center mb-3">
                 <h2 class="col-auto">Contacto de emergencia:</h2>
@@ -62,17 +87,16 @@
             </div>
             <div class="companions-container d-flex flex-wrap">
                 <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
-                    <label for="1acompananteNombre" class="form-label mt-1 mb-3">Contacto de emergencia 1:</label>
+                    <label for="1acompananteNombre" class="form-label mt-1 mb-3">Contacto 1:</label>
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="acompananteNombreN1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
-                        </div>
-                      
-                        <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido1CE" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
+                            <input type="text" id="acompananteNombreN1" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido2CE" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
+                            <input type="text" id="apellido1CE1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="apellido2CE1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25">
                         </div>
                         <div class="col-md-3 mb-3">
                             <input type="text" id="contactoEmergencia" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
@@ -80,34 +104,54 @@
                     </div>
                 </div>
             </div>
+            <div class="companions-container d-flex flex-wrap">
+                <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
+                    <label for="1acompananteNombre" class="form-label mt-1 mb-3">Contacto 2:</label>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="acompananteNombreN2" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="apellido1CE2" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="apellido2CE2" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" id="contactoEmergencia2" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group mt-4 d-flex justify-content-center align-items-center ">
+        <div class="form-group mt-4 d-flex justify-content-center align-items-center">
             <button type="button" id="btnGuardar" class="btn btn-primary m-2"><i class="bi bi-save"></i> Guardar</button>
             <button type="button" id="btnActualizar" class="btn btn-secondary m-2"><i class="bi bi-pencil"></i> Actualizar</button>
         </div>
     </form>
     <div>
-    <h2 class="mt-5">Catálogo de choferes</h2>
-    <div class="table-responsive">
-        <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
-            <thead style="background-color: #094079; color: white;">
-                <tr>
-                    <th>nombre</th>
-                    <th>cedula</th>
-                    <th>apellido1</th>
-                    <th>apellido2</th>
-                    <th>Contacto</th>
-                    <th>tipoSangre</th>
-                    <th>tipoLicencia</th>
-                    <th>vencimientoLicencia</th>
-                    <th>contactoEmergencia</th>
-                    <th>nombreContactoEmer</th>
-                </tr>
-            </thead>
-            <tbody id="choferTableBody">
-                <!-- Aquí se agregarán las unidades registradas -->
-            </tbody>
-        </table>
+        <h2 class="mt-5">Catálogo de choferes</h2>
+        <div class="table-responsive">
+            <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
+                <thead style="background-color: #094079; color: white;">
+                    <tr>
+                        <th>nombre</th>
+                        <th>cedula</th>
+                        <th>apellido1</th>
+                        <th>apellido2</th>
+                        <th>Contacto</th>
+                        <th>tipoSangre</th>
+                        <th>tipoLicencia</th>
+                        <th>vencimientoLicencia</th>
+                        <th>contactoEmergencia</th>
+                        <th>nombreContactoEmer</th>
+                    </tr>
+                </thead>
+                <tbody id="choferTableBody">
+                    <!-- Aquí se agregarán las unidades registradas -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div data-script="js/driver.js"></div>
