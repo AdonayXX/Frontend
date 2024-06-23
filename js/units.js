@@ -25,42 +25,10 @@ document.getElementById('clearFormButton').addEventListener('click', function ()
     clearForm();
 });
 
-function updateCapacity() {
-    const unitType = document.getElementById('unitType').value;
-    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10) || 0;
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10) || 0;
-    let totalCapacity = 0;
-
-    if (unitType === '5') {
-        totalCapacity = capacityChairs + (capacityBeds * 2);
-        document.getElementById('capacityBeds').disabled = false;
-    } else if (unitType === '3') {
-        document.getElementById('capacityBeds').value = 0;
-        document.getElementById('capacityBeds').disabled = true;
-        totalCapacity = capacityChairs;
-    }
-    document.getElementById('totalCapacity').value = totalCapacity;
-}
-
-document.getElementById('unitType').addEventListener('change', updateCapacity);
-document.getElementById('capacityChairs').addEventListener('input', updateCapacity);
-document.getElementById('capacityBeds').addEventListener('input', updateCapacity);
-
-function clearForm() {
-    document.getElementById('unitsForm').reset();
-    document.getElementById('unitNumber').disabled = false;
-    document.getElementById('unitType').disabled = false;
-    document.getElementById('resourceType').disabled = false;
-    document.getElementById('initialMileage').disabled = false;
-    document.getElementById('clearFormButton').style.display = 'none';
-    document.getElementById('update-unit-button').disabled = true;
-    document.getElementById('submit-unit-button').disabled = false;
-    document.getElementById('capacityBeds').disabled = false;
-    document.getElementById('mileageField').style.display = 'none';
-    document.getElementById('dateField').style.display = 'none';
-    document.getElementById('advanceField').style.display = 'none';
-    document.getElementById('periodicityField').style.display = 'none';
-}
+document.getElementById('loadUnit').addEventListener('click', function (event) {
+    event.preventDefault();
+    getUnidad();
+});
 
 document.getElementById('maintenanceType').addEventListener('change', function () {
     const mileageField = document.getElementById('mileageField');
@@ -75,7 +43,7 @@ document.getElementById('maintenanceType').addEventListener('change', function (
         maintenanceMileage.setAttribute('required', 'required');
         dateField.style.display = 'none';
         maintenanceDate.removeAttribute('required');
-    } else if (this.value === '5') {
+    } else if (this.value === '1') {
         dateField.style.display = 'block';
         maintenanceDate.setAttribute('required', 'required');
         mileageField.style.display = 'none';
@@ -87,10 +55,32 @@ document.getElementById('maintenanceType').addEventListener('change', function (
         maintenanceDate.removeAttribute('required');
     }
 
-    advanceField.style.display = (this.value === '5' || this.value === '2') ? 'block' : 'none';
-    periodicityField.style.display = (this.value === '5' || this.value === '2') ? 'block' : 'none';
+    advanceField.style.display = (this.value === '1' || this.value === '2') ? 'block' : 'none';
+    periodicityField.style.display = (this.value === '1' || this.value === '2') ? 'block' : 'none';
 });
 
+document.getElementById('unitType').addEventListener('change', updateCapacity);
+document.getElementById('capacityChairs').addEventListener('input', updateCapacity);
+document.getElementById('capacityBeds').addEventListener('input', updateCapacity);
+
+function updateCapacity() {
+    const unitTypeSelect = document.getElementById('unitType');
+    const selectedOption = unitTypeSelect.options[unitTypeSelect.selectedIndex].text;
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10) || 0;
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10) || 0;
+    let totalCapacity = 0;
+
+    if (selectedOption === 'Ambulancia') {
+        totalCapacity = capacityChairs + (capacityBeds * 2);
+        document.getElementById('capacityBeds').disabled = false;
+    }
+    if (selectedOption === 'Pickup 4x4') {
+        document.getElementById('capacityBeds').value = 0;
+        document.getElementById('capacityBeds').disabled = true;
+        totalCapacity = capacityChairs;
+    }
+    document.getElementById('totalCapacity').value = totalCapacity;
+}
 
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
@@ -121,31 +111,48 @@ function showToast(title, message) {
     });
 }
 
-// async function getChoferes() {
-//     try {
-//         const API_URL = 'https://backend-transporteccss.onrender.com/api/unidadChofer';
-//         const response = await axios.get(API_URL);
-//         const choferes = response.data.choferes;
-//         const selectBody = document.querySelector('#assignedDriver');
+async function getChoferesSelect() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+        const choferes = response.data.choferes;
 
-//         selectBody.innerHTML = '';
+        const assignedDriver = document.getElementById('assignedDriver');
+        assignedDriver.innerHTML = '';
 
-//         const defaultOption = document.createElement('option');
-//         defaultOption.textContent = 'Seleccione el chófer...';
-//         defaultOption.selected = true;
-//         defaultOption.disabled = true;
-//         selectBody.appendChild(defaultOption);
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Seleccione el chofer...';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        assignedDriver.appendChild(defaultOption);
 
-//         choferes.forEach(chofer => {
-//             const option = document.createElement('option');
-//             option.value = chofer.id;
-//             option.textContent = `Unidad ${chofer.nombreChofer}`;
-//             selectBody.appendChild(option);
-//         });
-//     } catch (error) {
-//         console.error('Error al obtener las unidades:', error);
-//     }
-// }
+        choferes.forEach(chofer => {
+            const option = document.createElement('option');
+            option.value = chofer.idChofer;
+            option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+            assignedDriver.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al obtener los choferes:', error);
+    }
+}
+
+async function getNombreChofer() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+        const choferes = response.data.choferes;
+        const choferMap = {};
+
+        choferes.forEach(chofer => {
+            choferMap[chofer.idChofer] = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+        });
+
+        return choferMap;
+    } catch (error) {
+        console.error('Error al obtener los nombres de los choferes:', error);
+        return {};
+    }
+}
 
 async function getTiposRecurso() {
     try {
@@ -164,6 +171,62 @@ async function getTiposRecurso() {
     }
 }
 
+async function getTiposRecursoSelect() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso');
+        const tiposRecurso = response.data.tiporecurso;
+
+        const resourceType = document.getElementById('resourceType');
+        resourceType.innerHTML = '';
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Seleccione el tipo de recurso...';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        resourceType.appendChild(defaultOption);
+
+        let counter = 1;
+
+        tiposRecurso.forEach(recurso => {
+            const option = document.createElement('option');
+            option.value = counter++;
+            option.textContent = recurso.recurso;
+            resourceType.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al obtener los tipos de recurso:', error);
+    }
+}
+
+async function getTiposUnidadSelect() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad');
+        const tiposUnidad = response.data.tipounidad;
+
+        const unitType = document.getElementById('unitType');
+        unitType.innerHTML = '';
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Seleccione el tipo de unidad...';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        unitType.appendChild(defaultOption);
+
+        let counter = 1;
+
+        tiposUnidad.forEach(unidad => {
+            const option = document.createElement('option');
+            option.value = counter++;
+            option.textContent = unidad.tipo;
+            unitType.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al obtener los tipos de unidad:', error);
+    }
+}
+
 async function getEstadosUnidad() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
@@ -176,7 +239,7 @@ async function getEstadosUnidad() {
 
         return estadoMap;
     } catch (error) {
-        console.error('Error al obtener los estados de unidad:', error);
+        console.error('Error al obtener los estados de las unidades:', error);
         return {};
     }
 }
@@ -193,17 +256,18 @@ async function getFrecuenciaCambio() {
 
         return frecuenciaMap;
     } catch (error) {
-        console.error('Error al obtener los estados de unidad:', error);
+        console.error('Error al obtener las frecuencias de cambio:', error);
         return {};
     }
 }
 
 async function getUnidades() {
     try {
-        const [recursoMap, estadoMap, frecuenciaMap] = await Promise.all([
+        const [recursoMap, estadoMap, frecuenciaMap, choferMap] = await Promise.all([
             getTiposRecurso(),
             getEstadosUnidad(),
-            getFrecuenciaCambio()
+            getFrecuenciaCambio(),
+            getNombreChofer()
         ]);
 
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
@@ -221,15 +285,15 @@ async function getUnidades() {
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
-                    <td class="text-center">${unidad.numeroUnidad}</td>
-                    <td class="text-center">${unidad.capacidadTotal}</td>
-                    <td class="text-center">${recursoMap[unidad.idTipoRecurso] || 'Desconocido'}</td>
-                    <td class="text-center">${unidad.kilometrajeInicial}</td>
-                    <td class="text-center">${unidad.kilometrajeActual}</td>
-                    <td class="text-center">${(estadoMap[unidad.idEstado] || 'Desconocido').toUpperCase()}</td>
-                    <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString()}</td>
+                    <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
+                    <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
+                    <td class="text-center">${recursoMap[unidad.idTipoRecurso] || 'N/A'}</td>
+                    <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
+                    <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
+                    <td class="text-center">${(estadoMap[unidad.idEstado]).toUpperCase() || 'N/A'}</td>
+                    <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
                     <td class="text-center">${frecuenciaMap[unidad.idFrecuenciaCambio] || 'N/A'}</td>
-                    <td class="text-center">${unidad.choferDesignado}</td>
+                    <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
                 `;
 
                 row.addEventListener('click', function () {
@@ -257,79 +321,62 @@ async function getUnidades() {
                 let inputValue = $(this).val().toLowerCase();
                 $('#unitTable').DataTable().search(inputValue).draw();
             });
+
         });
     } catch (error) {
         console.error('Error al obtener las unidades:', error);
     }
 }
 
-getUnidades();
+async function getUnidad() {
+    const unitNumber = document.getElementById('unitNumber').value;
 
-function postUnidad() {
-    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
-    const unitType = parseInt(document.getElementById('unitType').value, 10);
-    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-    const status = parseInt(document.getElementById('status').value, 10);
-    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-    const maintenanceType = parseInt(document.getElementById('maintenanceType').value, 10);
-    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
-    const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);;
-    const advance = parseInt(document.getElementById('advance').value, 10);
-
-    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
-        showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
+    if (unitNumber === '') {
+        showToast('Error', 'El campo no puede estar vacío.');
         return;
     }
 
-    if (currentMileage < initialMileage) {
-        showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
-        return;
-    }
+    try {
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`);
+        const unidad = response.data.unidades;
 
-    if (unitType == '5' && totalCapacity > 8) {
-        showToast('Error', 'La capacidad total de una ambulancia no puede ser mayor a 8.');
-        return;
-    }
+        if (unidad.length === 0) {
+            showToast('Error', 'La unidad con el número ' + unitNumber + ' no se encuentra registrada.');
+            return;
+        }
 
-    if (unitType == '3' && totalCapacity > 5) {
-        showToast('Error', 'La capacidad total de una pickup 4x4 no puede ser mayor a 5.');
-        return;
-    }
-
-    const unidadData = {
-        idTipoUnidad: unitType,
-        idTipoRecurso: resourceType,
-        idFrecuenciaCambio: maintenanceType,
-        numeroUnidad: unitNumber,
-        choferDesignado: driver,
-        fechaDekra: dekraDate,
-        capacidadTotal: totalCapacity,
-        capacidadCamas: capacityBeds,
-        capacidadSillas: capacityChairs,
-        kilometrajeInicial: initialMileage,
-        kilometrajeActual: currentMileage,
-        adelanto: advance,
-        idEstado: status
-    };
-
-    console.log('Datos a enviar:', unidadData);
-
-    axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
-        .then(response => {
-            clearForm();
-            console.log('Unidad creada:', response.data);
-            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-            document.getElementById('unitsForm').reset();
-            getUnidades();
-        })
-        .catch(error => {
-            console.error('Error al crear la unidad:', error);
-            showToast('Error', 'Error al crear la unidad.');
+        unidad.forEach(unidad => {
+            document.getElementById('unitNumber').value = unidad.numeroUnidad.toUpperCase();
+            document.getElementById('unitType').value = unidad.idTipoUnidad;
+            document.getElementById('resourceType').value = unidad.idTipoRecurso;
+            document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+            document.getElementById('currentMileage').value = unidad.kilometrajeActual;
+            document.getElementById('status').value = unidad.idEstado;
+            document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+            document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
+            document.getElementById('assignedDriver').value = unidad.choferDesignado;
+            document.getElementById('capacityChairs').value = unidad.capacidadSillas;
+            document.getElementById('capacityBeds').value = unidad.capacidadCamas;
+            document.getElementById('totalCapacity').value = unidad.capacidadTotal;
+            document.getElementById('advance').value = unidad.adelanto;
+            document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
         });
+
+        document.getElementById('unitNumber').disabled = true;
+        document.getElementById('unitType').disabled = true;
+        document.getElementById('resourceType').disabled = true;
+        document.getElementById('initialMileage').disabled = true;
+        const event = new Event('change');
+        document.getElementById('status').dispatchEvent(event);
+        document.getElementById('maintenanceType').dispatchEvent(event);
+        document.getElementById('clearFormButton').style.display = 'inline-block';
+        document.getElementById('update-unit-button').disabled = false;
+        document.getElementById('submit-unit-button').disabled = true;
+
+    } catch (error) {
+        console.error('Error al obtener la unidad:', error);
+        showToast('Error', 'Error al obtener la unidad.');
+    }
 }
 
 function postTipoRecurso() {
@@ -350,7 +397,7 @@ function postTipoRecurso() {
         .then(response => {
             console.log('Tipo de recurso creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-            document.getElementById('resourceForm').reset();
+            getTiposRecursoSelect();
         })
         .catch(error => {
             console.error('Error al crear el tipo de recurso:', error);
@@ -360,15 +407,17 @@ function postTipoRecurso() {
 }
 
 function postTipoUnidad() {
-    const unidad = document.getElementById('addUnit').value;
+    const tipo = document.getElementById('addUnit').value;
+    const capacidad = parseInt(document.getElementById('addCapacity').value, 10);
 
-    if (unidad === '') {
-        showToast('Error', 'El campo no puede estar vacío.');
+    if (tipo === '' && capacidad === '') {
+        showToast('Error', 'Los campos no pueden estar vacíos.');
         return;
     }
 
     const unidadData = {
-        unidad: unidad
+        tipo: tipo,
+        capacidad: capacidad
     };
 
     console.log('Datos a enviar:', unidadData);
@@ -377,7 +426,7 @@ function postTipoUnidad() {
         .then(response => {
             console.log('Tipo de unidad creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-            document.getElementById('unitForm').reset();
+            getTiposUnidadSelect();
         })
         .catch(error => {
             console.error('Error al crear el tipo de unidad:', error);
@@ -386,34 +435,7 @@ function postTipoUnidad() {
 
 }
 
-function loadFormData(unidad) {
-    document.getElementById('unitNumber').value = unidad.numeroUnidad;
-    document.getElementById('unitNumber').disabled = true;
-    document.getElementById('unitType').value = unidad.idTipoUnidad;
-    document.getElementById('unitType').disabled = true;
-    document.getElementById('resourceType').value = unidad.idTipoRecurso;
-    document.getElementById('resourceType').disabled = true;
-    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
-    document.getElementById('initialMileage').disabled = true;
-    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
-    document.getElementById('status').value = unidad.idEstado;
-    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-    document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
-    document.getElementById('assignedDriver').value = unidad.choferDesignado;
-    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
-    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
-    document.getElementById('totalCapacity').value = unidad.capacidadTotal;
-    document.getElementById('advance').value = unidad.adelanto;
-
-    const event = new Event('change');
-    document.getElementById('status').dispatchEvent(event);
-    document.getElementById('maintenanceType').dispatchEvent(event);
-    document.getElementById('clearFormButton').style.display = 'inline-block';
-    document.getElementById('update-unit-button').disabled = false;
-    document.getElementById('submit-unit-button').disabled = true;
-}
-
-function updateUnidad() {
+function postUnidad() {
     const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
     const unitType = parseInt(document.getElementById('unitType').value, 10);
     const resourceType = parseInt(document.getElementById('resourceType').value, 10);
@@ -427,6 +449,9 @@ function updateUnidad() {
     const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
     const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
     const advance = parseInt(document.getElementById('advance').value, 10);
+    const periodicity = parseInt(document.getElementById('periodicity').value, 10);
+    const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10);
+    const maintenanceDate = new Date(document.getElementById('maintenanceDate').value).toISOString().split('T')[0];
 
     if (initialMileage < 0 || currentMileage < 0 || driver === '') {
         showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
@@ -461,7 +486,77 @@ function updateUnidad() {
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
         adelanto: advance,
-        idEstado: status
+        idEstado: status,
+        valorFrecuenciaC: periodicity,
+    };
+
+    console.log('Datos a enviar:', unidadData);
+
+    axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
+        .then(response => {
+            clearForm();
+            console.log('Unidad creada:', response.data);
+            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
+            document.getElementById('unitsForm').reset();
+            getUnidades();
+        })
+        .catch(error => {
+            console.error('Error al crear la unidad:', error);
+            showToast('Error', 'Error al crear la unidad.');
+        });
+}
+
+function updateUnidad() {
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    const unitType = parseInt(document.getElementById('unitType').value, 10);
+    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
+    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
+    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
+    const status = parseInt(document.getElementById('status').value, 10);
+    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+    const maintenanceType = parseInt(document.getElementById('maintenanceType').value, 10);
+    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
+    const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
+    const advance = parseInt(document.getElementById('advance').value, 10);
+    const periodicity = parseInt(document.getElementById('periodicity').value, 10);
+
+    if (initialMileage < 0 || currentMileage < 0 || driver === '') {
+        showToast('Error', 'Los campos no pueden tener valores negativos o vacíos.');
+        return;
+    }
+
+    if (currentMileage < initialMileage) {
+        showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
+        return;
+    }
+
+    if (unitType == '5' && totalCapacity > 8) {
+        showToast('Error', 'La capacidad total de una ambulancia no puede ser mayor a 8.');
+        return;
+    }
+
+    if (unitType == '3' && totalCapacity > 5) {
+        showToast('Error', 'La capacidad total de una pickup 4x4 no puede ser mayor a 5.');
+        return;
+    }
+
+    const unidadData = {
+        idTipoUnidad: unitType,
+        idTipoRecurso: resourceType,
+        idFrecuenciaCambio: maintenanceType,
+        numeroUnidad: unitNumber,
+        choferDesignado: driver,
+        fechaDekra: dekraDate,
+        capacidadTotal: totalCapacity,
+        capacidadCamas: capacityBeds,
+        capacidadSillas: capacityChairs,
+        kilometrajeInicial: initialMileage,
+        kilometrajeActual: currentMileage,
+        adelanto: advance,
+        idEstado: status,
+        valorFrecuenciaC: periodicity
     };
 
     console.log('Datos a enviar para actualizar:', unidadData);
@@ -480,3 +575,55 @@ function updateUnidad() {
             showToast('Error', 'Error al actualizar la unidad.');
         });
 }
+
+function loadFormData(unidad) {
+    document.getElementById('unitNumber').value = unidad.numeroUnidad;
+    document.getElementById('unitNumber').setAttribute('readonly', true);
+    document.getElementById('unitType').value = unidad.idTipoUnidad;
+    document.getElementById('unitType').disabled = true;
+    document.getElementById('resourceType').value = unidad.idTipoRecurso;
+    document.getElementById('resourceType').disabled = true;
+    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+    document.getElementById('initialMileage').disabled = true;
+    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
+    document.getElementById('status').value = unidad.idEstado;
+    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+    document.getElementById('maintenanceType').value = unidad.idFrecuenciaCambio;
+    document.getElementById('assignedDriver').value = unidad.choferDesignado;
+    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
+    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
+    document.getElementById('totalCapacity').value = unidad.capacidadTotal;
+    document.getElementById('advance').value = unidad.adelanto;
+    document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
+
+    const event = new Event('change');
+    document.getElementById('status').dispatchEvent(event);
+    document.getElementById('maintenanceType').dispatchEvent(event);
+    document.getElementById('clearFormButton').style.display = 'inline-block';
+    document.getElementById('update-unit-button').disabled = false;
+    document.getElementById('submit-unit-button').disabled = true;
+}
+
+function clearForm() {
+    document.getElementById('unitsForm').reset();
+    document.getElementById('unitNumber').disabled = false;
+    document.getElementById('unitType').disabled = false;
+    document.getElementById('resourceType').disabled = false;
+    document.getElementById('initialMileage').disabled = false;
+    document.getElementById('clearFormButton').style.display = 'none';
+    document.getElementById('update-unit-button').disabled = true;
+    document.getElementById('submit-unit-button').disabled = false;
+    document.getElementById('capacityBeds').disabled = false;
+    document.getElementById('mileageField').style.display = 'none';
+    document.getElementById('dateField').style.display = 'none';
+    document.getElementById('advanceField').style.display = 'none';
+    document.getElementById('periodicityField').style.display = 'none';
+    getChoferesSelect();
+    getTiposRecursoSelect();
+    getTiposUnidadSelect();
+}
+
+getTiposRecursoSelect();
+getTiposUnidadSelect();
+getChoferesSelect();
+getUnidades();
