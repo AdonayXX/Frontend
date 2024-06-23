@@ -75,17 +75,20 @@
         }
         if (vale.Acompanante3 != null) {
             const acompDiv1 = document.getElementById('input-acompanante3');
-            acompDiv1.style.display = 'block';
+            const div1 = document.getElementById('div3');
+            div1.style.display = 'block';
             acompDiv1.value = vale.Acompanante3;
         }
         if (vale.Acompanante4 != null) {
             const acompDiv1 = document.getElementById('input-acompanante4');
-            acompDiv1.style.display = 'block';
+            const div1 = document.getElementById('div4');
+            div1.style.display = 'block';
             acompDiv1.value = vale.Acompanante4;
         }
         if (vale.Acompanante5 != null) {
             const acompDiv1 = document.getElementById('input-acompanante5');
-            acompDiv1.style.display = 'block';
+            const div1 = document.getElementById('div5');
+            div1.style.display = 'block';
             acompDiv1.value = vale.Acompanante5;
         }
     }
