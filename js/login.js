@@ -67,6 +67,10 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
     if (acompananteCount > 0) {
         const acompDiv = document.getElementById('acompanante' + acompananteCount);
         if (acompDiv) {
+            const inputs = acompDiv.getElementsByTagName('input');
+            for (let input of inputs) {
+                input.value = '';
+            }
             acompDiv.style.display = 'none';
         }
         acompananteCount--;
