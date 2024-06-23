@@ -40,8 +40,6 @@ function renderTable(citas) {
 
     citas.forEach(cita => {
         if (cita.estadoCita === 'Finalizada' && cita.ausente !== null) {
-            showToast('¡Éxitos!', 'Citas cargadas correctamente.');
-
             const row = document.createElement('tr');
 
             row.innerHTML = `

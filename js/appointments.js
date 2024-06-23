@@ -4,8 +4,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
     const identificacion = this.value.trim();
     let idPaciente = null;
     let acompanantes = [];
-    populateDestinos();
-    populateEspecialidades();
+
 
 
     if (identificacion) {
@@ -31,8 +30,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('nombre').value = pacienteEncontrado.Nombre || '';
                 document.getElementById('primerApellido').value = pacienteEncontrado.Apellido1 || '';
                 document.getElementById('segundoApellido').value = pacienteEncontrado.Apellido2 || '';
-                document.getElementById('telefono1').value = pacienteEncontrado.Telefono1 || '';
-                document.getElementById('telefono2').value = pacienteEncontrado.Telefono2 || '';
+                document.getElementById('telefonos').value = `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2 || ''}`;
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
 
                 const prioridadCheckbox = document.getElementById('prelacion');
@@ -178,8 +176,7 @@ function limpiarCampos() {
     document.getElementById('nombre').value = '';
     document.getElementById('primerApellido').value = '';
     document.getElementById('segundoApellido').value = '';
-    document.getElementById('telefono1').value = '';
-    document.getElementById('telefono2').value = '';
+    document.getElementById('telefonos').value = '';
     document.getElementById('direccion').value = '';
     document.getElementById('camilla').checked = false;
     document.getElementById('prelacion').checked = false;
@@ -268,15 +265,20 @@ await guardarCita();
     
 });
 
-  function populateDestinos() {
+
+
+});
+
+
+function getRutas() {
     const selectDestino = document.getElementById('destino');
 
-    axios.get('https://backend-transporteccss.onrender.com/api/destinos')
+    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
         .then(response => {
             const destinos = response.data;
             destinos.forEach(destino => {
                 const option = document.createElement('option');
-                option.value = destino.IdDestino;
+                option.value = destino.IdRuta;
                 option.textContent = destino.Descripcion;
                 selectDestino.appendChild(option);
             });
@@ -288,7 +290,7 @@ await guardarCita();
 
     }
 
-    function populateEspecialidades() {
+    function getEspecialidades() {
         const selectEspecialidad = document.getElementById('especialidad');
 
         axios.get('https://backend-transporteccss.onrender.com/api/especialidad')
@@ -307,5 +309,6 @@ await guardarCita();
     }
 
 
-});
+        getRutas();
+        getEspecialidades();
 
