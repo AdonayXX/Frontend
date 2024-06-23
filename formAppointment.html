@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="identificacion" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
-                        <input type="text" id="identificacion" name="identificacion" class="form-control" >
+                        <input type="text" id="identificacion" name="identificacion" class="form-control" maxlength="15">
                     </div>
                     <div class="col-md-4 mt-2">
                         <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
@@ -41,18 +41,18 @@
                         <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo Apellido:</label>
                         <input type="text" id="segundoApellido" name="segundoApellido" class="form-control" readonly>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                        <input type="text" id="telefono1" name="telefono1" class="form-control" readonly>
+                    <div class="col-md-4 mb-3">
+                        <label for="telefonos" class="form-label"><i class="bi bi-telephone"></i> Teléfonos:</label>
+                        <input type="text" id="telefonos" name="telefono1" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="row">
-                   
-                    <div class="col-md-3 mb-3">
-                        <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
-                        <input type="text" id="telefono2" name="telefono2" class="form-control" readonly>
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
+                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
                     </div>
-                    <div class="col-md-3 mb-3">
+
+                    <div class="col-md-2 mb-3">
                         <label for="condicion" class="form-label"><i class="bi bi-exclamation-circle"></i> Condición:</label>
                         <select id="condicion" name="condicion" class="form-select">
                             <option value="Verde">Verde</option>
@@ -75,17 +75,14 @@
                             <label class="form-check-label" for="camilla">SI</label>
                         </div>
                     </div>
+                    
 
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
-                    </div>
-
+               
                     <div class="col-md-6 mb-3">
                         <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
-                        <textarea id="diagnostico" name="diagnostico" class="form-control" required></textarea>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250"></textarea>
                     </div>
                 </div>
             </div>
@@ -126,17 +123,17 @@
                                 
                             </div>
                             <div class="col-md-3 mb-3">
-                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido">
+                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" readonly>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido">
+                                <input type="text" id="acompananteApellido2_1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" readonly>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfonos">
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfonos" readonly>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label for="" class="form-label">Parentesco:</label>
-                                <input type="text"  id="acompananteParentesco1" name="acompananteParentesco1"class="form-control" placeholder="Parentesco">
+                                <input type="text"  id="acompananteParentesco1" name="acompananteParentesco1"class="form-control" placeholder="Parentesco" readonly>
                             </div>
                         </div>
                     </div>
@@ -152,22 +149,22 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
-                                    class="form-control" placeholder="1° Apellido">
+                                    class="form-control" placeholder="1° Apellido" readonly>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteApellido2_2" name="acompananteApellido2_2"
-                                    class="form-control" placeholder="2° Apellido">
+                                    class="form-control" placeholder="2° Apellido" readonly>
                             </div>
 
                             <div class="col-md-3 mb-3">
                                 <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
-                                    class="form-control" placeholder="Teléfonos">
+                                    class="form-control" placeholder="Teléfonos" readonly>
                             </div>
                           
                           
                             <div class="col-md-2 mb-3">
                                 <label for="" class="form-label">Parentesco:</label>
-                                <input type="text"  id="acompananteParentesco2" name="acompananteParentesco2"class="form-control" placeholder="Parentesco">
+                                <input type="text"  id="acompananteParentesco2" name="acompananteParentesco2"class="form-control" placeholder="Parentesco" readonly>
                             </div>
                         </div>
                     </div>
@@ -176,14 +173,15 @@
 
             <div class="form-section">
                 <h2>Datos de la Cita:</h2>
-                <div class="row mb-3 mt-5">
-                    <div class="col-md-3">
+                <div class="row mb-4 mt-5">
+                    <div class="col-md-3 mt-1">
                         <label class="form-label" for="traslado"><i class="bi bi-geo"></i> Traslado:</label>
                         <select id="traslado" name="traslado" class="form-select">
                             <option value="Local">Local</option>
                             <option value="Externo">Externo</option>
                         </select>
                     </div>
+                    
                         <div class="col-md-3 mt-1">
                         <label for="origen" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de salida:</label>
                         <select id="origen" name="origen" class="form-select">
@@ -192,6 +190,14 @@
                             <option value="Domicilio">Domicilio</option>
                             <option value="Sede">Sede</option>
                         </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="fechaCita" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha:</label>
+                        <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="horaCita" class="form-label"><i class="bi bi-stopwatch"></i> Hora:</label>
+                        <input type="time" id="horaCita" name="horaCita" class="form-control">
                     </div>
                     <div class="col-md-3 mt-1">
                         <label for="destino" class="form-label"><i class="bi bi-hospital"></i> Destino:</label>
@@ -206,14 +212,7 @@
                             <option disabled selected value> -- Seleccione una especialidad -- </option>
                         </select>
                     </div>
-                    <div class="col-md-3 mt-1">
-                        <label for="fechaCita" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha:</label>
-                        <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
-                    </div>
-                    <div class="col-md-3 mt-1">
-                        <label for="horaCita" class="form-label"><i class="bi bi-stopwatch"></i> Hora:</label>
-                        <input type="time" id="horaCita" name="horaCita" class="form-control">
-                    </div>
+                
 
                 </div>
             </div>
