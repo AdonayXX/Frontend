@@ -1,11 +1,22 @@
+Promise.all([
+    mostrarProximosViajes(),
+    contarCitasHome(),
+    mostrarChoferesPorVencer(),
+    mostrarUnidadesPorVencer(),
+]);
+
+
 async function mostrarProximosViajes() {
     try {
         const ahora = new Date();
         const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
         const hoyUTC = ahoraUTC.toISOString().split('T')[0];
 
+        const fechaFormateada = hoyUTC.split('-').reverse().join('-');
+        document.getElementById('fecha').textContent = fechaFormateada;
+
         const [destinosRespuesta, viajesRespuesta, unidadesRespuesta] = await axios.all([
-            axios.get('https://backend-transporteccss.onrender.com/api/destinos'),
+            axios.get('https://backend-transporteccss.onrender.com/api/rutas'),
             axios.get('https://backend-transporteccss.onrender.com/api/viaje'),
             axios.get('https://backend-transporteccss.onrender.com/api/unidades')
         ]);
@@ -21,7 +32,7 @@ async function mostrarProximosViajes() {
         ]);
 
         const destinoMap = destinos.reduce((map, destino) => {
-            map[destino.IdDestino] = destino.Descripcion.toLowerCase().replace(/(^|\s)\S/g, (letra) => letra.toUpperCase());
+            map[destino.IdRuta] = destino.Descripcion.toLowerCase().replace(/(^|\s)\S/g, (letra) => letra.toUpperCase());
             return map;
         }, {});
 
@@ -36,7 +47,7 @@ async function mostrarProximosViajes() {
             const fechaViaje = new Date(viaje.FechaCita);
             const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), fechaViaje.getUTCHours(), fechaViaje.getUTCMinutes(), fechaViaje.getUTCSeconds()));
             const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
-            return fechaViajeStr === hoyUTC && viaje.EstadoViaje === null;
+            return fechaViajeStr === hoyUTC && viaje.EstadoViaje === null; // Cambiar a 'En curso' cuando se implemente
         });
 
         const proximosViajesContainer = document.getElementById('proximosViajesContainer');
@@ -45,13 +56,13 @@ async function mostrarProximosViajes() {
         if (viajesHoyUTC.length === 0) {
             const mensajeNoViajes = document.createElement('p');
             mensajeNoViajes.textContent = 'No hay viajes asignados para el día de hoy.';
-            mensajeNoViajes.classList.add('text-center'); // Agregar clase para centrar texto
+            mensajeNoViajes.classList.add('text-center');
             proximosViajesContainer.appendChild(mensajeNoViajes);
         
         } else {
             viajesHoyUTC.forEach(viaje => {
                 const viajeElement = document.createElement('div');
-                viajeElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow-lg');
+                viajeElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
                 viajeElement.style.maxWidth = '18rem';
                 const destinoDescripcion = destinoMap[viaje.idUbicacionDestino] || viaje.idUbicacionDestino;
                 const numeroUnidad = unidadMap[viaje.idUnidad] || viaje.idUnidad;
@@ -60,17 +71,166 @@ async function mostrarProximosViajes() {
                     <div class="headerviaje card-header text-center text-white" style="background-color: #094079;">
                         <h5 class="fw-bolder">Unidad ${numeroUnidad}</h5>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Fecha de viaje: ${new Date(viaje.FechaCita).toISOString().split('T')[0]}</h5>
+                    <div class="card-body text-center">
+                        
+                        <h5 class="card-title">Fecha de viaje:</h5>
+                        <h5 class="card-title"> ${new Date(viaje.FechaCita).toISOString().split('T')[0]}</h5>
                         <p class="card-text fs-5">Destino: ${destinoDescripcion}</p>
                     </div>
                 `;
                 proximosViajesContainer.appendChild(viajeElement);
             });
         }
+
+        
+        const viajesFinalizados = viajes.filter(viaje => {
+            const añoViaje = viaje.idViaje.split('-')[0];
+            return viaje.EstadoViaje === null && añoViaje === ahora.getFullYear().toString();
+        });
+
+        // Mostrar el contador de viajes finalizados
+        document.getElementById('contadorViajesFinalizados').textContent = viajesFinalizados.length;
+
     } catch (error) {
         console.error('Error al mostrar los próximos viajes:', error);
     }
 }
 
-mostrarProximosViajes();
+async function contarCitasHome() {
+    try {
+        const year = new Date().getFullYear().toString();
+        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje');
+
+        if (!viajesRespuesta.data) {
+            throw new Error('Error al obtener los viajes');
+        }
+
+        const dataViajesFinalizadas = viajesRespuesta.data.viaje;
+        const citasFinalizadas = dataViajesFinalizadas.filter(viaje => {
+            const viajeYear = viaje.idViaje.split('-')[0];
+            return viaje.EstadoCita === 'Iniciada' && viajeYear === year; // Cambiar a 'Finalizada' cuando se implemente
+        });
+        
+        const dataViajesCanceladas = viajesRespuesta.data.viaje;
+        const citasCanceladas = dataViajesCanceladas.filter(viaje => {
+            const viajeYear = viaje.idViaje.split('-')[0];
+            return viaje.EstadoCita === 'Iniciada' && viajeYear === year; // Cambiar a 'Cancelada' cuando se implemente
+        });
+
+        document.getElementById('contadorCitasFinalizadas').textContent = citasFinalizadas.length;
+        document.getElementById('contadorCitasCanceladas').textContent = citasCanceladas.length;
+
+    } catch (error) {
+        console.error('Error al contar las citas finalizadas:', error);
+    }
+}
+
+
+async function mostrarUnidadesPorVencer() {
+    try {
+        const ahora = new Date();
+        const hoyUTC = ahora.toISOString().split('T')[0];
+
+        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+
+        if (!unidadesRespuesta.data) {
+            throw new Error('Error al obtener las unidades');
+        }
+
+        const dataUnidades = unidadesRespuesta.data;
+
+        const unidadesPorVencer = dataUnidades.unidades.filter(unidad => {
+            const fechaVencimiento = new Date(unidad.fechaDekra);
+            const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
+            return diasRestantes < 30 && diasRestantes > 0;
+        });
+
+        const unidadesPorVencerContainer = document.getElementById('proximosDekra');
+        unidadesPorVencerContainer.innerHTML = '';
+
+        if (unidadesPorVencer.length === 0) {
+            console.log('No hay unidades cuya fecha de revisión de Dekra vence en menos de 30 días.');
+
+        } else {
+            const tituloFechasDekra = document.createElement('h5');
+            tituloFechasDekra.textContent = 'Fechas de Dekra';
+            tituloFechasDekra.classList.add('text-center','mb-4', 'rounded' );
+            unidadesPorVencerContainer.appendChild(tituloFechasDekra);
+
+            unidadesPorVencer.forEach(unidad => {
+                const unidadElement = document.createElement('div');
+                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                unidadElement.style.maxWidth = '18rem';
+                unidadElement.innerHTML = `
+                    <div class="headerunidad card-header text-center text-white" style="background-color: #097F4A;">
+                        <h5 class="fw-bolder">Unidad ${unidad.numeroUnidad}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Fecha de Revisión: </h5>
+                        <h5 class="card-title">${unidad.fechaDekra.split('T')[0]}</h5>
+                    </div>
+                `;
+                unidadesPorVencerContainer.appendChild(unidadElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error al mostrar las unidades por vencer:', error);
+    }
+}
+
+async function mostrarChoferesPorVencer() {
+    try {
+        const ahora = new Date();
+
+        const choferesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+
+        if (!choferesRespuesta.data) {
+            throw new Error('Error al obtener los choferes');
+        }
+
+        const dataChoferes = choferesRespuesta.data;
+
+        const choferesPorVencer = dataChoferes.choferes.filter(chofer => {
+            const fechaVencimiento = new Date(chofer.vencimientoLicencia);
+            const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
+            return diasRestantes <= 30 && diasRestantes > 0;
+        });
+
+        const choferesPorVencerContainer = document.getElementById('proximoschoferes');
+        choferesPorVencerContainer.innerHTML = '';
+
+        if (choferesPorVencer.length === 0) {
+            console.log('No hay choferes cuya fecha de vencimiento de licencia vence en menos de 30 días.');
+        } else {
+            const tituloFechasChofer = document.createElement('h5');
+            tituloFechasChofer.textContent = 'Fechas de Vencimiento de Licencia';
+            tituloFechasChofer.classList.add('text-center', 'mb-4', 'mt-5', 'rounded');
+            choferesPorVencerContainer.appendChild(tituloFechasChofer);
+
+            choferesPorVencer.forEach(chofer => {
+                const fechaVencimiento = new Date(chofer.vencimientoLicencia);
+                const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
+
+                const choferElement = document.createElement('div');
+                choferElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                choferElement.style.maxWidth = '18rem';
+                choferElement.innerHTML = `
+                    <div class="headerchofer card-header text-center text-white" style="background-color: #4267ad;">
+                        <h5 class="fw-bolder">${chofer.nombre} ${chofer.apellido1}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Fecha de Vencimiento de Licencia: </h5>
+                        <h5 class="card-title">${chofer.vencimientoLicencia.split('T')[0]}</h5>
+                        <h5 class="card-title">Días restantes: ${diasRestantes}</h5>
+                    </div>
+                `;
+                choferesPorVencerContainer.appendChild(choferElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error al mostrar los choferes por vencer:', error);
+    }
+}
+
+
+// ------------------------------------- //
