@@ -34,8 +34,15 @@
                     document.getElementById('txa-detalle').value = vale.Detalle;
                     document.getElementById('input-salida').value = vale.NombreSalida;
                     document.getElementById('input-destino').value = vale.NombreDestino;
-                    if (vale.EstadoValeID === 3 || vale.EstadoValeID === 5) {
+                    if (vale.EstadoId === 3 || vale.EstadoId === 5) {
                         blockBtn()
+                        const selectPlaca = document.getElementById('select-placa');
+                        const selectChofer = document.getElementById('select-chofer');
+                        const selectEncargado = document.getElementById('select-encargado');
+                        selectPlaca.disabled = true;
+                        selectChofer.disabled = true;
+                        selectEncargado.disabled = true;
+                        showToast('Vale Rechazado', 'No se pueden modificar datos.');
                     }
                     acompanantes(vale);
                 }
@@ -120,29 +127,35 @@
                 HoraRevision: obtenerHoraActual(),
                 Observaciones: "Agregando datos"
             };
+            console.log(coordinate);
             try {
                 await axios.post(`${url}api/revicionVale`, coordinate);
-                console.log(coordinate);
                 return true;
             } catch (error) {
                 console.error('Error al guardar datos', error);
                 showToast('Error', 'Error al guardar la la revición.');
+                return false;
             }
         } catch (error) {
             console.error('Error fetching vale data:', error);
+            return false;
         }
     }
 
     btnAdd.addEventListener('click', function () {
         if(addCoordinate()){
+            const selectPlaca = document.getElementById('select-placa');
+            const selectChofer = document.getElementById('select-chofer');
+            const selectEncargado = document.getElementById('select-encargado');
+            selectPlaca.disabled = true;
+            selectChofer.disabled = true;
+            selectEncargado.disabled = true;
+            btnAdd.disabled = true;
             showToast('Datos Agregados', 'Los datos se han guardado correctamente');
-            setTimeout(function() {
-                loadContent('dataTableRequest.html', 'mainContent');
-            }, 2500);
+            const newIdEstado = 2;
+            const valueId = document.getElementById('input-id').value;
+            newStatus(valueId, newIdEstado);
         }
-        const newIdEstado = 2;
-        const valueId = document.getElementById('input-id').value;
-        newStatus(valueId, newIdEstado);
     })
 
     async function readChofer() {
@@ -175,32 +188,36 @@
         }
     }
 
-    // Configura la URL y los datos a enviar
     async function newStatus(valueId, newIdEstado) {
         try {
-            // Configuracion de la URL para ejecutar la actualizacion 
             const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
-            // Realiza la petición PUT para actualizar el campo
             const response = await axios.put(valUrl);
             console.log('Campo actualizado correctamente:');
-            if (newIdEstado === 3) {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
-            } else {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
-            }
 
+            if (newIdEstado === 2) {
+                showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
+            } else {
+                showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
+                blockBtn();
+            }
+    
         } catch (error) {
             console.error('Error al actualizar el campo:', error);
-            throw error; // Propaga el error para manejarlo en el contexto externo si es necesario
+            throw error;
         }
     }
 
-    //Se configuro el boton y se llama a la funcion Cancelar con el evento click
     const btnCancel = document.getElementById('btn-rechazarSoli');
     btnCancel.addEventListener('click', function () {
         const newIdEstado = 3;
         const valueId = document.getElementById('input-id').value;
         newStatus(valueId, newIdEstado);
+        const selectPlaca = document.getElementById('select-placa');
+        const selectChofer = document.getElementById('select-chofer');
+        const selectEncargado = document.getElementById('select-encargado');
+        selectPlaca.disabled = true;
+        selectChofer.disabled = true;
+        selectEncargado.disabled = true;
     });
 
     function blockBtn() {
