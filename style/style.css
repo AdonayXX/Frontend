@@ -131,18 +131,19 @@ h1 {
 .datosint {
 
     border-bottom: 1px solid #000;
-
 }
 
+
+
 .datosinf {
-    border: 1px solid #000000;
+    border: 1px solid #5a5757;
     background-color: white;
 
 
 }
 
 .img-inf img {
-    border: 2px solid #000;
+    border: 1px solid #000;
     padding: 1rem;
     border-radius: 15px;
     display: flex;
@@ -150,7 +151,40 @@ h1 {
     margin: auto;
 
 }
+.header-C {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 0 1rem;
+}
+.header-C h3 {
+    margin: 0; 
+}
+.date-home {
+    font-size: 1.2rem;
+    color: #094079;
+}
+/* media */
 
+@media (max-width: 768px) {
+    .header-C {
+
+        flex-direction: column;
+    }
+}
+.header-C h2 {
+    color: #094079;
+    font-weight: 300;
+}
+.datosinf {
+    /* border-radius: 10px; */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+.datosinf:hover {
+    transform: scale(1.05);
+}
 /* Fin Estilos home.html */
 
 /* CSS de dataTableAppointment (centrar los iconos) */
