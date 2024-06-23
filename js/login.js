@@ -349,30 +349,35 @@ function getAcompanantes(vale) {
         const div1 = document.getElementById('acompanante1');
         div1.style.display = 'block';
         acompDiv1.value = vale.Acompanante1;
+        acompananteCount++;
     }
     if (vale.Acompanante2 != null) {
         const acompDiv1 = document.getElementById('acompananteNombre2');
         const div1 = document.getElementById('acompanante2');
         div1.style.display = 'block';
         acompDiv1.value = vale.Acompanante2;
+        acompananteCount++;
     }
     if (vale.Acompanante3 != null) {
         const acompDiv1 = document.getElementById('acompananteNombre3');
         const div1 = document.getElementById('acompanante3');
         div1.style.display = 'block';
         acompDiv1.value = vale.Acompanante3;
+        acompananteCount++;
     }
     if (vale.Acompanante4 != null) {
         const acompDiv1 = document.getElementById('acompananteNombre4');
         const div1 = document.getElementById('acompanante4');
         div1.style.display = 'block';
         acompDiv1.value = vale.Acompanante4;
+        acompananteCount++;
     }
     if (vale.Acompanante5 != null) {
         const acompDiv1 = document.getElementById('acompananteNombre5');
         const div1 = document.getElementById('acompanante5');
         div1.style.display = 'block';
         acompDiv1.value = vale.Acompanante5;
+        acompananteCount++;
     }
 }
 
