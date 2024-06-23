@@ -58,7 +58,7 @@ h1 {
     background-color: #094079;
     padding-top: 20px;
     transition: 0.3s;
-    z-index: 1;
+    z-index: 1049;
 }
 
 .items {
@@ -269,7 +269,7 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1049;
+    z-index: 1048;
     display: flex;
     justify-content: center;
     align-items: center;

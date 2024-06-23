@@ -1,10 +1,10 @@
 getUserData();
-mostrarSpinner();
+
 // Simular una carga o tarea que toma tiempo
 setTimeout(function () {
   // Ocultar el spinner después de un tiempo simulado (por ejemplo, después de 3 segundos)
   ocultarSpinner();
-}, 4000);
+}, 3000);
 document.getElementById("addUserButton").addEventListener("click", function () {
   getUserRegisterData()
 });
@@ -145,6 +145,13 @@ async function getUserData() {
 
   } catch (error) {
     console.error('Error al obtener datos del usuario:', error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      showToast('Error',errorMessage);
+    }  else {
+      console.error('Ha ocurrido un problema:', error);
+      showToast('Error','Ocurrio un problema al cargar los datos.')
+    } 
   }
 }
 function fillTableUsuarios(usuarios) {
