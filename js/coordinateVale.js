@@ -43,6 +43,10 @@
                         selectChofer.disabled = true;
                         selectEncargado.disabled = true;
                         showToast('Vale Rechazado', 'No se pueden modificar datos.');
+                    }else{
+                        if (vale.EstadoId == 2) {
+                            blockBtn();
+                        }
                     }
                     acompanantes(vale);
                 }
@@ -150,11 +154,11 @@
             selectPlaca.disabled = true;
             selectChofer.disabled = true;
             selectEncargado.disabled = true;
-            btnAdd.disabled = true;
             showToast('Datos Agregados', 'Los datos se han guardado correctamente');
             const newIdEstado = 2;
             const valueId = document.getElementById('input-id').value;
             newStatus(valueId, newIdEstado);
+            blockBtn();
         }
     })
 
