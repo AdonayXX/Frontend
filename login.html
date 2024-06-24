@@ -15,11 +15,11 @@
     <div class="container-fluid contenedor">
         <div id="6" name="formLogin" class="form-container">
             <p class="title">Login</p>
-            <form class="form">
-                <input id="userEmail" type="email" class="input" placeholder="Usuario">
-                <input id="userPassword" type="password" class="input" placeholder="Contraseña">
+            <form class="form" id="formLogin" method="post">
+                <input id="userEmail" type="email" class="input" placeholder="Usuario" required maxlength="30">
+                <input id="userPassword" type="password" class="input" placeholder="Contraseña" required maxlength="30">
                 
-                <button id="loginButton" type="button" class="form-btn">Iniciar Sesión</button>
+                <button id="loginButton" type="submit" class="form-btn">Iniciar Sesión</button>
             </form>
            
 
@@ -218,7 +218,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-1">
-                <form action="" method="post" id="formUser" class="bg-light p-4 border rounded-3">
+                <form  method="post" id="formUserRegister" class="bg-light p-4 border rounded-3">
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="userIdentification" class="form-label"><i class="bi bi-person-badge"></i> Identificación:</label>
@@ -254,14 +254,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label for="userEmail" class="form-label"><i class="bi bi-envelope"></i> Correo:</label>
-                            <input type="email" id="userEmail" name="userEmail" class="form-control" maxlength="30"
+
+                            <label for="userRegisterEmail" class="form-label"><i class="bi bi-envelope"></i> Correo:</label>
+                            <input type="email" id="userRegisterEmail" name="userRegisterEmail" class="form-control" maxlength="30"
                                 required>
                         </div>
                     </div>
                     <div class="row justify-content-end">
                         <div class="col-md-3 mt-3">
-                            <button id="saveCompanient" type="submit" class="btn btn-primary" title="Guardar"><i class="bi bi-save"></i> Guardar</button>
+                            <button type="submit" class="btn btn-primary" title="Guardar"><i class="bi bi-save"></i> Guardar</button>
                         </div>
                     </div>
                 </form>
@@ -276,6 +277,8 @@
         </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/login.js"></script>
+    <script src="/js/registerLogin.js"></script>
 </body>
+
 
 </html>

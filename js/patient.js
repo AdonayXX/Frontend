@@ -1,13 +1,10 @@
 
 getPatientComp();
-mostrarSpinner();
-// Simular una carga o tarea que toma tiempo
-setTimeout(function() {
-  // Ocultar el spinner después de un tiempo simulado (por ejemplo, después de 3 segundos)
-  ocultarSpinner();
-}, 2000);
+
+
 
 async function getPatientComp() {
+  mostrarSpinner();
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
     const response = await axios.get(API_URL);
@@ -40,9 +37,7 @@ async function getPatientComp() {
 
 
     });
-
-
-
+  ocultarSpinner();
   } catch (error) {
 
     if (error.response && error.response.status === 400) {
