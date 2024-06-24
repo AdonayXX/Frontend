@@ -7,7 +7,22 @@
             const data = response.data;
             const vales = data.vales;
 
-            console.log("Datos de los vales:", vales);
+
+                let table = $('#tableRequest').DataTable({
+                  dom: "<'row'<'col-md-6'l>" +
+                    "<'row'<'col-md-12't>>" +
+                    "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+                  ordering: false,
+                  searching: true,
+                  paging: true,
+                  language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+                  },
+                  caseInsensitive: true,
+                  smart: true
+          
+                });
+    
 
             const tableBody = document.querySelector('#tableRequest');
             tableBody.innerHTML = '';
