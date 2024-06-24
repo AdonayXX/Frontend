@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="unitNumber"><i class="bi bi-hash"></i> Número de Unidad</label>
-                    <input type="text" class="form-control" id="unitNumber" maxlength="9" required>
+                    <input type="text" class="form-control" id="unitNumber" maxlength="15" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
@@ -39,7 +39,6 @@
                 <div class="col-md-4 mb-3">
                     <label for="assignedDriver"><i class="bi bi-person"></i> Chófer Designado</label>
                     <select class="form-select" id="assignedDriver" required>
-                        <option selected disabled value="">Seleccione el chófer...</option>
                         <!-- Aquí se cargan los choferes -->
                     </select>
                 </div>
@@ -89,9 +88,9 @@
                 <div class="col-md-4 mb-3">
                     <label for="maintenanceType"><i class="bi bi-tools"></i> Tipo de Mantenimiento</label>
                     <select class="form-select" id="maintenanceType" required>
-                        <option selected disabled value="">Seleccione el mantenimiento...</option>
-                        <option value="1">Por Fecha</option>
-                        <option value="2">Por Kilometraje</option>
+                        <option selected disabled value="">Seleccione el tipo de mantenimiento...</option>
+                        <option value="1">Fecha</option>
+                        <option value="2">Kilometraje</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3" id="mileageField" style="display: none;">
@@ -107,12 +106,15 @@
                 </div>
                 <div class="col-md-4 mb-3" id="periodicityField" style="display: none;">
                     <label for="advance"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
-                    <input type="text" class="form-control" id="periodicity" required>
+                    <input type="text" class="form-control" id="periodicity" maxlength="6"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3" id="advanceField" style="display: none;">
-                    <label for="advance"><i class="bi bi-arrow-90deg-right"></i> Porcentaje Adelanto del
-                        Mantenimiento</label>
-                    <input type="text" class="form-control" id="advance" required>
+                    <label for="advance"><i class="bi bi-percent"></i> Adelanto del Mantenimiento</label>
+                    <input type="text" class="form-control" id="advance" maxlength="2"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
             </div>
             <br>
