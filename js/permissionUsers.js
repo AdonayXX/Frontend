@@ -104,7 +104,7 @@ function fillPermissionsTable(roles, forms) {
                     <td>${form.NombreFormulario}</td>
                     <td>${formattedDate}</td>
                     <td class="text-center">
-                    ${roleName !== 'Admin' ? `<button class="btn btn-outline-danger btn-sm" onclick="DeletePermiso(${role.IdRol})"><i class="bi bi-trash"></i></button>` : 'No hay acciones'}
+                    ${roleName !== 'Admin' ? `<button class="btn btn-outline-danger btn-sm" onclick="DeletePermiso(${role.IdRol})"><i class="bi bi-trash"></i></button>` : '-'}
                     </td>
                 `;
                 fragment.appendChild(row);

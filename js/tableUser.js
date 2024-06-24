@@ -168,6 +168,7 @@ function fillTableUsuarios(usuarios) {
       const roleDescription = getRoleDescription(usuario.Rol);
       const row = document.createElement('tr');
       const nombreCompleto = `${usuario.Nombre} ${usuario.Apellido1} ${usuario.Apellido2}`;
+      const isActive = usuario.Rol === 1 && usuario.Estado === 'Activo';
       row.innerHTML = `
               <tr>
                 <td class="text-start">${usuario.Identificacion}</td>
@@ -176,8 +177,13 @@ function fillTableUsuarios(usuarios) {
                 <td>${roleDescription}</td>
                 <td>${usuario.Estado}</td>
                 <td class="actions">
-                <button class="btn btn-outline-primary btn-sm" data-user='${JSON.stringify(usuario)}' onclick='sendUserData(this)'><i class="bi bi-pencil-square"></i></button>
-                <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash" onclick="deleteButton('${usuario.IdUsuario}', '${nombreCompleto}', '${usuario.Identificacion}')"></i></button>            
+                 ${!isActive ? `
+                <button class="btn btn-outline-primary btn-sm" data-user='${JSON.stringify(usuario)}' onclick='sendUserData(this)'>
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm" onclick="deleteButton('${usuario.IdUsuario}', '${nombreCompleto}', '${usuario.Identificacion}')">
+                    <i class="bi bi-trash"></i>
+                </button>` : '-'}
                 </td>
               </tr>
             `;
