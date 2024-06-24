@@ -132,8 +132,8 @@ async function getChofer(cedula) {
             document.getElementById('fechaVencimientoLicencia').disabled = false;
             document.getElementById('estado').disabled = false;
             document.getElementById('acompananteNombreN1').disabled = false;
-            document.getElementById('apellido1CE').disabled = false;
-            document.getElementById('apellido2CE').disabled = false;
+            document.getElementById('apellido1CE1').disabled = false;
+            document.getElementById('apellido2CE1').disabled = false;
             document.getElementById('contactoEmergencia').disabled = false;
 
             document.getElementById('acompananteNombreN2').disabled = false;
