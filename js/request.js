@@ -21,7 +21,7 @@
                         <td>${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
                         <td>${vale.NombreMotivo}</td>
-                        <td>${processStatus(vale.NombreEstado)}</td> 
+                        <td class="d-flex justify-content-center"><div class="text-start" style="width: 8em">${processStatus(vale.NombreEstado)}</div></td> 
                         <td class="text-center">
                             <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-secondary">Coordinar</button>
                         </td>
@@ -38,13 +38,13 @@
     function processStatus(status){
         switch (status) {
             case "Pendiente":
-                return '<span style="color: orange; ">! </span>'  + status;
+                return '<span style="color: orange;font-size: 1.5rem;">■ </span>' + status;
             break;
             case "Rechazado":
-                return '<span style="color: red; ">x </span>' + status;
+                return '<span style="color: red; font-size: 1.5rem;">■ </span>' + status;
             break
             case "Aprobado":
-                return '<span style="color: blue; ">ѻ </span>' + status;
+                return '<span style="color: blue;font-size: 1.5rem;">■ </span>' + status;
             break
             default:
                 return status;
