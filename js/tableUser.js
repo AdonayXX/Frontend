@@ -1,16 +1,13 @@
 getUserData();
 
-// Simular una carga o tarea que toma tiempo
-setTimeout(function () {
-  // Ocultar el spinner después de un tiempo simulado (por ejemplo, después de 3 segundos)
-  ocultarSpinner();
-}, 3000);
+
 document.getElementById("addUserButton").addEventListener("click", function () {
   getUserRegisterData()
 });
 
 //Funcion para obtener datos ingresados del usuario
 function getUserRegisterData() {
+ 
   const userIdentification = document.querySelector('#userRegisterIdentification').value;
   const userName = document.querySelector('#userRegisterName').value;
   const userFirstLastName = document.querySelector('#userRegisterFirstlastname').value;
@@ -106,6 +103,7 @@ async function deleteUser(userId) {
 }
 
 async function getUserData() {
+  mostrarSpinner();
   try {
     const Api_Url = 'http://localhost:18026/';
     const token = localStorage.getItem('token');
@@ -142,6 +140,11 @@ async function getUserData() {
         table.search(inputValue).draw();
       });
     });
+
+setTimeout(function () {
+
+  ocultarSpinner();
+}, 500);
 
   } catch (error) {
     console.error('Error al obtener datos del usuario:', error);

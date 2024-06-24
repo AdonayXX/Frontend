@@ -1,12 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //Verificar token
-    const token = localStorage.getItem('token');
+     //Verificar token
+   /*  const token = localStorage.getItem('token');
     if (token) {
         setupAutoLogout(token);
-    }
+        const rolUser=  tokenrol(token);
+        getCatForm(rolUser);
+        
+
+    }  */
     //Cerrar Sesión
     document.querySelector('#logoutLink').addEventListener('click', ()=> {
-    console.log("Entro");
         logout(); 
     });
     loadToastTemplate();
@@ -194,3 +197,74 @@ function logout() {
     history.replaceState(null, '', 'login.html');
     window.location.href = 'login.html';
 }
+
+function tokenrol(token) {
+    try {
+        const decodedToken = jwt_decode(token);
+        return (decodedToken.usuario); // Muestra todo el contenido del token decodificado
+        // Si solo quieres el payload:
+        // console.log(decodedToken.payload);
+    } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        throw new Error('Error al decodificar el token');
+    }
+}
+async function getCatForm(rolUser) {
+    console.log(rolUser);
+    try {
+      const Api_Url = 'http://localhost:18026/';
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const rolesFr = response.data.roles;
+      const Rol = rolUser.Rol;
+      console.log(response.data);
+      obtenerFormulariosPorRol(rolesFr, Rol);
+    } catch (error) {
+      console.error('Error al obtener datos :', error);
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        showToast('Error','Inicie Sesión de nuevo');
+      }  else {
+        console.error('Ha ocurrido un problema:', error);
+        showToast('Atención','No tienes permisos, contacte al administrador.');
+        const allItems = document.querySelectorAll('.items');
+        allItems.forEach(item => {
+            if (item.classList.contains('no-hide')) {
+                item.classList.remove('hidden');
+            }
+        });
+
+      } 
+    }
+  }
+
+  function obtenerFormulariosPorRol(roles, rolBuscado) {
+    const formularios = roles
+        .filter(role => role.Rol === rolBuscado)
+        .map(role => role.Formulario);
+        console.log(formularios);
+        const allItems = document.querySelectorAll('.items');
+        if (formularios.length > 0){
+            allItems.forEach(item => {
+                if (item.classList.contains('no-hide')) {
+                    item.classList.remove('hidden');
+                }
+            });
+        
+            formularios.forEach(formulario => {
+                const item = document.getElementById(formulario.toString());
+                if (item) {
+                    item.classList.remove('hidden');
+                }
+            });
+
+        }
+       
+}
+
+
+ 

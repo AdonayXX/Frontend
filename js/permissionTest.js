@@ -24,7 +24,6 @@ async function getUserPermission() {
         console.log(roles);
        
         document.querySelector('#addNewPermission').addEventListener('click',()=>{
-            console.log("Hola")
               // Crear un mapa de roles a formularios excluidos
               const roleExclusions = {};
               roles.forEach(entry => {

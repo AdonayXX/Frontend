@@ -104,7 +104,7 @@ function fillPermissionsTable(roles, forms) {
                     <td>${form.NombreFormulario}</td>
                     <td>${formattedDate}</td>
                     <td class="text-center">
-                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                    ${roleName !== 'Admin' ? `<button class="btn btn-outline-danger btn-sm" onclick="DeletePermiso(${role.IdRol})"><i class="bi bi-trash"></i></button>` : 'No hay acciones'}
                     </td>
                 `;
                 fragment.appendChild(row);
@@ -201,3 +201,56 @@ async function addNewPermission(DataRolPermission) {
 
     }
 }
+
+async function DeletePermiso(Idrol){
+    let modal = new bootstrap.Modal(document.getElementById('confirmDeletePermission'), {
+        backdrop: 'static',
+        keyboard: false
+      });
+      let bodyConfirm = document.querySelector('#bodyConfirmPermission');
+    
+      bodyConfirm.innerHTML = `
+        <p>¿Estás seguro de que deseas eliminar el Permiso?</p>
+    `;
+    
+    
+      modal.show();
+    
+    
+      let confirmBtn = document.getElementById('confirmDeleteBtnPermission');
+    
+    
+      confirmBtn.onclick = function () {
+    
+        deletePer(Idrol);
+    
+    
+        modal.hide();
+      };
+    
+    };
+
+    async function deletePer(Idrol){
+        try {
+            const token = localStorage.getItem('token');
+            const API_URL = `http://localhost:18026/api/rolesCatalogo/${Idrol}`;
+            const response = await axios.delete(API_URL,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+
+            });
+            showToast('Exito','Permiso eliminado.')
+            setTimeout(function () {
+              loadContent('dataTableRoles.html', 'mainContent');
+            }, 1000);
+            
+        
+          } catch (error) {
+            console.error('There has been a problem deleting the patient:', error);
+            showToast('Ups!','Error al eliminar el permiso.')
+          }
+
+    }
+
+

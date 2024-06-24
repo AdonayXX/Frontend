@@ -137,6 +137,26 @@
            
         </div>
     </div>
+    <div class="modal fade mt-5" id="confirmDeletePermission" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de Eliminación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyConfirmPermission">
+                    <!-- El contenido se actualizará dinámicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDeleteBtnPermission" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
     <div data-script="/js/permissionUsers.js"></div>
    <!--  <div data-script="/js/permissionTest.js"></div> -->
 </body>
