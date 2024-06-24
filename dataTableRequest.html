@@ -24,11 +24,11 @@
                 <img src="img/icons8-excel.svg" alt="Excel Icon">
             </button>
         </div>
+
     <div class="table-responsive mt-3">
-        <table class="table table-light table-hover table-striped table-bordered text-center">
+        <table class="table table-light table-hover table-striped table-bordered text-center" id="tableRequest">
             <thead>
-                <tr>
-                    
+                <tr> 
                     <th>ID</th>
                     <th>Fecha Solicitada</th>
                     <th>Solicitante</th>
@@ -37,42 +37,10 @@
                     <th>Coordinar</th>
                 </tr>
             </thead>
-            <tbody id="tableRequest">
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
-                </tr>
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
-                </tr>
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
-                </tr>
-                <tr>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td>-------------</td>
-                    <td class="text-center"><button onclick="loadContent('formVale.html', 'mainContent')" type="button" class="btn btn-outline-secondary">Coordinar</button></td>
-                </tr>
+            <tbody id="tableRequestBody" class="text-center">
 
             </tbody>
         </table>
     </div>
-</div>
-    <div data-script="js/request.js"></div>
+</div> 
+<div data-script="js/request.js"></div>
