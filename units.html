@@ -97,12 +97,12 @@
                     <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                         Mantenimiento</label>
                     <input type="number" class="form-control" id="maintenanceMileage" maxlength="6"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
                 </div>
                 <div class="col-md-4 mb-3" id="dateField" style="display: none;">
                     <label for="maintenanceDate"><i class="bi bi-calendar-event"></i> Fecha del Último
                         Mantenimiento</label>
-                    <input type="date" class="form-control" id="maintenanceDate">
+                    <input type="date" class="form-control" id="maintenanceDate" required>
                 </div>
                 <div class="col-md-4 mb-3" id="periodicityField" style="display: none;">
                     <label for="advance"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>

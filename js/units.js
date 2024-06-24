@@ -40,12 +40,10 @@ document.getElementById('maintenanceType').addEventListener('change', function (
 
     if (this.value === '2') {
         mileageField.style.display = 'block';
-        maintenanceMileage.setAttribute('required', 'required');
         dateField.style.display = 'none';
         maintenanceDate.removeAttribute('required');
     } else if (this.value === '1') {
         dateField.style.display = 'block';
-        maintenanceDate.setAttribute('required', 'required');
         mileageField.style.display = 'none';
         maintenanceMileage.removeAttribute('required');
     } else {
@@ -474,8 +472,13 @@ async function postUnidad() {
     const maintenanceDate = maintenanceDateValue ? new Date(maintenanceDateValue).toISOString().split('T')[0] : null;
     const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
 
-    if (initialMileage < 0 || currentMileage < 0) {
-        showToast('Error', 'Los los kilometrajes no pueden tener valores negativos.');
+    if (initialMileage < 0 || currentMileage < 0 || advance < 0 || periodicity < 0 || capacityChairs < 0 || capacityBeds < 0 || totalCapacity < 0 || maintenanceMileage < 0) {
+        showToast('Error', 'No se pueden ingresar valores negativos.');
+        return;
+    }
+
+    if (advance < 10) {
+        showToast('Error', 'El adelanto de mantenimiento no puede ser menor de 10%.');
         return;
     }
 
@@ -536,7 +539,7 @@ async function postUnidad() {
         .then(response => {
             clearForm();
             console.log('Unidad creada:', response.data);
-            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
+            showToast('Registro exitoso', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
             document.getElementById('unitsForm').reset();
             getUnidades();
         })
@@ -572,8 +575,13 @@ async function updateUnidad() {
     const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
 
 
-    if (initialMileage < 0 || currentMileage < 0) {
-        showToast('Error', 'Los los kilometrajes no pueden tener valores negativos.');
+    if (initialMileage < 0 || currentMileage < 0 || advance < 0 || periodicity < 0 || capacityChairs < 0 || capacityBeds < 0 || totalCapacity < 0 || maintenanceMileage < 0) {
+        showToast('Error', 'No se pueden ingresar valores negativos.');
+        return;
+    }
+
+    if (advance < 10) {
+        showToast('Error', 'El adelanto de mantenimiento no puede ser menor de 10%.');
         return;
     }
 
@@ -634,7 +642,7 @@ async function updateUnidad() {
         .then(response => {
             clearForm();
             console.log('Unidad actualizada:', response.data);
-            showToast('Actualización exitosa', 'La unidad se ha actualizado exitosamente.');
+            showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
             document.getElementById('unitsForm').reset();
             document.getElementById('unitNumber').disabled = false;
             getUnidades();
@@ -674,14 +682,6 @@ function loadFormData(unidad) {
 
     if (selectedIndex !== -1) {
         maintenanceTypeSelect.selectedIndex = selectedIndex;
-    }
-
-    if (maintenanceTypeSelect.value === '1') {
-        document.getElementById('mantaenanceDate').setAttribute('required', 'required');
-    }
-
-    if (maintenanceTypeSelect.value === '2') {
-        document.getElementById('maintenanceMileage').setAttribute('required', 'required');
     }
 
     const event = new Event('change');
