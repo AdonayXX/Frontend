@@ -3,6 +3,9 @@ Promise.all([
     contarCitasHome(),
     mostrarChoferesPorVencer(),
     mostrarUnidadesPorVencer(),
+    mostrarUnidadesPorKilometraje(),
+    mostrarUnidadesPorFecha(),
+
 ]);
 
 
@@ -231,6 +234,135 @@ async function mostrarChoferesPorVencer() {
         console.error('Error al mostrar los choferes por vencer:', error);
     }
 }
+
+
+// -----------------------NUEVOS-------------------------------- //
+
+async function mostrarUnidadesPorKilometraje() {
+    try {
+        const ahora = new Date();
+        const hoyUTC = ahora.toISOString().split('T')[0];
+
+        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+
+        if (!unidadesRespuesta.data) {
+            throw new Error('Error al obtener las unidades');
+        }
+
+        const dataUnidades = unidadesRespuesta.data.unidades;
+
+        const unidadesPorKilometraje = dataUnidades.filter(unidad => {
+            if (unidad.tipoFrecuenciaCambio === "Kilometraje") {
+                const ultimoKilometraje = unidad.ultimoMantenimientoKilometraje || unidad.kilometrajeInicial;
+                const kilometrajeActual = unidad.kilometrajeActual;
+                const frecuenciaKilometraje = unidad.valorFrecuenciaC;
+                const adelantoKilometraje = frecuenciaKilometraje * (unidad.adelanto / 100);
+
+                return (kilometrajeActual - ultimoKilometraje) >= frecuenciaKilometraje - adelantoKilometraje;
+            }
+            return false;
+        });
+
+        const unidadesPorKilometrajeContainer = document.getElementById('proximosMantenimientoKilometraje');
+        unidadesPorKilometrajeContainer.innerHTML = '';
+
+        if (unidadesPorKilometraje.length === 0) {
+            console.log('No hay unidades próximas a necesitar mantenimiento por kilometraje.');
+        } else {
+            const tituloMantenimientoKilometraje = document.createElement('h5');
+            tituloMantenimientoKilometraje.textContent = 'Mantenimiento por Kilometraje';
+            tituloMantenimientoKilometraje.classList.add('text-center', 'mt-4', 'mb-4', 'rounded');
+            unidadesPorKilometrajeContainer.appendChild(tituloMantenimientoKilometraje);
+
+            unidadesPorKilometraje.forEach(unidad => {
+                const unidadElement = document.createElement('div');
+                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                unidadElement.style.maxWidth = '18rem';
+                unidadElement.innerHTML = `
+                    <div class="headerunidad card-header text-center text-white" style="background-color: #42ad89;">
+                        <h5 class="fw-bolder">Unidad ${unidad.numeroUnidad}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Último Kilometraje: ${unidad.ultimoMantenimientoKilometraje || unidad.kilometrajeInicial}</h5>
+                        <h5 class="card-title">Kilometraje Actual: ${unidad.kilometrajeActual}</h5>
+                        <h5 class="card-title">Próximo Mantenimiento: ${(unidad.ultimoMantenimientoKilometraje || unidad.kilometrajeInicial) + unidad.valorFrecuenciaC}</h5>
+                    </div>
+                `;
+                unidadesPorKilometrajeContainer.appendChild(unidadElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error al mostrar las unidades por kilometraje:', error);
+    }
+}
+
+
+
+async function mostrarUnidadesPorFecha() {
+    try {
+        const ahora = new Date();
+        const hoyUTC = ahora.toISOString().split('T')[0];
+
+        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+
+        if (!unidadesRespuesta.data) {
+            throw new Error('Error al obtener las unidades');
+        }
+
+        const dataUnidades = unidadesRespuesta.data.unidades;
+
+        const unidadesPorFecha = dataUnidades.filter(unidad => {
+            if (unidad.tipoFrecuenciaCambio === "Fecha") {
+                const ultimoMantenimiento = new Date(unidad.ultimoMantenimientoFecha);
+                const frecuenciaDias = unidad.valorFrecuenciaC;
+                const proximoMantenimiento = new Date(ultimoMantenimiento);
+                proximoMantenimiento.setDate(proximoMantenimiento.getDate() + frecuenciaDias);
+                
+                const diasRestantes = Math.floor((proximoMantenimiento - ahora) / (1000 * 60 * 60 * 24));
+                const adelantoDias = Math.floor(frecuenciaDias * (unidad.adelanto / 100));
+                
+                return diasRestantes <= adelantoDias;
+            }
+            return false;
+        });
+
+        const unidadesPorFechaContainer = document.getElementById('proximosMantenimientoFecha');
+        unidadesPorFechaContainer.innerHTML = '';
+
+        if (unidadesPorFecha.length === 0) {
+            console.log('No hay unidades próximas a necesitar mantenimiento por fecha.');
+        } else {
+            const tituloMantenimientoFecha = document.createElement('h5');
+            tituloMantenimientoFecha.textContent = 'Mantenimiento por Fecha';
+            tituloMantenimientoFecha.classList.add('text-center', 'mt-4', 'mb-4', 'rounded');
+            unidadesPorFechaContainer.appendChild(tituloMantenimientoFecha);
+
+            unidadesPorFecha.forEach(unidad => {
+                const proximoMantenimiento = new Date(unidad.ultimoMantenimientoFecha);
+                proximoMantenimiento.setDate(proximoMantenimiento.getDate() + unidad.valorFrecuenciaC);
+                
+                const unidadElement = document.createElement('div');
+                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                unidadElement.style.maxWidth = '18rem';
+                unidadElement.innerHTML = `
+                    <div class="headerunidad card-header text-center text-white" style="background-color: #4244ad;">
+                        <h5 class="fw-bolder">Unidad ${unidad.numeroUnidad}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Último Mantenimiento: </h5>
+                        <h5 class="card-title">${unidad.ultimoMantenimientoFecha.split('T')[0]}</h5>
+                        <h5 class="card-title">Próximo Mantenimiento: </h5>
+                        <h5 class="card-title">${proximoMantenimiento.toISOString().split('T')[0]}</h5>
+                    </div>
+                `;
+                unidadesPorFechaContainer.appendChild(unidadElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error al mostrar las unidades por fecha:', error);
+    }
+}
+
 
 
 // ------------------------------------- //
