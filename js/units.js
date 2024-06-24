@@ -323,7 +323,7 @@ async function getUnidad() {
     const unitNumber = document.getElementById('unitNumber').value;
 
     if (unitNumber === '') {
-        showToast('Error', 'El campo no puede estar vacío.');
+        showToast('Error', 'El número de unidad no puede estar vacío.');
         return;
     }
 
