@@ -5,25 +5,8 @@
             const response = await axios.get(`${url}api/vales`);
             const data = response.data;
             const vales = data.vales;
-
-
-                // let table = $('#tableRequest').DataTable({
-                //   dom: "<'row'<'col-md-6'l>" +
-                //     "<'row'<'col-md-12't>>" +
-                //     "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
-                //   ordering: false,
-                //   searching: true,
-                //   paging: true,
-                //   language: {
-                //     url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-                //   },
-                //   caseInsensitive: true,
-                //   smart: true
-          
-                // });
     
-
-            const tableBody = document.querySelector('#tableRequest');
+            const tableBody = document.querySelector('#tableRequestBody');
             tableBody.innerHTML = '';
 
             vales.slice().reverse().forEach(vale => {
@@ -35,17 +18,37 @@
                         <td>${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
                         <td>${vale.NombreMotivo}</td>
-                        <td class="d-flex justify-content-center"><div class="text-start" style="width: 8em">${processStatus(vale.NombreEstado)}</div></td> 
+                        <td class=" justify-content-center"><div class="mx-auto text-start" style="width: 8rem">${processStatus(vale.NombreEstado)}</div></td> 
                         <td class="text-center">
-                            <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-secondary">Coordinar</button>
+                            <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-primary">Coordinar</button>
                         </td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
             });
+            createTableRequest();
         } catch (error) {
             console.error('Hubo un problema con la operación de obtención:', error);
         }
+    }
+
+    function createTableRequest() {
+        $('#tableRequest').DataTable({
+            dom: "<'row'<'col-md-6'l>" +
+                "<'row'<'col-md-12't>>" +
+                "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true,
+            columnDefs: [
+                { className: 'text-center', targets: '_all' }
+            ]
+        });
     }
 
     //Funcion para agregar el simbolo segun el estado en la tabla
