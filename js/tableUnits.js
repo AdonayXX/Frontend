@@ -1,3 +1,5 @@
+"use strict";
+
 async function getNombreChofer() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
@@ -49,29 +51,11 @@ async function getEstadosUnidad() {
     }
 }
 
-async function getFrecuenciaCambio() {
-    try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/frecuenciaCambio');
-        const frecuenciaCambio = response.data.frecuenciacambios;
-        const frecuenciaMap = {};
-
-        frecuenciaCambio.forEach(tipo => {
-            frecuenciaMap[tipo.idFrecuenciaCambio] = tipo.tipo;
-        });
-
-        return frecuenciaMap;
-    } catch (error) {
-        console.error('Error al obtener las frecuencias de cambio:', error);
-        return {};
-    }
-}
-
 async function getUnidades() {
     try {
-        const [recursoMap, estadoMap, frecuenciaMap, choferMap] = await Promise.all([
+        const [recursoMap, estadoMap, choferMap] = await Promise.all([
             getTiposRecurso(),
             getEstadosUnidad(),
-            getFrecuenciaCambio(),
             getNombreChofer()
         ]);
 
@@ -92,12 +76,12 @@ async function getUnidades() {
                 row.innerHTML = `
                     <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
                     <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
-                    <td class="text-center">${recursoMap[unidad.idTipoRecurso] || 'N/A'}</td>
+                    <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
                     <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
                     <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
-                    <td class="text-center">${(estadoMap[unidad.idEstado]).toUpperCase() || 'N/A'}</td>
+                    <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
                     <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
-                    <td class="text-center">${frecuenciaMap[unidad.idFrecuenciaCambio] || 'N/A'}</td>
+                    <td class="text-center">${(unidad.tipoFrecuenciaCambio || 'N/A').toUpperCase()}</td>
                     <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
                 `;
 
