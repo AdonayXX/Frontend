@@ -399,7 +399,5 @@ var error;
 };
 
 document.getElementById('loginButton').addEventListener('click', handleLogin);
-
-
 document.getElementById('loginButton').addEventListener('click', handleLogin); */
 
