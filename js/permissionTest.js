@@ -17,11 +17,67 @@ async function getUserPermission() {
                 'Authorization': `Bearer ${token}`
             }
         });
+     
 
         const roles = rolesResponse.data.roles || [];
         const forms = formsResponse.data.forms || [];
+        console.log(roles);
+       
+        document.querySelector('#addNewPermission').addEventListener('click',()=>{
+              // Crear un mapa de roles a formularios excluidos
+              const roleExclusions = {};
+              roles.forEach(entry => {
+              if (!roleExclusions[entry.Rol]) {
+                  roleExclusions[entry.Rol] = new Set();
+              }
+              roleExclusions[entry.Rol].add(entry.Formulario);
+              });
 
-        fillPermissionsTable(roles, forms);
+             console.log("Role Exclusions Map: ", roleExclusions);
+
+           document.querySelector('#rolSelect').addEventListener('change', () => {
+            const selectedRol = parseInt(rolSelect.value, 10);
+            console.log("Selected Role: ", selectedRol); // Debugging output
+            document.querySelector('#item').innerHTML = '<option selected disabled value="">Seleccionar...</option>';
+
+            // Filtrar los formularios que no deben ser mostrados para el rol seleccionado
+            const excludedForms = roleExclusions[selectedRol] || new Set();
+            const filteredForms = forms.filter(form => !excludedForms.has(form.IdFormulario));
+
+            // Llenar el select de permisos con los formularios filtrados
+            llenarSelectPermisos(filteredForms);
+            });
+
+        });
+       
+      
+        
+        $(document).ready(function () {
+            if ($.fn.DataTable.isDataTable('#tablePermission')) {
+              $('#tablePermission').DataTable().destroy();
+            }
+            fillPermissionsTable(roles, forms);
+            let table = $('#tablePermission').DataTable({
+              dom: "<'row'<'col-md-6'l>" +
+                "<'row'<'col-md-12't>>" +
+                "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+              ordering: false,
+              searching: true,
+              paging: true,
+              language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+              },
+              caseInsensitive: true,
+              smart: true
+      
+            });
+            $('#searchPermission').on('keyup', function () {
+              let inputValue = $(this).val().toLowerCase();
+              table.search(inputValue).draw();
+            });
+        });
+
+        
 
     } catch (error) {
         console.error('Error al obtener datos de permisos:', error);
@@ -61,23 +117,6 @@ function fillPermissionsTable(roles, forms) {
 
         tableBody.appendChild(fragment);
 
-        if ($.fn.DataTable.isDataTable('#tablePermission')) {
-            $('#tablePermission').DataTable().destroy();
-        }
-        $('#tablePermission').DataTable({
-            dom: "<'row'<'col-md-6'l>" +
-                "<'row'<'col-md-12't>>" +
-                "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
-            ordering: false,
-            searching: true,
-            paging: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-            },
-            caseInsensitive: true,
-            smart: true
-        });
-
     } catch (error) {
         console.error('Error al llenar la tabla de permisos:', error);
     }
@@ -110,3 +149,14 @@ function mostrarSpinner() {
 function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
 }
+
+function llenarSelectPermisos(forms){
+    const itemSelect = document.getElementById('item');
+    forms.forEach(form => {
+        const option = document.createElement('option');
+        option.value = form.IdFormulario;
+        option.textContent = form.NombreFormulario;
+        itemSelect.appendChild(option);
+      });
+}
+
