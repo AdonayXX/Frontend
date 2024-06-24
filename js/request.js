@@ -18,7 +18,7 @@
                         <td>${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
                         <td>${vale.NombreMotivo}</td>
-                        <td class=" justify-content-center"><div class="mx-auto text-start" style="width: 8rem">${processStatus(vale.NombreEstado)}</div></td> 
+                        <td><div class="mx-auto text-start" style="width: 8rem">${processStatus(vale.NombreEstado)}</div></td> 
                         <td class="text-center">
                             <button onclick="handleCoordinateButton('${vale.IdVale}')" type="button" class="btn btn-outline-primary">Coordinar</button>
                         </td>
