@@ -35,7 +35,6 @@
             console.error('Hubo un problema con la operación de obtención:', error);
         }
     }
-
     window.loadAcompanantes = function (acomp1, acomp2, acomp3, acomp4) {
         const acompanantes = [acomp1, acomp2, acomp3, acomp4].filter(acomp => acomp);
         const acompTableBody = document.querySelector('#acompTableBody');
@@ -46,6 +45,5 @@
             acompTableBody.innerHTML += row;
         });
     }
-
     getVales();
 })();
