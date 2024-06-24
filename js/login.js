@@ -275,47 +275,6 @@ function GuardarDatos() {
             }
         });
 }
-
-
-var error;
-//Login
-// fetchLogin.js
-const loginUser = async (identificador, Contrasena) => {
-    try {
-        const response = await axios.post(`${url}api/user/login`, {
-            identificador,
-            Contrasena
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        return response.data.token; // Supón que el token viene en la propiedad token
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        throw new Error('Error al iniciar sesión');
-    }
-};
-
-const handleLogin = async () => {
-    const userEmail = document.getElementById('userEmail').value;
-    const userPassword = document.getElementById('userPassword').value;
-    try {
-        const token = await loginUser(userEmail, userPassword);
-        console.log('Token:', token);
-        window.location.href = 'Index.html';
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        showToast("Error", "Usuario o Contraseña incorrectos", () => {
-            setTimeout(() => {
-                location.reload();
-            }, 0);
-        });
-    }
-};
-document.getElementById('loginButton').addEventListener('click', handleLogin);
-
 //Mostrar ultimo acompañante
 async function getUltimate() {
     try {
@@ -388,3 +347,59 @@ function getAcompanantes(vale) {
 document.getElementById('btn-mostrar').addEventListener('click', function (event) {
     getUltimate();
 });
+
+var error;
+//Login
+// fetchLogin.js
+/* const loginUser = async (identificador, Contrasena) => {
+    try {
+        const response = await axios.post(`${url}api/user/login`, {
+            identificador,
+            Contrasena
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        return response.data.token; // Supón que el token viene en la propiedad token
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        throw new Error('Error al iniciar sesión');
+    }
+};
+
+//  */// Llama a la función y almacena el token
+// loginUser()
+//     .then(token => {
+//         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
+//         console.log('Token guardado:', token);
+//     })
+//     .catch(error => {
+//         console.error('Error al obtener el token:', error);
+//     });
+
+
+/* const handleLogin = async () => {
+    const userEmail = document.getElementById('userEmail').value;
+    const userPassword = document.getElementById('userPassword').value;
+    try {
+        const token = await loginUser(userEmail, userPassword);
+        localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
+        console.log('Token:', token);
+        window.location.href = 'Index.html';
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        showToast("Error", "Usuario o Contraseña incorrectos", () => {
+            setTimeout(() => {
+                location.reload();
+            }, 0);
+        });
+    }
+};
+
+document.getElementById('loginButton').addEventListener('click', handleLogin);
+
+
+document.getElementById('loginButton').addEventListener('click', handleLogin); */
+
