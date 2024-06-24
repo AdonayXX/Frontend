@@ -222,11 +222,7 @@ h1 {
     .open-sidebar .main-content {
         margin-left: 0;
     }
-
-    .main-content {
-        margin-top: 0;
-    }
-
+    
     #items {
         padding: 5px 0;
         font-size: 94%;

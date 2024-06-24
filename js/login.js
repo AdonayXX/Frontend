@@ -34,20 +34,20 @@ function showToast(title, message, reloadCallback) {
     });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     var today = new Date();
     var formattedDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
     document.getElementById('date').textContent = formattedDate;
 });
+
 //establece que no se puedan elegir fechas anteriores 
 const today = new Date();
 const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');  // Meses son 0-indexados, por eso se suma 1
-const day = String(today.getDate()).padStart(2, '0');  // Obtener día del mes
-
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
 const formattedDate = `${year}-${month}-${day}`;
 document.getElementById('b_date').min = formattedDate;
+
 //Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
@@ -61,11 +61,16 @@ document.getElementById('addCompanion').addEventListener('click', function () {
         showToast("Error", "No se pueden agregar mas de 5 acompañantes");
     }
 });
+
 //Eliminar Acompañantes
 document.getElementById('removeCompanion').addEventListener('click', function () {
     if (acompananteCount > 0) {
         const acompDiv = document.getElementById('acompanante' + acompananteCount);
         if (acompDiv) {
+            const inputs = acompDiv.getElementsByTagName('input');
+            for (let input of inputs) {
+                input.value = '';
+            }
             acompDiv.style.display = 'none';
         }
         acompananteCount--;
@@ -85,7 +90,7 @@ var url = 'https://backend-transporteccss.onrender.com/';
 function ObtenerUnidades() {
     axios.get(`${url}api/unidadProgramatica`)
         .then(response => {
-            console.log(response.data);
+
             LlenarUnidadesProgramaticas(response.data);
         })
         .catch(error => {
@@ -105,7 +110,7 @@ function LlenarUnidadesProgramaticas(data) {
 function ObtenerServicios() {
     axios.get(`${url}api/servicios`)
         .then(response => {
-            console.log(response.data);
+
             LlenarServicios(response.data);
         })
         .catch(error => {
@@ -125,7 +130,7 @@ function LlenarServicios(data) {
 function ObtenerMotivo() {
     axios.get(`${url}api/motivoVale`)
         .then(response => {
-            console.log(response.data);
+
             LlenarMotivo(response.data);
         })
         .catch(error => {
@@ -145,7 +150,7 @@ function LlenarMotivo(data) {
 function ObtenerSalida() {
     axios.get(`${url}api/rutas`)
         .then(response => {
-            console.log(response.data);
+
             LlenarSalida(response.data);
         })
         .catch(error => {
@@ -165,7 +170,6 @@ function LlenarSalida(data) {
 function ObtenerDestino() {
     axios.get(`${url}api/rutas`)
         .then(response => {
-            console.log(response.data);
             LlenarDestino(response.data);
         })
         .catch(error => {
@@ -260,7 +264,6 @@ function GuardarDatos() {
 
     axios.post(`${url}api/vales`, datos)
         .then(response => {
-            console.log('Datos guardados exitosamente:', response.data);
             showToast("", "Se generó la solicitud exitosamente");
             location.reload();
         })
@@ -294,31 +297,94 @@ const loginUser = async (identificador, Contrasena) => {
         throw new Error('Error al iniciar sesión');
     }
 };
-// // Llama a la función y almacena el token
-// loginUser()
-//     .then(token => {
-//         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
-//         console.log('Token guardado:', token);
-//     })
-//     .catch(error => {
-//         console.error('Error al obtener el token:', error);
-//     });
 
 const handleLogin = async () => {
     const userEmail = document.getElementById('userEmail').value;
     const userPassword = document.getElementById('userPassword').value;
-
     try {
         const token = await loginUser(userEmail, userPassword);
         console.log('Token:', token);
-        window.location.href = 'Index.html'; // Redirigir al usuario
+        window.location.href = 'Index.html';
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         showToast("Error", "Usuario o Contraseña incorrectos", () => {
             setTimeout(() => {
                 location.reload();
-            }, 0); // Ajusta el tiempo de espera según sea necesario (3000 ms = 3 segundos)
+            }, 0);
         });
     }
 };
 document.getElementById('loginButton').addEventListener('click', handleLogin);
+
+//Mostrar ultimo acompañante
+async function getUltimate() {
+    try {
+        const response = await axios.get(`${url}api/vales`);
+        const vales = response.data.vales;
+        const ultimo = vales.length - 1;
+        console.log(vales);
+
+        if (ultimo >= 0) {
+            const vale = vales[ultimo];
+            const fechaSolicitud = new Date(vale.Fecha_Solicitud);
+            const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
+            document.getElementById('Up').value = vale.IdUnidadProgramatica;
+            document.getElementById('lugarSa').value = vale.SalidaId;
+            document.getElementById('service').value = vale.ServicioId;
+            document.getElementById('motivo').value = vale.MotivoId;
+            document.getElementById('lugarDes').value = vale.DestinoId;
+            document.getElementById('detalle').value = vale.Detalle;
+            document.getElementById('nameSoli').value = vale.NombreSolicitante;
+            document.getElementById('hora_salida').value = vale.Hora_Salida;
+            document.getElementById('b_date').value = fechaFormateada;
+            getAcompanantes(vale);
+            showToast("Ultimo Vale", "Se cargó el último vale exitosamente");
+        } else {
+            console.error('No hay vales disponibles.');
+        }
+    } catch (error) {
+        console.error('No se cargaron los datos', error);
+    }
+}
+
+function getAcompanantes(vale) {
+    if (vale.Acompanante1 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre1');
+        const div1 = document.getElementById('acompanante1');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante1;
+        acompananteCount++;
+    }
+    if (vale.Acompanante2 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre2');
+        const div1 = document.getElementById('acompanante2');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante2;
+        acompananteCount++;
+    }
+    if (vale.Acompanante3 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre3');
+        const div1 = document.getElementById('acompanante3');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante3;
+        acompananteCount++;
+    }
+    if (vale.Acompanante4 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre4');
+        const div1 = document.getElementById('acompanante4');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante4;
+        acompananteCount++;
+    }
+    if (vale.Acompanante5 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre5');
+        const div1 = document.getElementById('acompanante5');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante5;
+        acompananteCount++;
+    }
+}
+
+document.getElementById('btn-mostrar').addEventListener('click', function (event) {
+    getUltimate();
+});
