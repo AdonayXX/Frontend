@@ -176,7 +176,7 @@ function fillTableUsuarios(usuarios) {
                 <td>${usuario.Correo}</td>
                 <td>${roleDescription}</td>
                 <td>${usuario.Estado}</td>
-                <td class="actions">
+                <td class="text-center">
                  ${!isActive ? `
                 <button class="btn btn-outline-primary btn-sm" data-user='${JSON.stringify(usuario)}' onclick='sendUserData(this)'>
                     <i class="bi bi-pencil-square"></i>
@@ -226,6 +226,7 @@ window.sendUserData = function (button) {
   modal.show();
 
   document.getElementById("formUserEdit").reset();
+  const IdUsuario= user.IdUsuario
   fillUserFields(user);
   const userIdentification = user.Identificacion;
 
@@ -236,30 +237,30 @@ window.sendUserData = function (button) {
   };
 
   function getEditUserData(userIdentification) {
-    const password1 = document.getElementById('userPassword1Edit').value;
-    const password2 = document.getElementById('userPassword2Edit').value;
+    const password1 = document.getElementById('userPassword1Edit').value.trim();
+    const password2 = document.getElementById('userPassword2Edit').value.trim();
 
     if (password1 !== password2) {
       alert("Las contraseñas no coinciden.");
       return;
     }
     const userData = {
-      Identificacion: userIdentification,
-      Nombre: document.getElementById('userNameEdit').value,
-      Apellido1: document.getElementById('userFirstlastnameEdit').value,
-      Apellido2: document.getElementById('userSecondlastnameEdit').value,
+      Identificacion: document.getElementById('userIdentificationEdit').value.trim(),
+      Nombre: document.getElementById('userNameEdit').value.trim(),
+      Apellido1: document.getElementById('userFirstlastnameEdit').value.trim(),
+      Apellido2: document.getElementById('userSecondlastnameEdit').value.trim(),
       Rol: parseInt(document.getElementById('rol').value.trim()),
       Contrasena: password1,
-      Correo: document.getElementById('userEmailEdit').value,
-      Estado: document.getElementById('userState').value
+      Correo: document.getElementById('userEmailEdit').value.trim(),
+      Estado: document.getElementById('userState').value.trim()
     };
-    editUserData(userData);
+    editUserData(userData,IdUsuario);
     console.log(userData);
   }
 
-  async function editUserData(userData) {
+  async function editUserData(userData,IdUsuario) {
     try {
-      const API_URL = `http://localhost:18026/api/usuario/identificacion/${userIdentification}`;
+      const API_URL = `http://localhost:18026/api/usuario//${IdUsuario}`;
       const token = localStorage.getItem('token');
 
       if (!token) {
@@ -273,10 +274,11 @@ window.sendUserData = function (button) {
         }
       });
       console.log(response);
-      showToast('Éxito!', 'Usuario actualizado correctamente');
       modal.hide();
+      showToast('Éxito!', 'Usuario actualizado correctamente');
+    
       setTimeout(function () {
-        loadContent('dataTableUser.html', 'mainContent');
+        loadContent('dataTableUsers.html', 'mainContent');
       }, 1000);
     } catch (error) {
       if (error.response && error.response.status === 400) {
