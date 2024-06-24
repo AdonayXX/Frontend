@@ -35,8 +35,6 @@ document.getElementById('maintenanceType').addEventListener('change', function (
     const dateField = document.getElementById('dateField');
     const advanceField = document.getElementById('advanceField');
     const periodicityField = document.getElementById('periodicityField');
-    const maintenanceMileage = document.getElementById('maintenanceMileage');
-    const maintenanceDate = document.getElementById('maintenanceDate');
 
     if (this.value === '2') {
         mileageField.style.display = 'block';
@@ -44,10 +42,8 @@ document.getElementById('maintenanceType').addEventListener('change', function (
     } else if (this.value === '1') {
         dateField.style.display = 'block';
         mileageField.style.display = 'none';
-        maintenanceMileage.removeAttribute('required');
     } else {
         mileageField.style.display = 'none';
-        maintenanceMileage.removeAttribute('required');
         dateField.style.display = 'none';
     }
 
