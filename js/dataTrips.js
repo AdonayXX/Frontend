@@ -396,7 +396,7 @@
     const url = `https://backend-transporteccss.onrender.com/api/cita/${idCita}`;
     const datosAusencia = {
       ausente: motivoAusencia,
-      estadoCita: "Finalizada"
+      estadoCita: "Cancelada"
     };
 
     try {

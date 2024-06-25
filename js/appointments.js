@@ -90,7 +90,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             showToast('Error', 'Error al obtener los datos de los acompañantes.');
         }
     }
-    function showAcompananteDetails(event, nombreField, apellido1Field, apellido2Field, telefonoField, parentescoField) {
+    function showAcompananteDetails(event, nombreField, apellido1Field, telefonoField, parentescoField) {
         const selectedOption = event.target.value;
         if (!acompanantes || acompanantes.length === 0) {
             showToast('Acompañantes', 'No se encontraron acompañantes para este paciente.');
@@ -101,7 +101,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         if (acompanante) {
             nombreField.value = acompanante.Nombre || '';
             apellido1Field.value = acompanante.Apellido1 || '';
-            apellido2Field.value = acompanante.Apellido2 || '';
             telefonoField.value = `${acompanante.Telefono1} / ${acompanante.Telefono2}` || '';
             parentescoField.value = acompanante.Parentesco || '';
         } else {
@@ -129,7 +128,7 @@ function handleAcompanante1Change(event) {
        acompanante2Select.disabled = acompanantes[0].Nombre !== selectedValue1 && acompanantes[1].Nombre !== selectedValue1;
     }
 
-    showAcompananteDetails(event, document.getElementById('acompananteNombre1'), document.getElementById('acompananteApellido1_1'), document.getElementById('acompananteApellido2_1'),  document.getElementById('acompananteTelefono1_1'), document.getElementById('acompananteParentesco1'));
+    showAcompananteDetails(event, document.getElementById('acompananteNombre1'), document.getElementById('acompananteApellido1_1'),document.getElementById('acompananteTelefono1_1'), document.getElementById('acompananteParentesco1'));
 }
 
 function handleAcompanante2Change(event) {
@@ -151,7 +150,7 @@ function handleAcompanante2Change(event) {
         acompanante1Select.disabled = acompanantes[0].Nombre !== selectedValue2 && acompanantes[1].Nombre !== selectedValue2;
     }
 
-    showAcompananteDetails(event, document.getElementById('acompananteNombre2'), document.getElementById('acompananteApellido1_2'), document.getElementById('acompananteApellido2_2'), document.getElementById('acompananteTelefono1_2'),  document.getElementById('acompananteParentesco2'));
+    showAcompananteDetails(event, document.getElementById('acompananteNombre2'), document.getElementById('acompananteApellido1_2'), document.getElementById('acompananteTelefono1_2'),  document.getElementById('acompananteParentesco2'));
 }
 
 document.getElementById('acompananteNombre1').addEventListener('change', handleAcompanante1Change);
