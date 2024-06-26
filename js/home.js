@@ -2,7 +2,7 @@ Promise.all([
     mostrarProximosViajes(),
     contarCitasHome(),
     mostrarChoferesPorVencer(),
-    mostrarUnidadesPorVencer(),
+    mostrarUnidadesPorDekra(),
     mostrarUnidadesPorKilometraje(),
     mostrarUnidadesPorFecha(),
 
@@ -50,7 +50,7 @@ async function mostrarProximosViajes() {
             const fechaViaje = new Date(viaje.FechaCita);
             const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), fechaViaje.getUTCHours(), fechaViaje.getUTCMinutes(), fechaViaje.getUTCSeconds()));
             const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
-            return fechaViajeStr === hoyUTC && viaje.EstadoViaje === null; // Cambiar a 'En curso' cuando se implemente
+            return fechaViajeStr === hoyUTC && viaje.EstadoViaje === "Iniciado"; // Cambiar a 'En curso' cuando se implemente
         });
 
         const proximosViajesContainer = document.getElementById('proximosViajesContainer');
@@ -85,15 +85,6 @@ async function mostrarProximosViajes() {
             });
         }
 
-        
-        const viajesFinalizados = viajes.filter(viaje => {
-            const añoViaje = viaje.idViaje.split('-')[0];
-            return viaje.EstadoViaje === null && añoViaje === ahora.getFullYear().toString();
-        });
-
-        // Mostrar el contador de viajes finalizados
-        document.getElementById('contadorViajesFinalizados').textContent = viajesFinalizados.length;
-
     } catch (error) {
         console.error('Error al mostrar los próximos viajes:', error);
     }
@@ -111,25 +102,30 @@ async function contarCitasHome() {
         const dataViajesFinalizadas = viajesRespuesta.data.viaje;
         const citasFinalizadas = dataViajesFinalizadas.filter(viaje => {
             const viajeYear = viaje.idViaje.split('-')[0];
-            return viaje.EstadoCita === 'Iniciada' && viajeYear === year; // Cambiar a 'Finalizada' cuando se implemente
+            return viaje.EstadoCita === 'Asignada' && viajeYear === year; // Cambiar a 'Finalizada' cuando se implemente
         });
-        
+
         const dataViajesCanceladas = viajesRespuesta.data.viaje;
         const citasCanceladas = dataViajesCanceladas.filter(viaje => {
             const viajeYear = viaje.idViaje.split('-')[0];
-            return viaje.EstadoCita === 'Iniciada' && viajeYear === year; // Cambiar a 'Cancelada' cuando se implemente
+            return viaje.EstadoCita === 'Asignada' && viajeYear === year; // Cambiar a 'Cancelada' cuando se implemente
+        });
+
+        const viajesFinalizados = dataViajesFinalizadas.filter(viaje => {
+            const añoViaje = viaje.idViaje.split('-')[0];
+            return viaje.EstadoViaje === "Iniciado" && añoViaje === year; //FINALIZADO
         });
 
         document.getElementById('contadorCitasFinalizadas').textContent = citasFinalizadas.length;
         document.getElementById('contadorCitasCanceladas').textContent = citasCanceladas.length;
+        document.getElementById('contadorViajesFinalizados').textContent = viajesFinalizados.length;
 
     } catch (error) {
         console.error('Error al contar las citas finalizadas:', error);
     }
 }
 
-
-async function mostrarUnidadesPorVencer() {
+async function mostrarUnidadesPorDekra() {
     try {
         const ahora = new Date();
         const hoyUTC = ahora.toISOString().split('T')[0];
@@ -235,8 +231,6 @@ async function mostrarChoferesPorVencer() {
     }
 }
 
-
-// -----------------------NUEVOS-------------------------------- //
 
 async function mostrarUnidadesPorKilometraje() {
     try {
@@ -363,6 +357,3 @@ async function mostrarUnidadesPorFecha() {
     }
 }
 
-
-
-// ------------------------------------- //
