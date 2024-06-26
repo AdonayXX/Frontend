@@ -42,7 +42,7 @@
         <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
             <div class="col text-center">
                 <br>
-                <h1 class="text-wrap">Citas Efectuadas</h1>
+                <h1 id="tituloCitas" class="text-wrap">Citas Iniciadas</h1>
             </div>
 
             <div class="col-sm-3 search-bar input-group m-2">
@@ -55,6 +55,16 @@
                 <label for="fechaCita" class="form-label">Buscar por Fecha</label>
                 <input type="date" id="fechaCita" class="form-control" style="text-align: center;">
             </div>
+
+            <div class="col-md-4">
+                <label for="seleccionar-estado" class="form-label">Buscar por Estado</label>
+                <select class="form-select" id="seleccionar-estado">
+                    <option value="Iniciada" selected class="text-center">Iniciada</option>
+                    <option value="Finalizada" class="text-center">Finalizada</option>
+                    <option value="Asignada" class="text-center">Asignada</option>
+                </select>
+            </div>
+
         </div>
 
         <div class="row mt-3">
@@ -86,6 +96,7 @@
                         <th class="text-center">Fecha</th>
                         <th class="text-center">Hora</th>
                         <th class="text-center">Destino</th>
+                        <th class="text-center">Estado</th>
                         <th class="narrow-col">Información</th>
                     </tr>
                 </thead>
@@ -98,14 +109,6 @@
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                     </tr>
 
@@ -116,9 +119,21 @@
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
                     </tr>
 
                     <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
