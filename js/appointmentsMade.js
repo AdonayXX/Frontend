@@ -73,10 +73,13 @@ function renderTable(citas) {
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
+                   <td>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(cita)})'>
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
             `;
         tableBody.appendChild(row);
-
-
     });
 }
 
@@ -126,3 +129,43 @@ document.querySelector('#searchAppointment').addEventListener('input', function 
         this.value = this.value.slice(0, 15);
     }
 });
+
+function editarCita(cita) {
+    console.log(cita);
+
+    document.querySelector('#editarIdCita').value = cita.idCita;
+    document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
+    document.querySelector('#editarFechaCita').value = cita.fechaCita;
+    document.querySelector('#editarHora').value = cita.horaCita;
+    document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
+    document.querySelector('#editarEstado').value = cita.estadoCita;
+
+
+}
+
+document.querySelector('#searchAppointment').addEventListener('input', function (e) {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+});
+
+function getRutas() {
+    const selectDestino = document.getElementById('seleccionar-destino');
+
+    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
+        .then(response => {
+            const destinos = response.data;
+            destinos.forEach(destino => {
+                const option = document.createElement('option');
+                option.value = destino.IdRuta;
+                option.textContent = destino.Descripcion;
+                selectDestino.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching destinos:', error);
+        });
+}
+
+getRutas();
+
