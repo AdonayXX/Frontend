@@ -33,11 +33,7 @@
     }
 </style>
 
-
-
 <body>
-
-
     <div class="mt-3 fade-in">
         <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
             <div class="col text-center">
@@ -61,6 +57,7 @@
                 <select class="form-select" id="seleccionar-estado">
                     <option value="Iniciada" selected class="text-center">Iniciada</option>
                     <option value="Finalizada" class="text-center">Finalizada</option>
+                    <option value="Cancelada" class="text-center">Cancelada</option>
                     <option value="Asignada" class="text-center">Asignada</option>
                 </select>
             </div>
@@ -98,6 +95,7 @@
                         <th class="text-center">Destino</th>
                         <th class="text-center">Estado</th>
                         <th class="narrow-col">Información</th>
+                        <th class="narrow-col">Editar</th>
                     </tr>
                 </thead>
                 <tbody id="viajesTableBody">
@@ -110,15 +108,6 @@
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
-                    </tr>
-
-                    <tr>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
-                        <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                     </tr>
 
@@ -130,9 +119,22 @@
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
                     </tr>
 
                     <tr>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                        <td class="text-center">----------</td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
                         <td class="text-center">----------</td>
@@ -183,6 +185,87 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade mt-5" id="editarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Editar Cita</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalFormEdit">
+                    <div class="container  fade-in" style="max-width: 1100px;">
+                        <form id="formEditarCita" method="post" class="bg-light p-4 border rounded-3">
+
+                            <div class="form-section">
+                                <h2 class="text-center">Datos de la Cita</h2>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>Id Cita</label>
+                                        <input required type="text" id="editarIdCita" name="identificacion"
+                                            class="form-control" maxlength="20" readonly>
+
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>Nombre
+                                            Paciente</label>
+                                        <input required type="text" id="editarNombrePaciente" name="identificacion"
+                                            class="form-control" maxlength="20" readonly>
+
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>
+                                            Fecha Cita</label>
+                                        <input type="date" id="editarFechaCita" name="fechaVencimientoSeguro"
+                                            class="form-control date-input">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>
+                                            Hora Cita</label>
+                                        <input type="time" id="editarHora" name="fechaVencimientoSeguro"
+                                            class="form-control date-input">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>Destino</label>
+                                        <select name="" id="seleccionar-destino" class="form-control">
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label"><i></i>Estado</label>
+                                        <input required type="text" id="editarEstado" name="identificacion"
+                                            class="form-control" maxlength="20" readonly>
+
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-secondary m-2"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" id="confirmEditBtn" class="btn btn-primary m-2">Guardar
+                                            Cambios</button>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div data-script="js/appointmentsMade.js"></div>
 </body>

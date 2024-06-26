@@ -24,7 +24,7 @@
 
 
   let citasCombinadas = []; // Array de citas combinadas con los datos de los viajes
-  let citasSeleccionadasGlobal = new Set(); 
+  let citasSeleccionadasGlobal = new Set();
   let citasConfirmadas = new Set();
 
   async function getCitas() {
@@ -87,41 +87,66 @@
     console.log("Citas filtradas:", filteredCitas);
     mostrarCitas(filteredCitas);
   }
-  
-  
+
   function mostrarCitas(citas) {
-    const tableBody = document.querySelector('#viajesTableBody');
-    tableBody.innerHTML = '';
-  
-    citas.forEach(cita => {
-      const formattedFechaCita = formatISODate(cita.fechaCita);
-      const row = `
-   <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
+    $(document).ready(function () {
+      if ($.fn.DataTable.isDataTable('#tableTrips')) {
+        $('#tableTrips').DataTable().destroy();
+      }
+      const tableBody = document.querySelector('#viajesTableBody');
+      tableBody.innerHTML = '';
+
+      citas.forEach(cita => {
+        const formattedFechaCita = formatISODate(cita.fechaCita);
+        const row = `
+        <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
           <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En Curso' || cita.estadoCita === 'Finalizada' ? 'checked disabled' : ''}></td>
           <td>${cita.Paciente}</td>
-          <td class="text-center">${cita.ubicacionOrigen}</td>
-          <td class="text-center">${cita.idUbicacionDestino}</td>
-          <td class="text-center">${cita.condicionCita}</td>
-          <td class="text-center">${cita.horaCita}</td>
-          <td class="text-center">${formattedFechaCita}</td>
-          <td class="text-center">${cita.Traslado}</td>
-          <td class="text-center">${cita.camilla}</td>
-          <td class="text-center">
+          <td>${cita.ubicacionOrigen}</td>
+          <td>${cita.idUbicacionDestino}</td>
+          <td>${cita.condicionCita}</td>
+          <td>${cita.horaCita}</td>
+          <td>${formattedFechaCita}</td>
+          <td>${cita.Traslado}</td>
+          <td>${cita.camilla}</td>
+          <td>
             <button class="btn btn-warning ausenteBtn" data-bs-toggle="modal" data-bs-target="#ausenteModal" data-idcita="${cita.idCita}">Ausente</button>
           </td>
         </tr>
       `;
-      tableBody.innerHTML += row;
-    });
-
-    document.querySelectorAll('.ausenteBtn').forEach(button => {
-      button.addEventListener('click', function () {
-        const idCita = this.dataset.idcita;
-        document.getElementById('ausenteCitaId').value = idCita;
+        tableBody.innerHTML += row;
       });
-    });
 
-    addCheckboxEventListeners();
+      document.querySelectorAll('.ausenteBtn').forEach(button => {
+        button.addEventListener('click', function () {
+          const idCita = this.dataset.idcita;
+          document.getElementById('ausenteCitaId').value = idCita;
+        });
+      });
+
+      addCheckboxEventListeners();
+      let table = $('#tableTrips').DataTable({
+        dom: "<'row'<'col-md-6'l>" +
+          "<'row'<'col-md-12't>>" +
+          "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+        ordering: false,
+        searching: true,
+        paging: true,
+        language: {
+          url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        },
+        caseInsensitive: true,
+        smart: true
+
+      });
+      $('#searchPatient').on('keyup', function () {
+        let inputValue = $(this).val().toLowerCase();
+        table.search(inputValue).draw();
+      });
+
+
+
+    });
   }
 
   function addCheckboxEventListeners() {
@@ -146,8 +171,6 @@
           }
         }
       });
-      checkbox.style.margin = 'auto'; 
-      checkbox.style.display = 'block'; 
     });
   }
 
@@ -286,11 +309,11 @@
       showToast('Error', 'Seleccione al menos una cita para crear un viaje');
       return;
     }
-    if(unidades.selectedIndex === 0 | unidades === 'Seleccionar Unidad...'){
+    if (unidades.selectedIndex === 0 | unidades === 'Seleccionar Unidad...') {
       showToast('Error', 'Seleccione una unidad para crear un viaje');
       return;
     }
-    if(fechaInicio.value === ''){
+    if (fechaInicio.value === '') {
       showToast('Error', 'Seleccione una fecha de inicio para crear un viaje');
       return;
     }

@@ -194,6 +194,25 @@ async function getTiposUnidadSelect() {
     }
 }
 
+
+async function getEstadosUnidad() {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
+        const estadosUnidad = response.data.estadosUnidad;
+        const estadoMap = {};
+
+        estadosUnidad.forEach(estado => {
+            estadoMap[estado.idEstado] = estado.estado;
+        });
+
+        return estadoMap;
+    } catch (error) {
+        console.error('Error al obtener los estados de las unidades:', error);
+        return {};
+    }
+}
+
+
 async function getUnidad() {
     const unitNumber = document.getElementById('unitNumber').value;
 
@@ -420,7 +439,6 @@ async function postUnidad() {
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            getUnidades();
         })
         .catch(error => {
             console.error('Error al crear la unidad:', error);
@@ -533,7 +551,6 @@ async function updateUnidad() {
             console.log('Unidad actualizada:', response.data);
             showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            getUnidades();
         })
         .catch(error => {
             console.error('Error al actualizar la unidad:', error);
@@ -607,4 +624,5 @@ function clearForm() {
 fetchUnitTypes();
 getTiposRecursoSelect();
 getTiposUnidadSelect();
+getChoferesSelect();
 getChoferesSelect();
