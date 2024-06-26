@@ -55,17 +55,19 @@ function fillAccomp(acompanantes) {
     const tableComp = document.querySelector('#tableComp');
     tableBody.innerHTML = '';
     // Filtrar solo los acompañantes con estado "Activo"
-    const activeAcompanantes = acompanantes.filter(accomp => accomp.Estado === 'Activo');
+    const activeAcompanantes = acompanantes.length
+  
 
 
-    if (activeAcompanantes.length === 0) {
+
+    if (activeAcompanantes === 0) {
       tableComp.style.display = 'none';
-      noAcompanantesMessage.style.display = 'block'
-
+      noAcompanantesMessage.style.display = 'block';
+      console.log();
     } else {
       tableComp.style.display = 'block';
       noAcompanantesMessage.style.display = 'none';
-      activeAcompanantes.forEach(accomp => {
+      acompanantes.forEach(accomp => {
         const telefonoCompleto = (accomp.Telefono2 !== 0) ? `${accomp.Telefono1}/${accomp.Telefono2}` : `${accomp.Telefono1}`;
         const nombreCompleto = `${accomp.Nombre} ${accomp.Apellido1} ${accomp.Apellido2}`;
         const IdentificacionComp =`${accomp.Identificacion} `;
@@ -112,7 +114,7 @@ function fillPatientComp(listPatientComp) {
         const row = document.createElement('tr');
         const telefonoCompleto = (patient.Telefono2 !== 0) ? `${patient.Telefono1} / ${patient.Telefono2}` : `${patient.Telefono1}`;
         const nombreCompleto = `${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}`;
-        const acompanantesActivos = patient.acompanantes.filter(acomp => acomp.Estado === 'Activo');
+        const acompanantesActivos = patient.acompanantes
 
         const cantidadAcompanantes = acompanantesActivos.length;
 
@@ -167,6 +169,7 @@ function fillPatientComp(listPatientComp) {
 }
 
 window.openAccomp = async function (button) {
+ 
 
   const acompanantes = JSON.parse(button.getAttribute('data-acompanantes'));
   let modalAcomp = new bootstrap.Modal(document.getElementById('showAccomp'), {
@@ -210,8 +213,7 @@ window.editAccomp = function (button) {
       Identificacion: document.getElementById('identification').value,
       Telefono1: document.getElementById('phone1').value,
       Telefono2: document.getElementById('phone2').value,
-      Parentesco: document.getElementById('parentesco').value,
-      Estado: "Activo"
+      Parentesco: document.getElementById('parentesco').value
     };
 
     addEditedCompanion(companionData, IdAcompanante);
@@ -444,8 +446,8 @@ function addCompanion(idPacienteCapturado) {
   const acompananteApellido1 = document.querySelector(`#firstlastname`).value.trim();
   const acompananteApellido2 = document.querySelector(`#secondlastname`).value.trim();
   const acompananteIdentificacion = document.querySelector(`#identification`).value.trim();
-  const acompananteTelefono1 = document.querySelector(`#phone1`).value.trim();
-  const acompananteTelefono2 = document.querySelector(`#phone2`).value.trim() || '0';
+  const acompananteTelefono1 = parseInt(document.querySelector(`#phone1`).value.trim());
+  const acompananteTelefono2 = parseInt(document.querySelector(`#phone2`).value.trim() || '0');
   const acompananteParentesco = document.querySelector(`#parentesco`).value.trim();
 
   if (!acompananteNombre || !acompananteApellido1 || !acompananteApellido2 || !acompananteIdentificacion ||
@@ -463,13 +465,12 @@ function addCompanion(idPacienteCapturado) {
     "Identificacion": acompananteIdentificacion,
     "Telefono1": acompananteTelefono1,
     "Telefono2": acompananteTelefono2,
-    "Parentesco": acompananteParentesco,
-    "Estado": "Activo"
+    "Parentesco": acompananteParentesco
   };
 
-  obtenerAcompanante(companionData);
+  agregarAcompanante(companionData);
 }
-
+/* 
 //8: Verifica si el acompañante ya está registrado
 async function obtenerAcompanante(companionData) {
   try {
@@ -484,7 +485,7 @@ async function obtenerAcompanante(companionData) {
       ;
 
     } else {
-      agregarAcompanante(companionData)
+      agregarAcompanante(companionData);
     }
 
 
@@ -492,7 +493,7 @@ async function obtenerAcompanante(companionData) {
   } catch (error) {
 
   }
-}
+} */
 
 //9: Registra un nuevo acompañante
 async function agregarAcompanante(companionData) {
