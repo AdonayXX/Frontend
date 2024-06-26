@@ -101,19 +101,19 @@
         const row = `
         <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
           <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En Curso' || cita.estadoCita === 'Finalizada' ? 'checked disabled' : ''}></td>
-          <td>${cita.Paciente}</td>
-          <td>${cita.ubicacionOrigen}</td>
-          <td>${cita.idUbicacionDestino}</td>
-          <td>${cita.condicionCita}</td>
-          <td>${cita.horaCita}</td>
-          <td>${formattedFechaCita}</td>
-          <td>${cita.Traslado}</td>
-          <td>${cita.camilla}</td>
-          <td>
+          <td class="text-center">${cita.Paciente}</td>
+          <td class="text-center">${cita.ubicacionOrigen}</td>
+          <td class="text-center">${cita.idUbicacionDestino}</td>
+          <td class="text-center">${cita.condicionCita}</td>
+          <td class="text-center">${cita.horaCita}</td>
+          <td class="text-center">${formattedFechaCita}</td>
+          <td class="text-center">${cita.Traslado}</td>
+          <td class="text-center">${cita.camilla}</td>
+          <td class="text-center">
             <button class="btn btn-warning ausenteBtn" data-bs-toggle="modal" data-bs-target="#ausenteModal" data-idcita="${cita.idCita}">Ausente</button>
           </td>
         </tr>
-      `;
+            `;
         tableBody.innerHTML += row;
       });
 
@@ -143,6 +143,9 @@
         let inputValue = $(this).val().toLowerCase();
         table.search(inputValue).draw();
       });
+
+      // Center the checkbox
+      $('.cita-checkbox').parent().addClass('text-center');
 
 
 
