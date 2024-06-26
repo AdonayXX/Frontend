@@ -16,12 +16,12 @@ async function obtenerViajes() {
             const acompanante2 = viaje.Acompanante2 ? viaje.Acompanante2 : 'N/A';
 
             row.innerHTML = `
-                <td>${viaje.Paciente}</td>
-                <td>${viaje.LugarSalida}</td>
-                <td>${viaje.idUbicacionDestino}</td>
-                <td>${viaje.horaCita}</td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm full-width" data-bs-toggle="modal"
+                <td class="text-center">${viaje.Paciente}</td>
+                <td class="text-center">${viaje.LugarSalida}</td>
+                <td class="text-center">${viaje.idUbicacionDestino}</td>
+                <td class="text-center">${viaje.horaCita}</td>
+                <td class="text-center">
+                    <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
                         data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
                         <i class="bi bi-eye"></i>
                     </button>
