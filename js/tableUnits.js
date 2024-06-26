@@ -85,9 +85,9 @@ async function getUnidades() {
                     <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
                 `;
 
-                row.addEventListener('click', function () {
-                    loadFormData(unidad);
-                });
+                // row.addEventListener('click', function () {
+                //     loadFormData(unidad);
+                // });
 
                 tableBody.appendChild(row);
             });

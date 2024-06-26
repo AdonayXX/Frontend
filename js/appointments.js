@@ -160,13 +160,11 @@ document.getElementById('acompananteNombre2').addEventListener('change', handleA
 function limpiarCamposAcompanantes() {
     document.getElementById('acompananteNombre1').value = '';
     document.getElementById('acompananteApellido1_1').value = '';
-    document.getElementById('acompananteApellido2_1').value = '';
     document.getElementById('acompananteTelefono1_1').value = '';
     document.getElementById('acompananteParentesco1').value = '';
 
     document.getElementById('acompananteNombre2').value = '';
     document.getElementById('acompananteApellido1_2').value = '';
-    document.getElementById('acompananteApellido2_2').value = '';
     document.getElementById('acompananteTelefono1_2').value = '';
     document.getElementById('acompananteParentesco2').value = '';
 }

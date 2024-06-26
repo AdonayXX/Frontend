@@ -245,71 +245,71 @@ async function getEstadosUnidad() {
     }
 }
 
-async function getUnidades() {
-    try {
-        const [recursoMap, estadoMap, choferMap] = await Promise.all([
-            getTiposRecurso(),
-            getEstadosUnidad(),
-            getNombreChofer()
-        ]);
+// async function getUnidades() {
+//     try {
+//         const [recursoMap, estadoMap, choferMap] = await Promise.all([
+//             getTiposRecurso(),
+//             getEstadosUnidad(),
+//             getNombreChofer()
+//         ]);
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
-        const unidades = response.data.unidades;
+//         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+//         const unidades = response.data.unidades;
 
-        $(document).ready(function () {
-            if ($.fn.DataTable.isDataTable('#unitTable')) {
-                $('#unitTable').DataTable().destroy();
-            }
+//         $(document).ready(function () {
+//             if ($.fn.DataTable.isDataTable('#unitTable')) {
+//                 $('#unitTable').DataTable().destroy();
+//             }
 
-            const tableBody = document.getElementById('unitTableBody');
-            tableBody.innerHTML = '';
+//             const tableBody = document.getElementById('unitTableBody');
+//             tableBody.innerHTML = '';
 
-            unidades.forEach(unidad => {
-                const row = document.createElement('tr');
+//             unidades.forEach(unidad => {
+//                 const row = document.createElement('tr');
 
-                row.innerHTML = `
-                    <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
-                    <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
-                    <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
-                    <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
-                    <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
-                    <td class="text-center">${(unidad.tipoFrecuenciaCambio || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
-                `;
+//                 row.innerHTML = `
+//                     <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
+//                     <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
+//                     <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
+//                     <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
+//                     <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
+//                     <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
+//                     <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
+//                     <td class="text-center">${(unidad.tipoFrecuenciaCambio || 'N/A').toUpperCase()}</td>
+//                     <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
+//                 `;
 
-                row.addEventListener('click', function () {
-                    loadFormData(unidad);
-                });
+//                 row.addEventListener('click', function () {
+//                     loadFormData(unidad);
+//                 });
 
-                tableBody.appendChild(row);
-            });
+//                 tableBody.appendChild(row);
+//             });
 
-            $('#unitTable').DataTable({
-                dom: "<'row'<'col-sm-6'l>" +
-                    "<'row'<'col-sm-12't>>" +
-                    "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-                ordering: false,
-                searching: true,
-                paging: true,
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-                },
-                caseInsensitive: true,
-                smart: true
-            });
+//             $('#unitTable').DataTable({
+//                 dom: "<'row'<'col-sm-6'l>" +
+//                     "<'row'<'col-sm-12't>>" +
+//                     "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+//                 ordering: false,
+//                 searching: true,
+//                 paging: true,
+//                 language: {
+//                     url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+//                 },
+//                 caseInsensitive: true,
+//                 smart: true
+//             });
 
-            $('#searchUnit').on('keyup', function () {
-                let inputValue = $(this).val().toLowerCase();
-                $('#unitTable').DataTable().search(inputValue).draw();
-            });
+//             $('#searchUnit').on('keyup', function () {
+//                 let inputValue = $(this).val().toLowerCase();
+//                 $('#unitTable').DataTable().search(inputValue).draw();
+//             });
 
-        });
-    } catch (error) {
-        console.error('Error al obtener las unidades:', error);
-    }
-}
+//         });
+//     } catch (error) {
+//         console.error('Error al obtener las unidades:', error);
+//     }
+// }
 
 async function getUnidad() {
     const unitNumber = document.getElementById('unitNumber').value;
@@ -537,7 +537,6 @@ async function postUnidad() {
             console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            getUnidades();
         })
         .catch(error => {
             console.error('Error al crear la unidad:', error);
@@ -650,7 +649,6 @@ async function updateUnidad() {
             console.log('Unidad actualizada:', response.data);
             showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            getUnidades();
         })
         .catch(error => {
             console.error('Error al actualizar la unidad:', error);
@@ -725,4 +723,4 @@ fetchUnitTypes();
 getTiposRecursoSelect();
 getTiposUnidadSelect();
 getChoferesSelect();
-getUnidades();
+// getUnidades();
