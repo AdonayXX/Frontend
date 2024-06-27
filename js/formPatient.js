@@ -1,6 +1,5 @@
 
-document.getElementById('1').addEventListener('submit', function (event) {
-  event.preventDefault();
+document.querySelector('#guardarFormPatients').addEventListener('click', ()=> {
   addPersona();
 });
 
@@ -12,25 +11,26 @@ function addPersona() {
     const identificacion = document.querySelector('#identificacion').value.trim();
     const tipoIdentificacion = document.querySelector('#tipoIdentificacion').value.trim();
     const genero = document.querySelector('#genero').value.trim();
-    const telefono1 = document.querySelector('#telefono1').value.trim();
-    const telefono2 = document.querySelector('#telefono2').value.trim()||0;
+    const telefono1 = document.querySelector('#telefono1Hidden').value.trim();
+    const telefono2 = document.querySelector('#telefono2Hidden').value.trim() || 0;
     const tipoSeguro = document.querySelector('#tipoSeguro').value.trim();
     const direccion = document.querySelector('#direccion').value.trim();
-    const latitud = parseFloat(document.querySelector('#latitud').value.trim())||0;
-    const longitud = parseFloat(document.querySelector('#longitud').value.trim())||0;
+    const latitud = parseFloat(document.querySelector('#latitud').value.trim()) || 0;
+    const longitud = parseFloat(document.querySelector('#longitud').value.trim()) || 0;
     const tipoSangre = document.querySelector('#tipoSangre').value.trim();
-    if (!nombre || !primerApellido || !segundoApellido || !identificacion || !tipoIdentificacion || !genero || 
-      !telefono1  || !tipoSeguro || !direccion || !tipoSangre) {
+    // const seguroVencimiento = document.querySelector('#fechaVencimientoSeguro').value.trim();
+    if (!nombre || !primerApellido || !segundoApellido || !identificacion || !tipoIdentificacion || !genero ||
+      !telefono1 || !tipoSeguro || !direccion || !tipoSangre) {
       alert("Por favor, rellena todos los campos solicitados.");
       return;
-  }
+    }
 
 
-  
 
-  
 
-  const personaData = {
+
+
+    const personaData = {
       "Nombre": nombre,
       "Apellido1": primerApellido,
       "Apellido2": segundoApellido,
@@ -38,57 +38,88 @@ function addPersona() {
       "Tipo_identificacion": tipoIdentificacion,
       "Genero": genero,
       "Telefono1": telefono1,
-      "Telefono2": telefono2 ,
+      "Telefono2": telefono2,
       "Tipo_seguro": tipoSeguro,
+      // "FechaVencimientoSeguro":seguroVencimiento,
       "Direccion": direccion,
       "Latitud": latitud,
       "Longitud": longitud,
       "Tipo_sangre": tipoSangre
-  }
-console.log(personaData);
-  addPerson(personaData);
-    
+    }
+    console.log(personaData);
+    addPerson(personaData);
+
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema al enviar los datos.');
     console.error(error);
-    
+
   }
-  
-  
+
+
 }
 
 //2
 async function addPerson(personaData) {
   try {
-      const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-      const response = await axios.get(API_URL);
-      const listaPersonas = response.data.personas;
-      const personaEncontrada = listaPersonas.find(persona => persona.Identificacion === personaData.Identificacion);
-      if (personaEncontrada) {
-          const IdPersonaCreada = personaEncontrada.Id;
-          getPatient(IdPersonaCreada);
-      } else {
-          addPeople(personaData);
-      }
-      
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const response = await axios.get(API_URL);
+    const listaPersonas = response.data.personas;
+    const personaEncontrada = listaPersonas.find(persona => persona.Identificacion === personaData.Identificacion);
+    if (personaEncontrada) {
+      const IdPersonaCreada = personaEncontrada.Id;
+      getPatient(IdPersonaCreada);
+    } else {
+      addPeople(personaData);
+    }
+
   } catch (error) {
-      showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-      console.error(error);
+    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
+    console.error(error);
   }
 }
 
 //3
 async function addPeople(personaData) {
   try {
-      const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-      const response = await axios.post(API_URL, personaData);
-      const idPersona = response.data.persona.insertId;
-      getPatient(idPersona);
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const response = await axios.post(API_URL, personaData);
+    const idPersona = response.data.persona.insertId;
+    getPatient(idPersona);
   } catch (error) {
-        showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-        console.error(error);
+    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
+    console.error(error);
   }
 }
+document.querySelector('#telefono1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#telefono2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono1_1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono2_1').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono1_2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
+document.querySelector('#acompananteTelefono2_2').addEventListener('input', function (e) {
+  if (this.value.length > 8) {
+    this.value = this.value.slice(0, 8);
+  }
+});
 
 //4
 function addDataPatient(IdPersonaCreada) {
@@ -97,104 +128,105 @@ function addDataPatient(IdPersonaCreada) {
   const encamado = document.querySelector('#encamado').value;
 
   const pacienteData = {
-      "IdPersona": IdPersonaCreada,
-      "Criticidad": "null",
-      "Encamado": encamado,
-      "Traslado": lugarSalida,
-      "Prioridad": prioridad,
-      "Estado": "Activo"
+    "IdPersona": IdPersonaCreada,
+    "Criticidad": "null",
+    "Encamado": encamado,
+    "Traslado": lugarSalida,
+    "Prioridad": prioridad,
+    "Estado": "Activo"
   }
   addPatient(pacienteData);
-  
+
 }
 
 //5
 async function getPatient(IdPersonaCreada) {
   try {
-      const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
-      const response = await axios.get(API_URL);
-      const listaPacientes = response.data.pacientes;
-      const pacienteEncontrado = listaPacientes.find(paciente => paciente.IdPersona === IdPersonaCreada);
-      if (pacienteEncontrado) {
-          showToast('Ups!','El paciente ya se encuentra registrado')
-         
-      } if (!pacienteEncontrado) {
-          addDataPatient(IdPersonaCreada);
-      }
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
+    const response = await axios.get(API_URL);
+    const listaPacientes = response.data.pacientes;
+    const pacienteEncontrado = listaPacientes.find(paciente => paciente.IdPersona === IdPersonaCreada);
+    if (pacienteEncontrado) {
+      showToast('Ups!', 'El paciente ya se encuentra registrado')
+
+    } if (!pacienteEncontrado) {
+      addDataPatient(IdPersonaCreada);
+    }
   } catch (error) {
-     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-     console.error(error);
+    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
+    console.error(error);
   }
 }
 
 //6
 async function addPatient(pacienteData) {
   try {
-      const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
-      const response = await axios.post(API_URL, pacienteData);
-      const idPaciente = (response.data.paciente.insertId);
-      addCompanion(idPaciente);
-      showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
+    const response = await axios.post(API_URL, pacienteData);
+    const idPaciente = (response.data.paciente.insertId);
+    addCompanion(idPaciente);
+    showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
+    loadContent('formPatient.html', 'mainContent');
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
     console.error(error);
-   
-     
+
+
   }
 }
 
 
 function addCompanion(idPaciente) {
   const numAcompanantes = 2; // 
-  
+
   for (let i = 1; i <= numAcompanantes; i++) {
     const acompananteNombre = document.querySelector(`#acompananteNombre${i}`).value.trim();
     const acompananteApellido1 = document.querySelector(`#acompananteApellido1_${i}`).value.trim();
     const acompananteApellido2 = document.querySelector(`#acompananteApellido2_${i}`).value.trim();
     const acompananteIdentificacion = document.querySelector(`#acompananteIdentificacion${i}`).value.trim();
-    const acompananteTelefono1 = document.querySelector(`#acompananteTelefono1_${i}`).value.trim();
-    const acompananteTelefono2 = document.querySelector(`#acompananteTelefono2_${i}`).value.trim() || 0;
+    const acompananteTelefono1 = document.querySelector(`#acompananteTelefono1Hidden_${i}`).value.trim();
+    const acompananteTelefono2 = document.querySelector(`#acompananteTelefono2Hidden_${i}`).value.trim() || 0;
     const acompananteParentesco = document.querySelector(`#acompananteParentesco${i}`).value.trim();
 
     if (acompananteNombre && acompananteApellido1 && acompananteApellido2 && acompananteIdentificacion &&
-        acompananteTelefono1  && acompananteParentesco) {
+      acompananteTelefono1 && acompananteParentesco) {
 
       const companionData = {
         "IdPaciente": idPaciente,
         "Nombre": acompananteNombre,
         "Apellido1": acompananteApellido1,
-        "Apellido2": acompananteApellido2,
+        "Apellido2" : acompananteApellido2,
         "Identificacion": acompananteIdentificacion,
         "Telefono1": acompananteTelefono1,
         "Telefono2": acompananteTelefono2,
-        "Parentesco": acompananteParentesco,
-        "Estado": "Activo"
+        "Parentesco": acompananteParentesco
+
       };
 
- 
+
       getComp(companionData);
     }
   }
-  
-  document.getElementById('1').reset();
+
+
 }
 
 //8: Verifica si el acompañante ya está registrado
-async function getComp(companionData){
+async function getComp(companionData) {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
     const response = await axios.get(API_URL);
     const listaAcompanantes = response.data.acompanantes;
-    const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente );
-    if (acompananteEncontrado){
+    const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente);
+    if (acompananteEncontrado) {
       alert('El acompañante ya esta registrado al paciente.');
-    }else{
+    } else {
       addComp(companionData);
     }
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
     console.error(error);
-    
+
   }
 }
 
@@ -207,46 +239,61 @@ async function addComp(companionData) {
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
     console.error(error);
-    
+
   }
 }
 
 
-//Funcion de botones agregar pacientes
-(function() {
+//Funcion de botones agregar acompañante
+(function () {
   let acompananteCount = 0;
 
+  function isAcompananteFilled(index) {
+    const nombre = document.getElementById(`acompananteNombre${index}`).value;
+    const apellido1 = document.getElementById(`acompananteApellido1_${index}`).value;
+    const apellido2 = document.getElementById(`acompananteApellido2_${index}`).value;
+    const identificacion = document.getElementById(`acompananteIdentificacion${index}`).value;
+    const parentesco = document.getElementById(`acompananteParentesco${index}`).value;
+    const telefono1 = document.getElementById(`acompananteTelefono${index}_1`).value;
+
+    return nombre !== '' && apellido1 !== '' && apellido2 !== '' && identificacion !== '' && parentesco !== '' && telefono1 !== '';
+  }
+
   function addAcompanante() {
-      if (acompananteCount < 2) {
-          acompananteCount++;
-          document.getElementById('acompanante' + acompananteCount).style.display = 'block';
+    if (acompananteCount < 2) {
+      if (acompananteCount === 0 || isAcompananteFilled(acompananteCount)) {
+        acompananteCount++;
+        document.getElementById('acompanante' + acompananteCount).style.display = 'block';
+      } else {
+        showToast('Ups!', 'Completa los datos del primer acompañante para ingresar uno nuevo.');
       }
+    }
   }
 
   function removeAcompanante() {
-      if (acompananteCount > 0) {
-          document.getElementById('acompanante' + acompananteCount).style.display = 'none';
-          acompananteCount--;
-      }
+    if (acompananteCount > 0) {
+      document.getElementById('acompanante' + acompananteCount).style.display = 'none';
+      acompananteCount--;
+    }
   }
 
   function cambiarEstiloBoton(btn, div) {
-      if (div.style.display === 'none' || div.style.display === '') {
-          btn.style.backgroundColor = '#198754';
-      } else {
-          btn.style.backgroundColor = '#DC3545';
-      }
+    if (div.style.display === 'none' || div.style.display === '') {
+      btn.style.backgroundColor = '#198754';
+    } else {
+      btn.style.backgroundColor = '#DC3545';
+    }
   }
 
   function togglePhone(btn, div) {
-      if (div.style.display === 'none' || div.style.display === '') {
-          div.style.display = 'block';
-          btn.innerHTML = '<i class="bi bi-telephone-minus-fill"></i>';
-      } else {
-          div.style.display = 'none';
-          btn.innerHTML = '<i class="bi bi-telephone-plus-fill"></i>';
-      }
-      cambiarEstiloBoton(btn, div);
+    if (div.style.display === 'none' || div.style.display === '') {
+      div.style.display = 'block';
+      btn.innerHTML = '<i class="bi bi-telephone-minus-fill"></i>';
+    } else {
+      div.style.display = 'none';
+      btn.innerHTML = '<i class="bi bi-telephone-plus-fill"></i>';
+    }
+    cambiarEstiloBoton(btn, div);
   }
 
   document.getElementById('addAcompananteBtn').addEventListener('click', addAcompanante);
@@ -257,15 +304,199 @@ async function addComp(companionData) {
   const acompananteTelefono2_1Div = document.getElementById('acompanantePhone');
   const acompananteTelefono2_2Div = document.getElementById('acompanantePhone2');
 
-  PhoneBtn.addEventListener('click', function() {
-      togglePhone(PhoneBtn, acompananteTelefono2_1Div);
+  PhoneBtn.addEventListener('click', function () {
+    togglePhone(PhoneBtn, acompananteTelefono2_1Div);
   });
 
-  phonebtn2.addEventListener('click', function() {
-      togglePhone(phonebtn2, acompananteTelefono2_2Div);
+  phonebtn2.addEventListener('click', function () {
+    togglePhone(phonebtn2, acompananteTelefono2_2Div);
   });
 
 
   cambiarEstiloBoton(PhoneBtn, acompananteTelefono2_1Div);
   cambiarEstiloBoton(phonebtn2, acompananteTelefono2_2Div);
 })();
+
+//Funciones para mascara de inputs numericos
+function applyInputMask(elementId, hiddenElementId, mask) {
+  let inputElement = document.getElementById(elementId);
+  let hiddenElement = document.getElementById(hiddenElementId);
+  let content = '';
+
+  inputElement.addEventListener('keydown', function (e) {
+    if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (isNumeric(e.key) && content.length < mask.length) {
+      content += e.key;
+    }
+
+    if (e.keyCode == 8) { // Backspace key
+      if (content.length > 0) {
+        content = content.substr(0, content.length - 1);
+      }
+    }
+
+    // Validar la longitud máxima permitida (8 dígitos)
+    if (content.replace(/\D/g, '').length > 8) {
+      content = content.substring(0, 8);
+    }
+
+    inputElement.value = maskIt(mask, content);
+    hiddenElement.value = content.replace(/\D/g, '');
+
+
+    inputElement.setAttribute('data-hidden-value', hiddenElement.value);
+  });
+
+  inputElement.addEventListener('input', function (e) {
+
+    hiddenElement.value = inputElement.value.replace(/\D/g, '');
+
+    inputElement.setAttribute('data-hidden-value', hiddenElement.value);
+  });
+}
+
+function isNumeric(char) {
+  return !isNaN(char - parseInt(char));
+}
+
+function maskIt(pattern, value) {
+  let maskedValue = '';
+  let valueIndex = 0;
+
+  // Iterar sobre el patrón y aplicar la máscara al valor ingresado
+  for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
+    if (valueIndex >= value.length) {
+      break; // Si hemos alcanzado el final del valor, salir del bucle
+    }
+
+    if (pattern[patternIndex] === '0') {
+      maskedValue += value[valueIndex];
+      valueIndex++;
+    } else {
+      maskedValue += pattern[patternIndex];
+    }
+  }
+
+  return maskedValue;
+}
+
+// Aplicar la máscara a los inputs
+applyInputMask('telefono1', 'telefono1Hidden', '0000-0000');
+applyInputMask('telefono2', 'telefono2Hidden', '0000-0000');
+applyInputMask('acompananteTelefono1_1', 'acompananteTelefono1Hidden_1', '0000-0000');
+applyInputMask('acompananteTelefono2_1', 'acompananteTelefono2Hidden_1', '0000-0000');
+applyInputMask('acompananteTelefono1_2', 'acompananteTelefono1Hidden_2', '0000-0000');
+applyInputMask('acompananteTelefono2_2', 'acompananteTelefono2Hidden_2', '0000-0000');
+
+// Función para aplicar la máscara según el tipo de identificación seleccionado
+function applyMaskBasedOnType() {
+  let tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+  let identificacionInput = document.getElementById('identificacion');
+
+  switch (tipoIdentificacion) {
+    case 'Cédula de Identidad':
+      // Máscara para Cédula de Identidad: 000000000
+      identificacionInput.setAttribute('data-mask', '0-0000-0000');
+      break;
+    case 'Número de Asegurado':
+      // Máscara para Números de Asegurado: Primeros 4 dígitos fijos 2536
+      identificacionInput.setAttribute('data-mask', '0000000000000000000000000');
+      break;
+    case 'Interno':
+      // Aquí debes definir la máscara para Interno cuando esté definida
+      identificacionInput.setAttribute('data-mask', '2536-00000000000000000000'); // Por ahora, quitar la máscara
+      break;
+    default:
+      identificacionInput.removeAttribute('data-mask');
+      break;
+  }
+
+  // Limpiar el valor del campo de identificación al cambiar el tipo de identificación
+  identificacionInput.value = '';
+
+  // Aplicar la máscara al campo de identificación según el tipo seleccionado
+  applyIdentificationMask('identificacion', identificacionInput.getAttribute('data-mask'));
+}
+
+// Función para aplicar la máscara al campo de identificación según el patrón dado
+function applyIdentificationMask(elementId, mask) {
+  let inputElement = document.getElementById(elementId);
+  if (!inputElement) return; // Salir si el elemento no está definido
+
+  let content = '';
+
+  inputElement.addEventListener('input', function () {
+    let maskedValue = maskIt(mask, this.value);
+    this.value = maskedValue;
+
+    // Validar la longitud máxima permitida (20 dígitos)
+    if (this.value.replace(/\D/g, '').length > 20) {
+      this.value = this.value.substring(0, this.value.length - 1);
+    }
+  });
+
+  inputElement.addEventListener('keydown', function (e) {
+    if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (!mask) {
+      mask = ''; // Asegurar que mask no sea null o undefined
+    }
+
+    if (isNumeric(e.key) && content.length < mask.length) {
+      content += e.key;
+    }
+
+    // Validar la longitud máxima permitida (20 dígitos)
+    if (content.replace(/\D/g, '').length > 20) {
+      content = content.substring(0, content.length - 1);
+    }
+
+    if (e.keyCode == 8) { // Backspace key
+      if (content.length > 0) {
+        content = content.substr(0, content.length - 1);
+      }
+    }
+
+    inputElement.value = maskIt(mask, content);
+  });
+}
+
+// Evento para detectar cambios en el tipo de identificación y aplicar la máscara correspondiente
+document.getElementById('tipoIdentificacion').addEventListener('change', function () {
+  applyMaskBasedOnType();
+});
+
+// Inicialmente aplicar la máscara basada en el tipo seleccionado (por si se carga la página con un valor seleccionado)
+applyMaskBasedOnType();
+applyIdentificationMask('identificacion', ''); // Llamar con una máscara inicial vacía o definida
+
+function toSentenceCase(str) {
+  return str.toLowerCase().replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+}
+
+document.querySelectorAll('input[type="text"]').forEach(input => {
+  input.addEventListener('input', (event) => {
+    const inputValue = event.target.value;
+    event.target.value = toSentenceCase(inputValue);
+  });
+});
+// Función para convertir solo la primera letra de cada oración a mayúscula
+function toSentenceCase(str) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+    return c.toUpperCase();
+  });
+}
+
+document.getElementById('direccion').addEventListener('input', (event) => {
+  const inputValue = event.target.value;
+  event.target.value = toSentenceCase(inputValue);
+});

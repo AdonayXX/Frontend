@@ -122,11 +122,12 @@ body {
 
 .contenedor-Modal {
     color: #094079;
+    
 }
 
 .sectionCompanion {
     margin-top: 30px;
-    text-align: center;
+   
 }
 
 #toast-container {
@@ -134,4 +135,15 @@ body {
     top: 20px;
     right: 20px;
     z-index: 2000;
+}
+.form-label {
+    color: #094079;
+}
+.btn-primary {
+    background-color: #094079;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #072d57;
 }

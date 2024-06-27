@@ -1,5 +1,3 @@
-loadCitas();
-
 async function loadCitas() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
@@ -9,10 +7,11 @@ async function loadCitas() {
         let table = $('#TableAppointment').DataTable({
             dom: "<'row'<'col-sm-6'l>" +
                 "<'row'<'col-sm-12't>>" +
-                "<'row '<'col-sm-6'i><'col-sm-6'p>>",
+                "<'col-sm-6'p>>",
             ordering: false,
             searching: true,
             paging: true,
+            pagingType: 'simple_numbers',
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
             },
@@ -22,43 +21,65 @@ async function loadCitas() {
 
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
-            table.search(inputValue).draw();
+            let selectedState = $('#seleccionar-estado').val().toLowerCase();
+            table.search(inputValue + ' ' + selectedState).draw();
         });
 
         $('#fechaCita').on('change', function () {
             let fechaInput = $('#fechaCita').val();
             table.column(2).search(fechaInput).draw();
         });
+
+        $(document).ready(function () {
+            $('#seleccionar-estado').val('Iniciada').trigger('change');
+
+            $('#seleccionar-estado').on('change', function () {
+                let selectedState = $(this).val().toLowerCase();
+                table.column(5).search(selectedState).draw();
+
+                let tituloCitas = document.getElementById('tituloCitas');
+                tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
+
+                let inputValue = $('#searchAppointment').val().toLowerCase();
+                table.search(inputValue + ' ' + selectedState).draw();
+            });
+        });
+
+        table.search('iniciada').draw();
+
     } catch (error) {
         console.error('Error al obtener las citas:', error);
     }
 }
+
+loadCitas();
 
 function renderTable(citas) {
     const tableBody = document.getElementById('viajesTableBody');
     tableBody.innerHTML = '';
 
     citas.forEach(cita => {
-        if (cita.estadoCita === 'Finalizada' && cita.ausente !== null) {
-            showToast('¡Éxitos!', 'Citas cargadas correctamente.');
+        const row = document.createElement('tr');
 
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
+        row.innerHTML = `
                 <td class="text-center">${cita.idCita}</td>
                 <td class="text-center">${cita.nombreCompletoPaciente}</td>
                 <td class="text-center">${cita.fechaCita}</td>
                 <td class="text-center">${cita.horaCita}</td>
                 <td class="text-center">${cita.ubicacionDestino}</td>
+                <td class="text-center">${cita.estadoCita}</td>
                 <td>
                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
+                   <td>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(cita)})'>
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
             `;
-            tableBody.appendChild(row);
-
-        }
+        tableBody.appendChild(row);
     });
 }
 
@@ -102,3 +123,49 @@ function getAcompanantes(cita) {
         showToast(error, 'Error al obtener los acompañantes:');
     }
 }
+
+document.querySelector('#searchAppointment').addEventListener('input', function (e) {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+});
+
+function editarCita(cita) {
+    console.log(cita);
+
+    document.querySelector('#editarIdCita').value = cita.idCita;
+    document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
+    document.querySelector('#editarFechaCita').value = cita.fechaCita;
+    document.querySelector('#editarHora').value = cita.horaCita;
+    document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
+    document.querySelector('#editarEstado').value = cita.estadoCita;
+
+
+}
+
+document.querySelector('#searchAppointment').addEventListener('input', function (e) {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+});
+
+function getRutas() {
+    const selectDestino = document.getElementById('seleccionar-destino');
+
+    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
+        .then(response => {
+            const destinos = response.data;
+            destinos.forEach(destino => {
+                const option = document.createElement('option');
+                option.value = destino.IdRuta;
+                option.textContent = destino.Descripcion;
+                selectDestino.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching destinos:', error);
+        });
+}
+
+getRutas();
+

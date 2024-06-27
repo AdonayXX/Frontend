@@ -34,20 +34,20 @@ function showToast(title, message, reloadCallback) {
     });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     var today = new Date();
     var formattedDate = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
     document.getElementById('date').textContent = formattedDate;
 });
+
 //establece que no se puedan elegir fechas anteriores 
 const today = new Date();
 const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');  // Meses son 0-indexados, por eso se suma 1
-const day = String(today.getDate()).padStart(2, '0');  // Obtener día del mes
-
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
 const formattedDate = `${year}-${month}-${day}`;
 document.getElementById('b_date').min = formattedDate;
+
 //Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
@@ -61,11 +61,16 @@ document.getElementById('addCompanion').addEventListener('click', function () {
         showToast("Error", "No se pueden agregar mas de 5 acompañantes");
     }
 });
+
 //Eliminar Acompañantes
 document.getElementById('removeCompanion').addEventListener('click', function () {
     if (acompananteCount > 0) {
         const acompDiv = document.getElementById('acompanante' + acompananteCount);
         if (acompDiv) {
+            const inputs = acompDiv.getElementsByTagName('input');
+            for (let input of inputs) {
+                input.value = '';
+            }
             acompDiv.style.display = 'none';
         }
         acompananteCount--;
@@ -73,44 +78,19 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
 });
 
 function SolicitarVale() {
-    ObtenerFuncionarios();
     ObtenerUnidades();
     ObtenerServicios();
     ObtenerMotivo();
     ObtenerDestino();
-    // ObtenerSalida();
+    ObtenerSalida();
 }
 
 var url = 'https://backend-transporteccss.onrender.com/';
-//Obtener Funcionarios
-function ObtenerFuncionarios() {
-    axios.get(`${url}api/funcionarios`)
-        .then(response => {
-            console.log(response.data);
-            LlenarAcompanante(response.data);
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
-}
-
-function LlenarAcompanante(data) {
-    let body = '<option selected disabled value="null">Seleccione una opción</option>';
-    for (let index = 0; index < data.length; index++) {
-        body += `<option value = ${data[index].IdFuncionario}>${data[index].Nombre}</option>`;
-    }
-    document.getElementById('acompananteNombre1').innerHTML = body;
-    document.getElementById('acompananteNombre2').innerHTML = body;
-    document.getElementById('acompananteNombre3').innerHTML = body;
-    document.getElementById('acompananteNombre4').innerHTML = body;
-    document.getElementById('acompananteNombre5').innerHTML = body;
-}
-
 //Obtener Unidades
 function ObtenerUnidades() {
     axios.get(`${url}api/unidadProgramatica`)
         .then(response => {
-            console.log(response.data);
+
             LlenarUnidadesProgramaticas(response.data);
         })
         .catch(error => {
@@ -130,7 +110,7 @@ function LlenarUnidadesProgramaticas(data) {
 function ObtenerServicios() {
     axios.get(`${url}api/servicios`)
         .then(response => {
-            console.log(response.data);
+
             LlenarServicios(response.data);
         })
         .catch(error => {
@@ -150,7 +130,7 @@ function LlenarServicios(data) {
 function ObtenerMotivo() {
     axios.get(`${url}api/motivoVale`)
         .then(response => {
-            console.log(response.data);
+
             LlenarMotivo(response.data);
         })
         .catch(error => {
@@ -167,30 +147,29 @@ function LlenarMotivo(data) {
 }
 
 //Obtener Lugar de Salida
-// function ObtenerSalida() {
-//     axios.get(`${url}api/destinos`)
-//         .then(response => {
-//             console.log(response.data);
-//             LlenarSalida(response.data);
-//         })
-//         .catch(error => {
-//             console.error('There was a problem with the fetch operation:', error);
-//         });
-// }
+function ObtenerSalida() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
 
-// function LlenarSalida(data) {
-//     let body = '<option selected disabled value="">Seleccione una opción</option>';
-//     for (let index = 0; index < data.length; index++) {
-//         body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
-//     }
-//     document.getElementById('lugarSa').innerHTML = body;
-// }
+            LlenarSalida(response.data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+function LlenarSalida(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarSa').innerHTML = body;
+}
 
 //Obtener Lugar Destino
 function ObtenerDestino() {
-    axios.get(`${url}api/destinos`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
-            console.log(response.data);
             LlenarDestino(response.data);
         })
         .catch(error => {
@@ -201,7 +180,7 @@ function ObtenerDestino() {
 function LlenarDestino(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
-        body += `<option value="${data[index].IdDestino}">${data[index].IdDestino} - ${data[index].Descripcion}</option>`;
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
     }
     document.getElementById('lugarDes').innerHTML = body;
 }
@@ -210,7 +189,6 @@ function LlenarDestino(data) {
 //guarda los datos
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
     event.preventDefault();
-
     GuardarDatos();
 });
 
@@ -219,6 +197,9 @@ function validateModalForm() {
     let isValid = true;
 
     inputs.forEach(input => {
+
+        if (input.id.startsWith('acompananteNombre')) return;
+
         if (input.value.trim() === '' || input.value === null) {
             isValid = false;
         }
@@ -233,12 +214,14 @@ function GuardarDatos() {
         showToast("Error", "Se deben llenar todos los campos");
         return;
     }
+
     let Acompanante1 = document.getElementById('acompananteNombre1').value;
     let Acompanante2 = document.getElementById('acompananteNombre2').value;
     let Acompanante3 = document.getElementById('acompananteNombre3').value;
     let Acompanante4 = document.getElementById('acompananteNombre4').value;
     let Acompanante5 = document.getElementById('acompananteNombre5').value;
     const IdUnidadProgramatica = document.getElementById('Up').value;
+    const SalidaId = document.getElementById('lugarSa').value;
     const ServicioID = document.getElementById('service').value;
     const MotivoID = document.getElementById('motivo').value;
     const DestinoId = document.getElementById('lugarDes').value;
@@ -247,32 +230,30 @@ function GuardarDatos() {
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
-    const Unidad = document.getElementById('uni').value;
 
-
-    function adjustToNullIfContainsNull(value) {
-        if (typeof value === 'string' && value.toLowerCase().includes('null')) {
+    function adjustToNullIfEmpty(value) {
+        if (typeof value === 'string' && value.trim() === '') {
             value = null;
         }
         return value;
     }
 
-    Acompanante1 = adjustToNullIfContainsNull(Acompanante1);
-    Acompanante2 = adjustToNullIfContainsNull(Acompanante2);
-    Acompanante3 = adjustToNullIfContainsNull(Acompanante3);
-    Acompanante4 = adjustToNullIfContainsNull(Acompanante4);
-    Acompanante5 = adjustToNullIfContainsNull(Acompanante5);
+    Acompanante1 = adjustToNullIfEmpty(Acompanante1);
+    Acompanante2 = adjustToNullIfEmpty(Acompanante2);
+    Acompanante3 = adjustToNullIfEmpty(Acompanante3);
+    Acompanante4 = adjustToNullIfEmpty(Acompanante4);
+    Acompanante5 = adjustToNullIfEmpty(Acompanante5);
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
-        Unidad: Unidad,
+        SalidaId: SalidaId,
         DestinoId: DestinoId,
-        MotivoID: MotivoID,
-        ServicioID: ServicioID,
+        MotivoId: MotivoID,
+        ServicioId: ServicioID,
         Fecha_Solicitud: Fecha_Solicitud,
         Hora_Salida: Hora_Salida,
         Detalle: Detalle,
-        EstadoValeID: Estado,
+        EstadoId: Estado,
         IdUnidadProgramatica: IdUnidadProgramatica,
         Acompanante1: Acompanante1,
         Acompanante2: Acompanante2,
@@ -280,21 +261,97 @@ function GuardarDatos() {
         Acompanante4: Acompanante4,
         Acompanante5: Acompanante5
     };
+
     axios.post(`${url}api/vales`, datos)
         .then(response => {
-            console.log('Datos guardados exitosamente:', response.data);
+            showToast("", "Se generó la solicitud exitosamente");
             location.reload();
         })
         .catch(error => {
-            console.error('Hubo un problema al guardar los datos:', error);
+            if (error.response) {
+                console.error('Hubo un problema al guardar los datos:', error.response.data);
+            } else {
+                console.error('Error desconocido:', error);
+            }
         });
 }
+//Mostrar ultimo acompañante
+async function getUltimate() {
+    try {
+        const response = await axios.get(`${url}api/vales`);
+        const vales = response.data.vales;
+        const ultimo = vales.length - 1;
+        console.log(vales);
 
+        if (ultimo >= 0) {
+            const vale = vales[ultimo];
+            const fechaSolicitud = new Date(vale.Fecha_Solicitud);
+            const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
+            document.getElementById('Up').value = vale.IdUnidadProgramatica;
+            document.getElementById('lugarSa').value = vale.SalidaId;
+            document.getElementById('service').value = vale.ServicioId;
+            document.getElementById('motivo').value = vale.MotivoId;
+            document.getElementById('lugarDes').value = vale.DestinoId;
+            document.getElementById('detalle').value = vale.Detalle;
+            document.getElementById('nameSoli').value = vale.NombreSolicitante;
+            document.getElementById('hora_salida').value = vale.Hora_Salida;
+            document.getElementById('b_date').value = fechaFormateada;
+            getAcompanantes(vale);
+            showToast("Ultimo Vale", "Se cargó el último vale exitosamente");
+        } else {
+            console.error('No hay vales disponibles.');
+        }
+    } catch (error) {
+        console.error('No se cargaron los datos', error);
+    }
+}
+
+function getAcompanantes(vale) {
+    if (vale.Acompanante1 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre1');
+        const div1 = document.getElementById('acompanante1');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante1;
+        acompananteCount++;
+    }
+    if (vale.Acompanante2 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre2');
+        const div1 = document.getElementById('acompanante2');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante2;
+        acompananteCount++;
+    }
+    if (vale.Acompanante3 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre3');
+        const div1 = document.getElementById('acompanante3');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante3;
+        acompananteCount++;
+    }
+    if (vale.Acompanante4 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre4');
+        const div1 = document.getElementById('acompanante4');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante4;
+        acompananteCount++;
+    }
+    if (vale.Acompanante5 != null) {
+        const acompDiv1 = document.getElementById('acompananteNombre5');
+        const div1 = document.getElementById('acompanante5');
+        div1.style.display = 'block';
+        acompDiv1.value = vale.Acompanante5;
+        acompananteCount++;
+    }
+}
+
+document.getElementById('btn-mostrar').addEventListener('click', function (event) {
+    getUltimate();
+});
 
 var error;
 //Login
 // fetchLogin.js
-const loginUser = async (identificador, Contrasena) => {
+/* const loginUser = async (identificador, Contrasena) => {
     try {
         const response = await axios.post(`${url}api/user/login`, {
             identificador,
@@ -311,7 +368,8 @@ const loginUser = async (identificador, Contrasena) => {
         throw new Error('Error al iniciar sesión');
     }
 };
-// // Llama a la función y almacena el token
+
+//  */// Llama a la función y almacena el token
 // loginUser()
 //     .then(token => {
 //         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
@@ -321,21 +379,25 @@ const loginUser = async (identificador, Contrasena) => {
 //         console.error('Error al obtener el token:', error);
 //     });
 
-const handleLogin = async () => {
+
+/* const handleLogin = async () => {
     const userEmail = document.getElementById('userEmail').value;
     const userPassword = document.getElementById('userPassword').value;
-
     try {
         const token = await loginUser(userEmail, userPassword);
+        localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
         console.log('Token:', token);
-        window.location.href = 'Index.html'; // Redirigir al usuario
+        window.location.href = 'Index.html';
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         showToast("Error", "Usuario o Contraseña incorrectos", () => {
             setTimeout(() => {
                 location.reload();
-            }, 0); // Ajusta el tiempo de espera según sea necesario (3000 ms = 3 segundos)
+            }, 0);
         });
     }
 };
+
 document.getElementById('loginButton').addEventListener('click', handleLogin);
+document.getElementById('loginButton').addEventListener('click', handleLogin); */
+

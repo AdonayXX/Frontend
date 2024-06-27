@@ -7,131 +7,197 @@
 </head>
 
 <body>
-    <div class="container-fluid mt-5 m-auto fade-in bg-light p-3 border rounded-3" style="max-width: 1200px;">
-        <h2 class="text-center mt-3">Registro de Unidades</h2>
-        <form id="unitsForm">
+    <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
+        <h1 class="mb-4 text-center">Registro de Unidades</h1>
+        <form id="unitsForm" class="bg-light p-4 border rounded-3">
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="unitNumber">Número de Unidad</label>
-                    <input type="text" class="form-control" id="unitNumber" required>
+                <div class="col-md-4 mb-3">
+                    <label for="unitNumber"><i class="bi bi-hash"></i> Número de Unidad</label>
+                    <input type="text" class="form-control" id="unitNumber" maxlength="15" required>
                 </div>
-                <div class="col-md-6 mb-3 text-end">
-                    <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i class="bi bi-x-lg"></i></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="resourceType">Tipo de Recurso</label>
+                <div class="col-md-4 mb-3">
+                    <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
                     <div class="input-group">
-                        <select class="form-control" id="resourceType" required>
-                            <option value="1">CCSS</option>
-                            <option value="2">Cruz Roja</option>
-                            <option value="3">Privado</option>
+                        <select class="form-select" id="resourceType" required>
+                            <!-- Aquí se cargan los tipos de recurso -->
                         </select>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="addResourceType">+</button>
-                        </div>
+                        <button class="btn btn-outline-secondary ms-2" type="button" id="btnAddResource"
+                            data-bs-toggle="modal" data-bs-target="#addResourceModal"><i
+                                class="bi bi-plus"></i></button>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="unitType">Tipo de Unidad</label>
-                    <select class="form-control" id="unitType" required>
-                        <option value="">Seleccione tipo...</option>
-                        <option value="5">Ambulancia</option>
-                        <option value="8">Taxi</option>
-                        <option value="3">4x4</option>
-                        <option value="4">Buseta</option>
-                        <option value="3">Moto</option>
+                <div class="col-md-4 mb-3">
+                    <label for="unitType"><i class="bi bi-truck-front"></i> Tipo de Unidad</label>
+                    <div class="input-group">
+                        <select class="form-select" id="unitType" required>
+                            <!-- Aquí se cargan los tipos de unidad -->
+                        </select>
+                        <button class="btn btn-outline-secondary ms-2" type="button" id="btnAddUnit"
+                            data-bs-toggle="modal" data-bs-target="#addUnitModal"><i class="bi bi-plus"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="assignedDriver"><i class="bi bi-person"></i> Chófer Designado</label>
+                    <select class="form-select" id="assignedDriver" required>
+                        <!-- Aquí se cargan los choferes -->
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="initialMileage">Kilometraje Inicial</label>
-                    <input type="number" class="form-control" id="initialMileage" required>
+                <div class="col-md-4 mb-3">
+                    <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
+                    <input type="number" class="form-control" id="initialMileage" maxlength="6"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="currentMileage">Kilometraje Actual</label>
-                    <input type="number" class="form-control" id="currentMileage" required>
+                <div class="col-md-4 mb-3">
+                    <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
+                    <input type="number" class="form-control" id="currentMileage" maxlength="6"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="capacityChairs">Capacidad de Sillas</label>
-                    <input type="number" class="form-control" id="capacityChairs" required>
+                <div class="col-md-4 mb-3">
+                    <label for="capacityChairs"><i class="bi bi-people"></i> Capacidad de Asientos</label>
+                    <input type="number" class="form-control" id="capacityChairs" maxlength="2"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="capacityBed">Capacidad de Camillas</label>
-                    <input type="number" class="form-control" id="capacityBeds" required>
+                <div class="col-md-4 mb-3">
+                    <label for="capacityBed"><i class="bi bi-heart-pulse"></i> Capacidad de Camillas</label>
+                    <input type="number" class="form-control" id="capacityBeds" maxlength="2"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="totalCapacity">Capacidad Total</label>
-                    <input type="number" class="form-control" id="totalCapacity" readonly>
+                <div class="col-md-4 mb-3">
+                    <label for="totalCapacity"><i class="bi bi-truck"></i> Capacidad Total</label>
+                    <input type="number" class="form-control" id="totalCapacity" maxlength="2"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        readonly>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="dekraDate">Fecha de Dekra</label>
+                <div class="col-md-4 mb-3">
+                    <label for="dekraDate"><i class="bi bi-calendar-event"></i> Fecha de DEKRA</label>
                     <input type="date" class="form-control" id="dekraDate" required>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="assignedDriver">Chófer Designado</label>
-                    <input type="text" class="form-control" id="assignedDriver">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="status">Estado</label>
-                    <select class="form-control" id="status" required>
+                <div class="col-md-4 mb-3">
+                    <label for="status"><i class="bi bi-exclamation-circle"></i> Estado</label>
+                    <select class="form-select" id="status" required>
                         <option value="1">Activa</option>
-                        <option value="4">Inactiva</option>
-                        <option value="10">En Mantenimiento</option>
-                        <option value="3">Desechada</option>
+                        <option value="2">Inactiva</option>
+                        <option value="3">En Mantenimiento</option>
+                        <option value="4">Desechada</option>
                     </select>
                 </div>
-                <div id="maintenanceFields" style="display: none;">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="maintenanceType">Tipo de Mantenimiento</label>
-                            <select class="form-control" id="maintenanceType">
-                                <option value="5">Por Fecha</option>
-                                <option value="2">Por Kilometraje</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3" id="mileageField" style="display: none;">
-                            <label for="maintenanceMileage">Kilometraje de Mantenimiento</label>
-                            <input type="number" class="form-control" id="maintenanceMileage">
-                        </div>
-                        <div class="col-md-6 mb-3" id="dateField" style="display: none;">
-                            <label for="maintenanceDate">Fecha de Mantenimiento</label>
-                            <input type="date" class="form-control" id="maintenanceDate">
-                        </div>
-                    </div>
+                <div class="col-md-4 mb-3">
+                    <label for="maintenanceType"><i class="bi bi-tools"></i> Tipo de Mantenimiento</label>
+                    <select class="form-select" id="maintenanceType" required>
+                        <option selected disabled value="">Seleccione el tipo de mantenimiento...</option>
+                        <option value="1">Fecha</option>
+                        <option value="2">Kilometraje</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3" id="mileageField" style="display: none;">
+                    <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
+                        Mantenimiento</label>
+                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                </div>
+                <div class="col-md-4 mb-3" id="dateField" style="display: none;">
+                    <label for="maintenanceDate"><i class="bi bi-calendar-event"></i> Fecha del Último
+                        Mantenimiento</label>
+                    <input type="date" class="form-control" id="maintenanceDate">
+                </div>
+                <div class="col-md-4 mb-3" id="periodicityField" style="display: none;">
+                    <label for="advance"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
+                    <input type="text" class="form-control" id="periodicity" maxlength="6"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
+                </div>
+                <div class="col-md-4 mb-3" id="advanceField" style="display: none;">
+                    <label for="advance"><i class="bi bi-percent"></i> Adelanto del Mantenimiento</label>
+                    <input type="text" class="form-control" id="advance" maxlength="2"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
             </div>
-            <button type="submit" id="submit-unit-button" class="btn text-white" style="background-color: #094079; border-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';">Registrar Unidad</button>
-            <button type="submit" id="update-unit-button" class="btn btn-primary text-white" style="background-color: #094079;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';" disabled>Actualizar Unidad</button>
+            <br>
+            <div class="row text-center">
+                <div class="col-md-12 mb-3">
+                    <button type="submit" id="submit-unit-button" class="btn text-white"
+                        style="background-color: #094079; border-color: #094079; margin: 5px;"
+                        onmouseover="this.style.backgroundColor='#073c64';"
+                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
+                    <button type="submit" id="update-unit-button" class="btn btn-primary text-white"
+                        style="background-color: #094079; margin: 5px;"
+                        onmouseover="this.style.backgroundColor='#073c64';"
+                        onmouseout="this.style.backgroundColor='#094079';" disabled><i
+                            class="bi bi-arrow-clockwise"></i>
+                        Actualizar</button>
+                    <button id="loadUnit" class="btn btn-primary text-white"
+                        style="background-color: #094079; margin: 5px;"
+                        onmouseover="this.style.backgroundColor='#073c64';"
+                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-down"></i> Cargar
+                        Datos</button>
+                </div>
+                <div class="col-md-12 mb-3 text-end">
+                    <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i
+                            class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
         </form>
-        <h2 class="mt-5">Catálogo de Unidades</h2>
-        <div class="table-responsive">
-            <table class="table table-light table-hover table-bordered mt-3" style="cursor: pointer;">
-                <thead style="background-color: #094079; color: white;">
-                    <tr>
-                        <th>Número de Unidad</th>
-                        <th>Capacidad</th>
-                        <th>Tipo de Recurso</th>
-                        <th>Kilometraje Inicial</th>
-                        <th>Kilometraje Actual</th>
-                        <th>Estado</th>
-                        <th>Fecha de Dekra</th>
-                        <th>Tipo de Mantenimiento</th>
-                        <th>Chófer Designado</th>
-                    </tr>
-                </thead>
-                <tbody id="unitTableBody">
-                    <!-- Aquí se agregarán las unidades registradas -->
-                </tbody>
-            </table>
+    </div>
+
+    <div class="modal fade" id="addResourceModal" tabindex="-1" aria-labelledby="addResourceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="addResourceModalLabel">Agregar Tipo de Recurso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" style="text-align: center;">
+                        <h3>Ingrese el nombre del nuevo tipo de recurso</h3>
+                        <br>
+                        <input type="text" id="addResource" class="form-control"
+                            placeholder="Ingrese el tipo de recurso..." maxlength="15" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary me-2" id="btnSaveResource"><i class="bi bi-save"></i>
+                        Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="modal fade" id="addUnitModal" tabindex="-1" aria-labelledby="addUnitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="addUnitModalLabel">Agregar Tipo de Unidad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" style="text-align: center;">
+                        <h3>Ingrese el nombre del nuevo tipo de unidad y su capacidad</h3>
+                        <br>
+                        <input type="text" id="addUnit" class="form-control" placeholder="Ingrese el tipo de unidad..."
+                            maxlength="15" required>
+                        <br>
+                        <input type="number" id="addCapacity" class="form-control"
+                            placeholder="Ingrese la capacidad de la unidad..." maxlength="15" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary me-2" id="btnSaveUnit"><i class="bi bi-save"></i>
+                        Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
     <div id="modal-container"></div>
     <div data-script="js/units.js"></div>
