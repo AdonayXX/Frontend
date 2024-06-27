@@ -35,22 +35,16 @@ document.getElementById('maintenanceType').addEventListener('change', function (
     const dateField = document.getElementById('dateField');
     const advanceField = document.getElementById('advanceField');
     const periodicityField = document.getElementById('periodicityField');
-    const maintenanceMileage = document.getElementById('maintenanceMileage');
-    const maintenanceDate = document.getElementById('maintenanceDate');
 
     if (this.value === '2') {
         mileageField.style.display = 'block';
         dateField.style.display = 'none';
-        maintenanceDate.removeAttribute('required');
     } else if (this.value === '1') {
         dateField.style.display = 'block';
         mileageField.style.display = 'none';
-        maintenanceMileage.removeAttribute('required');
     } else {
         mileageField.style.display = 'none';
-        maintenanceMileage.removeAttribute('required');
         dateField.style.display = 'none';
-        maintenanceDate.removeAttribute('required');
     }
 
     advanceField.style.display = (this.value === '1' || this.value === '2') ? 'block' : 'none';
@@ -366,14 +360,6 @@ async function getUnidad() {
             }
         });
 
-        const maintenanceTypeSelect = document.getElementById('maintenanceType');
-        const tipoFrecuenciaCambio = unidad.tipoFrecuenciaCambio;
-        const selectedIndex = Array.from(maintenanceTypeSelect.options).findIndex(option => option.text === tipoFrecuenciaCambio);
-    
-        if (selectedIndex !== -1) {
-            maintenanceTypeSelect.selectedIndex = selectedIndex;
-        }
-
         document.getElementById('unitNumber').disabled = true;
         document.getElementById('unitType').disabled = true;
         document.getElementById('resourceType').disabled = true;
@@ -514,6 +500,16 @@ async function postUnidad() {
         ultimoMantenimientoKilometraje = null;
     }
 
+    if (maintenanceType === 'Kilometraje' && ultimoMantenimientoKilometraje === null) {
+        showToast('Error', 'El kilometraje del último mantenimiento no puede estar vacío.');
+        return;
+    }
+
+    if (maintenanceType === 'Fecha' && ultimoMantenimientoFecha === null) {
+        showToast('Error', 'La fecha del último mantenimiento no puede estar vacío.');
+        return;
+    }
+
     const unidadData = {
         idTipoUnidad: unitType,
         idTipoRecurso: resourceType,
@@ -604,7 +600,7 @@ async function updateUnidad() {
     }
 
     if (selectedUnitType && totalCapacity > selectedUnitType.capacidad) {
-        showToast('Capacidad excedida', `La capacidad total de la unidad no puede ser mayor de ${selectedUnitType.capacidad}.`);
+        showToast('Capacidad excedida', `La capacidad total de una unidad de tipo ${selectedOption} no puede ser mayor de ${selectedUnitType.capacidad}.`);
         return;
     }
 
@@ -615,6 +611,16 @@ async function updateUnidad() {
         ultimoMantenimientoFecha = null;
     } else if (maintenanceType === 'Fecha') {
         ultimoMantenimientoKilometraje = null;
+    }
+
+    if (maintenanceType === 'Kilometraje' && ultimoMantenimientoKilometraje === null) {
+        showToast('Error', 'El kilometraje del último mantenimiento no puede estar vacío.');
+        return;
+    }
+
+    if (maintenanceType === 'Fecha' && ultimoMantenimientoFecha === null) {
+        showToast('Error', 'La fecha del último mantenimiento no puede estar vacío.');
+        return;
     }
 
     const unidadData = {
@@ -644,7 +650,6 @@ async function updateUnidad() {
             console.log('Unidad actualizada:', response.data);
             showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
             document.getElementById('unitsForm').reset();
-            document.getElementById('unitNumber').disabled = false;
             getUnidades();
         })
         .catch(error => {

@@ -1,6 +1,5 @@
 
-document.getElementById('1').addEventListener('submit', function (event) {
-  event.preventDefault();
+document.querySelector('#guardarFormPatients').addEventListener('click', ()=> {
   addPersona();
 });
 
@@ -167,6 +166,7 @@ async function addPatient(pacienteData) {
     const idPaciente = (response.data.paciente.insertId);
     addCompanion(idPaciente);
     showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
+    loadContent('formPatient.html', 'mainContent');
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
     console.error(error);
@@ -195,12 +195,12 @@ function addCompanion(idPaciente) {
         "IdPaciente": idPaciente,
         "Nombre": acompananteNombre,
         "Apellido1": acompananteApellido1,
-        "Apellido2": acompananteApellido2,
+        "Apellido2" : acompananteApellido2,
         "Identificacion": acompananteIdentificacion,
         "Telefono1": acompananteTelefono1,
         "Telefono2": acompananteTelefono2,
-        "Parentesco": acompananteParentesco,
-        "Estado": "Activo"
+        "Parentesco": acompananteParentesco
+
       };
 
 
@@ -208,7 +208,7 @@ function addCompanion(idPaciente) {
     }
   }
 
-  document.getElementById('1').reset();
+
 }
 
 //8: Verifica si el acompañante ya está registrado
