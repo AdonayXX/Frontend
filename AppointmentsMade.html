@@ -186,7 +186,7 @@
         </div>
     </div>
 
-
+    <!-- Edit Modal -->
     <div class="modal fade mt-5" id="editarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -198,7 +198,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalFormEdit">
-                    <div class="container  fade-in" style="max-width: 1100px;">
+                    <div class="container fade-in" style="max-width: 1100px;">
                         <form id="formEditarCita" method="post" class="bg-light p-4 border rounded-3">
 
                             <div class="form-section">
@@ -209,51 +209,42 @@
                                         <label class="form-label"><i></i>Id Cita</label>
                                         <input required type="text" id="editarIdCita" name="identificacion"
                                             class="form-control" maxlength="20" readonly>
-
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Nombre
-                                            Paciente</label>
+                                        <label class="form-label"><i></i>Nombre Paciente</label>
                                         <input required type="text" id="editarNombrePaciente" name="identificacion"
                                             class="form-control" maxlength="20" readonly>
-
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>
-                                            Fecha Cita</label>
-                                        <input type="date" id="editarFechaCita" name="fechaVencimientoSeguro"
+                                        <label class="form-label"><i></i>Fecha Cita</label>
+                                        <input type="date" id="editarFechaCita" name="fechaCita"
                                             class="form-control date-input">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>
-                                            Hora Cita</label>
-                                        <input type="time" id="editarHora" name="fechaVencimientoSeguro"
+                                        <label class="form-label"><i></i>Hora Cita</label>
+                                        <input type="time" id="editarHora" name="horaCita"
                                             class="form-control date-input">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label"><i></i>Destino</label>
-                                        <select name="" id="seleccionar-destino" class="form-control">
-
-                                        </select>
+                                        <select name="idUbicacionDestino" id="seleccionar-destino"
+                                            class="form-control"></select>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label"><i></i>Estado</label>
-                                        <input required type="text" id="editarEstado" name="identificacion"
+                                        <input required type="text" id="editarEstado" name="estadoCita"
                                             class="form-control" maxlength="20" readonly>
-
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
                                     <div class="col-md-4">
                                         <button type="button" class="btn btn-secondary m-2"
                                             data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" id="confirmEditBtn" class="btn btn-primary m-2">Guardar
-                                            Cambios</button>
+                                        <button type="submit" id="confirmarEditarCita"
+                                            class="btn btn-primary m-2">Guardar Cambios</button>
                                     </div>
-
-
                                 </div>
 
                             </div>
@@ -265,7 +256,6 @@
             </div>
         </div>
     </div>
-
 
     <div data-script="js/appointmentsMade.js"></div>
 </body>

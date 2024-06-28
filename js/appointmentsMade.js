@@ -55,33 +55,46 @@ async function loadCitas() {
 loadCitas();
 
 function renderTable(citas) {
+    citas.sort((a, b) => {
+        // Convertir fechas y horas a objetos Date para comparar
+        const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
+        const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
+
+        // Ordenar de la más reciente a la más antigua
+        return fechaHoraB - fechaHoraA;
+    });
+
     const tableBody = document.getElementById('viajesTableBody');
     tableBody.innerHTML = '';
 
     citas.forEach(cita => {
         const row = document.createElement('tr');
 
+        const isDisabled = (cita.estadoCita.toLowerCase() === 'finalizada' || cita.estadoCita.toLowerCase() === 'cancelada');
+        const disabledAttribute = isDisabled ? 'disabled' : '';
+
         row.innerHTML = `
-                <td class="text-center">${cita.idCita}</td>
-                <td class="text-center">${cita.nombreCompletoPaciente}</td>
-                <td class="text-center">${cita.fechaCita}</td>
-                <td class="text-center">${cita.horaCita}</td>
-                <td class="text-center">${cita.ubicacionDestino}</td>
-                <td class="text-center">${cita.estadoCita}</td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </td>
-                   <td>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(cita)})'>
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </td>
-            `;
+            <td class="text-center">${cita.idCita}</td>
+            <td class="text-center">${cita.nombreCompletoPaciente}</td>
+            <td class="text-center">${cita.fechaCita}</td>
+            <td class="text-center">${cita.horaCita}</td>
+            <td class="text-center">${cita.ubicacionDestino}</td>
+            <td class="text-center">${cita.estadoCita}</td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
+                    <i class="bi bi-eye"></i>
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(cita)})' ${disabledAttribute}>
+                    <i class="bi bi-pencil"></i>
+                </button>
+            </td>
+        `;
         tableBody.appendChild(row);
     });
 }
+
 
 function getAcompanantes(cita) {
     console.log(cita);
@@ -140,14 +153,12 @@ function editarCita(cita) {
     document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
     document.querySelector('#editarEstado').value = cita.estadoCita;
 
-
+    document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
+        event.preventDefault();
+        updateCita(cita.idCita);
+    });
 }
 
-document.querySelector('#searchAppointment').addEventListener('input', function (e) {
-    if (this.value.length > 15) {
-        this.value = this.value.slice(0, 15);
-    }
-});
 
 function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
@@ -168,4 +179,39 @@ function getRutas() {
 }
 
 getRutas();
+
+
+async function updateCita(idCita) {
+    const fechaCita = document.querySelector('#editarFechaCita').value;
+    const horaCita = document.querySelector('#editarHora').value;
+    const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
+    const estadoCita = document.querySelector('#editarEstado').value;
+
+    const updatedCitas = {
+        idUbicacionDestino: idUbicacionDestino,
+        estadoCita: estadoCita,
+        fechaCita: fechaCita,
+        horaCita: horaCita,
+    };
+
+    console.log('Datos enviados al backend:', updatedCitas);
+
+    try {
+        const response = await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas);
+        console.log(response);
+        $('#editarModal').modal('hide');
+        setTimeout(function () {
+            loadContent('AppointmentsMade.html', 'mainContent');
+        }, 1000);
+        showToast("¡Éxito!", "Cita actualizada correctamente");
+    } catch (error) {
+        $('#editarModal').modal('hide');
+        console.error('Error al actualizar la cita:', error);
+        alert('Error al actualizar la cita');
+    }
+}
+
+
+
+
 
