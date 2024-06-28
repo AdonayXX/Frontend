@@ -37,7 +37,7 @@ async function getPatientComp() {
 
 
     });
-  ocultarSpinner();
+    ocultarSpinner();
   } catch (error) {
 
     if (error.response && error.response.status === 400) {
@@ -56,7 +56,7 @@ function fillAccomp(acompanantes) {
     tableBody.innerHTML = '';
     // Filtrar solo los acompañantes con estado "Activo"
     const activeAcompanantes = acompanantes.length
-  
+
 
 
 
@@ -70,7 +70,7 @@ function fillAccomp(acompanantes) {
       acompanantes.forEach(accomp => {
         const telefonoCompleto = (accomp.Telefono2 !== 0) ? `${accomp.Telefono1}/${accomp.Telefono2}` : `${accomp.Telefono1}`;
         const nombreCompleto = `${accomp.Nombre} ${accomp.Apellido1} ${accomp.Apellido2}`;
-        const IdentificacionComp =`${accomp.Identificacion} `;
+        const IdentificacionComp = `${accomp.Identificacion} `;
         const row = `
                     <tr>
                         <td>${accomp.Identificacion}</td>
@@ -118,6 +118,8 @@ function fillPatientComp(listPatientComp) {
 
         const cantidadAcompanantes = acompanantesActivos.length;
 
+        const dontShowButton = patient.Latitud == "0" && patient.Longitud == "0";
+
         row.innerHTML = `
           <tr>
             <td>${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
@@ -126,9 +128,11 @@ function fillPatientComp(listPatientComp) {
             <td>${patient.Genero}</td>
            <td>${patient.Prioridad ? 'Si' : 'No'}</td>
             <td>${telefonoCompleto}</td>
-            <td>${patient.Tipo_seguro}</td>
             <td>${patient.Traslado}</td>
             <td>${patient.Direccion}</td>
+            <td>
+              ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${ patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
+            </td>
             <td>
               <button class="btn btn-outline-primary btn-sm" data-acompanantes='${JSON.stringify(patient.acompanantes)}' onclick='openAccomp(this)'><i class="bi bi-eye"></i></button>
               <button class="btn btn-outline-success btn-sm btnAddComp" data-bs-toggle="modal" data-bs-target="#addAccomp" onclick="companionAdd(${patient.IdPaciente})"><i class="bi bi-person-plus"></i></button>
@@ -168,8 +172,13 @@ function fillPatientComp(listPatientComp) {
 
 }
 
+function getLocation(latitude, longitude) {
+  var url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  window.open(url, '_blank');
+}
+
 window.openAccomp = async function (button) {
- 
+
 
   const acompanantes = JSON.parse(button.getAttribute('data-acompanantes'));
   let modalAcomp = new bootstrap.Modal(document.getElementById('showAccomp'), {
@@ -399,15 +408,15 @@ async function deletePatient(patientId) {
   try {
     const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
     const response = await axios.delete(API_URL);
-    showToast('Exito','Paciente eliminado exitosamente.')
+    showToast('Exito', 'Paciente eliminado exitosamente.')
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
     }, 1000);
-    
+
 
   } catch (error) {
     console.error('There has been a problem deleting the patient:', error);
-    showToast('Ups!','Error al eliminar el paciente.')
+    showToast('Ups!', 'Error al eliminar el paciente.')
   }
 }
 
@@ -586,7 +595,7 @@ function applyIdentificationMask(elementId, mask) {
     e.preventDefault();
 
     if (!mask) {
-      mask = ''; 
+      mask = '';
     }
 
     if (isNumeric(e.key) && content.length < mask.length) {
@@ -618,7 +627,7 @@ function maskIt(pattern, value) {
 
   for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
     if (valueIndex >= value.length) {
-      break; 
+      break;
     }
 
     if (pattern[patternIndex] === '0') {
@@ -650,7 +659,7 @@ document.querySelectorAll('input[type="text"]').forEach(input => {
 
 // Función para convertir solo la primera letra de cada oración a mayúscula
 function toSentenceCase(str) {
-  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function (c) {
     return c.toUpperCase();
   });
 }
@@ -660,8 +669,8 @@ document.getElementById('direccion').addEventListener('input', (event) => {
   event.target.value = toSentenceCase(inputValue);
 });
 
-async function companionDelete(IdAcompanante,nombreCompleto,Identificacion){
-  console.log(IdAcompanante,Identificacion,nombreCompleto);
+async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
+  console.log(IdAcompanante, Identificacion, nombreCompleto);
   let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModalComp'), {
     backdrop: 'static',
     keyboard: false
@@ -681,13 +690,13 @@ async function companionDelete(IdAcompanante,nombreCompleto,Identificacion){
 
   let confirmBtn = document.getElementById('confirmDeleteBtnComp');
 
- confirmBtn.onclick = function () {
+  confirmBtn.onclick = function () {
 
     deleteComp(IdAcompanante);
 
-     // Cerrar el modal correctamente usando Bootstrap
-     const modalElement = document.querySelector('#showAccomp');
-     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    // Cerrar el modal correctamente usando Bootstrap
+    const modalElement = document.querySelector('#showAccomp');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
     if (modalInstance) {
       modalInstance.hide();
     } else {
@@ -696,23 +705,23 @@ async function companionDelete(IdAcompanante,nombreCompleto,Identificacion){
     }
     modal.hide();
 
+  }
 }
-}
-async function deleteComp (IdAcompanante){
+async function deleteComp(IdAcompanante) {
   try {
     const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
     const response = await axios.delete(API_URL);
-    showToast('Exito','Acompañante eliminado exitosamente.');
-   
- 
+    showToast('Exito', 'Acompañante eliminado exitosamente.');
+
+
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
     }, 1000);
-   
+
 
   } catch (error) {
     console.error('There has been a problem deleting the patient:', error);
-    showToast('Ups!','Error al eliminar el acompañante.')
+    showToast('Ups!', 'Error al eliminar el acompañante.')
   }
 
 }
@@ -720,7 +729,7 @@ async function deleteComp (IdAcompanante){
 //Spiner
 // Mostrar el spinner
 function mostrarSpinner() {
-  document.getElementById('spinnerContainer').style.display='flex';
+  document.getElementById('spinnerContainer').style.display = 'flex';
 }
 
 // Ocultar el spinner
