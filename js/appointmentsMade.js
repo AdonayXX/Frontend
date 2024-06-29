@@ -1,4 +1,5 @@
 async function loadCitas() {
+    mostrarSpinner()
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
         const citas = response.data;
@@ -46,6 +47,7 @@ async function loadCitas() {
         });
 
         table.search('iniciada').draw();
+        ocultarSpinner()
 
     } catch (error) {
         console.error('Error al obtener las citas:', error);
@@ -211,6 +213,17 @@ async function updateCita(idCita) {
     }
 }
 
+
+//Spiner
+// Mostrar el spinner
+function mostrarSpinner() {
+    document.getElementById('spinnerContainer').style.display='flex';
+  }
+  
+  // Ocultar el spinner
+  function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+  }
 
 
 

@@ -28,7 +28,7 @@ async function loadEspecialidades() {
         }
 
         $('#tableEspecialidades').DataTable({
-            dom: "<'row'<'col-sm-6'l><'col-sm-6'>>" +
+            dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                 "<'row'<'col-sm-12't>>" +
                 "<'row'<'col-sm-12'p>>",
             ordering: false,
