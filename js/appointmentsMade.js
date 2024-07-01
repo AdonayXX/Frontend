@@ -1,11 +1,14 @@
 async function loadCitas() {
-    mostrarSpinner()
+    mostrarSpinner();
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
         const citas = response.data;
         renderTable(citas);
 
-        let table = $('#TableAppointment').DataTable({
+        if ($.fn.DataTable.isDataTable('#TableAppointment')) {
+            $('#TableAppointment').DataTable().clear().destroy();
+        }
+        $('#TableAppointment').DataTable({
             dom: "<'row'<'col-sm-6'l>" +
                 "<'row'<'col-sm-12't>>" +
                 "<'col-sm-6'p>>",
@@ -23,12 +26,12 @@ async function loadCitas() {
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
             let selectedState = $('#seleccionar-estado').val().toLowerCase();
-            table.search(inputValue + ' ' + selectedState).draw();
+            $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
         });
 
         $('#fechaCita').on('change', function () {
             let fechaInput = $('#fechaCita').val();
-            table.column(2).search(fechaInput).draw();
+            $('#TableAppointment').DataTable().column(2).search(fechaInput).draw();
         });
 
         $(document).ready(function () {
@@ -36,18 +39,18 @@ async function loadCitas() {
 
             $('#seleccionar-estado').on('change', function () {
                 let selectedState = $(this).val().toLowerCase();
-                table.column(5).search(selectedState).draw();
+                $('#TableAppointment').DataTable().column(5).search(selectedState).draw();
 
                 let tituloCitas = document.getElementById('tituloCitas');
                 tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
 
                 let inputValue = $('#searchAppointment').val().toLowerCase();
-                table.search(inputValue + ' ' + selectedState).draw();
+                $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
             });
         });
 
-        table.search('iniciada').draw();
-        ocultarSpinner()
+        $('#TableAppointment').DataTable().search('iniciada').draw();
+        ocultarSpinner();
 
     } catch (error) {
         console.error('Error al obtener las citas:', error);
@@ -101,43 +104,36 @@ function renderTable(citas) {
 function getAcompanantes(cita) {
     console.log(cita);
     try {
-        const acompanantes = [cita.nombreCompletoAcompanante1, cita.nombreCompletoAcompanante2];
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
 
+        const row = document.createElement('tr');
+
         const infoAdicional = [
-            { label: 'Ubicación Origen', value: cita.ubicacionOrigen },
-            { label: 'Ubicación Destino', value: cita.ubicacionDestino },
-            { label: 'Especialidad', value: cita.especialidad },
-            { label: 'Fecha Cita', value: cita.fechaCita }
+            cita.ubicacionOrigen,
+            cita.transladoCita,
+            cita.camilla,
+            cita.diagnostico,
+            cita.especialidad,
+            cita.condicionCita,
+            cita.prioridad,
+            cita.nombreCompletoAcompanante1 || 'No posee.',
+            cita.nombreCompletoAcompanante2 || 'No posee.'
         ];
 
         infoAdicional.forEach(info => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td><strong>${info.label}:</strong></td><td>${info.value || 'No disponible'}</td>`;
-            tableBody.appendChild(row);
+            const cell = document.createElement('td');
+            cell.textContent = info;
+            row.appendChild(cell);
         });
 
-        let hasAcompanantes = false;
-        acompanantes.forEach(acompanante => {
-            if (acompanante) {
-                hasAcompanantes = true;
-                const row = document.createElement('tr');
-                row.innerHTML = `<td><strong>Acompañante:</strong></td><td>${acompanante}</td>`;
-                tableBody.appendChild(row);
-            }
-        });
-
-        if (!hasAcompanantes) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="2">No existen acompañantes asignados a esta cita.</td>`;
-            tableBody.appendChild(row);
-        }
+        tableBody.appendChild(row);
     } catch (error) {
         console.error('Error al obtener los acompañantes:', error);
-        showToast(error, 'Error al obtener los acompañantes:');
+        showToast(error, 'Error al obtener los acompañantes.');
     }
 }
+
 
 document.querySelector('#searchAppointment').addEventListener('input', function (e) {
     if (this.value.length > 15) {
@@ -205,11 +201,11 @@ async function updateCita(idCita) {
         setTimeout(function () {
             loadContent('AppointmentsMade.html', 'mainContent');
         }, 1000);
-        showToast("¡Éxito!", "Cita actualizada correctamente");
+        showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
         console.error('Error al actualizar la cita:', error);
-        alert('Error al actualizar la cita');
+        showToast("Error", "Error al actualizar la cita.");
     }
 }
 
@@ -217,13 +213,13 @@ async function updateCita(idCita) {
 //Spiner
 // Mostrar el spinner
 function mostrarSpinner() {
-    document.getElementById('spinnerContainer').style.display='flex';
-  }
-  
-  // Ocultar el spinner
-  function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'flex';
+}
+
+// Ocultar el spinner
+function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
-  }
+}
 
 
 

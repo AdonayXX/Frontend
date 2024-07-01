@@ -1,4 +1,6 @@
 async function loadDestinations() {
+    mostrarSpinner()
+
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutas');
         const destinos = response.data;
@@ -10,6 +12,8 @@ async function loadDestinations() {
             option.textContent = destino.Descripcion;
             select.appendChild(option);
         });
+        ocultarSpinner()
+
     } catch (error) {
         console.error('Error al obtener los destinos:', error);
     }
@@ -17,6 +21,7 @@ async function loadDestinations() {
 loadDestinations();
 
 async function loadEspecialidades() {
+    mostrarSpinner()
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
         const especialidades = response.data.Especialidad;
@@ -24,7 +29,7 @@ async function loadEspecialidades() {
         renderTableEspecialidades(especialidades);
 
         if ($.fn.DataTable.isDataTable('#tableEspecialidades')) {
-            $('#tableEspecialidades').DataTable().destroy();
+            $('#tableEspecialidades').DataTable().clear().destroy();
         }
 
         $('#tableEspecialidades').DataTable({
@@ -54,6 +59,9 @@ async function loadEspecialidades() {
             let inputValue = $(this).val().toLowerCase();
             $('#tableEspecialidades').DataTable().search(inputValue).draw();
         });
+
+        ocultarSpinner()
+
 
     } catch (error) {
         console.error('Error al obtener las especialidades:', error);
@@ -218,7 +226,7 @@ async function loadDestinations2() {
         renderTableDestinations(destinos);
 
         if ($.fn.DataTable.isDataTable('#TableDestinations')) {
-            $('#TableDestinations').DataTable().destroy();
+            $('#TableDestinations').DataTable().clear().destroy();
         }
 
         let table = $('#TableDestinations').DataTable({
@@ -388,3 +396,11 @@ document.querySelector('#buscarEspecialidad').addEventListener('input', function
         this.value = this.value.slice(0, 10);
     }
 });
+
+function mostrarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'flex';
+}
+
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+}
