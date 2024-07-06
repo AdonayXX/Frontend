@@ -1,5 +1,5 @@
 
-document.querySelector('#guardarFormPatients').addEventListener('click', ()=> {
+document.querySelector('#guardarFormPatients').addEventListener('click', () => {
   addPersona();
 });
 
@@ -195,7 +195,7 @@ function addCompanion(idPaciente) {
         "IdPaciente": idPaciente,
         "Nombre": acompananteNombre,
         "Apellido1": acompananteApellido1,
-        "Apellido2" : acompananteApellido2,
+        "Apellido2": acompananteApellido2,
         "Identificacion": acompananteIdentificacion,
         "Telefono1": acompananteTelefono1,
         "Telefono2": acompananteTelefono2,
@@ -491,7 +491,7 @@ document.querySelectorAll('input[type="text"]').forEach(input => {
 });
 // Función para convertir solo la primera letra de cada oración a mayúscula
 function toSentenceCase(str) {
-  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function (c) {
     return c.toUpperCase();
   });
 }
@@ -500,3 +500,50 @@ document.getElementById('direccion').addEventListener('input', (event) => {
   const inputValue = event.target.value;
   event.target.value = toSentenceCase(inputValue);
 });
+
+// Función para consultar la cédula cuando se pierde el foco del input de identificación
+async function consultarCedulaOnBlur() {
+  const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+  const identificacion = document.getElementById('identificacion').value.trim(); // Trim para eliminar espacios en blanco al inicio y final
+
+  if (identificacion === '') {
+    return;
+  }
+
+  const apiUrl = `https://apis.gometa.org/cedulas/${identificacion}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.results && data.results.length > 0) {
+      const persona = data.results[0];
+
+      const nombreFormateado = formatNombre(persona.firstname);
+      const primerApellidoFormateado = formatNombre(persona.lastname1);
+      const segundoApellidoFormateado = persona.lastname2 ? formatNombre(persona.lastname2) : '';
+
+
+      document.getElementById('nombre').value = nombreFormateado;
+      document.getElementById('primerApellido').value = primerApellidoFormateado;
+      document.getElementById('segundoApellido').value = segundoApellidoFormateado;
+    } else {
+      showToast('Ups!', 'No se encontraron resultados para la cédula ingresada.');
+      document.getElementById('nombre').value = '';
+      document.getElementById('primerApellido').value = '';
+      document.getElementById('segundoApellido').value = '';
+    }
+  } catch (error) {
+    console.error('Error al consultar la API:', error);
+    showToast('Ups!', 'Ocurrió un error al consultar la información. Por favor, inténtalo nuevamente.');
+  }
+}
+
+function formatNombre(nombre) {
+  const partesNombre = nombre.toLowerCase().split(' ');
+  const nombreFormateado = partesNombre.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+  return nombreFormateado;
+}
+
+// Agregar el evento blur al input de identificación
+document.getElementById('identificacion').addEventListener('blur', consultarCedulaOnBlur);
