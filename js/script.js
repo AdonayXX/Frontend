@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadToastTemplate();
     loadModalTemplate();
     //Cargar desde el incio el home.html
+
     // loadContent('home.html', 'mainContent');
 
     document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
@@ -23,51 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelar').addEventListener('click', cancelar);
     document.getElementById('actualizar').addEventListener('click', actualizar);
     document.getElementById('')
+
+    loadContent('home.html', 'mainContent');
+
 });
 
-document.getElementById('registroViajesForm').addEventListener('submit', function (event) {
-    event.preventDefault();
 
-    const datosDelFormulario = {
-        citasAsociadas: document.getElementById('citasAsociadas').value,
-        choferAsignado: document.getElementById('choferAsignado').value,
-        capacidadRestante: document.getElementById('capacidadRestante').value,
-        estadoViaje: document.getElementById('estadoViaje').value,
-        kilometrajeInicial: document.getElementById('kilometrajeInicial').value,
-        kilometrajeFinal: document.getElementById('kilometrajeFinal').value,
-        duracionViaje: document.getElementById('duracionViaje').value,
-        consumoCombustible: document.getElementById('consumoCombustible').value,
-    };
-    axios.post('URL', datosDelFormulario)
-        .then(response => {
-            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-        })
-        .catch(error => {
-            console.error('Error en el registro:', error);
-            alert('Error en el registro');
-        });
-});
-
-function cancelar() {
-    showModal('¿Cancelar?', '¿Está seguro que desea cancelar el registro?', function () {
-        document.getElementById('registroViajesForm').reset();
-        showToast('Cancelación exitosa', 'Se ha cancelado el registro exitosamente.');
-    });
-}
-
-function handleEstadoChange() {
-    const estado = document.getElementById('estadoViaje').value;
-    const horaInicio = document.getElementById('horaInicio');
-    const horaFin = document.getElementById('horaFin');
-
-    if (estado === 'En curso' && !horaInicio.value) {
-        horaInicio.value = getCurrentTimeFormatted();
-        horaInicio.setAttribute('readonly', true);
-    } else if (estado === 'Cerrado' && !horaFin.value) {
-        horaFin.value = getCurrentTimeFormatted();
-        calcularDuracion();
-    }
-}
 
 function calcularDuracion() {
     const horaInicio = document.getElementById('horaInicio').value;
