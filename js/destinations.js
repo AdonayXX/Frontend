@@ -16,6 +16,7 @@ async function loadDestinations() {
 
     } catch (error) {
         console.error('Error al obtener los destinos:', error);
+
     }
 }
 loadDestinations();

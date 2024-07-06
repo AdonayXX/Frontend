@@ -209,18 +209,10 @@ async function updateCita(idCita) {
     }
 }
 
-
-//Spiner
-// Mostrar el spinner
 function mostrarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'flex';
 }
 
-// Ocultar el spinner
 function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
 }
-
-
-
-
