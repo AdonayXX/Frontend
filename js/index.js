@@ -4,7 +4,7 @@ loadFilterModules();
 function loadFilterModules(){
     document.getElementById('searchmodules').addEventListener('input', function() {
         let filter = this.value.toLowerCase();
-        let items = document.querySelectorAll('#items');
+        let items = document.querySelectorAll('.items');
 
         items.forEach(function(item) {
             let text = item.textContent.toLowerCase();
