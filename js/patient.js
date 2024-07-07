@@ -6,8 +6,15 @@ getPatientComp();
 async function getPatientComp() {
   mostrarSpinner();
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
-    const response = await axios.get(API_URL);
+    const token = localStorage.getItem('token');
+    //const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
+    const API_URL = 'http://localhost:18026/api/paciente/acompanantes/';
+
+    const response = await axios.get(API_URL, {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     const listPatientComp = response.data.pacientes;
 
     $(document).ready(function () {
@@ -122,18 +129,18 @@ function fillPatientComp(listPatientComp) {
 
         row.innerHTML = `
           <tr>
-            <td>${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
-            <td>${patient.Tipo_identificacion} </td>
-            <td>${patient.Identificacion}</td>
+            <td >${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
+            <td >${patient.Tipo_identificacion} </td>
+            <td class='text-nowrap'> ${patient.Identificacion}</td>
             <td>${patient.Genero}</td>
-           <td>${patient.Prioridad ? 'Si' : 'No'}</td>
-            <td>${telefonoCompleto}</td>
-            <td>${patient.Traslado}</td>
+           <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
+            <td class='text-center'>${telefonoCompleto}</td>
+            <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
             <td>${patient.Direccion}</td>
-            <td>
+            <td class='text-center'>
               ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${ patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
             </td>
-            <td>
+            <td class='text-center'>
               <button class="btn btn-outline-primary btn-sm" data-acompanantes='${JSON.stringify(patient.acompanantes)}' onclick='openAccomp(this)'><i class="bi bi-eye"></i></button>
               <button class="btn btn-outline-success btn-sm btnAddComp" data-bs-toggle="modal" data-bs-target="#addAccomp" onclick="companionAdd(${patient.IdPaciente})"><i class="bi bi-person-plus"></i></button>
             </td>
@@ -207,7 +214,7 @@ window.editAccomp = function (button) {
   document.getElementById('secondlastname').value = acompanantes.Apellido2;
   document.getElementById('identification').value = acompanantes.Identificacion;
   document.getElementById('phone1').value = acompanantes.Telefono1;
-  document.getElementById('phone2').value = acompanantes.Telefono2;
+  document.getElementById('phone2').value = acompanantes.Telefono2|| '';
   document.getElementById('parentesco').value = acompanantes.Parentesco;
 
   const IdAcompanante = acompanantes.IdAcompanante;
@@ -216,13 +223,13 @@ window.editAccomp = function (button) {
   document.querySelector("#saveChangesCompanion").addEventListener('click', function () {
     const companionData = {
       IdPaciente: acompanantes.IdPaciente,
-      Nombre: document.getElementById('name').value,
-      Apellido1: document.getElementById('firstlastname').value,
-      Apellido2: document.getElementById('secondlastname').value,
-      Identificacion: document.getElementById('identification').value,
-      Telefono1: document.getElementById('phone1').value,
-      Telefono2: document.getElementById('phone2').value,
-      Parentesco: document.getElementById('parentesco').value
+      Nombre: document.getElementById('name').value.trim(),
+      Apellido1: document.getElementById('firstlastname').value.trim(),
+      Apellido2: document.getElementById('secondlastname').value.trim(),
+      Identificacion: document.getElementById('identification').value.trim(),
+      Telefono1: document.getElementById('phone1').value.trim(),
+      Telefono2: document.getElementById('phone2').value.trim(),
+      Parentesco: document.getElementById('parentesco').value.trim()
     };
 
     addEditedCompanion(companionData, IdAcompanante);
@@ -232,10 +239,14 @@ window.editAccomp = function (button) {
   async function addEditedCompanion(companionData, IdAcompanante) {
 
     try {
-
-
-      const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
-      const response = await axios.put(API_URL, companionData);
+      const token = localStorage.getItem('token');
+      //const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+      const API_URL = `http://localhost:18026/api/acompanante/${IdAcompanante}`;
+      const response = await axios.put(API_URL, companionData , {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       modalAcomp.hide();
       document.querySelector('#formEditComp').reset();
       showToast('Acompañante', 'Se han guardado los cambios')
@@ -286,10 +297,21 @@ window.patientEdit = function (button) {
   });
   async function editPatientPerson(personaData, pacienteData) {
     try {
-      const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
-      const responsePersona = await axios.put(API_URL_PERSONA, personaData);
-      const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
-      const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData);
+      const token = localStorage.getItem('token');
+      const API_URL_PERSONA = `http://localhost:18026/api/persona/${IdPersona}`;
+     // const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
+      const responsePersona = await axios.put(API_URL_PERSONA, personaData , {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+      const API_URL_PACIENTE = `http://localhost:18026/api/paciente/${IdPaciente}`;
+     // const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
+      const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData , {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       console.log(responsePersona);
       console.log(responsePaciente);
 
@@ -321,7 +343,7 @@ window.patientEdit = function (button) {
       Genero: document.getElementById('genero').value,
       Telefono1: document.getElementById('telefono1').value,
       Telefono2: document.getElementById('telefono2').value || 0,
-      Tipo_seguro: document.getElementById('tipoSeguro').value,
+      Tipo_seguro:"N/A",
       Direccion: document.getElementById('direccion').value,
       Latitud: document.getElementById('latitud').value || 0,
       Longitud: document.getElementById('longitud').value || 0,
@@ -330,9 +352,9 @@ window.patientEdit = function (button) {
 
     pacienteData = {
       IdPersona: IdPersona,
-      Criticidad: "null",
+      Criticidad: "N/A",
       Encamado: document.getElementById('encamado').value,
-      Traslado: document.getElementById('lugarSalida').value,
+      Traslado: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
       Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
       Estado: "Activo"
     };
@@ -342,21 +364,22 @@ window.patientEdit = function (button) {
 
   }
   function llenarcampos(pacientes) {
+    console.log(pacientes);
     document.querySelector('#primerApellido').value = pacientes.Apellido1 || '';
     document.querySelector('#nombre').value = pacientes.Nombre || '';
     document.querySelector('#segundoApellido').value = pacientes.Apellido2 || '';
     document.querySelector('#genero').value = pacientes.Genero || '';
     document.querySelector('#tipoIdentificacion').value = pacientes.Tipo_identificacion || '';
     document.querySelector('#identificacion').value = pacientes.Identificacion || '';
-    document.querySelector('#tipoSeguro').value = pacientes.Tipo_seguro || '';
     document.querySelector('#telefono1').value = pacientes.Telefono1 || '';
     document.querySelector('#telefono2').value = pacientes.Telefono2 || '';
     document.querySelector('#tipoSangre').value = pacientes.Tipo_sangre || '';
     document.querySelector('#latitud').value = pacientes.Latitud || '';
     document.querySelector('#longitud').value = pacientes.Longitud || '';
     document.querySelector('#direccion').value = pacientes.Direccion || '';
-    document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
-    document.querySelector('#lugarSalida').value = pacientes.Traslado || '';
+
+   document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
+   document.querySelector('#trasladable').checked = pacientes.Traslado || '';
     document.querySelector('#encamado').value = pacientes.Encamado || '';
 
   }
@@ -406,8 +429,14 @@ window.patientDelete = function (idPatient, nombreCompleto, identificacion) {
 
 async function deletePatient(patientId) {
   try {
-    const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
-    const response = await axios.delete(API_URL);
+    const token = localStorage.getItem('token');
+  //  const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
+    const API_URL = `http://localhost:18026/api/paciente/${patientId}`;
+    const response = await axios.delete(API_URL , {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     showToast('Exito', 'Paciente eliminado exitosamente.')
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
@@ -508,10 +537,26 @@ async function obtenerAcompanante(companionData) {
 async function agregarAcompanante(companionData) {
   try {
 
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-    const response = await axios.post(API_URL, companionData);
+   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+    const API_URL = 'http://localhost:18026/api/acompanante/';
+
+   const token = localStorage.getItem('token');
+    const response = await axios.post(API_URL, companionData, {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     console.log(response.data);
     showToast('Acompañante Registrado', 'El registro se ha realizado exitosamente.');
+     // Cerrar el modal correctamente usando Bootstrap
+     const modalElement = document.querySelector('#addAccomp');
+     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+     if (modalInstance) {
+       modalInstance.hide();
+     } else {
+       const newModalInstance = new bootstrap.Modal(modalElement);
+       newModalInstance.hide();
+     }
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
     }, 1000);
@@ -693,26 +738,32 @@ async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
   confirmBtn.onclick = function () {
 
     deleteComp(IdAcompanante);
-
-    // Cerrar el modal correctamente usando Bootstrap
-    const modalElement = document.querySelector('#showAccomp');
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    if (modalInstance) {
-      modalInstance.hide();
-    } else {
-      const newModalInstance = new bootstrap.Modal(modalElement);
-      newModalInstance.hide();
-    }
-    modal.hide();
+      // Cerrar el modal correctamente usando Bootstrap
+      const modalElement = document.querySelector('#showAccomp');
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      } else {
+        const newModalInstance = new bootstrap.Modal(modalElement);
+        newModalInstance.hide();
+      }
+      modal.hide();
+  
 
   }
 }
 async function deleteComp(IdAcompanante) {
   try {
-    const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
-    const response = await axios.delete(API_URL);
+   // const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+    const token = localStorage.getItem('token');
+    const API_URL = `http://localhost:18026/api/acompanante/${IdAcompanante}`;
+   const response = await axios.delete(API_URL , {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});
     showToast('Exito', 'Acompañante eliminado exitosamente.');
-
+  
 
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');

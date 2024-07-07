@@ -46,23 +46,23 @@
         </div>
         <div class="table-responsive-xxl mt-3">
             <table class=" table table-light table-striped table-hover table-bordered" id="tablePatient">
-                <thead>
+                <thead >
                     <tr>
-                        <th>Nombre Completo</th>
-                        <th>Tipo Identificación</th>
+                        <th class="text-center">Nombre Completo</th>
+                        <th class="text-center">Tipo Identificación</th>
 
 
-                        <th>Identificación</th>
-                        <th>Genero</th>
-                        <th>Prioridad</th>
-                        <th>Teléfonos</th>
+                        <th class="text-center">Identificación</th>
+                        <th class="text-center">Genero</th>
+                        <th class="text-center">Prioridad</th>
+                        <th class="text-center">Teléfonos</th>
 
-                        <th>Lugar Salida</th>
-                        <th>Dirección</th>
-                        <th>Dirección exacta</th>
+                        <th class="text-center">Trasladable</th>
+                        <th class="text-center">Dirección</th>
+                        <th class="text-center">Ubicación</th>
 
-                        <th>Acompañante</th>
-                        <th>Acciones</th>
+                        <th class="text-center">Acompañante</th>
+                        <th class="text-center">Acciones</th>
 
                     </tr>
                 </thead>
@@ -288,36 +288,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <!-- Tipo de seguro -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>
-                                        <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
-                                            <option selected disabled value="">Seleccionar</option>
-                                            <option value="Asalariado">Asalariado</option>
-                                            <option value="Independiente">Trabajador Independiente</option>
-                                            <option value="Voluntario">Voluntario</option>
-                                            <option value="Pensionado">Pensionado</option>
-                                            <option value="Leyes o Decretos">Leyes o Decretos</option>
-                                            <option value="Beneficio Familiar">Beneficio Familiar</option>
-                                            <option value="Seguro por el Estado">Seguro por el Estado</option>
-                                            <option value="Cargo al Estado">Protección con cargo al Estado</option>
-                                        </select>
-                                    </div>
-                                    <!-- FechaVencimientoSeguro -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="fechaVencimientoSeguro" class="form-label"><i class="bi bi-calendar2-event"></i>
-                                            Fecha de vencimiento del seguro:</label>
-                                        <input type="date" id="fechaVencimientoSeguro" name="fechaVencimientoSeguro"
-                                            class="form-control date-input">
-                                    </div>
+                                  
                                     <!-- Telefono1 -->
                                     <div class="col-md-4 mb-3">
                                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
                                         <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="8">
                                         <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number">
                                     </div>
-                                </div>
-                                <div class="row">
                                     <!-- Telefono2 -->
                                     <div class="col-md-4 mb-3">
                                         <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
@@ -344,8 +321,11 @@
                                             <option value="N/A">No Definido</option>
                                         </select>
                                     </div>
-                                    <!-- LugarSalida -->
-                                    <div class="col-md-4 mb-3">
+                                </div>
+                              
+                                <div class="row">
+                                      <!-- LugarSalida -->
+                                      <div class="col-md-4 mb-3">
                                         <label for="lugarSalida" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de
                                             salida:</label>
                                         <select required id="lugarSalida" name="lugarSalida" class="form-select">
@@ -355,9 +335,7 @@
                                             <option value="Sede">Sede</option>
                                         </select>
                                     </div>
-                                </div>
-                
-                                <div class="row">
+                                    
                                     <!-- Encamado -->
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label"><i class="bi bi-bed"></i> Encamado:</label>
@@ -368,14 +346,21 @@
                                             <option value="noRequerido">No requerido</option>
                                         </select>
                                     </div>
-                                    <!-- Prioridad -->
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="prioridad">
-                                            <label class="form-check-label" for="prioridad">Si</label>
-                                        </div>
-                                    </div>
+                                   <div class="col-md-2 mb-3">
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label><br>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="prioridad">
+                            <label class="form-check-label" for="prioridad">Si</label>
+                        </div>
+                    </div>
+                    <!-- Es trasladable -->
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label"><i class="bi bi-truck"></i> Trasladable:</label><br>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="trasladable">
+                            <label class="form-check-label" for="trasladable">No</label>
+                        </div>
+                    </div>
                                 </div>
                                 <div class="row">
                                     <!-- Direccion -->
