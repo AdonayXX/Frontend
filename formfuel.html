@@ -1,17 +1,27 @@
 <div class="container mt-5 fade-in" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Registro de Combustible</h1>
-    <form id="20" name="formFuel" class="bg-light p-4 border rounded-3">
+    <form id="formFuel" name="formFuel" class="bg-light p-4 border rounded-3">
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="usuario" class="form-label"><i class="bi bi-person"></i> Usuario</label>
-                    <input type="text" class="form-control" id="usuario" name="usuario">
+                    <select class="form-control" id="usuario" name="usuario">
+                        <option value="usuario1">Usuario 1</option>
+                        <option value="usuario2">Usuario 2</option>
+                        <option value="usuario3">Usuario 3</option>
+                        <!-- Añade más opciones según necesites -->
+                    </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
-                    <input type="text" class="form-control" id="unidad" name="unidad">
+                    <select class="form-control" id="unidad" name="unidad">
+                        <option value="unidad1">Unidad 1</option>
+                        <option value="unidad2">Unidad 2</option>
+                        <option value="unidad3">Unidad 3</option>
+                        <!-- Añade más opciones según necesites -->
+                    </select>
                 </div>
             </div>
             <div class="col-md-4">
@@ -55,13 +65,15 @@
                 </div>
             </div>
         </div>
+        
         <div class="form-group mt-4 d-flex justify-content-center align-items-center">
             <button type="button" id="btnGuardar" class="btn btn-primary m-2"><i class="bi bi-save"></i> Guardar</button>
+            <button type="button" id="btnConsultar" class="btn btn-primary"><i class="bi bi-search"></i> Consultar</button>
             <button type="button" id="btnActualizar" class="btn btn-secondary m-2"><i class="bi bi-pencil"></i> Actualizar</button>
             <button type="button" id="btnEliminar" class="btn btn-danger m-2"><i class="bi bi-trash"></i> Eliminar</button>
         </div>
     </form>
 </div>
-<div data-script="js/.js"></div>
+<div data-script="js/fuel.js"></div>
 </body>
 </html>
