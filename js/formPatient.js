@@ -158,7 +158,7 @@ document.querySelector('#acompananteTelefono2_2').addEventListener('input', func
 function addDataPatient(IdPersonaCreada) {
   const prioridad = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
   const traslado = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
-//  const lugarSalida = document.querySelector('#lugarSalida').value;
+  const lugarSalida = document.querySelector('#lugarSalida').value;
   const encamado = document.querySelector('#encamado').value;
   const pacienteData = {
     "IdPersona": IdPersonaCreada,
@@ -166,7 +166,8 @@ function addDataPatient(IdPersonaCreada) {
     "Encamado": encamado,
     "Traslado": traslado,
     "Prioridad": prioridad,
-    "Estado": "Activo"
+    "Estado": "Activo",
+    "LugarSalida": lugarSalida,
   }
   console.log(pacienteData)
   addPatient(pacienteData);

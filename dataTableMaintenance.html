@@ -7,6 +7,12 @@
 </head>
 
 <body>
+    <div id="spinnerContainer" class="text-center mt-5">
+        <div class="spinner-border mt-5" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    
     <!-- Contenedor -->
     <div class="fade-in">
         <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
@@ -85,13 +91,13 @@
 
     <!-- Modal de tareas -->
     <div class="modal fade mt-5" id="addNewTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 1051;">
         <div class="modal-dialog modal-lg ">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="taskModalLabel" style="text-align: center;">Actividades</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close btn-close-white" id="btnCloseTask"  data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-1">
@@ -113,8 +119,8 @@
                             </div>
                             <!-- Botón para guardar nueva tarea -->
                             <div class="col-md-4 mb-3 align-self-md-end">
-                                <button class="btn btn-primary bi bi-plus" id="saveTask" type="submit"> Nueva
-                                    Tarea</button>
+                                <button class="btn btn-primary bi bi-plus" id="saveTask" type="submit"> 
+                                    Guardar</button>
                             </div>
                         </div>
                     </form>
@@ -159,8 +165,8 @@
         </div>
     </div>
 
-    <div class="modal fade mt-5" id="maintenanceModal"  " data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade mt-5" id="maintenanceModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 1051;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -305,6 +311,7 @@
         </div>
     </div>
 </div>
+<div data-script="js/maintenance.js"></div>
 </body>
 
 </html>
