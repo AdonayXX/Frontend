@@ -228,6 +228,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
     const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
     const condicionCita = document.getElementById('condicion').value;
     const salida = document.getElementById('origen').value;
+    const tipoSeguro = document.getElementById('tipoSeguro').value;
  
     const citaData = {
         "idPaciente" : idPaciente,
@@ -239,6 +240,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         "camilla": camilla,
         "prioridad": prioridad,
         "condicionCita": condicionCita,
+        "tipoSeguro": tipoSeguro,
         "diagnostico": diagnostico,
         "fechaCita": fechaCita,
         "horaCita": horaCita,
