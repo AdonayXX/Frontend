@@ -1,6 +1,4 @@
-
-<style> 
-
+<style>
     td,
     tr {
         text-align: center;
@@ -188,36 +186,46 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Id Cita</label>
+                                        <label class="form-label"><i class="bi bi-card-list"></i> Id Cita</label>
                                         <input required type="text" id="editarIdCita" name="identificacion"
                                             class="form-control" maxlength="20" readonly>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Nombre Paciente</label>
+                                        <label class="form-label"><i class="bi bi-person"></i> Nombre Paciente</label>
                                         <input required type="text" id="editarNombrePaciente" name="identificacion"
                                             class="form-control" maxlength="20" readonly>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Fecha Cita</label>
+                                        <label class="form-label"><i class="bi bi-calendar"></i> Fecha Cita</label>
                                         <input type="date" id="editarFechaCita" name="fechaCita"
                                             class="form-control date-input">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Hora Cita</label>
+                                        <label class="form-label"><i class="bi bi-clock"></i> Hora Cita</label>
                                         <input type="time" id="editarHora" name="horaCita"
                                             class="form-control date-input">
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Destino</label>
+                                        <label class="form-label"><i class="bi bi-geo-alt"></i> Destino</label>
                                         <select name="idUbicacionDestino" id="seleccionar-destino"
-                                            class="form-control"></select>
+                                            class="form-select"></select>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label"><i></i>Estado</label>
-                                        <input required type="text" id="editarEstado" name="estadoCita"
-                                            class="form-control" maxlength="20" readonly>
+                                        <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de
+                                            Seguro:</label>
+                                        <select id="tipoSeguro" name="tipoSeguro" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Asalariado">Asalariado</option>
+                                            <option value="Independiente">Trabajador Independiente</option>
+                                            <option value="Voluntario">Voluntario</option>
+                                            <option value="Pensionado">Pensionado</option>
+                                            <option value="Leyes o Decretos">Leyes o Decretos</option>
+                                            <option value="Beneficio Familiar">Beneficio Familiar</option>
+                                            <option value="Seguro por el Estado">Seguro por el Estado</option>
+                                            <option value="Cargo al Estado">Protección con cargo al Estado</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row justify-content-end">
@@ -228,8 +236,8 @@
                                             class="btn btn-primary m-2">Guardar Cambios</button>
                                     </div>
                                 </div>
-
                             </div>
+
 
                         </form>
                     </div>
