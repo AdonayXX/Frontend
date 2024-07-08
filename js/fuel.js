@@ -110,7 +110,7 @@ getUnidades();
 // }
 
 function postFuelLog() {
-    const usuarioSelect = document.getElementById('usuario');
+    const usuarioSelect = document.getElementById('chofer');
     const usuarioContent = usuarioSelect.options[usuarioSelect.selectedIndex].text;
     const unidadSelect = document.getElementById('unidad');
     const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
@@ -149,7 +149,7 @@ function postFuelLog() {
 }
 
 function updateFuelLog() {
-    const usuarioSelect = document.getElementById('usuario');
+    const usuarioSelect = document.getElementById('chofer');
     const usuarioContent = usuarioSelect.options[usuarioSelect.selectedIndex].text;
     const unidadSelect = document.getElementById('unidad');
     const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
