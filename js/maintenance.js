@@ -2,7 +2,27 @@ getMaintenance();
 //Obtener los matenimientos
 async function getMaintenance() {
     try {
+      const Api_Url = 'http://localhost:18026/';
       const token = localStorage.getItem('token');
+
+      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      const mantenimiento = mantenimientoResponse.data.mantenimientos || [];
+      const actividades = actividadesResponse.data.actividadesMantenimiento || [];
+
+      console.log(mantenimiento);
+      console.log(actividades);
+    /*   const token = localStorage.getItem('token');
       const API_URL = 'http://localhost:18026/api/mantenimiento/';
   
       const response = await axios.get(API_URL, {
@@ -11,13 +31,13 @@ async function getMaintenance() {
         }
     });
       const listMaintenance = response.data.mantenimientos;
-      console.log(listMaintenance);
+      console.log(listMaintenance); */
   
-      $(document).ready(function () {
+       $(document).ready(function () { 
         if ($.fn.DataTable.isDataTable('#tableMaintenance')) {
           $('#tableMaintenance').DataTable().destroy();
         }
-        fillMaintenance(listMaintenance);
+        fillMaintenance(mantenimiento,actividades);
         let table = $('#tableMaintenance').DataTable({
           dom: "<'row'<'col-md-6'l>" +
             "<'row'<'col-md-12't>>" +
@@ -39,7 +59,7 @@ async function getMaintenance() {
   
   
   
-      });
+      }); 
       ocultarSpinner();
     } catch (error) {
   
@@ -55,18 +75,24 @@ async function getMaintenance() {
   }
 
   //llenar tabla mantenimiento
-  function fillMaintenance(listMaintenance){
+  function fillMaintenance(mantenimiento,actividades){
     try {
         const tableBody = document.querySelector('#maintenance-body');
-        if (listMaintenance) {
+        
     
           tableBody.innerHTML = '';
           const fragment = document.createDocumentFragment();
     
-          listMaintenance.forEach(maintenance => {
-              // Formatear la fecha en formato dd/mm/aaaa
+          mantenimiento.forEach(maintenance => {
+            
+              const activ = actividades.filter(actividad => maintenance.IdMantenimiento === actividad.IdMantenimiento);
+              const activfind = activ.find(actividad => actividad.DescripcionTarea === maintenance.DescripcionTarea);
+
+              if (activ){
+                  // Formatear la fecha en formato dd/mm/aaaa
               const formattedDate = formatDate(maintenance.FechaMantenimiento);
-    
+
+             
     
     
     
@@ -81,12 +107,17 @@ async function getMaintenance() {
                 <td class='text-center'>${maintenance.UnidadMedida}</td>
                 <td class='text-center'>${maintenance.Estado}</td>
                 <td class="actions">
-                <button class="btn btn-outline-success btn-sm text-center" data-toggle="tooltip" data-placement="bottom" title="Estado: Finalizado">  <i class="bi bi-check"></i></button>
-             <button class="btn btn-outline-warning btn-sm text-center" data-toggle="tooltip"  data-placement="bottom" title="Estado: Pendiente"><i class="bi bi-exclamation"></i></button>       
+                <button class="btn btn-outline-success btn-sm text-center" data-toggle="tooltip" data-placement="bottom" title="Estado: Finalizado" onclick='cambioEstCop(${JSON.stringify({activfind})})'>   <i class="bi bi-check"></i></button>
+
+             <button class="btn btn-outline-warning btn-sm text-center" data-toggle="tooltip"  data-placement="bottom" title="Estado: Pendiente"  onclick='cambioEstPen(${JSON.stringify({activfind})})'><i class="bi bi-exclamation"></i></button>       
               </td>
               </tr>
             `;
             fragment.appendChild(row);
+          }else{
+            console.log("Ocurrio un error");
+          }
+    
     
           });
     
@@ -95,10 +126,7 @@ async function getMaintenance() {
     
     
     
-        } else {
-          throw new Error('Error al cargar los mantenimientos');
-    
-        }
+       
     
       } catch (error) {
     
@@ -160,6 +188,136 @@ async function getActividades (){
   }
 
 }
+
+ async function cambioEstCop(activ){
+  console.log(activ);
+ try {
+  ActividadData ={
+    IdMantenimiento : parseInt(activ.activfind.IdMantenimiento) ,
+    DescripcionTarea : activ.activfind.DescripcionTarea,
+    Cantidad : parseInt(activ.activfind.Cantidad),
+    UnidadMedida : activ.activfind.UnidadMedida,
+    Estado : "Completado"
+  }
+
+  console.log(ActividadData);
+  const token = localStorage.getItem('token');
+  const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.activfind.IdActividad}`;
+
+  const response = await axios.put(API_URL, ActividadData, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});
+console.log(response);
+showToast('Exito','Estado actulizado correctamente.')
+getMaintenance();
+
+
+  
+ } catch (error) {
+  console.error(error)
+  showToast('Error','No se logro cambiar el estado')
+  
+ }
+}
+async function cambioEstPen(activ){
+
+ try {
+  ActividadData ={
+    IdMantenimiento : parseInt(activ.activfind.IdMantenimiento) ,
+    DescripcionTarea : activ.activfind.DescripcionTarea,
+    Cantidad : parseInt(activ.activfind.Cantidad),
+    UnidadMedida : activ.activfind.UnidadMedida,
+    Estado : "Pendiente"
+  }
+
+  console.log(ActividadData);
+  const token = localStorage.getItem('token');
+  const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.activfind.IdActividad}`;
+
+  const response = await axios.put(API_URL, ActividadData, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});
+console.log(response);
+showToast('Exito','Estado actulizado correctamente.')
+getMaintenance();
+
+
+  
+ } catch (error) {
+  console.error(error)
+  showToast('Error','No se logro cambiar el estado')
+  
+ }
+}
+
+
+
+
+(function() {
+  let fieldCounter = 0;
+
+  document.getElementById('addActividadBtn').addEventListener('click', function() {
+      addFields();
+      console.log("Entro");
+  });
+
+  function addFields() {
+      fieldCounter++;
+      const container = document.getElementById('actividadesDinamicas');
+      const fieldSet = document.createElement('div');
+      fieldSet.className = 'col-12 mb-3';
+      fieldSet.id = `field-set-${fieldCounter}`;
+      
+      fieldSet.innerHTML = `
+          <div class="row">
+              <div class="col-md-3">
+                  <label for="activity-${fieldCounter}" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
+                  <select required id="activity-${fieldCounter}" name="activity" class="form-select">
+                      <option selected disabled value="">Seleccionar</option>
+                      <option value="Cambio de aceite">Cambio de aceite</option>
+                      <option value="Cambio de llantas">Cambio de llantas</option>
+                  </select>
+              </div>
+              <div class="col-md-3">
+                  <label for="unidadMedida-${fieldCounter}" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
+                  <input required type="text" id="unidadMedida-${fieldCounter}" name="unidadMedida" class="form-control" readonly>
+              </div>
+              <div class="col-md-2">
+                  <label for="cantidad-${fieldCounter}" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
+                  <input required type="number" id="cantidad-${fieldCounter}" name="cantidad" class="form-control">
+              </div>
+              <div class="col-md-3">
+                  <label for="estado-${fieldCounter}" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
+                  <select required id="estado-${fieldCounter}" name="estado" class="form-select">
+                      <option selected disabled value="">Seleccionar</option>
+                      <option value="Finalizada">Finalizada</option>
+                      <option value="Pendiente">Pendiente</option>
+                  </select>
+              </div>
+              <div class="col-md-1 d-flex align-items-end">
+                  <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeFields(${fieldCounter})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                  </button>
+              </div>
+          </div>
+          <hr>
+      `;
+
+      container.appendChild(fieldSet);
+  }
+
+  window.removeFields = function(id) {
+      const fieldSet = document.getElementById(`field-set-${id}`);
+      fieldSet.remove();
+  }
+})();
   
  
   

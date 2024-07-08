@@ -192,19 +192,16 @@
                                 </div>
                                 <!-- Tipo de unidad -->
                                 <div class="col-md-4 mb-3">
-                                    <label for="Tipounidad" class="form-label"><i class="bi bi-truck-front"></i> Tipo de
+                                    <label for="tipounidad" class="form-label"><i class="bi bi-truck-front"></i> Tipo de
                                         Unidad:</label>
-                                    <select required id="Tipounidad" name="Tipounidad" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Ambulancia">Ambulancia</option>
-                                        <option value="Moto">Moto</option>
-                                        <!-- etc -->
-                                    </select>
+                                        <input required type="text" id="tipoUnidad" name="tipoUnidad" class="form-control" maxlength="25" readonly>
+
+                                    
                                 </div>
                                 <!-- Chofer -->
                                 <div class="col-md-4 mb-3">
                                     <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer:</label>
-                                    <input required type="text" id="chofer" name="chofer" class="form-control" maxlength="25">
+                                    <input required type="text" id="chofer" name="chofer" class="form-control" maxlength="25" readonly>
                                 </div>
                             </div>
                             <div class="row">
@@ -250,52 +247,18 @@
                                   </button>
                              </div>
                              <div class="col-auto ms-auto" style="margin-bottom: 10px;">
-                                <button id="addAcompananteBtn" type="button" class="btn btn-outline-success">
+                                <button id="addActividadBtn" type="button" class="btn btn-outline-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                                       </svg>
                                 </button>
-                                <button type="button" class="btn btn-outline-danger" id="removeAcompananteBtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/>
-                                      </svg>
-                                </button>
                             </div>
                             </div>
                             <hr>
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label for="activity" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
-                                    <select required id="activity" name="activity" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Cambio de aceite">Cambio de aceite</option>
-                                        <option value="Cambio de llantas">Cambio de llantas</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="unidad" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
-                                    <select required id="unidad" name="unidad" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Litros">Litros</option>
-                                        <option value="Unidad">Unidad</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="cantidad" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
-                                    <input required type="number" id="cantidad" name="cantidad" class="form-control">
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label for="estado" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
-                                    <select required id="estado" name="unidad" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Finalizada">Finalizada</option>
-                                        <option value="Pendiente">Pendiente</option>
-                                    </select>
-                                </div>
-                                
+                            <div class="row" id="actividadesDinamicas">
+                                <!-- Se cargaran las actividades de forma dinamica -->
+                            </div>
 
-                            </div>
-                            <hr>
 
                             <div class="row justify-content-end ">
                                 <!-- Botón Guardar Mantenimiento -->
