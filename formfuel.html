@@ -5,29 +5,24 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="usuario" class="form-label"><i class="bi bi-person"></i> Usuario</label>
-                    <select class="form-control" id="usuario" name="usuario">
-                        <option value="usuario1">Usuario 1</option>
-                        <option value="usuario2">Usuario 2</option>
-                        <option value="usuario3">Usuario 3</option>
-                        <!-- Añade más opciones según necesites -->
+                    <select class="form-control" id="usuario" name="usuario" required>
+                        <!-- Aquí se cargan los choferes -->
                     </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
-                    <select class="form-control" id="unidad" name="unidad">
-                        <option value="unidad1">Unidad 1</option>
-                        <option value="unidad2">Unidad 2</option>
-                        <option value="unidad3">Unidad 3</option>
-                        <!-- Añade más opciones según necesites -->
+                    <select class="form-control" id="unidad" name="unidad" required>
+                        <!-- Aquí se cargan las unidades -->
                     </select>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
-                    <label for="kilometraje" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje de Recarga</label>
-                    <input type="text" class="form-control" id="kilometraje" name="kilometraje">
+                    <label for="kilometraje" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje de
+                        Recarga</label>
+                    <input type="number" class="form-control" id="kilometraje" name="kilometraje" required>
                 </div>
             </div>
         </div>
@@ -35,19 +30,19 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros Aproximados</label>
-                    <input type="text" class="form-control" id="litros" name="litros">
+                    <input type="number" class="form-control" id="litros" name="litros" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="monto" class="form-label"><i class="bi bi-currency-dollar"></i> Monto</label>
-                    <input type="text" class="form-control" id="monto" name="monto">
+                    <input type="number" class="form-control" id="monto" name="monto" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
-                    <input type="text" class="form-control" id="lugar" name="lugar">
+                    <input type="text" class="form-control" id="lugar" name="lugar" required>
                 </div>
             </div>
         </div>
@@ -55,24 +50,29 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="fecha" class="form-label"><i class="bi bi-calendar"></i> Fecha</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha">
+                    <input type="date" class="form-control" id="fecha" name="fecha" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
-                    <input type="time" class="form-control" id="hora" name="hora">
+                    <input type="time" class="form-control" id="hora" name="hora" required>
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group mt-4 d-flex justify-content-center align-items-center">
-            <button type="button" id="btnGuardar" class="btn btn-primary m-2"><i class="bi bi-save"></i> Guardar</button>
-            <button type="button" id="btnActualizar" class="btn btn-secondary m-2"><i class="bi bi-pencil"></i> Actualizar</button>
-            <button type="button" id="btnEliminar" class="btn btn-danger m-2"><i class="bi bi-trash"></i> Eliminar</button>
+            <button type="submit" id="btnGuardar" class="btn text-white"
+                style="background-color: #094079; border-color: #094079; margin: 5px;"
+                onmouseover="this.style.backgroundColor='#073c64';"
+                onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
+            <button type="submit" id="btnActualizar" class="btn btn-primary text-white"
+                style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';"
+                onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-clockwise"></i>
+                Actualizar</button>
+            <button type="button" id="btnEliminar" class="btn btn-danger m-2"><i class="bi bi-trash"></i>
+                Eliminar</button>
         </div>
     </form>
 </div>
 <div data-script="js/fuel.js"></div>
-</body>
-</html>
