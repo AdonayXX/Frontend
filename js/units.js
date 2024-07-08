@@ -13,7 +13,6 @@ document.getElementById('btnSaveResource').addEventListener('click', function (e
 document.getElementById('btnSaveUnit').addEventListener('click', function (event) {
     event.preventDefault();
     postTipoUnidad();
-
 });
 
 document.getElementById('update-unit-button').addEventListener('click', function (event) {
@@ -557,50 +556,6 @@ async function updateUnidad() {
             showToast('Error', 'Error al actualizar la unidad.');
         });
 }
-
-function loadFormData(unidad) {
-    document.getElementById('unitNumber').value = unidad.numeroUnidad;
-    document.getElementById('unitType').value = unidad.idTipoUnidad;
-    document.getElementById('resourceType').value = unidad.idTipoRecurso;
-    document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
-    document.getElementById('currentMileage').value = unidad.kilometrajeActual;
-    document.getElementById('status').value = unidad.idEstado;
-    document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-
-    if (unidad.ultimoMantenimientoFecha) {
-        document.getElementById('maintenanceDate').value = new Date(unidad.ultimoMantenimientoFecha).toISOString().split('T')[0];
-    } else {
-        document.getElementById('maintenanceDate').value = '';
-    }
-
-    document.getElementById('maintenanceMileage').value = unidad.ultimoMantenimientoKilometraje;
-    document.getElementById('assignedDriver').value = unidad.choferDesignado;
-    document.getElementById('capacityChairs').value = unidad.capacidadSillas;
-    document.getElementById('capacityBeds').value = unidad.capacidadCamas;
-    document.getElementById('totalCapacity').value = unidad.capacidadTotal;
-    document.getElementById('advance').value = unidad.adelanto;
-    document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
-
-    const maintenanceTypeSelect = document.getElementById('maintenanceType');
-    const tipoFrecuenciaCambio = unidad.tipoFrecuenciaCambio;
-    const selectedIndex = Array.from(maintenanceTypeSelect.options).findIndex(option => option.text === tipoFrecuenciaCambio);
-
-    if (selectedIndex !== -1) {
-        maintenanceTypeSelect.selectedIndex = selectedIndex;
-    }
-
-    const event = new Event('change');
-    document.getElementById('unitNumber').disabled = true;
-    document.getElementById('unitType').disabled = true;
-    document.getElementById('resourceType').disabled = true;
-    document.getElementById('initialMileage').disabled = true;
-    document.getElementById('status').dispatchEvent(event);
-    document.getElementById('maintenanceType').dispatchEvent(event);
-    document.getElementById('clearFormButton').style.display = 'inline-block';
-    document.getElementById('update-unit-button').disabled = false;
-    document.getElementById('submit-unit-button').disabled = true;
-}
-
 
 function clearForm() {
     document.getElementById('unitsForm').reset();
