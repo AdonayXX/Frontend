@@ -13,6 +13,10 @@ document.getElementById('btnCargar').addEventListener('click', function (event) 
     getFuelLog();
 });
 
+document.getElementById('clearFormButton').addEventListener('click', function () {
+    clearForm();
+});
+
 async function getChoferes() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
@@ -115,6 +119,7 @@ async function getFuelLog() {
         const event = new Event('change');
         choferSelect.dispatchEvent(event);
         unitSelect.dispatchEvent(event);
+        document.getElementById('clearFormButton').style.display = 'inline-block';
 
     } catch (error) {
         console.error('Error al obtener el registro de combustible:', error);
@@ -151,7 +156,7 @@ function postFuelLog() {
 
     axios.post('https://backend-transporteccss.onrender.com/api/registrocombustible', fuelLogData)
         .then(response => {
-            // clearForm();
+            clearForm();
             console.log('Registro de combustible realizado:', response.data);
             showToast('Registro exitoso', 'El registro de combustible se ha realizado exitosamente.');
             document.getElementById('formFuel').reset();
@@ -190,7 +195,7 @@ function updateFuelLog() {
 
     axios.put('https://backend-transporteccss.onrender.com/api/registrocombustible', fuelLogData)
         .then(response => {
-            // clearForm();
+            clearForm();
             console.log('Registro de combustible realizado:', response.data);
             showToast('Registro exitoso', 'El registro de combustible se ha realizado exitosamente.');
             document.getElementById('formFuel').reset();
@@ -199,4 +204,11 @@ function updateFuelLog() {
             console.error('Error al crear el registro de combustible:', error);
             showToast('Error', 'Error al guardar el registro de combustible.');
         });
+}
+
+function clearForm() {
+    document.getElementById('formFuel').reset();
+    document.getElementById('clearFormButton').style.display = 'none';
+    getUnidades();
+    getChoferes();
 }
