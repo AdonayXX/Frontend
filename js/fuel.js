@@ -1,28 +1,65 @@
-document.getElementById('btnConsultar').addEventListener('click', async function () {
-    const unidad = document.getElementById('unidad').value.trim(); 
-    if (!unidad) {
-        showToast('Advertencia', 'Ingrese un número de unidad válido.');
-        return;
-    }
+function populateChoferes() {
+    axios.get('https://backend-transporteccss.onrender.com/api/chofer')
+        .then(response => {
+            console.log('Respuesta de la API:', response); 
 
-    try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registroCombustible?numeroUnidad=${unidad}`);
-        const registroCombustible = response.data.registros;
+            const choferes = response.data.choferes;
+            if (!choferes || !choferes.length) {
+                console.error('No se encontraron choferes en la respuesta.');
+                return;
+            }
 
-    
-        document.getElementById('usuario').value = registroCombustible.usuario || '';
-        document.getElementById('unidad').value = registroCombustible.numeroUnidad || '';
-        document.getElementById('kilometraje').value = registroCombustible.kilometraje || '';
-        document.getElementById('litros').value = registroCombustible.litrosAproximados || '';
-        document.getElementById('monto').value = registroCombustible.montoColones || '';
-        document.getElementById('lugar').value = registroCombustible.lugar || '';
-        document.getElementById('fecha').value = registroCombustible.fecha ? new Date(registroCombustible.fecha).toISOString().split('T')[0] : '';
-        document.getElementById('hora').value = registroCombustible.hora || '';
+            const usuarioSelect = document.getElementById('usuario');
 
-        showToast('Éxito', 'Datos del registro de combustible cargados correctamente.');
-    } catch (error) {
-        console.error('Error al obtener datos del registro de combustible:', error);
-        showToast('Error', 'No se pudo obtener los datos del registro de combustible.');
-    }
-});
+        
+            usuarioSelect.innerHTML = '';
+
+            choferes.forEach(chofer => {
+                const option = document.createElement('option');
+                option.value = chofer.idChofer;
+                option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+                usuarioSelect.appendChild(option);
+            });
+
+            console.log('Choferes poblados en el select:', usuarioSelect); 
+        })
+        .catch(error => {
+            console.error('Error al obtener los choferes:', error); 
+        });
+}
+
+populateChoferes();
+
+function populateUnidades() {
+    axios.get('https://backend-transporteccss.onrender.com/api/unidades')
+        .then(response => {
+            console.log('Respuesta de la API de unidades:', response); 
+
+            const unidades = response.data.unidades;
+            if (!unidades || !unidades.length) {
+                console.error('No se encontraron unidades en la respuesta.');
+                return;
+            }
+
+            const unidadSelect = document.getElementById('unidad');
+
+            unidadSelect.innerHTML = '';
+
+            unidades.forEach(unidad => {
+                const option = document.createElement('option');
+                option.value = unidad.id;
+                option.textContent = unidad.numeroUnidad;
+                unidadSelect.appendChild(option);
+            });
+
+            console.log('Unidades pobladas en el select:', unidadSelect); 
+        })
+        .catch(error => {
+            console.error('Error al obtener las unidades:', error); 
+        });
+}
+
+populateUnidades();
+
+
 
