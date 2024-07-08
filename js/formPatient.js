@@ -1,8 +1,18 @@
+//Evento para guardar Personas/Pacientes/Acompañantes
+document.querySelector('#guardarFormPatients').addEventListener('click', () => {
+  let identificacionAcomp1 = document.querySelector('#acompananteIdentificacion1').value.trim();
+  let identificacionAcomp2 = document.querySelector('#acompananteIdentificacion2').value.trim();
+  let identificacionPerson = document.querySelector('#identificacion').value.trim();
 
-document.querySelector('#guardarFormPatients').addEventListener('click', ()=> {
+  if(identificacionAcomp1 && identificacionAcomp2){
+    if (identificacionAcomp1 === identificacionAcomp2 ){
+      alert('Los dos acompañantes no pueden ser la misma persona');
+      return;
+    }
+  }
   addPersona();
 });
-
+//Capturar los datos de la persona
 function addPersona() {
   try {
     const nombre = document.querySelector('#nombre').value.trim();
@@ -13,23 +23,15 @@ function addPersona() {
     const genero = document.querySelector('#genero').value.trim();
     const telefono1 = document.querySelector('#telefono1Hidden').value.trim();
     const telefono2 = document.querySelector('#telefono2Hidden').value.trim() || 0;
-    const tipoSeguro = document.querySelector('#tipoSeguro').value.trim();
     const direccion = document.querySelector('#direccion').value.trim();
     const latitud = parseFloat(document.querySelector('#latitud').value.trim()) || 0;
     const longitud = parseFloat(document.querySelector('#longitud').value.trim()) || 0;
     const tipoSangre = document.querySelector('#tipoSangre').value.trim();
-    // const seguroVencimiento = document.querySelector('#fechaVencimientoSeguro').value.trim();
     if (!nombre || !primerApellido || !segundoApellido || !identificacion || !tipoIdentificacion || !genero ||
-      !telefono1 || !tipoSeguro || !direccion || !tipoSangre) {
+      !telefono1  || !direccion || !tipoSangre) {
       alert("Por favor, rellena todos los campos solicitados.");
       return;
     }
-
-
-
-
-
-
     const personaData = {
       "Nombre": nombre,
       "Apellido1": primerApellido,
@@ -39,18 +41,18 @@ function addPersona() {
       "Genero": genero,
       "Telefono1": telefono1,
       "Telefono2": telefono2,
-      "Tipo_seguro": tipoSeguro,
-      // "FechaVencimientoSeguro":seguroVencimiento,
+      "Tipo_seguro": "N/A",
       "Direccion": direccion,
       "Latitud": latitud,
       "Longitud": longitud,
       "Tipo_sangre": tipoSangre
     }
     console.log(personaData);
+    //Funcion para agregar persona
     addPerson(personaData);
 
   } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema al enviar los datos.');
+    showToast('Ups!', 'Ocurrio un problema con los campos del formulario.');
     console.error(error);
 
   }
@@ -58,36 +60,67 @@ function addPersona() {
 
 }
 
-//2
+//2 Obtener Persona si  ya existe
 async function addPerson(personaData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-    const response = await axios.get(API_URL);
+    //const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const API_URL = 'http://localhost:18026/api/persona';
+    const token = localStorage.getItem('token');
+    const response = await axios.get(API_URL, {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     const listaPersonas = response.data.personas;
     const personaEncontrada = listaPersonas.find(persona => persona.Identificacion === personaData.Identificacion);
     if (personaEncontrada) {
       const IdPersonaCreada = personaEncontrada.Id;
-      getPatient(IdPersonaCreada);
+     // getPatient(IdPersonaCreada);
+    addDataPatient(IdPersonaCreada);
     } else {
       addPeople(personaData);
     }
 
   } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error(error);
+      showToast('Ups!', errorMessage);
+
+    }else{
+      showToast('Error','Hubo un problema al enviar los datos.');   
+       console.error(error);
+
+    }
   }
 }
 
-//3
+//3 Agregar Persona
 async function addPeople(personaData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-    const response = await axios.post(API_URL, personaData);
+    //const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const API_URL = 'http://localhost:18026/api/persona';
+    const token = localStorage.getItem('token');
+    const response = await axios.post(API_URL, personaData, {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     const idPersona = response.data.persona.insertId;
-    getPatient(idPersona);
+    console.log(response);
+    //getPatient(idPersona);
+    addDataPatient(idPersona);
   } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error(error);
+      showToast('Ups!', errorMessage);
+
+    }else{
+      showToast('Error','hubo un problema al enviar los datos.');
+      console.error(error);
+
+    }
   }
 }
 document.querySelector('#telefono1').addEventListener('input', function (e) {
@@ -121,26 +154,28 @@ document.querySelector('#acompananteTelefono2_2').addEventListener('input', func
   }
 });
 
-//4
+//4 Capturar Datos para Paciente
 function addDataPatient(IdPersonaCreada) {
   const prioridad = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
+  const traslado = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
   const lugarSalida = document.querySelector('#lugarSalida').value;
   const encamado = document.querySelector('#encamado').value;
-
   const pacienteData = {
     "IdPersona": IdPersonaCreada,
-    "Criticidad": "null",
+    "Criticidad": "N/A",
     "Encamado": encamado,
-    "Traslado": lugarSalida,
+    "Traslado": traslado,
     "Prioridad": prioridad,
-    "Estado": "Activo"
+    "Estado": "Activo",
+    "LugarSalida": lugarSalida,
   }
+  console.log(pacienteData)
   addPatient(pacienteData);
 
 }
 
-//5
-async function getPatient(IdPersonaCreada) {
+//5 Obtener Paciente
+/* async function getPatient(IdPersonaCreada) {
   try {
     const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
     const response = await axios.get(API_URL);
@@ -156,28 +191,41 @@ async function getPatient(IdPersonaCreada) {
     showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
     console.error(error);
   }
-}
+} */
 
 //6
 async function addPatient(pacienteData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
-    const response = await axios.post(API_URL, pacienteData);
+   // const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
+   const API_URL = 'http://localhost:18026/api/paciente';
+   const token = localStorage.getItem('token');
+    const response = await axios.post(API_URL, pacienteData , {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     const idPaciente = (response.data.paciente.insertId);
     addCompanion(idPaciente);
     showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
     loadContent('formPatient.html', 'mainContent');
   } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error('Error específico:', errorMessage);
+      showToast('Ups!', errorMessage);
 
+    }else{
+      showToast('Error','Hubo un problema al enviar los datos.');
 
+    }
   }
 }
 
+//Capturar los datos de los acompñantes
 
 function addCompanion(idPaciente) {
   const numAcompanantes = 2; // 
+  
 
   for (let i = 1; i <= numAcompanantes; i++) {
     const acompananteNombre = document.querySelector(`#acompananteNombre${i}`).value.trim();
@@ -195,27 +243,34 @@ function addCompanion(idPaciente) {
         "IdPaciente": idPaciente,
         "Nombre": acompananteNombre,
         "Apellido1": acompananteApellido1,
-        "Apellido2" : acompananteApellido2,
+        "Apellido2": acompananteApellido2,
         "Identificacion": acompananteIdentificacion,
+        "Parentesco": acompananteParentesco,
         "Telefono1": acompananteTelefono1,
-        "Telefono2": acompananteTelefono2,
-        "Parentesco": acompananteParentesco
+        "Telefono2": acompananteTelefono2
+      
 
       };
 
 
-      getComp(companionData);
+      addComp(companionData);
     }
   }
 
 
 }
 
-//8: Verifica si el acompañante ya está registrado
+/* //8: Verifica si el acompañante ya está registrado
 async function getComp(companionData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-    const response = await axios.get(API_URL);
+   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+   const API_URL = 'http://localhost:18026/api/acompanante';
+   const token = localStorage.getItem('token');
+    const response = await axios.get(API_URL, {
+      headers: {
+          'Authorization': `Bearer ${token}`
+      }
+  });
     const listaAcompanantes = response.data.acompanantes;
     const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente);
     if (acompananteEncontrado) {
@@ -228,18 +283,32 @@ async function getComp(companionData) {
     console.error(error);
 
   }
-}
+} */
 
 //9: Registra un nuevo acompañante
 async function addComp(companionData) {
   try {
 
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-    const response = await axios.post(API_URL, companionData);
+   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+    const API_URL = 'http://localhost:18026/api/acompanante';
+    const token = localStorage.getItem('token');
+     const response = await axios.post(API_URL, companionData , {
+       headers: {
+           'Authorization': `Bearer ${token}`
+       }
+   });
+   console.log(response);
   } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error(error);
+      showToast('Ups!', errorMessage);
 
+    }else{
+      showToast('Error','Hubo un problema al enviar los datos del acompañante.');   
+       console.error(error);
+
+    }
   }
 }
 
@@ -491,7 +560,7 @@ document.querySelectorAll('input[type="text"]').forEach(input => {
 });
 // Función para convertir solo la primera letra de cada oración a mayúscula
 function toSentenceCase(str) {
-  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function(c) {
+  return str.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, function (c) {
     return c.toUpperCase();
   });
 }
@@ -500,3 +569,50 @@ document.getElementById('direccion').addEventListener('input', (event) => {
   const inputValue = event.target.value;
   event.target.value = toSentenceCase(inputValue);
 });
+
+// Función para consultar la cédula cuando se pierde el foco del input de identificación
+async function consultarCedulaOnBlur() {
+  const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+  const identificacion = document.getElementById('identificacion').value.trim(); // Trim para eliminar espacios en blanco al inicio y final
+
+  if (identificacion === '') {
+    return;
+  }
+
+  const apiUrl = `https://apis.gometa.org/cedulas/${identificacion}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.results && data.results.length > 0) {
+      const persona = data.results[0];
+
+      const nombreFormateado = formatNombre(persona.firstname);
+      const primerApellidoFormateado = formatNombre(persona.lastname1);
+      const segundoApellidoFormateado = persona.lastname2 ? formatNombre(persona.lastname2) : '';
+
+
+      document.getElementById('nombre').value = nombreFormateado;
+      document.getElementById('primerApellido').value = primerApellidoFormateado;
+      document.getElementById('segundoApellido').value = segundoApellidoFormateado;
+    } else {
+     // showToast('Ups!', 'No se encontraron resultados para la cédula ingresada.');
+      document.getElementById('nombre').value = '';
+      document.getElementById('primerApellido').value = '';
+      document.getElementById('segundoApellido').value = '';
+    }
+  } catch (error) {
+    /* console.error('Error al consultar la API:', error);
+    showToast('Ups!', 'Ocurrió un error al consultar la información. Por favor, inténtalo nuevamente.'); */
+  }
+}
+
+function formatNombre(nombre) {
+  const partesNombre = nombre.toLowerCase().split(' ');
+  const nombreFormateado = partesNombre.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+  return nombreFormateado;
+}
+
+// Agregar el evento blur al input de identificación
+document.getElementById('identificacion').addEventListener('blur', consultarCedulaOnBlur);

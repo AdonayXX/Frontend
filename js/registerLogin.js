@@ -82,7 +82,16 @@ async function saveUser(userData) {
         const API_URL = 'http://localhost:18026/api/usuario/';
         const response = await axios.post(API_URL, userData);
         const userExist = response.data.usuario;
+    
         showToast('Éxito!', 'Usuario registrado correctamente');
+        const modalElement = document.querySelector('#addNewUser');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+       if (modalInstance) {
+           modalInstance.hide();
+         } else {
+       const newModalInstance = new bootstrap.Modal(modalElement);
+       newModalInstance.hide();
+     }
         document.querySelector('#formUserRegister').reset();
     } catch (error) {
         if (error.response && error.response.status === 400) {
@@ -181,5 +190,51 @@ function initializePasswordValidations() {
 document.getElementById('addNewUser').addEventListener('shown.bs.modal', function () {
     initializePasswordValidations();
 });
+
+// Función para consultar la cédula cuando se pierde el foco del input de identificación
+async function consultarCedulaOnBlur() {
+    const userIdentification = document.querySelector('#userIdentification').value.trim(); // Trim para eliminar espacios en blanco al inicio y final
+  
+    if (userIdentification === '') {
+      return;
+    }
+  
+    const apiUrl = `https://apis.gometa.org/cedulas/${userIdentification}`;
+  
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+  
+      if (data.results && data.results.length > 0) {
+        const persona = data.results[0];
+  
+        const nombreFormateado = formatNombre(persona.firstname);
+        const primerApellidoFormateado = formatNombre(persona.lastname1);
+        const segundoApellidoFormateado = persona.lastname2 ? formatNombre(persona.lastname2) : '';
+     
+  
+        document.querySelector('#userName').value = nombreFormateado;
+        document.querySelector('#userFirstlastname').value = primerApellidoFormateado;
+        document.querySelector('#userSecondlastname').value = segundoApellidoFormateado;
+      } else {
+       // showToast('Ups!', 'No se encontraron resultados para la cédula ingresada.');
+       document.querySelector('#userName').value  = '';
+       document.querySelector('#userFirstlastname').value = '';
+       document.querySelector('#userSecondlastname').value = '';
+      }
+    } catch (error) {
+      /* console.error('Error al consultar la API:', error);
+      showToast('Ups!', 'Ocurrió un error al consultar la información. Por favor, inténtalo nuevamente.'); */
+    }
+  }
+  
+  function formatNombre(nombre) {
+    const partesNombre = nombre.toLowerCase().split(' ');
+    const nombreFormateado = partesNombre.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    return nombreFormateado;
+  }
+  
+  // Agregar el evento blur al input de identificación
+  document.querySelector('#userIdentification').addEventListener('blur', consultarCedulaOnBlur);
 
 

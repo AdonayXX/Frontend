@@ -28,12 +28,12 @@
             </div>
         </div>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success bi bi-person-plus mx-4" data-bs-toggle="modal" data-bs-placement="top"
+           <!--  <button class="btn btn-success bi bi-person-plus mx-4" data-bs-toggle="modal" data-bs-placement="top"
                 data-bs-target="#addUserAdmin">
 
 
                 Agregar Usuario
-            </button>
+            </button> -->
         </div>
         <div class="table-responsive-xxl mt-3">
             <table class=" table table-light table-striped table-hover table-bordered text-center" id="tableUsers">
@@ -123,19 +123,19 @@
                                 <label for="userIdentificationEdit" class="form-label"><i
                                         class="bi bi-person-badge"></i> Identificación:</label>
                                 <input type="text" id="userIdentificationEdit" name="userIdentificationEdit"
-                                    class="form-control" maxlength="20" required>
+                                    class="form-control" maxlength="20" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="userNameEdit" class="form-label"><i class="bi bi-person"></i>
                                     Nombre:</label>
-                                <input type="text" id="userNameEdit" name="userNameEdit" class="form-control" required
+                                <input type="text" id="userNameEdit" name="userNameEdit" class="form-control" readonly
                                     maxlength="20">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="userFirstlastnameEdit" class="form-label"><i class="bi bi-person"></i>
                                     Primer Apellido:</label>
                                 <input type="text" id="userFirstlastnameEdit" name="userFirstlastnameEdit"
-                                    class="form-control" maxlength="20" required>
+                                    class="form-control" maxlength="20" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -143,27 +143,16 @@
                                 <label for="userSecondlastnameEdit" class="form-label"><i class="bi bi-person"></i>
                                     Segundo Apellido:</label>
                                 <input type="text" id="userSecondlastnameEdit" name="userSecondlastnameEdit"
-                                    class="form-control" maxlength="20" required>
+                                    class="form-control" maxlength="20" readonly>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="userPassword1Edit" class="form-label"><i class="bi bi-lock"></i>
-                                    Contraseña:</label>
-                                <input type="password" id="userPassword1Edit" name="userPassword1" class="form-control"
-                                    maxlength="30" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="userPassword2Edit" class="form-label"><i class="bi bi-lock"></i> Repetir
-                                    Contraseña:</label>
-                                <input type="password" id="userPassword2Edit" name="userPassword2Edit" class="form-control"
-                                    maxlength="30" required>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="userEmailEdit" class="form-label"><i class="bi bi-envelope"></i> Correo:</label>
                                 <input type="email" id="userEmailEdit" name="userEmailEdit" class="form-control" maxlength="30"
-                                    required>
+                                    readonly>
                             </div>
+                        </div>
+                        <hr>
+                        <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="rol" class="form-label"><i class="bi bi-people"></i> Rol:</label>
                                 <select required id="rol" name="rol" class="form-select">

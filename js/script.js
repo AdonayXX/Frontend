@@ -15,7 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
     loadToastTemplate();
     loadModalTemplate();
     //Cargar desde el incio el home.html
+
+    // loadContent('home.html', 'mainContent');
+
+    document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
+    document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
+    document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
+    document.getElementById('cancelar').addEventListener('click', cancelar);
+    document.getElementById('actualizar').addEventListener('click', actualizar);
+    document.getElementById('')
+
     loadContent('home.html', 'mainContent');
+
 });
 
 
