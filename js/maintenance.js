@@ -19,20 +19,6 @@ async function getMaintenance() {
 
       const mantenimiento = mantenimientoResponse.data.mantenimientos || [];
       const actividades = actividadesResponse.data.actividadesMantenimiento || [];
-
-      console.log(mantenimiento);
-      console.log(actividades);
-    /*   const token = localStorage.getItem('token');
-      const API_URL = 'http://localhost:18026/api/mantenimiento/';
-  
-      const response = await axios.get(API_URL, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-      const listMaintenance = response.data.mantenimientos;
-      console.log(listMaintenance); */
-  
        $(document).ready(function () { 
         if ($.fn.DataTable.isDataTable('#tableMaintenance')) {
           $('#tableMaintenance').DataTable().destroy();
@@ -317,7 +303,150 @@ getMaintenance();
       const fieldSet = document.getElementById(`field-set-${id}`);
       fieldSet.remove();
   }
+  document.querySelector('#maintenancebtn').addEventListener('click', async () => {
+    const uniLlenado = await getUnidades();
+    console.log(uniLlenado);
+    const unidadSelect = document.querySelector('#unidadSelect');
+
+    // Llenar el select con las opciones de unidad
+    unidadSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>'; 
+    uniLlenado.forEach(unidad => {
+        const option = document.createElement('option');
+        option.value = unidad.id; 
+        option.textContent = unidad.numeroUnidad; 
+        unidadSelect.appendChild(option);
+    });
+
+    // Añadir el event listener para cambio de selección
+    unidadSelect.addEventListener('change', async () => {
+      console.log(uniLlenado)
+      
+        const unidadFiltrda= uniLlenado.find(unidad => unidad.id === parseInt(unidadSelect.value));
+        document.querySelector('#kilometraje').value = unidadFiltrda.kilometrajeActual;
+
+        const idChofer = parseInt(unidadFiltrda.choferDesignado);
+        const idtipoUnidad = parseInt(unidadFiltrda.idTipoUnidad);
+        const choferfind = await getChoferNombre(idChofer);
+        const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
+        nombreCompletoChofer =  `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`
+        document.querySelector('#chofer').value = nombreCompletoChofer;
+        document.querySelector('#tipoUnidad').value =obTipoUnidad
+       
+
+
+    });
+});
+
+//Obtener nombre de Tipo unidadd
+async function getTipoRecursoNombre (idtipoUnidad){
+  console.log(idtipoUnidad)
+  try {
+    const token = localStorage.getItem('token');
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/tipounidad';
+
+    const response = await axios.get(API_URL, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    console.log(response);
+    const tiposUnidad= response.data.tipounidad;
+    const tiposUnidadFiltrada= tiposUnidad.find(tipounidad=> tipounidad.idTipoUnidad === idtipoUnidad);
+    return tiposUnidadFiltrada.tipo;
+    
+
+
+
+
+
+    
+    
+  } catch (error) {
+    
+  }
+}
+
+
+
+//Obtener nombre de chofer
+async function getChoferNombre (idChofer){
+  try {
+    const token = localStorage.getItem('token');
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/chofer';
+
+    const response = await axios.get(API_URL, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const choferes = response.data.choferes;
+    const choferFiltrado= choferes.find(chofer=> chofer.idChofer === idChofer);
+    
+
+
+ return choferFiltrado;
+
+
+    
+    
+  } catch (error) {
+    
+  }
+}
+
+ 
+
+
+async function getUnidades() {
+  try {
+      const token = localStorage.getItem('token');
+      const API_URL = 'https://backend-transporteccss.onrender.com/api/unidades';
+
+      const response = await axios.get(API_URL, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      return response.data.unidades; // Asumiendo que las unidades están en response.data
+
+  } catch (error) {
+      console.error(error);
+      return []; // Retornar un arreglo vacío en caso de error
+  }
+}
+  
+/* //Llenar unidades
+  async function getUnidades(){
+    try {
+      const token = localStorage.getItem('token');
+    const API_URL = `https://backend-transporteccss.onrender.com/api/unidades`;
+
+     const response = await axios.get(API_URL, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});
+console.log(response);
+const unidades = response.data.unidades; // Asumiendo que las unidades están en response.data
+        const unidadSelect = document.querySelector('#unidadSelect');
+
+        unidades.forEach(unidad => {
+            const option = document.createElement('option');
+            option.value = unidad.id; // Asumiendo que cada unidad tiene un id
+            option.textContent = unidad.numeroUnidad; // Asumiendo que cada unidad tiene un nombre
+            unidadSelect.appendChild(option);
+        });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      
+    }
+  } */
 })();
+
+
   
  
   
