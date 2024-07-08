@@ -46,11 +46,23 @@
                         <input type="text" id="telefonos" name="telefono1" class="form-control" readonly>
                     </div>
                 </div>
+                
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
+                    <div class="col-md-4 mb-3">
+                        <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>
+                        <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="Asalariado">Asalariado</option>
+                            <option value="Independiente">Trabajador Independiente</option>
+                            <option value="Voluntario">Voluntario</option>
+                            <option value="Pensionado">Pensionado</option>
+                            <option value="Leyes o Decretos">Leyes o Decretos</option>
+                            <option value="Beneficio Familiar">Beneficio Familiar</option>
+                            <option value="Seguro por el Estado">Seguro por el Estado</option>
+                            <option value="Cargo al Estado">Protección con cargo al Estado</option>
+                        </select>
                     </div>
+                   
 
                     <div class="col-md-2 mb-3">
                         <label for="condicion" class="form-label"><i class="bi bi-exclamation-circle"></i> Condición:</label>
@@ -79,7 +91,10 @@
 
                 </div>
                 <div class="row">
-               
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
+                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
                         <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250"></textarea>
