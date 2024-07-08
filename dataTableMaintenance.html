@@ -191,6 +191,7 @@
                                     <label for="tipounidad" class="form-label"><i class="bi bi-truck-front"></i> Tipo de
                                         Unidad:</label>
                                         <input required type="text" id="tipoUnidad" name="tipoUnidad" class="form-control" maxlength="25" readonly>
+                                        <input type="hidden" id="IdTipoUnidadHidden">
 
                                     
                                 </div>
@@ -198,6 +199,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer:</label>
                                     <input required type="text" id="chofer" name="chofer" class="form-control" maxlength="25" readonly>
+                                    <input type="hidden" id="IdChoferHidden">
                                 </div>
                             </div>
                             <div class="row">
@@ -219,7 +221,7 @@
                                     <label for="tipoMantenimiento" class="form-label"><i class="bi bi-tools"></i> Tipo de Mantenimiento:</label>
                                     <select required id="tipoMantenimiento" name="tipoMantenimiento" class="form-select">
                                         <option selected disabled value="">Seleccionar</option>
-                                        <option value="Preventivo">Preventivo</option>
+                                        <option value="Programado">Programado</option>
                                         <option value="Correctivo">Correctivo</option>
                                         <!-- etc -->
                                     </select>

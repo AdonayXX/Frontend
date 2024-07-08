@@ -270,7 +270,11 @@ getMaintenance();
               </div>
               <div class="col-md-3">
                   <label for="unidadMedida-${fieldCounter}" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
-                  <input required type="text" id="unidadMedida-${fieldCounter}" name="unidadMedida" class="form-control" readonly>
+                   <select required id="unidadMedida-${fieldCounter}" name="activity" class="form-select">
+                      <option selected disabled value="">Seleccionar</option>
+                      <option value="Litros">Litros</option>
+                      <option value="Unidades">Unidades</option>
+                  </select>
               </div>
               <div class="col-md-2">
                   <label for="cantidad-${fieldCounter}" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
@@ -280,7 +284,7 @@ getMaintenance();
                   <label for="estado-${fieldCounter}" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
                   <select required id="estado-${fieldCounter}" name="estado" class="form-select">
                       <option selected disabled value="">Seleccionar</option>
-                      <option value="Finalizada">Finalizada</option>
+                      <option value="Completo">Completo</option>
                       <option value="Pendiente">Pendiente</option>
                   </select>
               </div>
@@ -323,7 +327,8 @@ getMaintenance();
       
         const unidadFiltrda= uniLlenado.find(unidad => unidad.id === parseInt(unidadSelect.value));
         document.querySelector('#kilometraje').value = unidadFiltrda.kilometrajeActual;
-
+        document.querySelector('#IdTipoUnidadHidden').value = unidadFiltrda.idTipoUnidad;
+        document.querySelector('#IdChoferHidden').value = unidadFiltrda.choferDesignado;
         const idChofer = parseInt(unidadFiltrda.choferDesignado);
         const idtipoUnidad = parseInt(unidadFiltrda.idTipoUnidad);
         const choferfind = await getChoferNombre(idChofer);
@@ -415,35 +420,80 @@ async function getUnidades() {
       return []; // Retornar un arreglo vacío en caso de error
   }
 }
-  
-/* //Llenar unidades
-  async function getUnidades(){
-    try {
+// Enviar Formulario 
+ // Manejar el envío del formulario
+ document.getElementById('formMaintenance').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  // Recopilar datos del formulario
+  const actividades = [];
+  for (let i = 1; i <= fieldCounter; i++) {
+      const activitySelect = document.getElementById(`activity-${i}`);
+      const unidadMedida = document.getElementById(`unidadMedida-${i}`);
+      const cantidadInput = document.getElementById(`cantidad-${i}`);
+      const estadoSelect = document.getElementById(`estado-${i}`);
+
+      if (activitySelect && unidadSelect && cantidadInput && estadoSelect) {
+          actividades.push({
+              DescripcionTarea: activitySelect.value,
+              UnidadMedida: unidadMedida.value,
+              Cantidad: parseInt(cantidadInput.value.trim()),
+              Estado: estadoSelect.value
+          });
+      }
+  }
+
+  const mantenimiento = {
+      IdChofer: document.querySelector('#IdChoferHidden').value.trim(), 
+      IdUnidad: parseInt(document.querySelector('#unidadSelect').value.trim()), 
+      FechaMantenimiento: document.querySelector('#fechaMantenimiento').value.trim(), 
+      Kilometraje: document.querySelector('#kilometraje').value.trim(), 
+      TipoMantenimiento: document.querySelector('#tipoMantenimiento').value.trim(), 
+      Observacion: document.querySelector('#observaciones').value.trim(), 
+      actividades: actividades
+  };
+  console.log(mantenimiento);
+
+  try {
       const token = localStorage.getItem('token');
-    const API_URL = `https://backend-transporteccss.onrender.com/api/unidades`;
+      const API_URL = 'http://localhost:18026/api/mantenimiento';
+      const response = await axios.post(API_URL, mantenimiento, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
 
-     const response = await axios.get(API_URL, {
-    headers: {
-        'Authorization': `Bearer ${token}`
-    }
+      console.log(response.data);
+      showToast('Exito','Mantenimiento Creado.')
+       // Cerrar el modal correctamente usando Bootstrap
+     const modalElement = document.querySelector('#maintenanceModal');
+     const modalInstance = bootstrap.Modal.getInstance(modalElement);
+     if (modalInstance) {
+       modalInstance.hide();
+     } else {
+       const newModalInstance = new bootstrap.Modal(modalElement);
+       newModalInstance.hide();
+     }
+     setTimeout(function () {
+      loadContent('dataTableMaintenance.html', 'mainContent')
+    }, 500);
+      // Manejar la respuesta del servidor aquí
+  } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        console.error(error);
+        showToast('Ups!', errorMessage);
+  
+      }else{
+        showToast('Error','Hubo un problema al enviar los datos.');   
+         console.error(error);
+  
+      }
+      // Manejar el error aquí
+  }
 });
-console.log(response);
-const unidades = response.data.unidades; // Asumiendo que las unidades están en response.data
-        const unidadSelect = document.querySelector('#unidadSelect');
+  
 
-        unidades.forEach(unidad => {
-            const option = document.createElement('option');
-            option.value = unidad.id; // Asumiendo que cada unidad tiene un id
-            option.textContent = unidad.numeroUnidad; // Asumiendo que cada unidad tiene un nombre
-            unidadSelect.appendChild(option);
-        });
-
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      
-    }
-  } */
 })();
 
 
