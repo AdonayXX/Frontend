@@ -1,5 +1,4 @@
 async function loadCitas() {
-    mostrarSpinner();
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
         const citas = response.data;
@@ -201,17 +200,13 @@ async function updateCita(idCita) {
         $('#editarModal').modal('hide');
         setTimeout(function () {
             loadContent('AppointmentsMade.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
         console.error('Error al actualizar la cita:', error);
         showToast("Error", "Error al actualizar la cita.");
     }
-}
-
-function mostrarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'flex';
 }
 
 function ocultarSpinner() {
