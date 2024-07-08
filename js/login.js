@@ -265,7 +265,7 @@ function GuardarDatos() {
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
-            location.reload();
+            
         })
         .catch(error => {
             if (error.response) {
@@ -275,78 +275,24 @@ function GuardarDatos() {
             }
         });
 }
-//Mostrar ultimo acompañante
-async function getUltimate() {
-    try {
-        const response = await axios.get(`${url}api/vales`);
-        const vales = response.data.vales;
-        const ultimo = vales.length - 1;
-        console.log(vales);
-
-        if (ultimo >= 0) {
-            const vale = vales[ultimo];
-            const fechaSolicitud = new Date(vale.Fecha_Solicitud);
-            const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
-            document.getElementById('Up').value = vale.IdUnidadProgramatica;
-            document.getElementById('lugarSa').value = vale.SalidaId;
-            document.getElementById('service').value = vale.ServicioId;
-            document.getElementById('motivo').value = vale.MotivoId;
-            document.getElementById('lugarDes').value = vale.DestinoId;
-            document.getElementById('detalle').value = vale.Detalle;
-            document.getElementById('nameSoli').value = vale.NombreSolicitante;
-            document.getElementById('hora_salida').value = vale.Hora_Salida;
-            document.getElementById('b_date').value = fechaFormateada;
-            getAcompanantes(vale);
-            showToast("Ultimo Vale", "Se cargó el último vale exitosamente");
-        } else {
-            console.error('No hay vales disponibles.');
-        }
-    } catch (error) {
-        console.error('No se cargaron los datos', error);
-    }
-}
-
-function getAcompanantes(vale) {
-    if (vale.Acompanante1 != null) {
-        const acompDiv1 = document.getElementById('acompananteNombre1');
-        const div1 = document.getElementById('acompanante1');
-        div1.style.display = 'block';
-        acompDiv1.value = vale.Acompanante1;
-        acompananteCount++;
-    }
-    if (vale.Acompanante2 != null) {
-        const acompDiv1 = document.getElementById('acompananteNombre2');
-        const div1 = document.getElementById('acompanante2');
-        div1.style.display = 'block';
-        acompDiv1.value = vale.Acompanante2;
-        acompananteCount++;
-    }
-    if (vale.Acompanante3 != null) {
-        const acompDiv1 = document.getElementById('acompananteNombre3');
-        const div1 = document.getElementById('acompanante3');
-        div1.style.display = 'block';
-        acompDiv1.value = vale.Acompanante3;
-        acompananteCount++;
-    }
-    if (vale.Acompanante4 != null) {
-        const acompDiv1 = document.getElementById('acompananteNombre4');
-        const div1 = document.getElementById('acompanante4');
-        div1.style.display = 'block';
-        acompDiv1.value = vale.Acompanante4;
-        acompananteCount++;
-    }
-    if (vale.Acompanante5 != null) {
-        const acompDiv1 = document.getElementById('acompananteNombre5');
-        const div1 = document.getElementById('acompanante5');
-        div1.style.display = 'block';
-        acompDiv1.value = vale.Acompanante5;
-        acompananteCount++;
-    }
-}
-
-document.getElementById('btn-mostrar').addEventListener('click', function (event) {
-    getUltimate();
+//Limpia los campos del modal 
+document.getElementById('btn-mostrar').addEventListener('click', function () {
+    document.getElementById('acompananteNombre1').value = '';
+    document.getElementById('acompananteNombre2').value = '';
+    document.getElementById('acompananteNombre3').value = '';
+    document.getElementById('acompananteNombre4').value = '';
+    document.getElementById('acompananteNombre5').value = '';
+    document.getElementById('Up').value = '';
+    document.getElementById('lugarSa').value = '';
+    document.getElementById('service').value = '';
+    document.getElementById('motivo').value = '';
+    document.getElementById('lugarDes').value = '';
+    document.getElementById('detalle').value = '';
+    document.getElementById('nameSoli').value = '';
+    document.getElementById('hora_salida').value = '';
+    document.getElementById('b_date').value = '';
 });
+
 
 var error;
 //Login
