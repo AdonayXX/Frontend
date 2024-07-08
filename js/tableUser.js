@@ -226,7 +226,6 @@ window.sendUserData = function (button) {
   modal.show();
 
   document.getElementById("formUserEdit").reset();
-  const IdUsuario= user.IdUsuario
   fillUserFields(user);
   const userIdentification = user.Identificacion;
 
@@ -237,37 +236,18 @@ window.sendUserData = function (button) {
   };
 
   function getEditUserData(userIdentification) {
-    const password1 = document.getElementById('userPassword1Edit').value.trim();
-    const password2 = document.getElementById('userPassword2Edit').value.trim();
-
-    if (password1 !== password2) {
-      alert("Las contraseñas no coinciden.");
-      return;
-    }
     const userData = {
-      Identificacion: document.getElementById('userIdentificationEdit').value.trim(),
-      Nombre: document.getElementById('userNameEdit').value.trim(),
-      Apellido1: document.getElementById('userFirstlastnameEdit').value.trim(),
-      Apellido2: document.getElementById('userSecondlastnameEdit').value.trim(),
       Rol: parseInt(document.getElementById('rol').value.trim()),
-      Contrasena: password1,
-      Correo: document.getElementById('userEmailEdit').value.trim(),
       Estado: document.getElementById('userState').value.trim()
     };
-    editUserData(userData,IdUsuario);
+    editUserData(userData,userIdentification);
     console.log(userData);
   }
 
-  async function editUserData(userData,IdUsuario) {
+  async function editUserData(userData,userIdentification) {
     try {
-      const API_URL = `http://localhost:18026/api/usuario//${IdUsuario}`;
+      const API_URL = `http://localhost:18026/api/usuario/identificacion/${userIdentification}`;
       const token = localStorage.getItem('token');
-
-      if (!token) {
-        showToast('Ups!', 'No se encontró el token de autenticación.');
-        return;
-      }
-
       const response = await axios.put(API_URL, userData, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -276,7 +256,6 @@ window.sendUserData = function (button) {
       console.log(response);
       modal.hide();
       showToast('Éxito!', 'Usuario actualizado correctamente');
-    
       setTimeout(function () {
         loadContent('dataTableUsers.html', 'mainContent');
       }, 1000);
@@ -284,6 +263,7 @@ window.sendUserData = function (button) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
         console.error('Error específico:', errorMessage);
+        console.error(error);
         alert(errorMessage);
       } else {
         console.error('Ha ocurrido un problema:', error);
