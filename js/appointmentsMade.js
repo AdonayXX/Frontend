@@ -149,8 +149,7 @@ function editarCita(cita) {
     document.querySelector('#editarFechaCita').value = cita.fechaCita;
     document.querySelector('#editarHora').value = cita.horaCita;
     document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
-    document.querySelector('#editarEstado').value = cita.estadoCita;
-
+    document.querySelector('#tipoSeguro').value = cita.tipoSeguro;
     document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
         event.preventDefault();
         updateCita(cita.idCita);
@@ -183,13 +182,15 @@ async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;
     const horaCita = document.querySelector('#editarHora').value;
     const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
-    const estadoCita = document.querySelector('#editarEstado').value;
+    // const estadoCita = document.querySelector('#editarEstado').value;
+    const tipoSeguro = document.querySelector("#tipoSeguro").value;
 
     const updatedCitas = {
         idUbicacionDestino: idUbicacionDestino,
-        estadoCita: estadoCita,
+        // estadoCita: estadoCita,
         fechaCita: fechaCita,
         horaCita: horaCita,
+        tipoSeguro: tipoSeguro
     };
 
     console.log('Datos enviados al backend:', updatedCitas);
