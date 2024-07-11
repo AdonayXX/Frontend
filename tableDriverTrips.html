@@ -36,20 +36,6 @@
             <input type="date" id="fecha" class="form-control">
         </div>
     </div>
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="kilometraje" class="form-label">Kilometraje Final</label>
-            <input type="text" id="kilometraje" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label for="horasExtras" class="form-label">Horas Extras</label>
-            <textarea class="form-control" name="horasExtras" id="horasExtras"></textarea>
-        </div>
-        <div class="col-md-4">
-            <label for="viaticos" class="form-label">Viáticos</label>
-            <input type="text" id="viaticos" class="form-control">
-        </div>
-    </div>
     <div class="table-responsive mt-2">
         <table class="table table-light table-striped table-hover table-bordered" id="tablePatient">
             <thead>
@@ -70,10 +56,13 @@
     <div class="row text-end">
         <div class="col-md-12 mt-auto col-sm-12">
             <button class="btn btn-primary" onclick="iniciarViaje()">Iniciar Viaje</button>
-            <button class="btn btn-danger" onclick="finalizarViaje()">Finalizar Viaje</button>
+            <button class="btn btn-danger" id="finalizarViajeBtn" data-bs-toggle="modal"
+                data-bs-target="#finalizarViajeModal">Finalizar Viaje</button>
         </div>
     </div>
 </div>
+
+<!-- Modal de Acompañantes -->
 <div class="modal fade" id="acompModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -101,4 +90,62 @@
         </div>
     </div>
 </div>
-<div data-script="js/tableDriverTrips.js"></div>
+
+<!-- Modal de Finalizar Viaje -->
+<div class="modal fade" id="finalizarViajeModal" tabindex="-1" aria-labelledby="finalizarViajeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="finalizarViajeModalLabel">Finalizar Viaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h5>¿Está seguro de finalizar el viaje?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <!-- Cambia el onclick para abrir el segundo modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#confirmarFinalizarModal">Finalizar Viaje</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de Confirmación Final de Viaje -->
+<!-- Modal de Confirmación Final de Viaje -->
+<div class="modal fade" id="confirmarFinalizarModal" tabindex="-1" aria-labelledby="confirmarFinalizarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid" alt="Logo CCSS" width="50" height="50">
+                <h5 class="modal-title ms-2" id="confirmarFinalizarModalLabel">Por favor confirme el viaje.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el viaje.</p>
+                <form id="finalizarViajeForm">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="kilometraje" class="form-label">Kilometraje Final</label>
+                            <input type="text" id="kilometraje" class="form-control" placeholder="Kilometraje final">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="horasExtras" class="form-label">Horas Extras</label>
+                            <textarea class="form-control" name="horasExtras" id="horasExtras" placeholder="Horas extras realizadas"></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="viaticos" class="form-label">Viáticos</label>
+                            <input type="text" id="viaticos" class="form-control" placeholder="Viáticos incurridos">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarFinalizarViaje()">Finalizar Viaje</button>
+            </div>
+        </div>
+    </div>
+</div>

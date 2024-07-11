@@ -1,5 +1,6 @@
   getChoferes();
 
+    document.getElementById('searchDrivers').addEventListener('keyup', debounce(handleSearchDrivers, 300));
     async function getChoferes() {
         try {
             const API_URL = 'https://backend-transporteccss.onrender.com/api/chofer';
@@ -58,4 +59,23 @@
             tableBody.innerHTML += row;
         });
     }
+    function debounce(func, wait) { //Esto es para que no se haga una búsqueda por cada letra que se escribe
+        let timeout;
+        return function () {
+          const context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+      }
 
+    function handleSearchDrivers() {
+        let input = document.getElementById('searchDrivers').value.toLowerCase();
+        let rows = Array.from(document.getElementById('driverTable').getElementsByTagName('tr'));
+    
+        rows.forEach((row, index) => {
+          if (index === 0) return;
+          let cells = Array.from(row.getElementsByTagName('td'));
+          let match = cells.some(cell => cell.innerText.toLowerCase().includes(input));
+          row.style.display = match ? '' : 'none';
+        });
+      }
