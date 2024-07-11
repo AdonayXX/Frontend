@@ -62,4 +62,52 @@ function openAccomp(acompanante1, acompanante2) {
     }
 }
 
+async function cargarUnidades() {
+    try {
+      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades';
+      const respuesta = await axios.get(URL_UNIDADES);
+      const unidades = respuesta.data.unidades;
+      const selectBody = document.querySelector('#unidades');
+      const choferesSelect = document.querySelector('#choferes');
+
+      selectBody.innerHTML = '';
+
+      const opcionDefault = document.createElement('option');
+      opcionDefault.textContent = 'Seleccionar Unidad...';
+      opcionDefault.selected = true;
+      opcionDefault.disabled = false;
+      selectBody.appendChild(opcionDefault);
+
+      unidades.forEach(unidad => {
+        const option = document.createElement('option');
+        option.value = unidad.id;
+        option.dataset.choferId = unidad.idChofer;
+        option.dataset.choferNombre = `${unidad.nombreChofer} ${unidad.apellido1Chofer}`;
+        option.textContent = `Unidad ${unidad.numeroUnidad}`;
+        selectBody.appendChild(option);
+      });
+
+      choferesSelect.innerHTML = opcionDefault.outerHTML;
+    } catch (error) {
+      console.error('Error al obtener las unidades:', error);
+    }
+  }
+
+  function actualizarChofer() {
+    const selectUnidades = document.getElementById('unidades');
+    const choferesSelect = document.getElementById('choferes');
+    const unidadSeleccionada = selectUnidades.options[selectUnidades.selectedIndex];
+
+    if (unidadSeleccionada && unidadSeleccionada.dataset.choferId) {
+      const choferOption = document.createElement('option');
+      choferOption.value = unidadSeleccionada.dataset.choferId;
+      choferOption.textContent = unidadSeleccionada.dataset.choferNombre;
+      choferesSelect.innerHTML = '';
+      choferesSelect.appendChild(choferOption);
+    } else {
+      choferesSelect.innerHTML = '<option selected>Seleccionar Chófer...</option>';
+    }
+  }
+
+
 obtenerViajes();
