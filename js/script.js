@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-     //Verificar token
-   /*  const token = localStorage.getItem('token');
-    if (token) {
-        setupAutoLogout(token);
-        const rolUser=  tokenrol(token);
-        getCatForm(rolUser);
-        
-
-    }  */
+    //Verificar token
+    /*  const token = localStorage.getItem('token');
+     if (token) {
+         setupAutoLogout(token);
+         const rolUser=  tokenrol(token);
+         getCatForm(rolUser);
+         
+ 
+     }  */
     //Cerrar Sesión
-    document.querySelector('#logoutLink').addEventListener('click', ()=> {
-        logout(); 
+    document.querySelector('#logoutLink').addEventListener('click', () => {
+        logout();
     });
     loadToastTemplate();
     loadModalTemplate();
@@ -18,43 +18,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // loadContent('home.html', 'mainContent');
 
-    document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
-    document.getElementById('cancelar').addEventListener('click', cancelar);
-    document.getElementById('actualizar').addEventListener('click', actualizar);
-    document.getElementById('')
-
     loadContent('home.html', 'mainContent');
 
 });
 
 
-
-function calcularDuracion() {
-    const horaInicio = document.getElementById('horaInicio').value;
-    const horaFin = document.getElementById('horaFin').value;
-    const inicio = new Date();
-    const fin = new Date();
-    const [horasInicio, minutosInicio] = horaInicio.split(':').map(Number);
-    const [horasFin, minutosFin] = horaFin.split(':').map(Number);
-
-    inicio.setHours(horasInicio, minutosInicio, 0);
-    fin.setHours(horasFin, minutosFin, 0);
-
-    const diferencia = (fin - inicio) / 1000 / 60;
-    const horas = Math.floor(diferencia / 60);
-    const minutos = diferencia % 60;
-
-    showToast('Duración del viaje', `Duración del viaje: ${horas} horas y ${minutos} minutos.`);
-}
-
-function getCurrentTimeFormatted() {
-    const ahora = new Date();
-    const horas = ahora.getHours();
-    const minutos = ahora.getMinutes();
-    return `${horas < 10 ? '0' + horas : horas}:${minutos < 10 ? '0' + minutos : minutos}`;
-}
 
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
@@ -122,7 +90,7 @@ function showModal(title, message, confirmCallback) {
 function decodeToken(token) {
     try {
         const decodedToken = jwt_decode(token);
-        return decodedToken.exp; 
+        return decodedToken.exp;
     } catch (error) {
         console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
@@ -138,7 +106,7 @@ function setupAutoLogout(token) {
 
             setTimeout(() => {
                 localStorage.setItem('sessionExpired', 'true');
-                
+
                 alert('Tu sesión ha expirado. Serás redirigido al login.');
                 localStorage.removeItem('token');
                 history.replaceState(null, '', 'login.html');
@@ -174,59 +142,58 @@ function tokenrol(token) {
 async function getCatForm(rolUser) {
     console.log(rolUser);
     try {
-      const Api_Url = 'http://localhost:18026/';
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const rolesFr = response.data.roles;
-      const Rol = rolUser.Rol;
-      console.log(response.data);
-      obtenerFormulariosPorRol(rolesFr, Rol);
+        const Api_Url = 'http://localhost:18026/';
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const rolesFr = response.data.roles;
+        const Rol = rolUser.Rol;
+        console.log(response.data);
+        obtenerFormulariosPorRol(rolesFr, Rol);
     } catch (error) {
-      console.error('Error al obtener datos :', error);
-      if (error.response && error.response.status === 400) {
-        const errorMessage = error.response.data.error;
-        showToast('Error','Inicie Sesión de nuevo');
-      }  else {
-        console.error('Ha ocurrido un problema:', error);
-        showToast('Atención','No tienes permisos, contacte al administrador.');
-        const allItems = document.querySelectorAll('.items');
+        console.error('Error al obtener datos :', error);
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            showToast('Error', 'Inicie Sesión de nuevo');
+        } else {
+            console.error('Ha ocurrido un problema:', error);
+            showToast('Atención', 'No tienes permisos, contacte al administrador.');
+            const allItems = document.querySelectorAll('.items');
+            allItems.forEach(item => {
+                if (item.classList.contains('no-hide')) {
+                    item.classList.remove('hidden');
+                }
+            });
+
+        }
+    }
+}
+
+function obtenerFormulariosPorRol(roles, rolBuscado) {
+    const formularios = roles
+        .filter(role => role.Rol === rolBuscado)
+        .map(role => role.Formulario);
+    console.log(formularios);
+    const allItems = document.querySelectorAll('.items');
+    if (formularios.length > 0) {
         allItems.forEach(item => {
             if (item.classList.contains('no-hide')) {
                 item.classList.remove('hidden');
             }
         });
 
-      } 
+        formularios.forEach(formulario => {
+            const item = document.getElementById(formulario.toString());
+            if (item) {
+                item.classList.remove('hidden');
+            }
+        });
+
     }
-  }
 
-  function obtenerFormulariosPorRol(roles, rolBuscado) {
-    const formularios = roles
-        .filter(role => role.Rol === rolBuscado)
-        .map(role => role.Formulario);
-        console.log(formularios);
-        const allItems = document.querySelectorAll('.items');
-        if (formularios.length > 0){
-            allItems.forEach(item => {
-                if (item.classList.contains('no-hide')) {
-                    item.classList.remove('hidden');
-                }
-            });
-        
-            formularios.forEach(formulario => {
-                const item = document.getElementById(formulario.toString());
-                if (item) {
-                    item.classList.remove('hidden');
-                }
-            });
-
-        }
-       
 }
 
 
- 
