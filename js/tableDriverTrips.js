@@ -62,4 +62,6 @@ function openAccomp(acompanante1, acompanante2) {
     }
 }
 
+
+
 obtenerViajes();
