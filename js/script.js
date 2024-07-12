@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //Verificar token
-    /*  const token = localStorage.getItem('token');
+    //Verificar token Descomentar para probar
+     const token = localStorage.getItem('token');
      if (token) {
          setupAutoLogout(token);
          const rolUser=  tokenrol(token);
          getCatForm(rolUser);
-         
- 
-     }  */
+         const userInfoSpan =   infoUser();
+         navbarUsername(userInfoSpan.usuario);
+     } 
     //Cerrar Sesión
     document.querySelector('#logoutLink').addEventListener('click', () => {
         logout();
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // loadContent('home.html', 'mainContent');
 
-    loadContent('home.html', 'mainContent');
+ /*    loadContent('home.html', 'mainContent'); */
 
 });
 
@@ -140,7 +140,6 @@ function tokenrol(token) {
     }
 }
 async function getCatForm(rolUser) {
-    console.log(rolUser);
     try {
         const Api_Url = 'http://localhost:18026/';
         const token = localStorage.getItem('token');
@@ -151,7 +150,6 @@ async function getCatForm(rolUser) {
         });
         const rolesFr = response.data.roles;
         const Rol = rolUser.Rol;
-        console.log(response.data);
         obtenerFormulariosPorRol(rolesFr, Rol);
     } catch (error) {
         console.error('Error al obtener datos :', error);
@@ -176,7 +174,7 @@ function obtenerFormulariosPorRol(roles, rolBuscado) {
     const formularios = roles
         .filter(role => role.Rol === rolBuscado)
         .map(role => role.Formulario);
-    console.log(formularios);
+    
     const allItems = document.querySelectorAll('.items');
     if (formularios.length > 0) {
         allItems.forEach(item => {
@@ -194,6 +192,31 @@ function obtenerFormulariosPorRol(roles, rolBuscado) {
 
     }
 
+}
+function infoUser(){
+    try {
+        const token = localStorage.getItem('token');
+        const decodedToken = jwt_decode(token);
+        return (decodedToken);
+    } catch (error) {
+        console.error(error);
+        showToast('Error','Ocurrio un problema al obtener loss datos del usuario')
+        
+    }
+
+}
+
+function navbarUsername(usuario){
+try {
+
+     const userNameSpan = document.querySelector('#user-name');
+     userNameSpan.textContent='';
+     const nombreCompleto = `${usuario.Nombre} ${usuario.Apellido1} ${usuario.Apellido2}`   
+     userNameSpan.textContent = nombreCompleto;
+} catch (error) {
+    console.error(error);
+    
+}
 }
 
 
