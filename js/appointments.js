@@ -1,6 +1,6 @@
 
 getRutas();
-getEspecialidades();
+getEspecialidadesByDestino();
 applyMaskBasedOnType();
 
 
@@ -273,45 +273,54 @@ await guardarCita();
 
 
 });
-
-
 function getRutas() {
     const selectDestino = document.getElementById('destino');
 
-    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
+    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad')
         .then(response => {
-            const destinos = response.data;
-            destinos.forEach(destino => {
+            const rutas = response.data;
+            rutas.forEach(ruta => {
                 const option = document.createElement('option');
-                option.value = destino.IdRuta;
-                option.textContent = destino.Descripcion;
+                option.value = ruta.IdRuta;
+                option.textContent = ruta.DescripcionRuta;
                 selectDestino.appendChild(option);
             });
         })
         .catch(error => {
             console.error('Error fetching destinos:', error);
         });
+}
 
+function getEspecialidadesByDestino(IdRuta) {
+    const selectEspecialidad = document.getElementById('especialidad');
+    selectEspecialidad.innerHTML = ''; // Limpiar las opciones existentes
 
-    }
+    const defaultOption = document.createElement('option');
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Seleccione una especialidad --';
+    selectEspecialidad.appendChild(defaultOption);
 
-    function getEspecialidades() {
-        const selectEspecialidad = document.getElementById('especialidad');
-
-        axios.get('https://backend-transporteccss.onrender.com/api/especialidad')
-            .then(response => {
-                const especialidades = response.data.Especialidad;
-                especialidades.forEach(especialidad => {
-                    const option = document.createElement('option');
-                    option.value = especialidad.idEspecialidad;
-                    option.textContent = especialidad.Especialidad;
-                    selectEspecialidad.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching especialidades:', error);
+    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`)
+        .then(response => {
+            const especialidades = response.data;
+            especialidades.forEach(especialidad => {
+                const option = document.createElement('option');
+                option.value = especialidad.idEspecialidad;
+                option.textContent = especialidad.Especialidad;
+                selectEspecialidad.appendChild(option);
             });
-    }
+        })
+        .catch(error => {
+            console.error('Error fetching especialidades:', error);
+        });
+}
+
+document.getElementById('destino').addEventListener('change', function () {
+    const IdRuta = this.value;
+    getEspecialidadesByDestino(IdRuta);
+});
 
 
     function applyIdentificationMask(elementId, mask) {
