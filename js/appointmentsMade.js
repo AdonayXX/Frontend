@@ -1,5 +1,4 @@
 async function loadCitas() {
-    mostrarSpinner();
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
         const citas = response.data;
@@ -149,8 +148,7 @@ function editarCita(cita) {
     document.querySelector('#editarFechaCita').value = cita.fechaCita;
     document.querySelector('#editarHora').value = cita.horaCita;
     document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
-    document.querySelector('#editarEstado').value = cita.estadoCita;
-
+    document.querySelector('#tipoSeguro').value = cita.tipoSeguro;
     document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
         event.preventDefault();
         updateCita(cita.idCita);
@@ -183,13 +181,15 @@ async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;
     const horaCita = document.querySelector('#editarHora').value;
     const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
-    const estadoCita = document.querySelector('#editarEstado').value;
+    // const estadoCita = document.querySelector('#editarEstado').value;
+    const tipoSeguro = document.querySelector("#tipoSeguro").value;
 
     const updatedCitas = {
         idUbicacionDestino: idUbicacionDestino,
-        estadoCita: estadoCita,
+        // estadoCita: estadoCita,
         fechaCita: fechaCita,
         horaCita: horaCita,
+        tipoSeguro: tipoSeguro
     };
 
     console.log('Datos enviados al backend:', updatedCitas);
@@ -200,17 +200,13 @@ async function updateCita(idCita) {
         $('#editarModal').modal('hide');
         setTimeout(function () {
             loadContent('AppointmentsMade.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
         console.error('Error al actualizar la cita:', error);
         showToast("Error", "Error al actualizar la cita.");
     }
-}
-
-function mostrarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'flex';
 }
 
 function ocultarSpinner() {

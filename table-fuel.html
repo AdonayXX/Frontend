@@ -2,14 +2,14 @@
     <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
         <div class="col text-center">
             <br>
-            <h1 class="text-wrap">Catálogo de Unidades</h1>
+            <h1 class="text-wrap">Registro de Combustible</h1>
         </div>
 
         <div class="col-sm-3 search-bar input-group m-2">
             <span class="input-group-text" id="lupa">
                 <i class="bi bi-search"></i>
             </span>
-            <input type="text" class="form-control" placeholder="Buscar..." id="searchUnit" aria-describedby="lupa">
+            <input type="text" class="form-control" placeholder="Buscar..." id="searchFuel" aria-describedby="lupa">
         </div>
     </div>
     <div class="row mt-3">
@@ -29,24 +29,24 @@
         </div>
     </div>
     <div class="table-responsive-xxl mt-3">
-        <table id="unitTable" class="table table-light table-striped table-hover table-bordered mt-3 text-center"
+        <table id="fuelTable" class="table table-light table-striped table-hover table-bordered mt-3 text-center"
             style="cursor: pointer;">
             <thead class="text-center" style="background-color: #094079; color: white;">
                 <tr>
-                    <th class="text-center">Número de Unidad</th>
-                    <th class="text-center">Capacidad</th>
-                    <th class="text-center">Tipo de Recurso</th>
-                    <th class="text-center">Kilometraje Inicial</th>
-                    <th class="text-center">Kilometraje Actual</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Fecha de Dekra</th>
-                    <th class="text-center">Chófer Designado</th>
+                    <th class="text-center">Chofer</th>
+                    <th class="text-center">Unidad</th>
+                    <th class="text-center">Kilometraje</th>
+                    <th class="text-center">Litros</th>
+                    <th class="text-center">Monto (₡)</th>
+                    <th class="text-center">Lugar</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Hora</th>
                 </tr>
             </thead>
-            <tbody id="unitTableBody">
-                <!-- Aquí se cargan las unidades registradas -->
+            <tbody id="fuelTableBody">
+                <!-- Aquí se cargan los registros de combustible -->
             </tbody>
         </table>
     </div>
 </div>
-<div data-script="js/tableUnits.js"></div>
+<div data-script="js/table-fuel.js"></div>

@@ -22,19 +22,20 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" onclick="toggleSidebar()">
-                <i class="bi bi-list" style="font-size: 2rem;"></i>
+            <a class="navbar-brand" href="#" onclick="toggleSidebar()">
+                <i class="bi bi-list" style="font-size: 2rem; color: white;"></i>
             </a>
-            <a class="navbar-brand" data-toggle="tooltip" data-placement="top" title="Inicio">
-                <a href="#" onclick="loadContent('home.html', 'mainContent')" style="color: white;">
-                    <i class="bi bi-house-door" style="font-size: 2rem;"></i>
-                </a>
+            <a class="navbar-brand" href="#" onclick="loadContent('home.html', 'mainContent')" data-toggle="tooltip"
+                data-placement="top" title="Inicio" style="color: white;">
+                <i class="bi bi-house-door" style="font-size: 2rem;"></i>
             </a>
-            <img class="ms-auto" src="./img/LogoCCSS.png" alt="" style="height: 50px;">
-            <a href="login.html"><i class="bi bi-person login" style="font-size: 2rem; color: white;"></i></a>
+            <img class="ms-auto me-3" src="./img/LogoCCSS.png" alt="Logo" style="height: 50px;">
+            <span id="user-name" style="color: white; margin-right: 20px; ">Usuario estático</span>
+            <a href="login.html" style="color: white;">
+                <i class="bi bi-person login" style="font-size: 2rem;"></i>
+            </a>
         </div>
     </nav>
-    
 
     <div class="sidebar" style="height: 100vh; overflow-y: auto;">
         <nav class="navbar navbar-expand-lg">
@@ -59,58 +60,71 @@
             <div class="container-fluid">
                 <div class="row" style="padding-bottom: 50px;">
                     <div class="col-6 col-sm-6 col-lg-12">
-                        <a id="1" class="items hidden" href="#"
-                            onclick="loadContent('formPatient.html', 'mainContent')"><i class="bi bi-person-add"
-                                style="font-size: 1.5rem;"></i> Pacientes</a>
-                        <a id="2" class="items hidden" href="#"
-                            onclick="loadContent('formdriver.html', 'mainContent')"><i class="bi bi-person-plus"
-                                style="font-size: 1.5rem;"></i> Choferes</a>
+
                         <a id="3" class="items hidden" href="#"
                             onclick="loadContent('formAppointment.html', 'mainContent')"><i class="bi bi-calendar-event"
                                 style="font-size: 1.5rem;"></i> Citas</a>
-                        <a id="4" class="items hidden" href="#" onclick="loadContent('units.html', 'mainContent')"><i
-                                class="bi bi-truck-front" style="font-size: 1.5rem;"></i> Unidades</a>
-                        <a id="5" class="items hidden" href="#" onclick="loadContent('formUbi.html', 'mainContent')"><i
-                                class="bi bi-geo-alt" style="font-size: 1.5rem;"></i> Ubicaciones</a>
-                        <a id="6" class="items hidden" href="#"
-                            onclick="loadContent('dataTablePatient.html', 'mainContent')"><i
-                                class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Pacientes</a>
-                        <a id="19" class="items hidden" href="#"
-                                onclick="loadContent('formfuel.html', 'mainContent')"><i class="bi bi-fuel-pump"></i> Combustible</a>
-                        <a id="7" class="items hidden" href="#"
-                            onclick="loadContent('tableTrips.html', 'mainContent')"><i class="bi bi-map"
-                                style="font-size: 1.5rem;"></i> Viajes</a>
-                        <a id="8" class="items hidden" href="#"
-                            onclick="loadContent('AppointmentsMade.html', 'mainContent')">
-                            <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Citas
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-6 col-lg-12">
                         <a id="9" class="items hidden" href="#"
                             onclick="loadContent('dataTableRequest.html', 'mainContent')"><i class="bi bi-receipt"
                                 style="font-size: 1.5rem;"></i> Vales</a>
-                        <a id="10" class="items hidden" href="#"><i class="bi bi-file-earmark-text"
-                                style="font-size: 1.5rem;"></i> Reportes</a>
-                        <a id="11" class="items hidden" href="#" onclick="loadContent('dataTableMaintenance.html', 'mainContent')"><i class="bi bi-tools" style="font-size: 1.5rem;"
-                            ></i>
-                            Mantenimiento</a>
-                        <a id="12" class="items hidden" href="#"><i class="bi bi-view-stacked"
-                                style="font-size: 1.5rem;"></i> Dashboard</a>
+                        <a id="7" class="items hidden" href="#"
+                            onclick="loadContent('tableTrips.html', 'mainContent')"><i class="bi bi-map"
+                                style="font-size: 1.5rem;"></i> Viajes</a>
+                        <a id="2" class="items hidden" href="#"
+                            onclick="loadContent('formdriver.html', 'mainContent')"><i class="bi bi-person-plus"
+                                style="font-size: 1.5rem;"></i> Choferes</a>
+                        <a id="4" class="items hidden" href="#" onclick="loadContent('units.html', 'mainContent')"><i
+                                class="bi bi-truck-front" style="font-size: 1.5rem;"></i> Unidades</a>
+                        <a id="1" class="items hidden" href="#"
+                            onclick="loadContent('formPatient.html', 'mainContent')"><i class="bi bi-person-add"
+                                style="font-size: 1.5rem;"></i> Pacientes</a>
+                        <a id="19" class="items hidden" href="#"
+                            onclick="loadContent('formfuel.html', 'mainContent')"><i class="bi bi-fuel-pump"></i>
+                            Combustible</a>
+                        <a id="5" class="items hidden" href="#" onclick="loadContent('formUbi.html', 'mainContent')"><i
+                                class="bi bi-geo-alt" style="font-size: 1.5rem;"></i> Ubicaciones</a>
                         <a id="13" class="items hidden" href="#"
                             onclick="loadContent('tableDriverTrips.html', 'mainContent')"><i class="bi bi-pin-map"
                                 style="font-size: 1.5rem;"></i> Viajes-Chofer</a>
-                         <a id="18" class="items hidden" href="#" onclick="loadContent('Table-driver.html', 'mainContent')"><i
-                                    class="bi bi-person-plus" style="font-size: 1.5rem;"></i> Catalogo Chofer</a>
+
+                        <a id="18" class="items hidden" href="#"
+                            onclick="loadContent('Table-driver.html', 'mainContent')"><i class="bi bi-person-plus"
+                                style="font-size: 1.5rem;"></i> Catalogo Chofer</a>
+
+                        <a id="19" class="items hidden" href="#"
+                            onclick="loadContent('Table-fuel.html', 'mainContent')"><i class="bi bi-person-plus"
+                                style="font-size: 1.5rem;"></i> Catalogo Combustible</a>
+
                         <a class="items hidden" id="18" href="#"
                             onclick="loadContent('tableDriverVales.html', 'mainContent')"><i class="bi bi-pin-map-fill"
                                 style="font-size: 1.5rem;"></i> Viajes Vales-Chofer</a>
-                        <a id="17" class="items hidden" href="#"
-                            onclick="loadContent('tableUnits.html', 'mainContent')"><i class="bi bi-table"
-                                style="font-size: 1.5rem;"></i> Tabla-Unidades</a>
+                    </div>
+
+                    <hr class="d-none d-sm-block" style="color: white; margin-top: 20px;">
+
+                    <div class="col-6 col-sm-6 col-md-s col-lg-12">
+                        <a id="10" class="items hidden" href="#"><i class="bi bi-file-earmark-text"
+                                style="font-size: 1.5rem;"></i> Reportes</a>
+                        <a id="12" class="items hidden" href="#"><i class="bi bi-view-stacked"
+                                style="font-size: 1.5rem;"></i> Dashboard</a>
+                        <a id="11" class="items hidden" href="#"
+                            onclick="loadContent('dataTableMaintenance.html', 'mainContent')"><i class="bi bi-tools"
+                                style="font-size: 1.5rem;"></i> Mantenimiento</a>
+                        <a id="8" class="items hidden" href="#"
+                            onclick="loadContent('AppointmentsMade.html', 'mainContent')">
+                            <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Citas</a>
                         <a id="14" class="items hidden" href="#"
                             onclick="loadContent('dataTable.html', 'mainContent')"><i class="bi bi-table"
-                                style="font-size: 1.5rem;"></i> Tabla-Viajes</a>
-
+                                style="font-size: 1.5rem;"></i> Catálogo-Viajes</a>
+                        <a id="18" class="items hidden" href="#"
+                            onclick="loadContent('Table-driver.html', 'mainContent')"><i class="bi bi-person-plus"
+                                style="font-size: 1.5rem;"></i> Catálogo-Chofer</a>
+                        <a id="17" class="items hidden" href="#"
+                            onclick="loadContent('tableUnits.html', 'mainContent')"><i class="bi bi-table"
+                                style="font-size: 1.5rem;"></i> Catálogo-Unidades</a>
+                        <a id="6" class="items hidden" href="#"
+                            onclick="loadContent('dataTablePatient.html', 'mainContent')"><i
+                                class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Pacientes</a>
                     </div>
                     <hr style="color: white; margin-top: 20px;">
                     <div class="col-12">
