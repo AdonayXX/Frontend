@@ -20,6 +20,11 @@ document.getElementById('update-unit-button').addEventListener('click', function
     putUnidad();
 });
 
+document.getElementById('delete-unit-button').addEventListener('click', function (event) {
+    event.preventDefault();
+    deleteUnidad();
+});
+
 document.getElementById('clearFormButton').addEventListener('click', function () {
     clearForm();
 });
@@ -38,6 +43,7 @@ function clearForm() {
     document.getElementById('clearFormButton').style.display = 'none';
     document.getElementById('update-unit-button').disabled = true;
     document.getElementById('submit-unit-button').disabled = false;
+    document.getElementById('delete-unit-button').disabled = true
     document.getElementById('capacityBeds').disabled = false;
     getChoferesSelect();
     getTiposRecursoSelect();
@@ -177,7 +183,7 @@ async function getTiposUnidad() {
 }
 
 async function getUnidad() {
-    const unitNumber = document.getElementById('unitNumber').value;
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
 
     if (unitNumber === '') {
         showToast('Error', 'El número de unidad no puede estar vacío.');
@@ -189,36 +195,42 @@ async function getUnidad() {
         const unidad = response.data.unidades;
 
         if (unidad.length === 0) {
-            showToast('Error', 'La unidad con el número ' + unitNumber + ' no se encuentra registrada.');
+            showToast('Error', 'La unidad ' + unitNumber + ' no se encuentra registrada.');
             return;
         }
 
         unidad.forEach(unidad => {
-            document.getElementById('unitNumber').value = unidad.numeroUnidad;
-            document.getElementById('unitType').value = unidad.idTipoUnidad;
-            document.getElementById('resourceType').value = unidad.idTipoRecurso;
-            document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
-            document.getElementById('currentMileage').value = unidad.kilometrajeActual;
-            document.getElementById('status').value = unidad.idEstado;
-            document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-            document.getElementById('maintenanceMileage').value = unidad.ultimoMantenimientoKilometraje;
-            document.getElementById('assignedDriver').value = unidad.choferDesignado;
-            document.getElementById('capacityChairs').value = unidad.capacidadSillas;
-            document.getElementById('capacityBeds').value = unidad.capacidadCamas;
-            document.getElementById('totalCapacity').value = unidad.capacidadTotal;
-            document.getElementById('advance').value = unidad.adelanto;
-            document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
-        });
+            if (unidad.idEstado !== 5) {
+                document.getElementById('unitNumber').value = unidad.numeroUnidad;
+                document.getElementById('unitType').value = unidad.idTipoUnidad;
+                document.getElementById('resourceType').value = unidad.idTipoRecurso;
+                document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
+                document.getElementById('currentMileage').value = unidad.kilometrajeActual;
+                document.getElementById('status').value = unidad.idEstado;
+                document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+                document.getElementById('maintenanceMileage').value = unidad.ultimoMantenimientoKilometraje;
+                document.getElementById('assignedDriver').value = unidad.choferDesignado;
+                document.getElementById('capacityChairs').value = unidad.capacidadSillas;
+                document.getElementById('capacityBeds').value = unidad.capacidadCamas;
+                document.getElementById('totalCapacity').value = unidad.capacidadTotal;
+                document.getElementById('advance').value = unidad.adelanto;
+                document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
 
-        document.getElementById('unitNumber').disabled = true;
-        document.getElementById('unitType').disabled = true;
-        document.getElementById('resourceType').disabled = true;
-        document.getElementById('initialMileage').disabled = true;
-        const event = new Event('change');
-        document.getElementById('status').dispatchEvent(event);
-        document.getElementById('clearFormButton').style.display = 'inline-block';
-        document.getElementById('update-unit-button').disabled = false;
-        document.getElementById('submit-unit-button').disabled = true;
+                document.getElementById('unitNumber').disabled = true;
+                document.getElementById('unitType').disabled = true;
+                document.getElementById('resourceType').disabled = true;
+                document.getElementById('initialMileage').disabled = true;
+                const event = new Event('change');
+                document.getElementById('status').dispatchEvent(event);
+                document.getElementById('clearFormButton').style.display = 'inline-block';
+                document.getElementById('update-unit-button').disabled = false;
+                document.getElementById('delete-unit-button').disabled = false
+                document.getElementById('submit-unit-button').disabled = true;
+            } else {
+                showToast('Error', 'La unidad ' + unitNumber + ' no se encuentra registrada.');
+                return;
+            }
+        });
 
     } catch (error) {
         console.error('Error al obtener la unidad:', error);
@@ -457,6 +469,64 @@ async function putUnidad() {
             showToast('Error', 'Error al actualizar la unidad.');
         });
 }
+
+async function deleteUnidad() {
+    const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    const unitType = parseInt(document.getElementById('unitType').value, 10);
+    const resourceType = parseInt(document.getElementById('resourceType').value, 10);
+    const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
+    const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
+    const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
+    const driver = parseInt(document.getElementById('assignedDriver').value, 10);
+    const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
+    const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
+    const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
+    const advance = parseInt(document.getElementById('advance').value, 10);
+    const periodicity = parseInt(document.getElementById('periodicity').value, 10);
+    const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
+
+    const confirmationMessage = document.getElementById('deleteConfirmationMessage');
+    confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad ${unitNumber}?`;
+
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteUnitModal'));
+    deleteModal.show();
+
+    const unidadData = {
+        idTipoUnidad: unitType,
+        idTipoRecurso: resourceType,
+        tipoFrecuenciaCambio: null,
+        ultimoMantenimientoFecha: null,
+        ultimoMantenimientoKilometraje: maintenanceMileage,
+        numeroUnidad: unitNumber,
+        choferDesignado: driver,
+        fechaDekra: dekraDate,
+        capacidadTotal: totalCapacity,
+        capacidadCamas: capacityBeds,
+        capacidadSillas: capacityChairs,
+        kilometrajeInicial: initialMileage,
+        kilometrajeActual: currentMileage,
+        adelanto: advance,
+        idEstado: 5,
+        valorFrecuenciaC: periodicity,
+    };
+
+    document.getElementById('confirmDelete').onclick = function () {
+        axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
+            .then(response => {
+                clearForm();
+                console.log('Unidad eliminada:', response.data);
+                showToast('Eliminación exitosa', 'La unidad ' + unitNumber + ' se ha eliminado exitosamente.');
+                document.getElementById('unitsForm').reset();
+            })
+            .catch(error => {
+                console.error('Error al eliminar la unidad:', error);
+                showToast('Error', 'Error al eliminar la unidad.');
+            });
+
+        deleteModal.hide();
+    };
+}
+
 
 getTiposUnidad();
 getTiposRecursoSelect();
