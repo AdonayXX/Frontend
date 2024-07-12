@@ -7,6 +7,11 @@
 </head>
 
 <body>
+    <div id="spinnerContainer" class="text-center mt-5">
+        <div class="spinner-border mt-5" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Registro de Unidades</h1>
         <form id="unitsForm" class="bg-light p-4 border rounded-3">
@@ -112,18 +117,14 @@
                     <button type="submit" id="submit-unit-button" class="btn btn-primary text-white"
                         style="background-color: #094079; border-color: #094079; margin: 5px;"
                         onmouseover="this.style.backgroundColor='#073c64';"
-                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
+                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i>
+                        Guardar</button>
                     <button type="submit" id="update-unit-button" class="btn btn-primary text-white"
                         style="background-color: #094079; margin: 5px;"
                         onmouseover="this.style.backgroundColor='#073c64';"
                         onmouseout="this.style.backgroundColor='#094079';" disabled><i
                             class="bi bi-arrow-clockwise"></i>
                         Actualizar</button>
-                    <button id="loadUnit" class="btn btn-primary text-white"
-                        style="background-color: #094079; margin: 5px;"
-                        onmouseover="this.style.backgroundColor='#073c64';"
-                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-down"></i> Cargar
-                        Datos</button>
                     <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
                             class="bi bi-trash"></i> Eliminar</button>
                 </div>
