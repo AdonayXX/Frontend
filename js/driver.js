@@ -103,7 +103,6 @@ async function getChofer(cedula) {
     try {
         const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`);
         const choferes = response.data.chofer;
-        console.log(response.data.chofer);
 
         const choferEncontrado = choferes[0]; // como la cedula es unica, solo se espera un chofer	
         if (choferEncontrado) {
