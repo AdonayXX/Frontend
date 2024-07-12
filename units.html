@@ -73,10 +73,6 @@
                         readonly>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="dekraDate"><i class="bi bi-calendar-event"></i> Fecha de DEKRA</label>
-                    <input type="date" class="form-control" id="dekraDate" required>
-                </div>
-                <div class="col-md-4 mb-3">
                     <label for="status"><i class="bi bi-exclamation-circle"></i> Estado</label>
                     <select class="form-select" id="status" required>
                         <option value="1">Activa</option>
@@ -86,31 +82,22 @@
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="maintenanceType"><i class="bi bi-tools"></i> Tipo de Mantenimiento</label>
-                    <select class="form-select" id="maintenanceType" required>
-                        <option selected disabled value="">Seleccione el tipo de mantenimiento...</option>
-                        <option value="1">Fecha</option>
-                        <option value="2">Kilometraje</option>
-                    </select>
+                    <label for="dekraDate"><i class="bi bi-calendar-event"></i> Fecha de DEKRA</label>
+                    <input type="date" class="form-control" id="dekraDate" required>
                 </div>
-                <div class="col-md-4 mb-3" id="mileageField" style="display: none;">
+                <div class="col-md-4 mb-3" id="mileageField">
                     <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                         Mantenimiento</label>
                     <input type="number" class="form-control" id="maintenanceMileage" maxlength="6"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
-                <div class="col-md-4 mb-3" id="dateField" style="display: none;">
-                    <label for="maintenanceDate"><i class="bi bi-calendar-event"></i> Fecha del Último
-                        Mantenimiento</label>
-                    <input type="date" class="form-control" id="maintenanceDate">
-                </div>
-                <div class="col-md-4 mb-3" id="periodicityField" style="display: none;">
+                <div class="col-md-4 mb-3" id="periodicityField">
                     <label for="advance"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
                     <input type="text" class="form-control" id="periodicity" maxlength="6"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
-                <div class="col-md-4 mb-3" id="advanceField" style="display: none;">
+                <div class="col-md-4 mb-3" id="advanceField">
                     <label for="advance"><i class="bi bi-percent"></i> Adelanto del Mantenimiento</label>
                     <input type="text" class="form-control" id="advance" maxlength="2"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
