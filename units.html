@@ -44,31 +44,31 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
-                    <input type="number" class="form-control" id="initialMileage" maxlength="6"
+                    <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
-                    <input type="number" class="form-control" id="currentMileage" maxlength="6"
+                    <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="capacityChairs"><i class="bi bi-people"></i> Capacidad de Asientos</label>
-                    <input type="number" class="form-control" id="capacityChairs" maxlength="2"
+                    <input type="number" class="form-control" id="capacityChairs" maxlength="2" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="capacityBed"><i class="bi bi-heart-pulse"></i> Capacidad de Camillas</label>
-                    <input type="number" class="form-control" id="capacityBeds" maxlength="2"
+                    <input type="number" class="form-control" id="capacityBeds" maxlength="2" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="totalCapacity"><i class="bi bi-truck"></i> Capacidad Total</label>
-                    <input type="number" class="form-control" id="totalCapacity" maxlength="2"
+                    <input type="number" class="form-control" id="totalCapacity" maxlength="2" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         readonly>
                 </div>
@@ -88,26 +88,28 @@
                 <div class="col-md-4 mb-3" id="mileageField">
                     <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                         Mantenimiento</label>
-                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6"
+                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
                 <div class="col-md-4 mb-3" id="periodicityField">
                     <label for="advance"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
-                    <input type="text" class="form-control" id="periodicity" maxlength="6"
+                    <input type="number" class="form-control" id="periodicity" maxlength="6" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
                 <div class="col-md-4 mb-3" id="advanceField">
                     <label for="advance"><i class="bi bi-percent"></i> Adelanto del Mantenimiento</label>
-                    <input type="text" class="form-control" id="advance" maxlength="2"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        required>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="advance" maxlength="2" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required>
+                    </div>
                 </div>
             </div>
             <br>
             <div class="row text-center">
                 <div class="col-md-12 mb-3">
-                    <button type="submit" id="submit-unit-button" class="btn text-white"
+                    <button type="submit" id="submit-unit-button" class="btn btn-primary text-white"
                         style="background-color: #094079; border-color: #094079; margin: 5px;"
                         onmouseover="this.style.backgroundColor='#073c64';"
                         onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
@@ -122,6 +124,8 @@
                         onmouseover="this.style.backgroundColor='#073c64';"
                         onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-down"></i> Cargar
                         Datos</button>
+                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
+                            class="bi bi-trash"></i> Eliminar</button>
                 </div>
                 <div class="col-md-12 mb-3 text-end">
                     <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i
@@ -142,10 +146,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3" style="text-align: center;">
-                        <h3>Ingrese el nombre del nuevo tipo de recurso</h3>
+                        <h4>Ingrese el nombre del nuevo tipo de recurso</h4>
                         <br>
                         <input type="text" id="addResource" class="form-control"
-                            placeholder="Ingrese el tipo de recurso..." maxlength="15" required>
+                            placeholder="Ingrese el tipo de recurso..." maxlength="20" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -167,19 +171,46 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3" style="text-align: center;">
-                        <h3>Ingrese el nombre del nuevo tipo de unidad y su capacidad</h3>
+                        <h4>Ingrese el nombre del nuevo tipo de unidad y su capacidad</h4>
                         <br>
                         <input type="text" id="addUnit" class="form-control" placeholder="Ingrese el tipo de unidad..."
-                            maxlength="15" required>
+                            maxlength="20" required>
                         <br>
                         <input type="number" id="addCapacity" class="form-control"
-                            placeholder="Ingrese la capacidad de la unidad..." maxlength="15" required>
+                            placeholder="Ingrese la capacidad de la unidad..." maxlength="2" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary me-2" id="btnSaveUnit"><i class="bi bi-save"></i>
                         Guardar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteUnitModal" tabindex="-1" aria-labelledby="deleteUnitModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="deleteUnitModalLabel">Eliminar Unidad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" style="text-align: center;">
+                        <h4 id="deleteConfirmationMessage"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger" id="confirmDelete" style="margin-right: 10px;"><i
+                            class="bi bi-check2"></i>
+                        Confirmar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="margin-left: 10px;"><i class="bi bi-x-lg"></i> Cancelar</button>
                 </div>
             </div>
         </div>
