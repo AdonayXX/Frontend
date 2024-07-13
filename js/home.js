@@ -1,5 +1,6 @@
 Promise.all([
-    // mostrarProximosViajes(),
+    mostrarProximosViajes(),
+    mostrarFecha(),
     contarCitasHome(),
     mostrarChoferesPorVencer(),
     mostrarUnidadesPorDekra(),
@@ -9,85 +10,99 @@ Promise.all([
 
 
 //CAMBIAR TODA LA FUNCION CUANDO SE TENGA LA RUTA DE LA API
+async function mostrarProximosViajes() {
+    try {
+        const ahora = new Date();
+        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        const hoyUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), 0, 0, 0));
+        const hoyUTCStr = hoyUTC.toISOString().split('T')[0];
 
-// async function mostrarProximosViajes() {
-//     try {
-//         const ahora = new Date();
-//         const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
-//         const hoyUTC = ahoraUTC.toISOString().split('T')[0];
+        const fechaFormateada = hoyUTCStr.split('-').reverse().join('-');
+        document.getElementById('fecha').textContent = fechaFormateada;
 
-//         const fechaFormateada = hoyUTC.split('-').reverse().join('-');
-//         document.getElementById('fecha').textContent = fechaFormateada;
+        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/destinos');
 
-//         const [destinosRespuesta, viajesRespuesta, unidadesRespuesta] = await axios.all([
-//             axios.get('https://backend-transporteccss.onrender.com/api/rutas'),
-//             axios.get('https://backend-transporteccss.onrender.com/api/viaje'),
-//             axios.get('https://backend-transporteccss.onrender.com/api/unidades')
-//         ]);
+        if (!viajesRespuesta.data) {
+            throw new Error('Error al obtener los viajes');
+        }
 
-//         if (!destinosRespuesta.data || !viajesRespuesta.data || !unidadesRespuesta.data) {
-//             throw new Error('Error al obtener los destinos, los viajes o las unidades');
-//         }
+        const dataViajes = viajesRespuesta.data;
+        const viajes = dataViajes.viaje;
 
-//         const destinos = destinosRespuesta.data;
-//         const dataViajes = viajesRespuesta.data;
-//         const dataUnidades = unidadesRespuesta.data;
+        const viajesHoyUTC = viajes.filter(viaje => {
+            const fechaViaje = new Date(viaje.fechaInicioViaje);
+            const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), 0, 0, 0));
+            const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
+            return fechaViajeStr === hoyUTCStr && viaje.EstadoViaje === "Iniciado";
+        });
 
-//         const destinoMap = destinos.reduce((map, destino) => {
-//             map[destino.IdRuta] = destino.Descripcion.toLowerCase().replace(/(^|\s)\S/g, (letra) => letra.toUpperCase());
-//             return map;
-//         }, {});
+        const proximosViajesContainer = document.getElementById('proximosViajesContainer');
+        proximosViajesContainer.innerHTML = '';
 
-//         const unidadMap = dataUnidades.unidades.reduce((map, unidad) => {
-//             map[unidad.id] = unidad.numeroUnidad;
-//             return map;
-//         }, {});
+        if (viajesHoyUTC.length === 0) {
+            const mensajeNoViajes = document.createElement('p');
+            mensajeNoViajes.textContent = 'No hay viajes asignados para el día de hoy.';
+            mensajeNoViajes.classList.add('text-center');
+            proximosViajesContainer.appendChild(mensajeNoViajes);
 
-//         const viajes = dataViajes.viaje;
+        } else {
+            const viajesPorDestino = viajesHoyUTC.reduce((acc, viaje) => {
+                if (!acc[viaje.ubicacionDestino]) {
+                    acc[viaje.ubicacionDestino] = [];
+                }
+                acc[viaje.ubicacionDestino].push(viaje);
+                return acc;
+            }, {});
 
-//         const viajesHoyUTC = viajes.filter(viaje => {
-//             const fechaViaje = new Date(viaje.fechaInicioViaje);
-//             const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), fechaViaje.getUTCHours(), fechaViaje.getUTCMinutes(), fechaViaje.getUTCSeconds()));
-//             const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
-//             return fechaViajeStr === hoyUTC && viaje.EstadoViaje === "Iniciado"; // Cambiar a 'En curso' cuando se implemente
-//         });
+            Object.keys(viajesPorDestino).forEach(destino => {
+                const viajesDestino = viajesPorDestino[destino];
+                const viaje = viajesDestino[0];
 
-//         const proximosViajesContainer = document.getElementById('proximosViajesContainer');
-//         proximosViajesContainer.innerHTML = '';
+                const viajeElement = document.createElement('div');
+                viajeElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                viajeElement.style.maxWidth = '18rem';
 
-//         if (viajesHoyUTC.length === 0) {
-//             const mensajeNoViajes = document.createElement('p');
-//             mensajeNoViajes.textContent = 'No hay viajes asignados para el día de hoy.';
-//             mensajeNoViajes.classList.add('text-center');
-//             proximosViajesContainer.appendChild(mensajeNoViajes);
-        
-//         } else {
-//             viajesHoyUTC.forEach(viaje => {
-//                 const viajeElement = document.createElement('div');
-//                 viajeElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
-//                 viajeElement.style.maxWidth = '18rem';
-//                 const destinoDescripcion = destinoMap[viaje.idUbicacionDestino] || viaje.idUbicacionDestino;
-//                 const numeroUnidad = unidadMap[viaje.idUnidad] || viaje.idUnidad;
+                const letraMayuscula = (string) => {
+                    const words = string.split(' ');
+                    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+                    return capitalizedWords.join(' ');
+                };
 
-//                 viajeElement.innerHTML = `
-//                     <div class="headerviaje card-header text-center text-white" style="background-color: #094079;">
-//                         <h5 class="fw-bolder">Unidad ${numeroUnidad}</h5>
-//                     </div>
-//                     <div class="card-body text-center">
-                        
-//                         <h5 class="card-title">Fecha de viaje:</h5>
-//                         <h5 class="card-title"> ${new Date(viaje.fechaInicioViaje).toISOString().split('T')[0]}</h5>
-//                         <p class="card-text fs-5">Destino: ${destinoDescripcion}</p>
-//                     </div>
-//                 `;
-//                 proximosViajesContainer.appendChild(viajeElement);
-//             });
-//         }
+                const badgeHTML = viajesDestino.length > 1 ? `<span class="badge position-absolute top-0 end-0" style="background-color: #094079;">${viajesDestino.length}</span>` : '';
 
-//     } catch (error) {
-//         console.error('Error al mostrar los próximos viajes:', error);
-//     }
-// }
+                viajeElement.innerHTML = `
+                    <div class="headerviaje card-header text-center text-white position-relative" style="background-color: #094079;">
+                        <h5 class="fw-bolder">UNIDAD ${viaje.numeroUnidad}</h5>
+                        ${badgeHTML}
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Fecha de viaje:</h5>
+                        <h5 class="card-title">${new Date(viaje.fechaInicioViaje).toISOString().split('T')[0]}</h5>
+                        <p class="card-text fs-5">Destino: ${letraMayuscula(viaje.ubicacionDestino)}</p>
+                    </div>
+                `;
+                proximosViajesContainer.appendChild(viajeElement);
+            });
+        }
+
+    } catch (error) {
+        console.error('Error al mostrar los próximos viajes:', error);
+    }
+}
+
+async function mostrarFecha() {
+    try {
+        const ahora = new Date();
+        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
+        const hoyUTC = ahoraUTC.toISOString().split('T')[0];
+
+        const fechaFormateada = hoyUTC.split('-').reverse().join('-');
+        document.getElementById('fecha').textContent = fechaFormateada;
+    } catch (error) {
+        console.error('Error al mostrar la fecha:', error);
+    }
+}
 
 
 async function contarCitasHome() {
