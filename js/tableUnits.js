@@ -71,25 +71,22 @@ async function getUnidades() {
             tableBody.innerHTML = '';
 
             unidades.forEach(unidad => {
-                const row = document.createElement('tr');
+                if (unidad.idEstado !== 5) {
+                    const row = document.createElement('tr');
 
-                row.innerHTML = `
-                    <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
-                    <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
-                    <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
-                    <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
-                    <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
-                    <td class="text-center">${(unidad.tipoFrecuenciaCambio || 'N/A').toUpperCase()}</td>
-                    <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
-                `;
+                    row.innerHTML = `
+                        <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
+                        <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
+                        <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
+                        <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
+                        <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
+                        <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
+                        <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
+                        <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
+                    `;
 
-                // row.addEventListener('click', function () {
-                //     loadFormData(unidad);
-                // });
-
-                tableBody.appendChild(row);
+                    tableBody.appendChild(row);
+                }
             });
 
             $('#unitTable').DataTable({

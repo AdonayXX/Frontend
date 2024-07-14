@@ -1,92 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Combustible</title>
 </head>
+
 <body>
-   <div class="container mt-5 fade-in" style="max-width: 1100px;">
-    <h1 class="mb-4 text-center">Registro de Combustible</h1>
-    <form id="formFuel" name="formFuel" class="bg-light p-4 border rounded-3">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chófer</label>
-                    <select class="form-control" id="chofer" name="chofer" required>
-                        <!-- Aquí se cargan los choferes -->
-                    </select>
+    <div class="container mt-5 fade-in" style="max-width: 1100px;">
+        <h1 class="mb-4 text-center">Registro de Combustible</h1>
+        <form id="fuelForm" name="formFuel" class="bg-light p-4 border rounded-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
+                        <select class="form-control" id="unidad" name="unidad" required>
+                            <!-- Aquí se cargan las unidades -->
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
-                    <select class="form-control" id="unidad" name="unidad" required>
-                        <!-- Aquí se cargan las unidades -->
-                    </select>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chófer</label>
+                        <select class="form-control" id="chofer" name="chofer" required>
+                            <!-- Aquí se cargan los choferes -->
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="kilometraje" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje de Recarga</label>
-                    <input type="number" class="form-control" id="kilometraje" name="kilometraje" required maxlength="25">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros Aproximados</label>
-                    <input type="number" class="form-control" id="litros" name="litros" required maxlength="25">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3 input-with-symbol">
-                    <label for="monto" class="form-label"><i class="bi bi-currency-dollar"></i> Monto</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">₡</span>
-                        </div>
-                        <input type="number" class="form-control" id="monto" name="monto" required>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje de
+                            Recarga</label>
+                        <input type="number" class="form-control" id="kilometraje" name="kilometraje" required
+                            maxlength="25">
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
-                    <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros
+                            Aproximados</label>
+                        <input type="number" class="form-control" id="litros" name="litros" required maxlength="25">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3 input-with-symbol">
+                        <label for="monto" class="form-label"><i class="bi bi-cash-stack"></i> Monto</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₡</span>
+                            <input type="number" class="form-control" id="monto" name="monto" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
+                        <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="fecha" class="form-label"><i class="bi bi-calendar"></i> Fecha</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha" required>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="fecha" class="form-label"><i class="bi bi-calendar"></i> Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
+                        <input type="time" class="form-control" id="hora" name="hora" required>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
-                    <input type="time" class="form-control" id="hora" name="hora" required>
+            <br>
+            <div class="row text-center">
+                <div class="col-md-12 mb-3">
+                    <button type="submit" id="btnGuardar" class="btn text-white"
+                        style="background-color: #094079; border-color: #094079; margin: 5px;"
+                        onmouseover="this.style.backgroundColor='#073c64';"
+                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
+                    <button type="submit" id="btnActualizar" class="btn btn-primary text-white"
+                        style="background-color: #094079; margin: 5px;"
+                        onmouseover="this.style.backgroundColor='#073c64';"
+                        onmouseout="this.style.backgroundColor='#094079';" disabled><i
+                            class="bi bi-arrow-clockwise"></i>
+                        Actualizar</button>
+                    <button type="submit" id="btnEliminar" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
+                            class="bi bi-trash"></i> Eliminar</button>
+                </div>
+                <div class="col-md-12 mb-3 text-end">
+                    <button type="button" id="btnLimpiar" class="btn btn-danger" style="display: none;"><i
+                            class="bi bi-x-lg"></i></button>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row text-center">
-            <div class="col-md-12 mb-3">
-                <button type="submit" id="btnGuardar" class="btn text-white" style="background-color: #094079; border-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
-                <button type="submit" id="btnActualizar" class="btn btn-primary text-white" style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
-                <button id="btnCargar" class="btn btn-primary text-white" style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';" onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-arrow-down"></i> Cargar Datos</button>
-                <button type="button" id="btnEliminar" class="btn btn-danger m-2"><i class="bi bi-trash"></i> Eliminar</button>
-            </div>
-            <div class="col-md-12 mb-3 text-end">
-                <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i class="bi bi-x-lg"></i></button>
-            </div>
-        </div>
-    </form>
-</div>
-<div data-script="js/fuel.js"></div>
+        </form>
+    </div>
+    <div data-script="js/fuel.js"></div>
 
 </body>
+
 </html>
