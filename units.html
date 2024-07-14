@@ -47,21 +47,15 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required>
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required>
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="capacityChairs"><i class="bi bi-people"></i> Capacidad de Asientos</label>
@@ -88,11 +82,8 @@
                 <div class="col-md-4 mb-3" id="mileageField">
                     <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                         Mantenimiento</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
                 <div class="col-md-4 mb-3" id="periodicityField">
                     <label for="periodicity"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
@@ -127,8 +118,8 @@
                         onmouseout="this.style.backgroundColor='#094079';" disabled><i
                             class="bi bi-arrow-clockwise"></i>
                         Actualizar</button>
-                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;"
-                        disabled><i class="bi bi-trash"></i> Eliminar</button>
+                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
+                            class="bi bi-trash"></i> Eliminar</button>
                 </div>
                 <div class="col-md-12 mb-3 text-end">
                     <button type="button" id="clean-button" class="btn btn-danger" style="display: none;"><i
