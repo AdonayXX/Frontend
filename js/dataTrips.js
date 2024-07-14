@@ -447,8 +447,8 @@
     };
 
     try {
-      const response = await axios.put(url, datosAusencia);
-      console.log('Cita marcada como ausente:', response.data);
+      await axios.put(url, datosAusencia);
+      showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
       console.error('Error al marcar la cita como ausente:', error.response.data);
