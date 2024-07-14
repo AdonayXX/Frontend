@@ -619,36 +619,42 @@ async function getUnidades() {
 }
 getUnidades();
 
-// Función para filtrar la tabla por fecha de mantenimiento
-async function filterByFechaMantenimiento(selectedDate) {
+// Función para filtrar la tabla por fecha de mantenimiento y unidad
+async function filterMaintenance() {
   const tableBody = document.querySelector("#maintenance-body");
   const tableRows = tableBody.querySelectorAll("tr");
+
+  const selectedDate = document.getElementById("fechaMantenimientoFiltro").value;
+  const selectedUnidad = document.getElementById("unidadFiltro").options[document.getElementById("unidadFiltro").selectedIndex].text;
 
   let foundMantenimientos = false;
 
   tableRows.forEach(row => {
     const fechaMantenimientoCell = row.querySelector("td:nth-child(3)"); // Ajusta el selector según la posición de la fecha de mantenimiento en tu tabla
-    if (fechaMantenimientoCell) {
-      const fechaMantenimiento = fechaMantenimientoCell.textContent.trim();
-      console.log("La fecha de la db es", fechaMantenimiento);
-      console.log("La fecha seleccionada es", selectedDate);
+    const unidadCell = row.querySelector("td:nth-child(1)"); // Ajusta el selector según la posición de la unidad en tu tabla
 
-      // Ajusta el formato de la fecha de la db según el formato de selectedDate (yyyy-mm-dd)
+    if (fechaMantenimientoCell && unidadCell) {
+      const fechaMantenimiento = fechaMantenimientoCell.textContent.trim();
+      const unidad = unidadCell.textContent.trim();
       const formattedFechaMantenimiento = formatDateForComparison(fechaMantenimiento);
 
-      if (formattedFechaMantenimiento === selectedDate) {
-        row.style.display = ""; // Muestra la fila si coincide con la fecha seleccionada
+      const matchDate = selectedDate ? formattedFechaMantenimiento === selectedDate : true;
+      const matchUnidad = selectedUnidad !== "Seleccionar" ? unidad === selectedUnidad : true;
+
+      if (matchDate && matchUnidad) {
+        row.style.display = ""; // Muestra la fila si coincide con los filtros seleccionados
         foundMantenimientos = true;
       } else {
-        row.style.display = "none"; // Oculta la fila si no coincide con la fecha seleccionada
+        row.style.display = "none"; // Oculta la fila si no coincide con los filtros seleccionados
       }
     }
   });
 
   if (!foundMantenimientos) {
-    showToast("Ups!", "No se encontraron mantenimientos para la fecha indicada");
+    showToast("Ups!", "No se encontraron mantenimientos para los filtros indicados");
     getMaintenance(); // Vuelve a cargar todos los mantenimientos
-    document.querySelector("#fechaMantenimientoFiltro").value = ""; // Limpia el campo de fecha
+    document.getElementById("fechaMantenimientoFiltro").value = ""; // Limpia el campo de fecha
+    document.getElementById("unidadFiltro").selectedIndex = 0; // Limpia el campo de unidad
   }
 }
 
@@ -667,42 +673,10 @@ function formatDateForComparison(isoDate) {
 
 // Captura el evento de cambio en el campo de fecha
 document.getElementById("fechaMantenimientoFiltro").addEventListener("change", function () {
-  const selectedDate = this.value; // Obtén la fecha seleccionada
-  filterByFechaMantenimiento(selectedDate); // Llama a la función para filtrar por fecha de mantenimiento
+  filterMaintenance(); // Llama a la función para filtrar por fecha de mantenimiento y unidad
 });
-
-// Función para filtrar la tabla por unidad
-async function filterByUnidad(selectedUnidad) {
-  const tableBody = document.querySelector("#maintenance-body");
-  const tableRows = tableBody.querySelectorAll("tr");
-
-  let foundMantenimientos = false;
-
-  tableRows.forEach(row => {
-    const unidadCell = row.querySelector("td:nth-child(1)"); // Ajusta el selector según la posición de la unidad en tu tabla
-    if (unidadCell) {
-      const unidad = unidadCell.textContent.trim();
-      console.log("La unidad en la db es", unidad);
-      console.log("La unidad seleccionada es", selectedUnidad);
-
-      if (unidad === selectedUnidad) {
-        row.style.display = ""; // Muestra la fila si coincide con la unidad seleccionada
-        foundMantenimientos = true;
-      } else {
-        row.style.display = "none"; // Oculta la fila si no coincide con la unidad seleccionada
-      }
-    }
-  });
-
-  if (!foundMantenimientos) {
-    showToast("Ups!", "No se encontraron mantenimientos para la unidad indicada");
-    getMaintenance(); // Vuelve a cargar todos los mantenimientos si no se encuentran mantenimientos para la unidad seleccionada
-  } else {
-  }
-}
 
 // Captura el evento de cambio en el select de unidad
 document.getElementById("unidadFiltro").addEventListener("change", function () {
-  const selectedUnidad = this.options[this.selectedIndex].text; // Obtén la unidad seleccionada
-  filterByUnidad(selectedUnidad); // Llama a la función para filtrar por unidad
+  filterMaintenance(); // Llama a la función para filtrar por fecha de mantenimiento y unidad
 });
