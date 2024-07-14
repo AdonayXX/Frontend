@@ -113,7 +113,7 @@ async function getChoferesSelect() {
 
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.textContent = 'Seleccione el chófer...';
+        defaultOption.textContent = 'Seleccione el chofer...';
         defaultOption.selected = true;
         defaultOption.disabled = true;
         assignedDriver.appendChild(defaultOption);

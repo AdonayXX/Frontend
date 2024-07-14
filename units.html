@@ -42,22 +42,28 @@
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="assignedDriver"><i class="bi bi-person"></i> Chófer Designado</label>
+                    <label for="assignedDriver"><i class="bi bi-person"></i> Chofer Designado</label>
                     <select class="form-select" id="assignedDriver" required>
                         <!-- Aquí se cargan los choferes -->
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
-                    <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        required>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required>
+                        <span class="input-group-text">km</span>
+                    </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
-                    <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        required>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required>
+                        <span class="input-group-text">km</span>
+                    </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="capacityChairs"><i class="bi bi-people"></i> Capacidad de Asientos</label>
@@ -78,6 +84,28 @@
                         readonly>
                 </div>
                 <div class="col-md-4 mb-3">
+                    <label for="dekraDate"><i class="bi bi-calendar-event"></i> Fecha de DEKRA</label>
+                    <input type="date" class="form-control" id="dekraDate" required>
+                </div>
+                <div class="col-md-4 mb-3" id="mileageField">
+                    <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
+                        Mantenimiento</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                        <span class="input-group-text">km</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3" id="periodicityField">
+                    <label for="periodicity"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="periodicity" maxlength="6" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required>
+                        <span class="input-group-text">km</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
                     <label for="status"><i class="bi bi-exclamation-circle"></i> Estado</label>
                     <select class="form-select" id="status" required>
                         <option value="1">Activa</option>
@@ -85,22 +113,6 @@
                         <option value="3">En Mantenimiento</option>
                         <option value="4">Desechada</option>
                     </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label for="dekraDate"><i class="bi bi-calendar-event"></i> Fecha de DEKRA</label>
-                    <input type="date" class="form-control" id="dekraDate" required>
-                </div>
-                <div class="col-md-4 mb-3" id="mileageField">
-                    <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
-                        Mantenimiento</label>
-                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                </div>
-                <div class="col-md-4 mb-3" id="periodicityField">
-                    <label for="periodicity"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
-                    <input type="number" class="form-control" id="periodicity" maxlength="6" min="0"
-                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        required>
                 </div>
             </div>
             <br>
