@@ -7,8 +7,10 @@
 </head>
 
 <body>
-    <div id="spinnerContainer">
-        <div class="loader"></div>
+    <div id="spinnerContainer" class="text-center mt-5">
+        <div class="spinner-border mt-5" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
     <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Registro de Unidades</h1>
@@ -16,7 +18,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="unitNumber"><i class="bi bi-hash"></i> Número de Unidad</label>
-                    <input type="text" class="form-control" id="unitNumber" maxlength="20" required>
+                    <input type="text" class="form-control" id="unitNumber" maxlength="15" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
@@ -127,7 +129,7 @@
                         onmouseout="this.style.backgroundColor='#094079';" disabled><i
                             class="bi bi-arrow-clockwise"></i>
                         Actualizar</button>
-                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;"
+                    <button type="submit" id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;"
                         disabled><i class="bi bi-trash"></i> Eliminar</button>
                 </div>
                 <div class="col-md-12 mb-3 text-end">
