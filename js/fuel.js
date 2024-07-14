@@ -53,11 +53,10 @@ async function getChoferes() {
         console.error('Error al obtener los choferes:', error);
     }
 }
-
 async function getUnidades() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
-        const unidades = response.data.unidades;
+        const unidades = response.data.unidades.filter(unidad => unidad.idEstado === 1);
 
         const unit = document.getElementById('unidad');
         unit.innerHTML = '';
@@ -126,41 +125,45 @@ async function getRegistroCombustible() {
         showToast('Error', 'Error al obtener el registro de combustible.');
     }
 }
+
 function postRegistroCombustible() {
-    const usuarioSelect = document.getElementById('chofer');
+    const chofer = document.getElementById('chofer');
     // const usuarioContent = usuarioSelect.options[usuarioSelect.selectedIndex].text;
     
     const unidadSelect = document.getElementById('unidad');
     const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
     
+    // kilometraje se 
     const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
     const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
     const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
     const lugar = document.getElementById('lugar').value;
     
     const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
-    const horaInput = document.getElementById('hora').value;
-    const hora = `${horaInput}:00` || null;
+  
+    const horaCitaInput = document.getElementById('hora').value;
+    const hora = `${horaCitaInput}:00`;
     
     const tipoCombustible = document.getElementById('tipoCombustible').value;
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
     
-    const estado = 'activo'; // Aquí se asigna el valor fijo 'activo' al estado
+    const estado = 'activo'; 
     
     const fuelLogData = {
-        usuario: null,
         numeroUnidad: unidadContent,
+        montoColones: monto,
         litrosAproximados: litros,
         kilometraje: kilometraje,
-        montoColones: monto,
-        lugar: lugar,
         fecha: fecha,
         hora: hora,
+        lugar: lugar,
+        chofer:  chofer.options[chofer.selectedIndex].text,
+        usuario: "Alejandra",
         tipoCombustible: tipoCombustible,
         numeroFactura: numeroFactura,
         numeroAutorizacion: numeroAutorizacion,
-        estado: estado // Se asigna directamente el valor de 'estado'
+        estado: estado
     };
 
     console.log('Datos a enviar:', fuelLogData);
