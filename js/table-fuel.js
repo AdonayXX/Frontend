@@ -23,6 +23,9 @@ async function getFuelRecords() {
                     <td class="text-center">${record.lugar || 'N/A'}</td>
                     <td class="text-center">${new Date(record.fecha).toLocaleDateString() || 'N/A'}</td>
                     <td class="text-center">${record.hora || 'N/A'}</td>
+                    <td class="text-center">${record.tipoCombustible || 'N/A'}</td> <!-- Nuevo campo -->
+                    <td class="text-center">${record.numeroFactura || 'N/A'}</td> <!-- Nuevo campo -->
+                    <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td> <!-- Nuevo campo -->
                 `;
 
                 tableBody.appendChild(row);
@@ -54,3 +57,4 @@ async function getFuelRecords() {
 }
 
 getFuelRecords();
+
