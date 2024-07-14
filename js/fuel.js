@@ -53,11 +53,10 @@ async function getChoferes() {
         console.error('Error al obtener los choferes:', error);
     }
 }
-
 async function getUnidades() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
-        const unidades = response.data.unidades;
+        const unidades = response.data.unidades.filter(unidad => unidad.idEstado === 1);
 
         const unit = document.getElementById('unidad');
         unit.innerHTML = '';
@@ -92,7 +91,6 @@ async function getRegistroCombustible() {
         // Remover event listener temporalmente
         unitSelect.removeEventListener('change', manejarCambioUnidad);
         const choferSelect = document.getElementById('chofer');
-        choferSelect.removeEventListener('change', manejarCambioUnidad);
 
         fuelLog.forEach(log => {
             for (let i = 0; i < choferSelect.options.length; i++) {
@@ -121,7 +119,6 @@ async function getRegistroCombustible() {
 
         // Volver a agregar event listener después de actualizar los selects
         unitSelect.addEventListener('change', manejarCambioUnidad);
-        choferSelect.addEventListener('change', manejarCambioUnidad);
 
     } catch (error) {
         console.error('Error al obtener el registro de combustible:', error);
@@ -130,37 +127,53 @@ async function getRegistroCombustible() {
 }
 
 function postRegistroCombustible() {
-    const usuarioSelect = document.getElementById('chofer');
-    const usuarioContent = usuarioSelect.options[usuarioSelect.selectedIndex].text;
+    const chofer = document.getElementById('chofer');
+    // const usuarioContent = usuarioSelect.options[usuarioSelect.selectedIndex].text;
+    
     const unidadSelect = document.getElementById('unidad');
     const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
+    
+    // kilometraje se 
     const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
     const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
     const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
     const lugar = document.getElementById('lugar').value;
+    
     const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
-    const horaInput = document.getElementById('hora').value;
-    const hora = `${horaInput}:00` || null;
-
+  
+    const horaCitaInput = document.getElementById('hora').value;
+    const hora = `${horaCitaInput}:00`;
+    
+    const tipoCombustible = document.getElementById('tipoCombustible').value;
+    const numeroFactura = document.getElementById('numeroFactura').value;
+    const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
+    
+    const estado = 'activo'; 
+    
     const fuelLogData = {
-        usuario: usuarioContent,
         numeroUnidad: unidadContent,
+        montoColones: monto,
         litrosAproximados: litros,
         kilometraje: kilometraje,
-        montoColones: monto,
-        lugar: lugar,
         fecha: fecha,
-        hora: hora
+        hora: hora,
+        lugar: lugar,
+        chofer:  chofer.options[chofer.selectedIndex].text,
+        usuario: "Alejandra",
+        tipoCombustible: tipoCombustible,
+        numeroFactura: numeroFactura,
+        numeroAutorizacion: numeroAutorizacion,
+        estado: estado
     };
 
     console.log('Datos a enviar:', fuelLogData);
 
-    axios.post('https://backend-transporteccss.onrender.com/api/registrocombustible', fuelLogData)
+    axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData)
         .then(response => {
-            limpiar();
+            limpiar(); // Suponiendo que limpiar() limpia los datos del formulario o reinicia el estado
             console.log('Registro de combustible realizado:', response.data);
             showToast('Registro exitoso', 'El registro de combustible se ha realizado exitosamente.');
-            document.getElementById('fuelForm').reset();
+            document.getElementById('fuelForm').reset(); // Resetea el formulario después de una solicitud exitosa
         })
         .catch(error => {
             console.error('Error al crear el registro de combustible:', error);
