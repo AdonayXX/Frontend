@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <div id="spinnerContainer">
+        <div class="loader"></div>
+    </div>
     <div class="container mt-5 fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Registro de Combustible</h1>
         <form id="fuelForm" name="formFuel" class="bg-light p-4 border rounded-3">
@@ -15,7 +18,7 @@
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
-                        <select class="form-control" id="unidad" name="unidad" required>
+                        <select class="form-select" id="unidad" name="unidad" required>
                             <!-- Aquí se cargan las unidades -->
                             <option value="" disabled selected>Selecciona la unidad</option>
                         </select>
@@ -23,8 +26,20 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chófer</label>
-                        <select class="form-control" id="chofer" name="chofer" required>
+                        <label for="numeroFactura" class="form-label"><i class="bi bi-receipt"></i> Número de Factura</label>
+                        <input type="text" class="form-control" id="numeroFactura" name="numeroFactura" required maxlength="50">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="numeroAutorizacion" class="form-label"><i class="bi bi-key"></i> Número de Autorización</label>
+                        <input type="text" class="form-control" id="numeroAutorizacion" name="numeroAutorizacion" required maxlength="50">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer</label>
+                        <select class="form-select" id="chofer" name="chofer" required>
                             <!-- Aquí se cargan los choferes -->
                             <option value="" disabled selected>Selecciona el chófer</option>
                         </select>
@@ -32,12 +47,20 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje de Recarga</label>
+                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje de Recarga</label>
                         <input type="number" class="form-control" id="kilometraje" name="kilometraje" required maxlength="25">
                     </div>
                 </div>
-            </div>
-            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="tipoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Tipo de Combustible</label>
+                        <select class="form-select" id="tipoCombustible" name="tipoCombustible" required>
+                            <option value="" disabled selected>Selecciona el tipo de combustible</option>
+                            <option value="gasolina">Gasolina</option>
+                            <option value="diesel">Diesel</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros Aproximados</label>
@@ -59,8 +82,6 @@
                         <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="fecha" class="form-label"><i class="bi bi-calendar"></i> Fecha</label>
@@ -71,31 +92,6 @@
                     <div class="form-group mb-3">
                         <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
                         <input type="time" class="form-control" id="hora" name="hora" required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="tipoCombustible" class="form-label"><i class="bi bi-fuel-pump-fill"></i> Tipo de Combustible</label>
-                        <select class="form-control" id="tipoCombustible" name="tipoCombustible" required>
-                            <option value="" disabled selected>Selecciona el tipo de combustible</option>
-                            <option value="gasolina">Gasolina</option>
-                            <option value="diesel">Diesel</option>
-                            <!-- Otras opciones de combustible -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="numeroFactura" class="form-label"><i class="bi bi-receipt"></i> Número de Factura</label>
-                        <input type="text" class="form-control" id="numeroFactura" name="numeroFactura" required maxlength="50">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="numeroAutorizacion" class="form-label"><i class="bi bi-key"></i> Número de Autorización</label>
-                        <input type="text" class="form-control" id="numeroAutorizacion" name="numeroAutorizacion" required maxlength="50">
                     </div>
                 </div>
             </div>
