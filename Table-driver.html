@@ -29,8 +29,7 @@
         </div>
     </div>
     <div class="table-responsive-xxl mt-3">
-        <table id="driverTable" class="table table-light table-striped table-hover table-bordered mt-3 text-center"
-            style="cursor: pointer;">
+        <table id="driverTable" class="table table-light table-striped table-hover table-bordered mt-3 text-center" style="cursor: pointer;">
             <thead class="text-center" style="background-color: #094079; color: white;">
                 <tr>
                     <th class="text-center">Nombre</th>
@@ -42,6 +41,7 @@
                     <th class="text-center">Tipo Licencia</th>
                     <th class="text-center">Vencimiento Licencia</th>
                     <th class="text-center">Estado</th>
+                    <th class="text-center">Contacto Emergencia</th>
                 </tr>
             </thead>
             <tbody id="choferTableBody">
@@ -50,6 +50,37 @@
         </table>
     </div>
 </div>
+
+<!-- Modal para mostrar la información de contacto de emergencia -->
+<div class="modal fade" id="emergencyContactModal" tabindex="-1" aria-labelledby="emergencyContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <h5 class="modal-title" id="emergencyContactModalLabel">Información de Contacto de Emergencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-light table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>1° Apellido</th>
+                                <th>2° Apellido</th>
+                                <th>Teléfono</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emergencyContactTableBody">
+                            <!-- Aquí se cargan los contactos de emergencia -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div data-script="js/table-driver.js"></div>
-
-
