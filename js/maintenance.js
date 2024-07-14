@@ -647,9 +647,9 @@ async function filterByFechaMantenimiento(selectedDate) {
 
   if (!foundMantenimientos) {
     showToast("Ups!", "No se encontraron mantenimientos para la fecha indicada");
+    getMaintenance(); // Vuelve a cargar todos los mantenimientos
+    document.querySelector("#fechaMantenimientoFiltro").value = ""; // Limpia el campo de fecha
   }
-
-  await getMaintenance(); // Vuelve a cargar todos los mantenimientos
 }
 
 // Función para formatear la fecha de la db para comparación
@@ -669,4 +669,40 @@ function formatDateForComparison(isoDate) {
 document.getElementById("fechaMantenimientoFiltro").addEventListener("change", function () {
   const selectedDate = this.value; // Obtén la fecha seleccionada
   filterByFechaMantenimiento(selectedDate); // Llama a la función para filtrar por fecha de mantenimiento
+});
+
+// Función para filtrar la tabla por unidad
+async function filterByUnidad(selectedUnidad) {
+  const tableBody = document.querySelector("#maintenance-body");
+  const tableRows = tableBody.querySelectorAll("tr");
+
+  let foundMantenimientos = false;
+
+  tableRows.forEach(row => {
+    const unidadCell = row.querySelector("td:nth-child(1)"); // Ajusta el selector según la posición de la unidad en tu tabla
+    if (unidadCell) {
+      const unidad = unidadCell.textContent.trim();
+      console.log("La unidad en la db es", unidad);
+      console.log("La unidad seleccionada es", selectedUnidad);
+
+      if (unidad === selectedUnidad) {
+        row.style.display = ""; // Muestra la fila si coincide con la unidad seleccionada
+        foundMantenimientos = true;
+      } else {
+        row.style.display = "none"; // Oculta la fila si no coincide con la unidad seleccionada
+      }
+    }
+  });
+
+  if (!foundMantenimientos) {
+    showToast("Ups!", "No se encontraron mantenimientos para la unidad indicada");
+    getMaintenance(); // Vuelve a cargar todos los mantenimientos si no se encuentran mantenimientos para la unidad seleccionada
+  } else {
+  }
+}
+
+// Captura el evento de cambio en el select de unidad
+document.getElementById("unidadFiltro").addEventListener("change", function () {
+  const selectedUnidad = this.options[this.selectedIndex].text; // Obtén la unidad seleccionada
+  filterByUnidad(selectedUnidad); // Llama a la función para filtrar por unidad
 });
