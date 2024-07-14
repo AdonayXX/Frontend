@@ -53,14 +53,14 @@ async function getMaintenance() {
         smart: true,
       });
       // Búsqueda por nombre
-    $("#searchMaintenance").on("keyup", function () {
-      let inputValue = $(this).val().toLowerCase();
-      table.search(inputValue).draw();
-  });
-  $('#searchMaintenanceDate').on('change', function () {
-    let fechamaint = $('#searchMaintenanceDate').val();
-    $('#tableMaintenance').DataTable().column(2).search(fechamaint).draw();
-});
+      $("#searchMaintenance").on("keyup", function () {
+        let inputValue = $(this).val().toLowerCase();
+        table.search(inputValue).draw();
+      });
+      $('#searchMaintenanceDate').on('change', function () {
+        let fechamaint = $('#searchMaintenanceDate').val();
+        $('#tableMaintenance').DataTable().column(2).search(fechamaint).draw();
+      });
     });
     ocultarSpinner();
   } catch (error) {
@@ -127,13 +127,13 @@ function fillMaintenance(mantenimiento, actividades, actividadesT) {
     <i class="bi bi-check"></i>
 </button>
               <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
-               { activ })},${JSON.stringify(maintenance)})' ><i class="bi bi-pencil"></i></button>
+          { activ })},${JSON.stringify(maintenance)})' ><i class="bi bi-pencil"></i></button>
 
               
               </tr>
             `;
         fragment.appendChild(row);
-        if(maintenance.Estado){
+        if (maintenance.Estado) {
 
         }
       } else {
@@ -223,9 +223,9 @@ async function cambioEstCop(activ) {
 }
 
 
-( async function () {
+(async function () {
   let fieldCounter = 0;
-  const actividadesLista = await  getActiv();
+  const actividadesLista = await getActiv();
 
   document
     .getElementById("addActividadBtn")
@@ -235,7 +235,7 @@ async function cambioEstCop(activ) {
     });
 
   async function addFields(actividadesLista) {
-  
+
 
     fieldCounter++;
     const container = document.getElementById("actividadesDinamicas");
@@ -245,10 +245,10 @@ async function cambioEstCop(activ) {
     // Crear las opciones del select dinámicamente
     let optionsHTML = '<option selected disabled value="">Seleccionar</option>';
     actividadesLista.forEach(actividad => {
-        optionsHTML += `<option value="${actividad.IdActividad}">${actividad.Descripcion}</option>`;
+      optionsHTML += `<option value="${actividad.IdActividad}">${actividad.Descripcion}</option>`;
     });
-  
-  
+
+
 
     fieldSet.innerHTML = `
           <div class="row">
@@ -299,7 +299,7 @@ async function cambioEstCop(activ) {
 
     let opcionesUnidades = '';
     if (actividad) {
-        opcionesUnidades += `<option value="${actividad.UnidadMedida}">${actividad.UnidadMedida}</option>`;
+      opcionesUnidades += `<option value="${actividad.UnidadMedida}">${actividad.UnidadMedida}</option>`;
     }
 
     unidadMedidaSelect.innerHTML = opcionesUnidades;
@@ -313,7 +313,7 @@ async function cambioEstCop(activ) {
     .querySelector("#maintenancebtn")
     .addEventListener("click", async () => {
       const uniLlenado = await getUnidades();
-  
+
       console.log(uniLlenado);
       const unidadSelect = document.querySelector("#unidadSelect");
 
@@ -369,7 +369,7 @@ async function cambioEstCop(activ) {
         (tipounidad) => tipounidad.idTipoUnidad === idtipoUnidad
       );
       return tiposUnidadFiltrada.tipo;
-    } catch (error) {}
+    } catch (error) { }
   }
 
   //Obtener nombre de chofer
@@ -389,7 +389,7 @@ async function cambioEstCop(activ) {
       );
 
       return choferFiltrado;
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getUnidades() {
@@ -434,7 +434,7 @@ async function cambioEstCop(activ) {
   // Manejar el envío del formulario
   document
     .getElementById("saveMaintenance")
-    .addEventListener("click", async function()  {
+    .addEventListener("click", async function () {
       // Recopilar datos del formulario
       const actividades = [];
       for (let i = 1; i <= fieldCounter; i++) {
@@ -507,63 +507,63 @@ async function cambioEstCop(activ) {
       }
     });
 
-    window.EditarMant = async function (activ, mantenimiento){
-      try {
+  window.EditarMant = async function (activ, mantenimiento) {
+    try {
 
       // Mostrar el modal de mantenimiento luego de agregar actividades
-          $("#maintenanceModalEdit").modal("show");
-      
-        const uniLlenado = await getUnidades();
-          console.log(uniLlenado);
-          const unidadSelect = document.querySelector("#unidadSelectEdit");
-    
-          // Llenar el select con las opciones de unidad
-          unidadSelect.innerHTML =
-            '<option selected disabled value="">Seleccionar</option>';
-          uniLlenado.forEach((unidad) => {
-            const option = document.createElement("option");
-            option.value = unidad.id;
-            option.textContent = unidad.numeroUnidad;
-            unidadSelect.appendChild(option);
-          });
-          // Establecer el valor seleccionado
-         unidadSelect.value = mantenimiento.IdUnidad;
-         // Simular evento change
-          const changeEvent = new Event("change");
-          unidadSelect.dispatchEvent(changeEvent);
-    
-          // Añadir el event listener para cambio de selección
-          unidadSelect.addEventListener("change", async () => {
-            console.log(uniLlenado);
-    
-            const unidadFiltrda = uniLlenado.find(
-              (unidad) => unidad.id === parseInt(unidadSelect.value)
-            );
-            document.querySelector("#kilometraje").value =
-              unidadFiltrda.kilometrajeActual;
-            document.querySelector("#IdTipoUnidadHiddenEdit").value =
-              unidadFiltrda.idTipoUnidad;
-            document.querySelector("#IdChoferHiddenEdit").value =
-              unidadFiltrda.choferDesignado;
-            const idChofer = parseInt(unidadFiltrda.choferDesignado);
-            const idtipoUnidad = parseInt(unidadFiltrda.idTipoUnidad);
-            const choferfind = await getChoferNombre(idChofer);
-            const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
-            nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
-            document.querySelector("#choferEdit").value = nombreCompletoChofer;
-            document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
-          });
-        
+      $("#maintenanceModalEdit").modal("show");
 
-          
+      const uniLlenado = await getUnidades();
+      console.log(uniLlenado);
+      const unidadSelect = document.querySelector("#unidadSelectEdit");
 
-        
-      } catch (error) {
-        console.error(error);
-        
-      }
+      // Llenar el select con las opciones de unidad
+      unidadSelect.innerHTML =
+        '<option selected disabled value="">Seleccionar</option>';
+      uniLlenado.forEach((unidad) => {
+        const option = document.createElement("option");
+        option.value = unidad.id;
+        option.textContent = unidad.numeroUnidad;
+        unidadSelect.appendChild(option);
+      });
+      // Establecer el valor seleccionado
+      unidadSelect.value = mantenimiento.IdUnidad;
+      // Simular evento change
+      const changeEvent = new Event("change");
+      unidadSelect.dispatchEvent(changeEvent);
+
+      // Añadir el event listener para cambio de selección
+      unidadSelect.addEventListener("change", async () => {
+        console.log(uniLlenado);
+
+        const unidadFiltrda = uniLlenado.find(
+          (unidad) => unidad.id === parseInt(unidadSelect.value)
+        );
+        document.querySelector("#kilometraje").value =
+          unidadFiltrda.kilometrajeActual;
+        document.querySelector("#IdTipoUnidadHiddenEdit").value =
+          unidadFiltrda.idTipoUnidad;
+        document.querySelector("#IdChoferHiddenEdit").value =
+          unidadFiltrda.choferDesignado;
+        const idChofer = parseInt(unidadFiltrda.choferDesignado);
+        const idtipoUnidad = parseInt(unidadFiltrda.idTipoUnidad);
+        const choferfind = await getChoferNombre(idChofer);
+        const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
+        nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
+        document.querySelector("#choferEdit").value = nombreCompletoChofer;
+        document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
+      });
+
+
+
+
+
+    } catch (error) {
+      console.error(error);
+
     }
-    
+  }
+
 })();
 
 //Funcion para validar que la fecha no pueda ser menor a la actual
@@ -587,6 +587,86 @@ document
     this.min = fechaActual;
   });
 
+// Agrega esta función para obtener las unidades y llenar el select
+async function getUnidades() {
+  try {
+    const Api_Url = "https://backend-transporteccss.onrender.com/api/unidades"; // Actualiza la URL de la API según corresponda
+    const token = localStorage.getItem("token");
 
+    const unidadesResponse = await axios.get(Api_Url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    const unidades = unidadesResponse.data.unidades || [];
+    console.log("unidades", unidades);
 
+    const unidadFiltroSelect = document.getElementById("unidadFiltro");
+    unidadFiltroSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+
+    unidades.forEach((unidad) => {
+      const option = document.createElement("option");
+      option.value = unidad.id;
+      option.textContent = unidad.numeroUnidad;
+      unidadFiltroSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error("Error al obtener unidades:", error);
+    showToast("Ups!", "Hubo un problema al obtener las unidades");
+  }
+}
+getUnidades();
+
+// Función para filtrar la tabla por fecha de mantenimiento
+async function filterByFechaMantenimiento(selectedDate) {
+  const tableBody = document.querySelector("#maintenance-body");
+  const tableRows = tableBody.querySelectorAll("tr");
+
+  let foundMantenimientos = false;
+
+  tableRows.forEach(row => {
+    const fechaMantenimientoCell = row.querySelector("td:nth-child(3)"); // Ajusta el selector según la posición de la fecha de mantenimiento en tu tabla
+    if (fechaMantenimientoCell) {
+      const fechaMantenimiento = fechaMantenimientoCell.textContent.trim();
+      console.log("La fecha de la db es", fechaMantenimiento);
+      console.log("La fecha seleccionada es", selectedDate);
+
+      // Ajusta el formato de la fecha de la db según el formato de selectedDate (yyyy-mm-dd)
+      const formattedFechaMantenimiento = formatDateForComparison(fechaMantenimiento);
+
+      if (formattedFechaMantenimiento === selectedDate) {
+        row.style.display = ""; // Muestra la fila si coincide con la fecha seleccionada
+        foundMantenimientos = true;
+      } else {
+        row.style.display = "none"; // Oculta la fila si no coincide con la fecha seleccionada
+      }
+    }
+  });
+
+  if (!foundMantenimientos) {
+    showToast("Ups!", "No se encontraron mantenimientos para la fecha indicada");
+  }
+
+  await getMaintenance(); // Vuelve a cargar todos los mantenimientos
+}
+
+// Función para formatear la fecha de la db para comparación
+function formatDateForComparison(isoDate) {
+  const parts = isoDate.split('/');
+  if (parts.length === 3) {
+    // Formato dd/mm/yyyy
+    const year = parts[2];
+    const month = parts[1].padStart(2, '0');
+    const day = parts[0].padStart(2, '0');
+    return `${year}-${month}-${day}`; // Formato yyyy-mm-dd
+  }
+  return isoDate; // Devuelve tal cual si no se puede formatear
+}
+
+// Captura el evento de cambio en el campo de fecha
+document.getElementById("fechaMantenimientoFiltro").addEventListener("change", function () {
+  const selectedDate = this.value; // Obtén la fecha seleccionada
+  filterByFechaMantenimiento(selectedDate); // Llama a la función para filtrar por fecha de mantenimiento
+});
