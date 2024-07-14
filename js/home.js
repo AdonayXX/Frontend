@@ -9,11 +9,10 @@ Promise.all([
 ]);
 
 
-//CAMBIAR TODA LA FUNCION CUANDO SE TENGA LA RUTA DE LA API
 async function mostrarProximosViajes() {
     try {
         const ahora = new Date();
-        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        ahora.setHours(0, 0, 0, 0); 
         const hoyUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), 0, 0, 0));
         const hoyUTCStr = hoyUTC.toISOString().split('T')[0];
 
@@ -67,18 +66,17 @@ async function mostrarProximosViajes() {
                     const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
                     return capitalizedWords.join(' ');
                 };
-
-                const badgeHTML = viajesDestino.length > 1 ? `<span class="badge position-absolute top-0 end-0" style="background-color: #094079;">${viajesDestino.length}</span>` : '';
+                const badgeHTML = viajesDestino.length >= 2 ? `<span class="badge position-absolute bottom-0 end-0" style="background-color: #094079;">${viajesDestino.length}</span>` : '';
 
                 viajeElement.innerHTML = `
-                    <div class="headerviaje card-header text-center text-white position-relative" style="background-color: #094079;">
+                    <div class="headerviaje card-header text-center text-white position-relative" style="background-color: #094079; ">
                         <h5 class="fw-bolder">UNIDAD ${viaje.numeroUnidad}</h5>
-                        ${badgeHTML}
                     </div>
                     <div class="card-body text-center">
                         <h5 class="card-title">Fecha de viaje:</h5>
                         <h5 class="card-title">${new Date(viaje.fechaInicioViaje).toISOString().split('T')[0]}</h5>
                         <p class="card-text fs-5">Destino: ${letraMayuscula(viaje.ubicacionDestino)}</p>
+                        ${viajesDestino.length > 1 ? `<span class="badge position-absolute bottom-0 end-0" style="background-color: #094079; border-radius: 50%; margin:5px;" >${viajesDestino.length}</span>` : ''}
                     </div>
                 `;
                 proximosViajesContainer.appendChild(viajeElement);
@@ -93,7 +91,7 @@ async function mostrarProximosViajes() {
 async function mostrarFecha() {
     try {
         const ahora = new Date();
-        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        ahora.setHours(0, 0, 0, 0); 
         const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
         const hoyUTC = ahoraUTC.toISOString().split('T')[0];
 
@@ -167,7 +165,7 @@ async function mostrarUnidadesPorDekra() {
         const unidadesPorVencer = dataUnidades.unidades.filter(unidad => {
             const fechaVencimiento = new Date(unidad.fechaDekra);
             const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
-            return diasRestantes < 30 && diasRestantes > 0;
+            return diasRestantes < 30 && diasRestantes > 0 && unidad.idEstado === 1;
         });
 
         const unidadesPorVencerContainer = document.getElementById('proximosDekra');
@@ -218,7 +216,7 @@ async function mostrarChoferesPorVencer() {
         const choferesPorVencer = dataChoferes.choferes.filter(chofer => {
             const fechaVencimiento = new Date(chofer.vencimientoLicencia);
             const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
-            return diasRestantes <= 30 && diasRestantes > 0;
+            return diasRestantes <= 30 && diasRestantes > 0 && chofer.estadoChofer === "Activo";
         });
 
         const choferesPorVencerContainer = document.getElementById('proximoschoferes');
@@ -272,7 +270,7 @@ async function mostrarUnidadesPorKilometraje() {
         const dataUnidades = unidadesRespuesta.data.unidades;
 
         const unidadesPorKilometraje = dataUnidades.filter(unidad => {
-            if (unidad.tipoFrecuenciaCambio === "Kilometraje") {
+            if (unidad.tipoFrecuenciaCambio === "Kilometraje" && unidad.idEstado === 1) {
                 const ultimoKilometraje = unidad.ultimoMantenimientoKilometraje || unidad.kilometrajeInicial;
                 const kilometrajeActual = unidad.kilometrajeActual;
                 const frecuenciaKilometraje = unidad.valorFrecuenciaC;
