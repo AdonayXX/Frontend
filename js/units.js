@@ -65,31 +65,6 @@ function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
 }
 
-document.getElementById('advance').addEventListener('input', function () {
-    let value = this.value.replace('%', '');
-    this.value = value + '%';
-});
-
-document.getElementById('advance').addEventListener('focus', function () {
-    let value = this.value.replace('%', '');
-    this.value = value + '%';
-    this.setSelectionRange(0, value.length);
-});
-
-document.getElementById('advance').addEventListener('blur', function () {
-    let value = this.value.replace('%', '');
-    if (value === '') {
-        this.value = '';
-    } else {
-        this.value = value + '%';
-    }
-});
-
-function getValorAdelanto() {
-    const advanceInput = document.getElementById('advance').value;
-    return parseInt(advanceInput.replace('%', ''), 10);
-}
-
 function limpiar() {
     document.getElementById('unitsForm').reset();
     document.getElementById('unitNumber').disabled = false;
@@ -271,7 +246,6 @@ async function getUnidad() {
                     document.getElementById('capacityChairs').value = unidad.capacidadSillas;
                     document.getElementById('capacityBeds').value = unidad.capacidadCamas;
                     document.getElementById('totalCapacity').value = unidad.capacidadTotal;
-                    document.getElementById('advance').value = `${unidad.adelanto}%`;
                     document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
 
                     document.getElementById('unitNumber').disabled = true;
@@ -371,19 +345,8 @@ async function postUnidad() {
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
     const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
     const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-    const advance = getValorAdelanto();
     const periodicity = parseInt(document.getElementById('periodicity').value, 10);
     const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
-
-    if (initialMileage < 0 || currentMileage < 0 || advance < 0 || periodicity < 0 || capacityChairs < 0 || capacityBeds < 0 || totalCapacity < 0 || maintenanceMileage < 0) {
-        showToast('Error', 'No se pueden ingresar valores negativos.');
-        return;
-    }
-
-    if (advance < 10) {
-        showToast('Error', 'El adelanto de mantenimiento no puede ser menor de 20%.');
-        return;
-    }
 
     if (currentMileage < initialMileage) {
         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
@@ -441,7 +404,7 @@ async function postUnidad() {
         capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: advance,
+        adelanto: 20,
         idEstado: status,
         valorFrecuenciaC: periodicity,
     };
@@ -477,19 +440,8 @@ async function putUnidad() {
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
     const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
     const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-    const advance = getValorAdelanto();
     const periodicity = parseInt(document.getElementById('periodicity').value, 10);
     const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
-
-    if (initialMileage < 0 || currentMileage < 0 || advance < 0 || periodicity < 0 || capacityChairs < 0 || capacityBeds < 0 || totalCapacity < 0 || maintenanceMileage < 0) {
-        showToast('Error', 'No se pueden ingresar valores negativos.');
-        return;
-    }
-
-    if (advance < 10) {
-        showToast('Error', 'El adelanto de mantenimiento no puede ser menor de 20%.');
-        return;
-    }
 
     if (currentMileage < initialMileage) {
         showToast('Error', 'El kilometraje actual no puede ser menor al kilometraje inicial.');
@@ -536,7 +488,7 @@ async function putUnidad() {
         capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: advance,
+        adelanto: 20,
         idEstado: status,
         valorFrecuenciaC: periodicity,
     };
@@ -566,7 +518,6 @@ async function deleteUnidad() {
     const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
     const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
     const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-    const advance = getValorAdelanto();
     const periodicity = parseInt(document.getElementById('periodicity').value, 10);
     const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
 
@@ -590,7 +541,7 @@ async function deleteUnidad() {
         capacidadSillas: capacityChairs,
         kilometrajeInicial: initialMileage,
         kilometrajeActual: currentMileage,
-        adelanto: advance,
+        adelanto: 20,
         idEstado: 5,
         valorFrecuenciaC: periodicity,
     };
