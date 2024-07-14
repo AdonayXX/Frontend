@@ -7,26 +7,26 @@ function openAccomp(acompanante1, acompanante2) {
   acompTableBody.innerHTML = '';
 
   if (acompanante1 === 'N/A' && acompanante2 === 'N/A') {
-      messageNoComp.style.display = 'block';
+    messageNoComp.style.display = 'block';
   } else {
-      messageNoComp.style.display = 'none';
+    messageNoComp.style.display = 'none';
 
-      if (acompanante1 !== 'N/A') {
-          const row1 = document.createElement('tr');
-          row1.innerHTML = `<td>${acompanante1}</td>`;
-          acompTableBody.appendChild(row1);
-      }
+    if (acompanante1 !== 'N/A') {
+      const row1 = document.createElement('tr');
+      row1.innerHTML = `<td>${acompanante1}</td>`;
+      acompTableBody.appendChild(row1);
+    }
 
-      if (acompanante2 !== 'N/A') {
-          const row2 = document.createElement('tr');
-          row2.innerHTML = `<td>${acompanante2}</td>`;
-          acompTableBody.appendChild(row2);
-      }
+    if (acompanante2 !== 'N/A') {
+      const row2 = document.createElement('tr');
+      row2.innerHTML = `<td>${acompanante2}</td>`;
+      acompTableBody.appendChild(row2);
+    }
   }
 }
 
+(async function () {
 
-(async function() {
   async function infoUser() {
     try {
       const token = localStorage.getItem('token');
@@ -37,6 +37,7 @@ function openAccomp(acompanante1, acompanante2) {
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
     }
   }
+
 
   async function obtenerUnidadAsignada(identificacion) {
     const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
@@ -60,6 +61,7 @@ function openAccomp(acompanante1, acompanante2) {
       console.error('Error al obtener el id de la unidad:', error);
     }
   }
+
 
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
@@ -97,6 +99,32 @@ function openAccomp(acompanante1, acompanante2) {
   }
 
 
+  async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
+    console.log("idUnidad en updateInitTrip:", idUnidad);
+    console.log("fechaValue en updateInitTrip:", fechaValue);
+    console.log("hora en updateInitTrip:", hourInitTrip);
+    const API_INIT_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/start`;
+    try {
+      const response = await axios.put(API_INIT_TRIP, {
+        idUnidad,
+        fechaInicioViaje: fechaValue,
+        horaInicioViaje: hourInitTrip
+      });
+      console.log('Respuesta de updateInitTrip:', response.data);
+    } catch (error) {
+      console.error('Error al actualizar el viaje:', error);
+    }
+  }
+
+
+  function obtenerHoraActual() {
+    const d = new Date();
+    const h = String(d.getHours()).padStart(2, '0');
+    const m = String(d.getMinutes()).padStart(2, '0');
+    const s = String(d.getSeconds()).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  }
+
 
   async function inicializarPagina() {
     try {
@@ -119,6 +147,13 @@ function openAccomp(acompanante1, acompanante2) {
           const yyyy = today.getFullYear();
           const fechaValue = `${yyyy}-${mm}-${dd}`;
           document.getElementById('fecha').value = fechaValue;
+
+          const hourInitTrip = obtenerHoraActual();
+          console.log('Hora de inicio de viaje:', hourInitTrip);
+
+          document.getElementById('btnIniciarViaje').addEventListener('click', async () => {
+            await updateInitTrip(idUnidad, fechaValue, hourInitTrip);
+          });
 
           await obtenerViajes(idUnidad, fechaValue);
         } else {
