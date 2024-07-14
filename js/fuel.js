@@ -38,7 +38,6 @@ function limpiar() {
     document.getElementById('btnLimpiar').style.display = 'none';
     document.getElementById('btnActualizar').disabled = true;
     document.getElementById('btnEliminar').disabled = true;
-    // document.getElementById('unidad').disabled = false;
 }
 
 async function getUnidades() {
@@ -96,11 +95,11 @@ async function getChoferes() {
 }
 
 async function getRegistroCombustible() {
-    const unitSelect = document.getElementById('unidad');
-    const unitNumber = unitSelect.options[unitSelect.selectedIndex].text;
+    const unidadSelect = document.getElementById('unidad');
+    const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
 
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unitNumber}`);
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
         const registros = response.data.registro;
 
         if (!registros.length) {
@@ -108,40 +107,60 @@ async function getRegistroCombustible() {
             return;
         }
 
-        registros.forEach(log => {
-            if (log.estado === 'activo') {
-                const choferSelect = document.getElementById('chofer');
-                const unitSelect = document.getElementById('unidad');
+        const fuelLog = registros.filter(log => log.estado === 'activo');
 
-                for (let i = 0; i < choferSelect.options.length; i++) {
-                    if (choferSelect.options[i].text === log.chofer) {
-                        choferSelect.selectedIndex = i;
-                        break;
+        if (fuelLog.length > 0) {
+            fuelLog.sort((a, b) => {
+                const dateComparison = new Date(b.fecha) - new Date(a.fecha);
+                if (dateComparison === 0) {
+                    const timeComparison = b.hora.localeCompare(a.hora);
+                    if (timeComparison === 0) {
+                        return b.id - a.id;
                     }
+                    return timeComparison;
                 }
+                return dateComparison;
+            });
 
-                for (let i = 0; i < unitSelect.options.length; i++) {
-                    if (unitSelect.options[i].text === log.numeroUnidad) {
-                        unitSelect.selectedIndex = i;
-                        break;
-                    }
+            const latestLog = fuelLog[0];
+
+            const choferSelect = document.getElementById('chofer');
+            const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+
+            for (let i = 0; i < choferSelect.options.length; i++) {
+                if (choferSelect.options[i].text === latestLog.chofer) {
+                    choferSelect.selectedIndex = i;
+                    break;
                 }
-
-                document.getElementById('numeroFactura').value = log.numeroFactura;
-                document.getElementById('numeroAutorizacion').value = log.numeroAutorizacion;
-                document.getElementById('tipoCombustible').value = log.tipoCombustible;
-                document.getElementById('litros').value = log.litrosAproximados;
-                document.getElementById('kilometraje').value = log.kilometraje;
-                document.getElementById('monto').value = log.montoColones;
-                document.getElementById('lugar').value = log.lugar;
-                document.getElementById('fecha').value = new Date(log.fecha).toISOString().split('T')[0];
-                document.getElementById('hora').value = log.hora;
-
-                document.getElementById('btnLimpiar').style.display = 'inline-block';
-                document.getElementById('btnActualizar').disabled = false;
-                document.getElementById('btnEliminar').disabled = false;
             }
-        });
+
+            for (let i = 0; i < unidadSelect.options.length; i++) {
+                if (unidadSelect.options[i].text === latestLog.numeroUnidad) {
+                    unidadSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            for (let i = 0; i < tipoCombustibleSelect.options.length; i++) {
+                if (tipoCombustibleSelect.options[i].text === latestLog.tipoCombustible) {
+                    tipoCombustibleSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            document.getElementById('numeroFactura').value = latestLog.numeroFactura;
+            document.getElementById('numeroAutorizacion').value = latestLog.numeroAutorizacion;
+            document.getElementById('litros').value = latestLog.litrosAproximados;
+            document.getElementById('kilometraje').value = latestLog.kilometraje;
+            document.getElementById('monto').value = latestLog.montoColones;
+            document.getElementById('lugar').value = latestLog.lugar;
+            document.getElementById('fecha').value = new Date(latestLog.fecha).toISOString().split('T')[0];
+            document.getElementById('hora').value = latestLog.hora;
+
+            document.getElementById('btnLimpiar').style.display = 'inline-block';
+            document.getElementById('btnActualizar').disabled = false;
+            document.getElementById('btnEliminar').disabled = false;
+        }
 
     } catch (error) {
         console.error('Error al obtener el registro de combustible:', error);
@@ -149,23 +168,26 @@ async function getRegistroCombustible() {
     }
 }
 
+
+
 function postRegistroCombustible() {
     const chofer = document.getElementById('chofer');
     const unidadSelect = document.getElementById('unidad');
-    const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
+    const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
     const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
     const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
     const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
     const lugar = document.getElementById('lugar').value;
     const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
     const horaCitaInput = document.getElementById('hora').value;
-    const hora = `${horaCitaInput}:00`;
-    const tipoCombustible = document.getElementById('tipoCombustible').value;
+    const hora = `${horaCitaInput}`;
+    const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+    const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
     const fuelLogData = {
-        numeroUnidad: unidadContent,
+        numeroUnidad: unidad,
         montoColones: monto,
         litrosAproximados: litros,
         kilometraje: kilometraje,
@@ -180,13 +202,11 @@ function postRegistroCombustible() {
         estado: "activo"
     };
 
-    console.log('Datos a enviar:', fuelLogData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData)
         .then(response => {
             limpiar();
             console.log('Registro de combustible realizado:', response.data);
-            showToast('Registro exitoso', 'El registro de combustible se ha realizado exitosamente.');
+            showToast('Registro exitoso', `El registro de combustible de la unidad ${unidad} se ha realizado exitosamente.`);
         })
         .catch(error => {
             console.error('Error al crear el registro de combustible:', error);
@@ -194,114 +214,127 @@ function postRegistroCombustible() {
         });
 }
 
-async function getIdRegistroCombustible(numeroUnidad) {
+async function getIdRegistroCombustible(unidad) {
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${numeroUnidad}`);
-        const fuelLog = response.data.registro.find(log => log.estado === 'activo');
-        return fuelLog.id;
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
+        const registros = response.data.registro;
+
+        if (!registros.length) {
+            showToast('Error', 'No hay registros de combustible para esta unidad.');
+            return;
+        }
+
+        const fuelLog = registros.filter(log => log.estado === 'activo');
+
+        if (fuelLog.length > 0) {
+            fuelLog.sort((a, b) => {
+                const dateComparison = new Date(b.fecha) - new Date(a.fecha);
+                if (dateComparison === 0) {
+                    const timeComparison = b.hora.localeCompare(a.hora);
+                    if (timeComparison === 0) {
+                        return b.id - a.id;
+                    }
+                    return timeComparison;
+                }
+                return dateComparison;
+            });
+
+            const latestLog = fuelLog[0];
+
+            return latestLog.id;
+        }
+
     } catch (error) {
-        console.error('Error al obtener el ID del registro de combustible:', error);
-        showToast('Error', 'Error al obtener el ID del registro de combustible.');
+        console.error('Error al obtener el registro de combustible:', error);
+        showToast('Error', 'Error al obtener el registro de combustible.');
     }
 }
 
-
 async function putRegistroCombustible() {
     const unidadSelect = document.getElementById('unidad');
-    const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
+    const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
+    const idRegistro = await getIdRegistroCombustible(unidad);
+    const chofer = document.getElementById('chofer');
+    const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
+    const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
+    const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
+    const lugar = document.getElementById('lugar').value;
+    const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
+    const horaCitaInput = document.getElementById('hora').value;
+    const hora = `${horaCitaInput}`;
+    const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+    const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
+    const numeroFactura = document.getElementById('numeroFactura').value;
+    const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
-    try {
-        const idRegistro = await getIdRegistroCombustible(unidadContent);
-        const chofer = document.getElementById('chofer');
-        const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
-        const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
-        const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
-        const lugar = document.getElementById('lugar').value;
-        const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
-        const horaCitaInput = document.getElementById('hora').value;
-        const hora = `${horaCitaInput}:00`;
-        const tipoCombustible = document.getElementById('tipoCombustible').value;
-        const numeroFactura = document.getElementById('numeroFactura').value;
-        const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
+    const fuelLogData = {
+        numeroUnidad: unidad,
+        montoColones: monto,
+        litrosAproximados: litros,
+        kilometraje: kilometraje,
+        fecha: fecha,
+        hora: hora,
+        lugar: lugar,
+        chofer: chofer.options[chofer.selectedIndex].text,
+        usuario: null,
+        tipoCombustible: tipoCombustible,
+        numeroFactura: numeroFactura,
+        numeroAutorizacion: numeroAutorizacion,
+        estado: "activo"
+    };
 
-        const fuelLogData = {
-            id: idRegistro,
-            numeroUnidad: unidadContent,
-            montoColones: monto,
-            litrosAproximados: litros,
-            kilometraje: kilometraje,
-            fecha: fecha,
-            hora: hora,
-            lugar: lugar,
-            chofer: chofer.options[chofer.selectedIndex].text,
-            usuario: "",
-            tipoCombustible: tipoCombustible,
-            numeroFactura: numeroFactura,
-            numeroAutorizacion: numeroAutorizacion,
-            estado: "activo"
-        };
-
-        console.log('Datos a enviar para actualizar:', fuelLogData);
-
-        axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
-            .then(response => {
-                limpiar();
-                console.log('Actualización de registro de combustible realizada:', response.data);
-                showToast('Actualización exitosa', 'El registro de combustible se ha actualizado exitosamente.');
-            })
-            .catch(error => {
-                console.error('Error al actualizar el registro de combustible:', error);
-                showToast('Error', 'Error al actualizar el registro de combustible.');
-            });
-
-    } catch (error) {
-        console.error('Error al obtener ID del registro de combustible:', error);
-        showToast('Error', 'Error al obtener ID del registro de combustible.');
-    }
+    axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
+        .then(response => {
+            limpiar();
+            console.log('Registro de combustible actualizado:', response.data);
+            showToast('Actualización exitosa', 'El registro de combustible se ha actualizado exitosamente.');
+        })
+        .catch(error => {
+            console.error('Error al actualizar el registro de combustible:', error);
+            showToast('Error', 'Error al actualizar el registro de combustible.');
+        });
 }
 
 async function deleteRegistroCombustible() {
     const unidadSelect = document.getElementById('unidad');
-    const unidadContent = unidadSelect.options[unidadSelect.selectedIndex].text;
+    const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
+    const idRegistro = await getIdRegistroCombustible(unidad);
+    const chofer = document.getElementById('chofer');
+    const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
+    const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
+    const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
+    const lugar = document.getElementById('lugar').value;
+    const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
+    const horaCitaInput = document.getElementById('hora').value;
+    const hora = `${horaCitaInput}`;
+    const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+    const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
+    const numeroFactura = document.getElementById('numeroFactura').value;
+    const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
-    try {
-        const idRegistro = await getIdRegistroCombustible(unidadContent);
-        const chofer = document.getElementById('chofer');
-        const litros = parseFloat(document.getElementById('litros').value).toFixed(2);
-        const kilometraje = parseInt(document.getElementById('kilometraje').value, 10);
-        const monto = parseFloat(document.getElementById('monto').value).toFixed(2);
-        const lugar = document.getElementById('lugar').value;
-        const fecha = new Date(document.getElementById('fecha').value).toISOString().split('T')[0] || null;
-        const horaCitaInput = document.getElementById('hora').value;
-        const hora = `${horaCitaInput}:00`;
-        const tipoCombustible = document.getElementById('tipoCombustible').value;
-        const numeroFactura = document.getElementById('numeroFactura').value;
-        const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
+    const confirmationMessage = document.getElementById('deleteConfirmationMessage');
+    confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad ${unidad}?`;
 
-        const confirmationMessage = document.getElementById('deleteConfirmationMessage');
-        confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad ${unidadContent}?`;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteFuelLogModal'));
+    deleteModal.show();
 
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteFuelLogModal'));
-        deleteModal.show();
+    const fuelLogData = {
+        numeroUnidad: unidad,
+        montoColones: monto,
+        litrosAproximados: litros,
+        kilometraje: kilometraje,
+        fecha: fecha,
+        hora: hora,
+        lugar: lugar,
+        chofer: chofer.options[chofer.selectedIndex].text,
+        usuario: null,
+        tipoCombustible: tipoCombustible,
+        numeroFactura: numeroFactura,
+        numeroAutorizacion: numeroAutorizacion,
+        estado: "inactivo"
+    };
 
-        const fuelLogData = {
-            numeroUnidad: unidadContent,
-            montoColones: monto,
-            litrosAproximados: litros,
-            kilometraje: kilometraje,
-            fecha: fecha,
-            hora: hora,
-            lugar: lugar,
-            chofer: chofer.options[chofer.selectedIndex].text,
-            usuario: "",
-            tipoCombustible: tipoCombustible,
-            numeroFactura: numeroFactura,
-            numeroAutorizacion: numeroAutorizacion,
-            estado: "inactivo"
-        };
-
-        console.log('Datos a eliminar:', fuelLogData);
-
+    document.getElementById('confirmDelete').onclick = function () {
         axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
             .then(response => {
                 limpiar();
@@ -314,10 +347,6 @@ async function deleteRegistroCombustible() {
             });
 
         deleteModal.hide();
-
-    } catch (error) {
-        console.error('Error al obtener ID del registro de combustible:', error);
-        showToast('Error', 'Error al obtener ID del registro de combustible.');
     }
 }
 
