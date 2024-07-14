@@ -276,8 +276,6 @@ function postTipoRecurso() {
         recurso: recurso
     };
 
-    console.log('Datos a enviar:', recursoData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData)
         .then(response => {
             document.getElementById('addResource').value = '';
@@ -303,8 +301,6 @@ function postTipoUnidad() {
         tipo: tipo,
         capacidad: capacidad
     };
-
-    console.log('Datos a enviar:', unidadData);
 
     axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData)
         .then(response => {
@@ -396,8 +392,6 @@ async function postUnidad() {
         valorFrecuenciaC: periodicity,
     };
 
-    console.log('Datos a enviar:', unidadData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
         .then(response => {
             limpiar();
@@ -479,8 +473,6 @@ async function putUnidad() {
         idEstado: status,
         valorFrecuenciaC: periodicity,
     };
-
-    console.log('Datos a enviar para actualizar:', unidadData);
 
     axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
         .then(response => {

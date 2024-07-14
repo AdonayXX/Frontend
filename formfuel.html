@@ -62,8 +62,8 @@
                             Combustible</label>
                         <select class="form-select" id="tipoCombustible" name="tipoCombustible" required>
                             <option value="" disabled selected>Selecciona el tipo de combustible</option>
-                            <option value="gasolina">Gasolina</option>
-                            <option value="diesel">Diesel</option>
+                            <option value="Gasolina">Gasolina</option>
+                            <option value="Diesel">Diesel</option>
                         </select>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                     <div class="form-group mb-3">
                         <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros
                             Aproximados</label>
-                        <input type="number" class="form-control" id="litros" name="litros" maxlength="25" min="0"
+                        <input type="number" class="form-control" id="litros" name="litros" maxlength="10" min="0"
                             oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                             required>
                     </div>
@@ -81,7 +81,7 @@
                         <label for="monto" class="form-label"><i class="bi bi-cash-stack"></i> Monto</label>
                         <div class="input-group">
                             <span class="input-group-text">₡</span>
-                            <input type="number" class="form-control" id="monto" name="monto" min="0"
+                            <input type="number" class="form-control" id="monto" name="monto" maxlength="10" min="0"
                                 oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                 required>
                         </div>
