@@ -7,10 +7,8 @@
 </head>
 
 <body>
-    <div id="spinnerContainer" class="text-center mt-5">
-        <div class="spinner-border mt-5" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
+    <div id="spinnerContainer">
+        <div class="loader"></div>
     </div>
     <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Registro de Unidades</h1>
@@ -18,7 +16,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label for="unitNumber"><i class="bi bi-hash"></i> Número de Unidad</label>
-                    <input type="text" class="form-control" id="unitNumber" maxlength="15" required>
+                    <input type="text" class="form-control" id="unitNumber" maxlength="20" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
@@ -49,21 +47,15 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required>
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required>
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="capacityChairs"><i class="bi bi-people"></i> Capacidad de Asientos</label>
@@ -90,11 +82,9 @@
                 <div class="col-md-4 mb-3" id="mileageField">
                     <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                         Mantenimiento</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                        <span class="input-group-text">km</span>
-                    </div>
+                    <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
                 </div>
                 <div class="col-md-4 mb-3" id="periodicityField">
                     <label for="periodicity"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
@@ -129,8 +119,8 @@
                         onmouseout="this.style.backgroundColor='#094079';" disabled><i
                             class="bi bi-arrow-clockwise"></i>
                         Actualizar</button>
-                    <button type="submit" id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;"
-                        disabled><i class="bi bi-trash"></i> Eliminar</button>
+                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
+                            class="bi bi-trash"></i> Eliminar</button>
                 </div>
                 <div class="col-md-12 mb-3 text-end">
                     <button type="button" id="clean-button" class="btn btn-danger" style="display: none;"><i
@@ -225,8 +215,6 @@
         </div>
     </div>
 
-    <div id="toast-container"></div>
-    <div id="modal-container"></div>
     <div data-script="js/units.js"></div>
 </body>
 
