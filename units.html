@@ -103,9 +103,9 @@
                         required>
                 </div>
                 <div class="col-md-4 mb-3" id="advanceField">
-                    <label for="advance"><i class="bi bi-percent"></i> Adelanto del Mantenimiento</label>
+                    <label for="advance"><i class="bi bi-tools"></i> Adelanto del Mantenimiento</label>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="advance" maxlength="2" min="0"
+                        <input type="text" class="form-control" id="advance" maxlength="3" min="0"
                             oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                             required>
                     </div>
@@ -125,11 +125,11 @@
                         onmouseout="this.style.backgroundColor='#094079';" disabled><i
                             class="bi bi-arrow-clockwise"></i>
                         Actualizar</button>
-                    <button id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
-                            class="bi bi-trash"></i> Eliminar</button>
+                    <button type="submit" id="delete-unit-button" class="btn btn-danger text-white" style="margin: 5px;"
+                        disabled><i class="bi bi-trash"></i> Eliminar</button>
                 </div>
                 <div class="col-md-12 mb-3 text-end">
-                    <button type="button" id="clearFormButton" class="btn btn-danger" style="display: none;"><i
+                    <button type="button" id="clean-button" class="btn btn-danger" style="display: none;"><i
                             class="bi bi-x-lg"></i></button>
                 </div>
             </div>
@@ -143,7 +143,8 @@
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="addResourceModalLabel">Agregar Tipo de Recurso</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button id="cerrarResourceType1" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3" style="text-align: center;">
@@ -154,9 +155,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary me-2" id="btnSaveResource"><i class="bi bi-save"></i>
+                    <button type="submit" class="btn btn-primary me-2" id="btnResourceType"><i class="bi bi-save"></i>
                         Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="cerrarResourceType2" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -168,7 +170,8 @@
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="addUnitModalLabel">Agregar Tipo de Unidad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button id="cerrarUnitType1" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3" style="text-align: center;">
@@ -184,9 +187,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary me-2" id="btnSaveUnit"><i class="bi bi-save"></i>
+                    <button type="submit" class="btn btn-primary me-2" id="btnUnitType"><i class="bi bi-save"></i>
                         Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="cerrarUnitType2" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
