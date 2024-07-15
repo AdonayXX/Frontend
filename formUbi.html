@@ -2,14 +2,14 @@
     <div class="loader"></div>
 </div>
 
-<div class="container mt-5 fade-in" style="max-width: 800px;">
+<div class="container mt-5 fade-in" style="max-width: 600px;">
     <h1 class="mb-4 text-center">Registro de Ubicaciones</h1>
 
-    <form id="registroCitaForm" class="bg-light p-4 border rounded-3">
         <div class="mb-3">
             <h4 style="text-align: center;">Destinos</h4>
             <div class="input-group">
                 <select id="select-destinos" name="destinos" class="form-control" required>
+                    <option selected disabled value="">Seleccionar</option>
                     <!-- Acá se cargaran los destino -->
                 </select>
                 <button type="button" class="btn btn-outline-secondary ms-2" data-bs-toggle="modal"
@@ -45,15 +45,12 @@
                 </button>
             </div>
         </div>
-
-
-        <div class="d-grid gap-2 d-sm-flex justify-content-center">
-            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Guardar Chofer">
-                <i class="bi bi-save"></i> Guardar
-            </button>
-        </div>
-    </form>
+    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+        <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" id="BtnGuardar2">
+        <i class="bi bi-save"></i>Guardar
+    </button>
+    </div>
+    <br>
 </div>
 
 <!-- Modals -->
@@ -83,6 +80,7 @@
                         </div>
                     </div>
                     <br>
+
                     <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
                         id="BtnGuardarUbi">
                         <i class="bi bi-save"></i> Guardar
