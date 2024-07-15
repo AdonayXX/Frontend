@@ -401,7 +401,7 @@ async function deleteRegistroCombustible() {
     const confirmationMessage = document.getElementById('deleteConfirmationMessage');
     ocultarSpinner();
     
-    confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad ${unidad}?`;
+    confirmationMessage.innerText = `¿Está seguro que desea eliminar este registro de combustible de la unidad ${unidad}?`;
 
     const deleteModal = new bootstrap.Modal(document.getElementById('deleteFuelLogModal'));
     deleteModal.show();
@@ -428,7 +428,7 @@ async function deleteRegistroCombustible() {
             .then(response => {
                 limpiar();
                 ocultarSpinner();
-                showToast('Eliminación exitosa', 'El registro de combustible se ha eliminado exitosamente.');
+                showToast('Eliminación exitosa', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);
             })
             .catch(error => {
                 ocultarSpinner();
