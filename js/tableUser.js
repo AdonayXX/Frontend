@@ -7,7 +7,7 @@ document.getElementById("addUserButton").addEventListener("click", function () {
 
 //Funcion para obtener datos ingresados del usuario
 function getUserRegisterData() {
- 
+
   const userIdentification = document.querySelector('#userRegisterIdentification').value;
   const userName = document.querySelector('#userRegisterName').value;
   const userFirstLastName = document.querySelector('#userRegisterFirstlastname').value;
@@ -141,20 +141,20 @@ async function getUserData() {
       });
     });
 
-setTimeout(function () {
+    setTimeout(function () {
 
-  ocultarSpinner();
-}, 500);
+      ocultarSpinner();
+    }, 500);
 
   } catch (error) {
     console.error('Error al obtener datos del usuario:', error);
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      showToast('Error',errorMessage);
-    }  else {
+      showToast('Error', errorMessage);
+    } else {
       console.error('Ha ocurrido un problema:', error);
-      showToast('Error','Ocurrio un problema al cargar los datos.')
-    } 
+      showToast('Error', 'Ocurrio un problema al cargar los datos.')
+    }
   }
 }
 function fillTableUsuarios(usuarios) {
@@ -240,11 +240,11 @@ window.sendUserData = function (button) {
       Rol: parseInt(document.getElementById('rol').value.trim()),
       Estado: document.getElementById('userState').value.trim()
     };
-    editUserData(userData,userIdentification);
+    editUserData(userData, userIdentification);
     console.log(userData);
   }
 
-  async function editUserData(userData,userIdentification) {
+  async function editUserData(userData, userIdentification) {
     try {
       const API_URL = `http://localhost:18026/api/usuario/identificacion/${userIdentification}`;
       const token = localStorage.getItem('token');
@@ -278,7 +278,17 @@ window.sendUserData = function (button) {
     document.getElementById('userFirstlastnameEdit').value = user.Apellido1;
     document.getElementById('userSecondlastnameEdit').value = user.Apellido2;
     document.getElementById('userEmailEdit').value = user.Correo;
-    document.getElementById('rol').value = user.Rol;
+
+    const rolSelect = document.getElementById('rol');
+    if (user.Rol === 0) {
+      const unknownOption = rolSelect.querySelector('option[value="0"]');
+      unknownOption.hidden = false; // Mostrar la opción temporalmente
+      rolSelect.value = user.Rol;
+      unknownOption.hidden = true; // Ocultar la opción de nuevo
+    } else {
+      rolSelect.value = user.Rol;
+    }
+    
     document.getElementById('userState').value = user.Estado;
   }
 }
