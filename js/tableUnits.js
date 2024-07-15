@@ -1,5 +1,13 @@
 "use strict";
 
+function mostrarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'flex';
+}
+
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+}
+
 async function getNombreChofer() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
@@ -109,6 +117,7 @@ async function getUnidades() {
             });
 
         });
+        ocultarSpinner();
     } catch (error) {
         console.error('Error al obtener las unidades:', error);
     }

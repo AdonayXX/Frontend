@@ -1,3 +1,13 @@
+"use strict";
+
+function mostrarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'flex';
+}
+
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+}
+
 async function getFuelRecords() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
@@ -15,17 +25,14 @@ async function getFuelRecords() {
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
-                    <td class="text-center">${record.usuario || 'N/A'}</td>
+                    <td class="text-center">${record.chofer || 'N/A'}</td>
                     <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
+                    <td class="text-center">${record.numeroFactura || 'N/A'}</td>
+                    <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
                     <td class="text-center">${record.kilometraje || 'N/A'}</td>
+                    <td class="text-center">${new Date(record.fecha).toLocaleDateString() || 'N/A'}</td>
                     <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
                     <td class="text-center">${record.montoColones || 'N/A'}</td>
-                    <td class="text-center">${record.lugar || 'N/A'}</td>
-                    <td class="text-center">${new Date(record.fecha).toLocaleDateString() || 'N/A'}</td>
-                    <td class="text-center">${record.hora || 'N/A'}</td>
-                    <td class="text-center">${record.tipoCombustible || 'N/A'}</td> <!-- Nuevo campo -->
-                    <td class="text-center">${record.numeroFactura || 'N/A'}</td> <!-- Nuevo campo -->
-                    <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td> <!-- Nuevo campo -->
                 `;
 
                 tableBody.appendChild(row);
@@ -51,6 +58,7 @@ async function getFuelRecords() {
             });
 
         });
+        ocultarSpinner();
     } catch (error) {
         console.error('Error al obtener los registros de combustible:', error);
     }
