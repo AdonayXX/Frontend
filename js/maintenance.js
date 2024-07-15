@@ -941,7 +941,7 @@
 
   function prepararDatosUnidad(unidadEncontrada, fechaMantenimiento, kilometrajeActualMantenimiento) {
     // Convertir la fecha a formato ISO
-    const dekraDate = convertirFechaISOAFechaCorta(unidadEncontrada.fechaDekra);
+    const dekraDate = convertISOStringToDate(unidadEncontrada.fechaDekra);
 
     // Preparar los datos de la unidad a actualizar
     const idTipoUnidad = parseInt(unidadEncontrada.idTipoUnidad);
@@ -986,6 +986,7 @@
     try {
       // Hacer la petición PUT para actualizar la unidad
       const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData);
+      console.log(response);
 
       // Verificar la respuesta del servidor
       if (response.status === 200) {
@@ -1026,91 +1027,18 @@
       showToast('Error', 'Error al actualizar la unidad.');
     }
   }
-
-
-
-  // async function ObtenerActualizarunidad(Idunidad, fechaMantenimiento, kilometrajeActualMantenimiento) {
-  //   console.log('Datos a enviar para actualizar:', Idunidad, fechaMantenimiento, kilometrajeActualMantenimiento);
-  //   try {
-  //     // Obtener la lista de unidades
-  //     const unidadesLista = await getUnidades();
-
-  //     // Convertir la fecha a formato ISO
-  //     const isoDateStr = convertDateToISOString(fechaMantenimiento);
-
-  //     // Encontrar la unidad correspondiente por ID
-  //     const unidadEncontrada = unidadesLista.find(a => a.id === Idunidad);
-  //     if (!unidadEncontrada) {
-  //       throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);
-  //     }
-
-  //     // Preparar los datos de la unidad a actualizar
-  //     const unidadData = {
-  //       idTipoUnidad: parseInt(unidadEncontrada.idTipoUnidad),
-  //       idTipoRecurso: parseInt(unidadEncontrada.idTipoRecurso),
-  //       tipoFrecuenciaCambio: unidadEncontrada.tipoFrecuenciaCambio || null,
-  //       ultimoMantenimientoFecha: unidadEncontrada.ultimoMantenimientoFecha,
-  //       ultimoMantenimientoKilometraje: unidadEncontrada.ultimoMantenimientoKilometraje,
-  //       numeroUnidad: unidadEncontrada.numeroUnidad,
-  //       choferDesignado: parseInt(unidadEncontrada.choferDesignado),
-  //       fechaDekra: unidadEncontrada.fechaDekra,
-  //       capacidadTotal: parseInt(unidadEncontrada.capacidadTotal),
-  //       capacidadCamas: parseInt(unidadEncontrada.capacidadCamas),
-  //       capacidadSillas: parseInt(unidadEncontrada.capacidadSillas),
-  //       kilometrajeInicial: parseInt(unidadEncontrada.kilometrajeInicial),
-  //       kilometrajeActual: parseInt(unidadEncontrada.kilometrajeActual),
-  //       adelanto: parseInt(unidadEncontrada.adelanto),
-  //       idEstado: parseInt(unidadEncontrada.idEstado),
-  //       valorFrecuenciaC: parseInt(unidadEncontrada.valorFrecuenciaC)
-  //     };
-
-  //     console.log('Datos a enviar para actualizar:', unidadData);
-
-  //     // Hacer la petición PUT para actualizar la unidad
-  //     const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData);
-
-  //     // Verificar la respuesta del servidor
-  //     if (response.status === 200) {
-  //       showToast('Éxito', 'Unidad actualizada correctamente.');
-  //     } else {
-  //       // Manejar errores en la respuesta del servidor
-  //       console.error('Error en la respuesta del servidor:', response.data);
-  //       showToast('Error', 'Error al actualizar la unidad.');
-  //     }
-
-  //   } catch (error) {
-  //     // Manejar errores generales
-  //     console.error('Error al actualizar la unidad:', error);
-  //     showToast('Error', 'Error al actualizar la unidad.');
-  //   }
-  // }
-
-
-
-  function convertirFechaISOAFechaCorta(fechaISO) {
-    const date = new Date(fechaISO);
-    const year = date.getFullYear();
-    let month = (date.getMonth() + 1).toString();
-    let day = date.getDate().toString();
-
-    // Añadir un cero delante si el mes o el día tienen un solo dígito
-    if (month.length === 1) {
-        month = '0' + month;
-    }
-    if (day.length === 1) {
-        day = '0' + day;
-    }
-
+  function convertISOStringToDate(isoString) {
+    // Crear una instancia de Date usando el string ISO
+    const date = new Date(isoString);
+    
+    // Obtener el año, mes y día de la fecha
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    
+    // Formatear la fecha en 'YYYY-MM-DD'
     return `${year}-${month}-${day}`;
-}
-
-// Ejemplo de uso:
-const fechaISO = "2024-09-07T00:00:00.000Z";
-const fechaCorta = convertirFechaISOAFechaCorta(fechaISO);
-console.log(fechaCorta);  // Output: "2024-09-07"
-
-
-
+  }
 
 })();
 
