@@ -782,21 +782,12 @@ async function getUnidadesFiltro() {
     showToast("Ups!", "Hubo un problema al obtener las unidades");
   }
 }
-
 // Función para formatear la fecha de YYYY-MM-DD a DD/MM/YYYY
 function formatDateFiltro(date) {
   let parts = date.split("-");
   return parts[2] + "/" + parts[1] + "/" + parts[0];
 }
-
-
-
-
-
 // ACTIVIDADES 
-
-
-
 document.querySelector('#openTask').addEventListener('click',optimazadoactividades());
 
 async function optimazadoactividades(){
@@ -830,6 +821,7 @@ async function getActividades() {
             showToast("Error", "Hubo un problema al obtener las actividades");
         }
     }
+
 }
 
 function fillActividades(actividades) {
@@ -880,7 +872,6 @@ function getActividad() {
         alert("Por favor, complete todos los campos.");
     }
 }
-
 //Funcion para agregar una actividad
 async function addActivity(activityData) {
     try {
@@ -946,3 +937,4 @@ function limpiarCampos() {
 }
 
 })();
+
