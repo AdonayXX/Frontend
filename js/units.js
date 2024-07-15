@@ -65,6 +65,9 @@ function ocultarSpinner() {
 
 function limpiar() {
     document.getElementById('unitsForm').reset();
+    document.getElementById('unitType').selectedIndex = 0;
+    document.getElementById('resourceType').selectedIndex = 0;
+    document.getElementById('assignedDriver').selectedIndex = 0;
     document.getElementById('unitNumber').disabled = false;
     document.getElementById('unitType').disabled = false;
     document.getElementById('resourceType').disabled = false;
@@ -74,9 +77,6 @@ function limpiar() {
     document.getElementById('submit-unit-button').disabled = false;
     document.getElementById('delete-unit-button').disabled = true
     document.getElementById('capacityBeds').disabled = false;
-    getChoferesSelect();
-    getTiposRecursoSelect();
-    getTiposUnidadSelect();
 }
 
 async function actualizarCapacidad() {
@@ -248,8 +248,6 @@ async function getUnidad() {
                     document.getElementById('unitType').disabled = true;
                     document.getElementById('resourceType').disabled = true;
                     document.getElementById('initialMileage').disabled = true;
-                    const event = new Event('change');
-                    document.getElementById('status').dispatchEvent(event);
                     document.getElementById('clean-button').style.display = 'inline-block';
                     document.getElementById('update-unit-button').disabled = false;
                     document.getElementById('delete-unit-button').disabled = false;
