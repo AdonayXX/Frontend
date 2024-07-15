@@ -86,6 +86,7 @@ async function getUnidades() {
                     `;
 
                     tableBody.appendChild(row);
+                    ocultarSpinner();
                 }
             });
 
@@ -114,4 +115,7 @@ async function getUnidades() {
     }
 }
 
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+}
 getUnidades();

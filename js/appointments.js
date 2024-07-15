@@ -40,7 +40,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('nombre').value = pacienteEncontrado.Nombre || '';
                 document.getElementById('primerApellido').value = pacienteEncontrado.Apellido1 || '';
                 document.getElementById('segundoApellido').value = pacienteEncontrado.Apellido2 || '';
-                document.getElementById('telefonos').value = `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2 || ''}`;
+                document.getElementById('telefonos').value = pacienteEncontrado.Telefono2 ? `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2}` : pacienteEncontrado.Telefono1 || '';  document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
 
                 const prioridadCheckbox = document.getElementById('prelacion');
@@ -231,8 +231,16 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
             const tipoSeguro = document.getElementById('tipoSeguro').value;
 
-            if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino) {
-                showToast('Error', 'Por favor, complete todos los campos requeridos.');
+            if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro) {
+                const camposFaltantes = [];
+                if (!diagnostico) camposFaltantes.push('Diagnóstico');
+                if (!fechaCita) camposFaltantes.push('Fecha de cita');
+                if (!horaCitaInput) camposFaltantes.push('Hora de cita');
+                if (!idUbicacionDestino) camposFaltantes.push('Ubicación de destino');
+                if (!tipoSeguro) camposFaltantes.push('Tipo de seguro');
+
+                const mensaje = `Por favor, complete los siguientes campos requeridos: ${camposFaltantes.join(', ')}.`;
+                showToast('Error', mensaje);
                 document.getElementById('btnGuardar').disabled = false;
                 return;
             }

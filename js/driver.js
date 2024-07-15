@@ -18,6 +18,8 @@
 
 // ---------------------------------POST------------------------------------------------ //
 
+document.getElementById('btnActualizar').disabled = true;
+
 document.getElementById('btnGuardar').addEventListener('click', async function (event) {
     event.preventDefault();
     this.disabled = true;
@@ -141,16 +143,23 @@ async function getChofer(cedula) {
             document.getElementById('contactoEmergencia2').disabled = false;
 
             showToast('Datos del chofer', 'Datos del chofer cargados correctamente.');
+            document.getElementById('btnGuardar').disabled = true;
+            document.getElementById('btnActualizar').disabled = false;
             return true;
+
+
+
         } else {
             setTimeout(() => {
             showToast('Error', 'No se encuentra ningun chofer registrado con la cédula ingresada.');
+            document.getElementById('btnGuardar').disabled = false;
+            document.getElementById('btnActualizar').disabled = true;
+            limpiarCampos();
             }
             , 0);
             return false;
         }
     } catch (error) {
-        console.error('Error fetching driver data:', error);
         showToast('Error', 'Error al obtener los datos del chofer.');
         return false;
     }
@@ -227,7 +236,7 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
 
 function limpiarCampos() {
 
-    document.getElementById('cedula').value = '';
+    // document.getElementById('cedula').value = '';
     document.getElementById('nombre').value = '';
     document.getElementById('apellido1').value = '';
     document.getElementById('apellido2').value = '';
