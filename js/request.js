@@ -27,6 +27,7 @@
                 tableBody.innerHTML += row;
             });
             createTableRequest();
+            ocultarSpinner();
         } catch (error) {
             console.error('Hubo un problema con la operación de obtención:', error);
         }
@@ -94,3 +95,7 @@
     getVales();
     window.handleCoordinateButton = handleCoordinateButton;
 })();
+
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
+}

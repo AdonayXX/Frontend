@@ -41,6 +41,7 @@ function limpiar() {
     document.getElementById('btnLimpiar').style.display = 'none';
     document.getElementById('btnActualizar').disabled = true;
     document.getElementById('btnEliminar').disabled = true;
+    document.getElementById('btnGuardar').disabled = false;
 }
 
 async function autorizacionDuplicado(numeroAutorizacion, idRegistro = null) {
@@ -127,6 +128,41 @@ async function getChoferes() {
     }
 }
 
+async function getIdRegistroCombustible(unidad) {
+    try {
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
+        const registros = response.data.registro;
+
+        if (!registros.length) {
+            showToast('Error', 'No hay registros de combustible para esta unidad.');
+            return;
+        }
+
+        const fuelLog = registros.filter(log => log.estado === 'activo');
+
+        if (fuelLog.length > 0) {
+            fuelLog.sort((a, b) => {
+                const dateComparison = new Date(b.fecha) - new Date(a.fecha);
+                if (dateComparison === 0) {
+                    const timeComparison = b.hora.localeCompare(a.hora);
+                    if (timeComparison === 0) {
+                        return b.id - a.id;
+                    }
+                    return timeComparison;
+                }
+                return dateComparison;
+            });
+
+            const latestLog = fuelLog[0];
+
+            return latestLog.id;
+        }
+
+    } catch (error) {
+        console.error('Error al obtener el registro de combustible:', error);
+        showToast('Error', 'Error al obtener el registro de combustible.');
+    }
+}
 
 async function getRegistroCombustible() {
     const unidadSelect = document.getElementById('unidad');
@@ -191,45 +227,10 @@ async function getRegistroCombustible() {
             document.getElementById('fecha').value = new Date(latestLog.fecha).toISOString().split('T')[0];
             document.getElementById('hora').value = latestLog.hora;
 
+            document.getElementById('btnGuardar').disabled = true;
             document.getElementById('btnLimpiar').style.display = 'inline-block';
             document.getElementById('btnActualizar').disabled = false;
             document.getElementById('btnEliminar').disabled = false;
-        }
-
-    } catch (error) {
-        console.error('Error al obtener el registro de combustible:', error);
-        showToast('Error', 'Error al obtener el registro de combustible.');
-    }
-}
-
-async function getIdRegistroCombustible(unidad) {
-    try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
-        const registros = response.data.registro;
-
-        if (!registros.length) {
-            showToast('Error', 'No hay registros de combustible para esta unidad.');
-            return;
-        }
-
-        const fuelLog = registros.filter(log => log.estado === 'activo');
-
-        if (fuelLog.length > 0) {
-            fuelLog.sort((a, b) => {
-                const dateComparison = new Date(b.fecha) - new Date(a.fecha);
-                if (dateComparison === 0) {
-                    const timeComparison = b.hora.localeCompare(a.hora);
-                    if (timeComparison === 0) {
-                        return b.id - a.id;
-                    }
-                    return timeComparison;
-                }
-                return dateComparison;
-            });
-
-            const latestLog = fuelLog[0];
-
-            return latestLog.id;
         }
 
     } catch (error) {
@@ -253,15 +254,6 @@ async function postRegistroCombustible() {
     const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
-
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
 
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {
@@ -317,15 +309,6 @@ async function putRegistroCombustible() {
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
-
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {
         showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
@@ -379,15 +362,6 @@ async function deleteRegistroCombustible() {
     const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
-
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
 
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {

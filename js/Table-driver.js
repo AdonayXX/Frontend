@@ -1,6 +1,40 @@
-    getChoferes();
+function openAccomp(cedula) {
+    const API_URL = `https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`;
+    axios.get(API_URL)
+        .then(response => {
+            const chofer = response.data.chofer[0]; 
 
-    document.getElementById('searchDrivers').addEventListener('keyup', debounce(handleSearchDrivers, 300));
+            const tableBody = document.querySelector('#emergencyContactTableBody');
+            if (chofer.nombreCE1 === null || chofer.nombreCE1 === undefined) {
+                tableBody.innerHTML = '<tr><td colspan="4">No hay acompañantes registrados</td></tr>';
+            } else {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td>${chofer.nombreCE1}</td>
+                        <td>${chofer.apellido1CE1}</td>
+                        <td>${chofer.apellido2CE1}</td>
+                        <td>${chofer.contactoEmergencia1}</td>
+                    </tr>
+                    <tr>
+                        <td>${chofer.nombreCE2 !== null ? chofer.nombreCE2 : ''}</td>
+                        <td>${chofer.apellido1CE2 !== null ? chofer.apellido1CE2 : ''}</td>
+                        <td>${chofer.apellido2CE2 !== null ? chofer.apellido2CE2 : ''}</td>
+                        <td>${chofer.contactoEmergencia2 !== null ? chofer.contactoEmergencia2 : ''}</td>
+                    </tr>
+                `;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('emergencyContactModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error fetching driver emergency contact data:', error);
+            showToast('Error', 'Error al obtener los datos de contacto de emergencia.');
+        });
+}
+
+getChoferes();
+
 
 async function getChoferes() {
     try {
@@ -13,12 +47,13 @@ async function getChoferes() {
                 $('#driverTable').DataTable().destroy();
             }
             fillChoferTable(choferes);
+
             $('#driverTable').DataTable({
-                dom: "<'row'<'col-md-6'l><'col-md-6'f>>" +
-                     "<'row'<'col-md-12't>>" +
-                     "<'row justify-content-between'<'col-md-5'i><'col-md-5'p>>",
+                dom: "<'row'<'col-sm-6'l>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 ordering: false,
-                searching: false,
+                searching: true,
                 paging: true,
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
@@ -31,6 +66,8 @@ async function getChoferes() {
                 let inputValue = $(this).val().toLowerCase();
                 $('#driverTable').DataTable().search(inputValue).draw();
             });
+
+            ocultarSpinner();
         });
 
     } catch (error) {
@@ -53,10 +90,10 @@ function fillChoferTable(choferes) {
                 <td>${chofer.contacto}</td>
                 <td>${chofer.tipoSangre}</td>
                 <td>${chofer.tipoLicencia}</td>
-                <td>${new Date(chofer.vencimientoLicencia).toISOString().split('T')[0]}</td>
+                <td class="text-center">${new Date(chofer.vencimientoLicencia).toISOString().split('T')[0]}</td>
                 <td>${chofer.estadoChofer}</td>
                 <td>
-                    <button class="btn btn-secondary" onclick="showEmergencyContact(${chofer.idChofer})" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Contacto de Emergencia">
+                    <button class="btn btn-outline-primary btn-sm" onclick="openAccomp('${chofer.cedula}')">
                         <i class="bi bi-eye"></i>
                     </button>
                 </td>
@@ -75,53 +112,7 @@ function debounce(func, wait) {
     };
 }
 
-function handleSearchDrivers() {
-    let input = document.getElementById('searchDrivers').value.toLowerCase();
-    let rows = Array.from(document.getElementById('driverTable').getElementsByTagName('tr'));
 
-    rows.forEach((row, index) => {
-        if (index === 0) return;
-        let cells = Array.from(row.getElementsByTagName('td'));
-        let match = cells.some(cell => cell.innerText.toLowerCase().includes(input));
-        row.style.display = match ? '' : 'none';
-    });
+function ocultarSpinner() {
+    document.getElementById('spinnerContainer').style.display = 'none';
 }
-
-// async function showEmergencyContact(idChofer) {
-//     try {
-//         const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/${idChofer}}`);
-//         if (response.status !== 200 || !response.data) {
-//             throw new Error('No data returned');
-//         }
-//         const chofer = response.data;
-
-//         const emergencyContactTableBody = document.getElementById('emergencyContactTableBody');
-//         emergencyContactTableBody.innerHTML = '';
-
-//         const contact1 = chofer.nombreCE1 ? `
-//             <tr>
-//                 <td>${chofer.nombreCE1}</td>
-//                 <td>${chofer.apellido1CE1}</td>
-//                 <td>${chofer.apellido2CE1}</td>
-//                 <td>${chofer.contactoEmergencia1}</td>
-//             </tr>
-//         ` : '';
-//         const contact2 = chofer.nombreCE2 ? `
-//             <tr>
-//                 <td>${chofer.nombreCE2}</td>
-//                 <td>${chofer.apellido1CE2}</td>
-//                 <td>${chofer.apellido2CE2}</td>
-//                 <td>${chofer.contactoEmergencia2}</td>
-//             </tr>
-//         ` : '';
-
-//         emergencyContactTableBody.innerHTML = contact1 + contact2;
-
-//         const emergencyContactModal = new bootstrap.Modal(document.getElementById('emergencyContactModal'));
-//         emergencyContactModal.show();
-
-//     } catch (error) {
-//         console.error('Error fetching emergency contact data:', error);
-//         showToast('Error', 'Error al obtener los datos de contacto de emergencia.');
-//     }
-// }
