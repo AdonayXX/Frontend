@@ -15,7 +15,7 @@ async function handleLogin() {
     try {
         const token = await loginUser(userEmail, userPassword);
         saveTokenLS(token);
-        window.location.href = 'Index.html'; // Redirigir al usuario
+        window.location.href = 'index.html'; // Redirigir al usuario
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         showToast('Error', 'Usuario o Contraseña incorrectos')
