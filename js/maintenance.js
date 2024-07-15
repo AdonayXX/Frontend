@@ -330,6 +330,7 @@ async function cambioEstCop(activ) {
     const fieldSet = document.getElementById(`field-set-${id}`);
     fieldSet.remove();
   };
+  
   document
     .querySelector("#maintenancebtn")
     .addEventListener("click", async () => {
@@ -490,7 +491,6 @@ async function cambioEstCop(activ) {
         Observacion: document.querySelector("#observaciones").value.trim() || "No hay observación",
         actividades: actividades,
       };
-      console.log(mantenimiento);
 
       try {
         const token = localStorage.getItem("token");
@@ -501,21 +501,25 @@ async function cambioEstCop(activ) {
           },
         });
 
-        console.log(response.data);
-        showToast("Exito", "Mantenimiento Creado.");
-        // Cerrar el modal correctamente usando Bootstrap
-        const modalElement = document.querySelector("#maintenanceModal");
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        if (modalInstance) {
-          modalInstance.hide();
-        } else {
-          const newModalInstance = new bootstrap.Modal(modalElement);
-          newModalInstance.hide();
+        if(response){
+          await ObtenerActualizarunidad(mantenimiento.IdUnidad,mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
+          showToast("Exito", "Mantenimiento Creado.");
+          // Cerrar el modal correctamente usando Bootstrap
+          const modalElement = document.querySelector("#maintenanceModal");
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide();
+          } else {
+            const newModalInstance = new bootstrap.Modal(modalElement);
+            newModalInstance.hide();
+          }
+          setTimeout(function () {
+            loadContent("dataTableMaintenance.html", "mainContent");
+          }, 500);
+
         }
-        setTimeout(function () {
-          loadContent("dataTableMaintenance.html", "mainContent");
-        }, 500);
-        // Manejar la respuesta del servidor aquí
+      
+
       } catch (error) {
         if (error.response && error.response.status === 400) {
           const errorMessage = error.response.data.error;
@@ -915,7 +919,6 @@ window.deleteActividad = async function (idActividad) {
         });
         console.log(response.data);
         showToast('Éxito', 'Actividad eliminada exitosamente');
-
         // Recargar la lista de actividades
         optimazadoactividades();
     } catch (error) {
@@ -935,6 +938,78 @@ function limpiarCampos() {
     document.querySelector("#tarea").value = "";
     document.querySelector("#unidadMedida").value = "";
 }
+
+
+async function ObtenerActualizarunidad(Idunidad, fechaMantenimiento, kilometrajeActualMantenimiento) {
+  try {
+    // Obtener la lista de unidades
+    const unidadesLista = await getUnidades();
+    
+    // Convertir la fecha a formato ISO
+    const isoDateStr = convertDateToISOString(fechaMantenimiento);
+
+    // Encontrar la unidad correspondiente por ID
+    const unidadEncontrada = unidadesLista.find(a => a.id === Idunidad);
+    if (!unidadEncontrada) {
+      throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);
+    }
+
+    // Preparar los datos de la unidad a actualizar
+    const unidadData = {
+      idTipoUnidad: parseInt(unidadEncontrada.idTipoUnidad),
+      idTipoRecurso: parseInt(unidadEncontrada.idTipoRecurso),
+      tipoFrecuenciaCambio: unidadEncontrada.tipoFrecuenciaCambio || null,
+      ultimoMantenimientoFecha: unidadEncontrada.ultimoMantenimientoFecha,
+      ultimoMantenimientoKilometraje: unidadEncontrada.ultimoMantenimientoKilometraje,
+      numeroUnidad: unidadEncontrada.numeroUnidad,
+      choferDesignado: parseInt(unidadEncontrada.choferDesignado),
+      fechaDekra: unidadEncontrada.fechaDekra,
+      capacidadTotal: parseInt(unidadEncontrada.capacidadTotal),
+      capacidadCamas: parseInt(unidadEncontrada.capacidadCamas),
+      capacidadSillas: parseInt(unidadEncontrada.capacidadSillas),
+      kilometrajeInicial: parseInt(unidadEncontrada.kilometrajeInicial),
+      kilometrajeActual: parseInt(unidadEncontrada.kilometrajeActual),
+      adelanto: parseInt(unidadEncontrada.adelanto),
+      idEstado: parseInt(unidadEncontrada.idEstado),
+      valorFrecuenciaC: parseInt(unidadEncontrada.valorFrecuenciaC)
+    };
+
+    console.log('Datos a enviar para actualizar:', unidadData);
+
+    // Hacer la petición PUT para actualizar la unidad
+    const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/89`, unidadData);
+    
+    // Verificar la respuesta del servidor
+    if (response.status === 200) {
+      showToast('Éxito', 'Unidad actualizada correctamente.');
+    } else {
+      // Manejar errores en la respuesta del servidor
+      console.error('Error en la respuesta del servidor:', response.data);
+      showToast('Error', 'Error al actualizar la unidad.');
+    }
+
+  } catch (error) {
+    // Manejar errores generales
+    console.error('Error al actualizar la unidad:', error);
+    showToast('Error', 'Error al actualizar la unidad.');
+  }
+}
+
+
+
+function convertDateToISOString(dateString) {
+  // Crear una instancia de Date usando el string de la fecha
+  const date = new Date(dateString);
+  
+  // Establecer la hora a medianoche UTC
+  date.setUTCHours(0, 0, 0, 0);
+  
+  // Convertir la fecha a una cadena ISO
+  return date.toISOString();
+}
+
+
+
 
 })();
 

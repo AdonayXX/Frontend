@@ -7,8 +7,8 @@ async function getPatientComp() {
   mostrarSpinner();
   try {
     const token = localStorage.getItem('token');
-    //const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
-    const API_URL = 'http://localhost:18026/api/paciente/acompanantes/';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
+   // const API_URL = 'http://localhost:18026/api/paciente/acompanantes/';
 
     const response = await axios.get(API_URL, {
       headers: {
