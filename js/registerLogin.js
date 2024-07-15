@@ -2,7 +2,7 @@ const sessionExpired = localStorage.getItem('sessionExpired');
 if (sessionExpired === 'true') {
     localStorage.removeItem('sessionExpired');
 }
-const Api_Url = 'http://localhost:18026/';
+const Api_Url = 'https://backend-transporteccss.onrender.com/';
 document.querySelector('#formLogin').addEventListener('submit', function(event){
     event.preventDefault();
     handleLogin();
@@ -79,7 +79,7 @@ function getUserData() {
 //Funcion para guardar el usuario
 async function saveUser(userData) {
     try {
-        const API_URL = 'http://localhost:18026/api/usuario/';
+        const API_URL = 'https://backend-transporteccss.onrender.com/api/usuario';
         const response = await axios.post(API_URL, userData);
         const userExist = response.data.usuario;
     

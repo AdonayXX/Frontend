@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tabla de Roles</title>
+    <title>Tabla de Mantenimiento</title>
 </head>
 
 <body>
     <div id="spinnerContainer" class="text-center mt-5">
         <div class="spinner-border mt-5" role="status">
-          <span class="sr-only">Loading...</span>
+            <span class="sr-only">Loading...</span>
         </div>
-      </div>
-    
+    </div>
+
     <!-- Contenedor -->
     <div class="fade-in">
         <div class="row justify-content-between align-items-center border-bottom m-2 p-2">
@@ -23,16 +23,38 @@
             </div>
             <!-- Barra de búsqueda -->
             <div class="col-sm-3 search-bar input-group m-2">
-                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar...">
+                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar..."  aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <!-- unidad -->
+            <div class="col-md-4 mb-3">
+                <label for="unidadFiltro" class="form-label"><i class="bi bi-truck"></i> Unidad:</label>
+                <select required id="unidadFiltro" name="unidadFiltro" class="form-select">
+                    <option selected disabled value="">Seleccionar</option>
+                </select>
+            </div>
+            <!-- fechaMantenimiento -->
+            <div class="col-md-4 mb-3">
+                <label for="fechaMantenimientoFiltro" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha de
+                    mantenimiento:</label>
+                <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro"
+                    class="form-control date-input">
             </div>
         </div>
         <!-- Botón para abrir modal de tareas -->
-        <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success bi bi-plus mx-4" id="maintenancebtn" data-bs-toggle="modal" data-bs-placement="top"
-                data-bs-target="#maintenanceModal">
+        <div class="d-flex  justify-content-end mb-3">
+
+
+
+
+            <button class="btn btn-success bi bi-plus mx-4" id="maintenancebtn" data-bs-toggle="modal"
+                data-bs-placement="top" data-bs-target="#maintenanceModal">
                 Agregar Mantenimiento
             </button>
-          
+
+
+
         </div>
         <!-- Tabla de mantenimiento -->
         <div class="table-responsive-xxl mt-3">
@@ -42,11 +64,14 @@
                         <th class="text-center">Unidad</th>
                         <th class="text-center">Tipo de unidad</th>
                         <th class="text-center">Fecha del mantenimiento</th>
+                        <th class="text-center">Tipo Mantenimiento</th>
+                        <th class="text-center">Observaciones</th>
                         <th class="text-center">Actividad</th>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Unidad de medida</th>
                         <th class="text-center">Estado</th>
                         <th class="text-center">Acciones</th>
+
                     </tr>
                 </thead>
                 <tbody id="maintenance-body" class="text-center">
@@ -87,27 +112,149 @@
                 </tbody>
             </table>
         </div>
+
+    </div>
+
+    <!-- MOdal Editar Mantenimiento -->
+
+    <div class="modal fade mt-5" id="maintenanceModalEdit" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Agregar mantenimiento
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalFormEdit">
+                    <div class="container fade-in" style="max-width: 1100px;">
+                        <form id="formMaintenance" name="formMaintenanceEdit"
+                            class="bg-light p-4 border rounded-3">
+                            <div class="form-section">
+                                <div class="row">
+                                    <!-- Unidad -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="unidad" class="form-label"><i class="bi bi-hash"></i>
+                                            Unidad:</label>
+                                        <select required id="unidadSelectEdit" name="unidad" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                    <!-- Tipo de unidad -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tipounidad" class="form-label"><i class="bi bi-truck-front"></i>
+                                            Tipo de Unidad:</label>
+                                        <input required type="text" id="tipoUnidadEdit" name="tipoUnidad"
+                                            class="form-control" maxlength="25" readonly>
+                                        <input type="hidden" id="IdTipoUnidadHiddenEdit">
+                                    </div>
+                                    <!-- Chofer -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="chofer" class="form-label"><i class="bi bi-person"></i>
+                                            Chofer:</label>
+                                        <input required type="text" id="choferEdit" name="chofer" class="form-control"
+                                            maxlength="25" readonly>
+                                        <input type="hidden" id="IdChoferHiddenEdit">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Kilometraje -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
+                                            Kilometraje:</label>
+                                        <input required type="number" id="kilometrajeEdit" name="kilometraje"
+                                            class="form-control" maxlength="25">
+                                    </div>
+                                    <!-- Fecha de mantenimiento -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fechaMantenimiento" class="form-label"><i
+                                                class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
+                                        <input type="date" id="fechaMantenimientoEdit" name="fechaMantenimiento"
+                                            class="form-control date-input">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tipoMantenimiento" class="form-label"><i class="bi bi-tools"></i>
+                                            Tipo de Mantenimiento:</label>
+                                        <select required id="tipoMantenimientoEdit" name="tipoMantenimiento"
+                                            class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Programado">Programado</option>
+                                            <option value="Correctivo">Correctivo</option>
+                                            <!-- etc -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Observaciones -->
+                                    <div class="col-12 mb-3">
+                                        <label for="observaciones" class="form-label"><i
+                                                class="bi bi-pencil-square"></i> Observaciones:</label>
+                                        <textarea required id="observacionesEdit" name="observaciones"
+                                            class="form-control" maxlength="200"></textarea>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="actividadEdit" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
+                                        <select required id="actividadEdit" name="actividadEdit" class="form-select">
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="unidadMedidaEdit" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
+                                           <select required id="unidadMedidaEdit" name="unidadMedidaEdit" class="form-select" readonly>    
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="cantidadEdit" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
+                                          <input required type="number" id="cantidadEdit" name="cantidadEdit" class="form-control">
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="estadoEdit" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
+                                          <select required id="estadoEdit" name="estadoEdit" class="form-select">
+                                              <option selected disabled value="">Seleccionar</option>
+                                              <option value="Completado">Completado</option>
+                                              <option value="Pendiente">Pendiente</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <hr>
+                                <div class="row justify-content-end">
+                                    <!-- Botón Guardar Mantenimiento -->
+                                    <div class="col-md-4 mb-3">
+                                        <button class="btn btn-primary bi bi-tools" id="saveMaintenanceEdit"
+                                            type="button">Guardar Cambios</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal de tareas -->
     <div class="modal fade mt-5" id="addNewTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 1051;">
-        <div class="modal-dialog modal-lg ">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="taskModalLabel" style="text-align: center;">Actividades</h5>
-                    <button type="button" class="btn-close btn-close-white" id="btnCloseTask"  data-bs-dismiss="modal"
+                    <button type="button" class="btn-close btn-close-white" id="btnCloseTask" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-1">
                     <!-- Formulario para agregar tarea -->
-                    <form action="" id="formAddtask" method="post">
+                    <form action="" id="formAddtask">
                         <div class="row">
                             <!-- Campo para ingresar tarea -->
                             <div class="col-md-4 mb-3">
-                                <label for="tarea" class="form-label"><i class="bi bi-list"></i>
-                                    Actividad:</label>
+                                <label for="tarea" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
                                 <input required type="text" id="tarea" name="tarea" class="form-control" maxlength="25">
                             </div>
                             <!-- Campo para ingresar unidad de medida -->
@@ -119,8 +266,7 @@
                             </div>
                             <!-- Botón para guardar nueva tarea -->
                             <div class="col-md-4 mb-3 align-self-md-end">
-                                <button class="btn btn-primary bi bi-plus" id="saveTask" type="submit"> 
-                                    Guardar</button>
+                                <button class="btn btn-primary bi bi-plus" id="saveTask" type="submit">Guardar</button>
                             </div>
                         </div>
                     </form>
@@ -136,7 +282,7 @@
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="activity-body">
                                 <!-- Ejemplo de fila de tarea -->
                                 <tr>
                                     <td>1</td>
@@ -165,114 +311,129 @@
         </div>
     </div>
 
-    <div class="modal fade mt-5" id="maintenanceModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"  
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 1051;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Agregar mantenimiento</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" ></button>
-            </div>
-            <div class="modal-body" id="modalFormEdit">
-                <div class="container  fade-in" style="max-width: 1100px;">
-                    <form id="formMaintenance" name="formMaintenance" method="post" class="class="bg-light p-4 border rounded-3>
-                        <div class="form-section">
-                            <div class="row">
-                                <!-- Unidad -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="unidad" class="form-label"><i class="bi bi-hash"></i> Unidad:</label>
-                                    <select required id="unidadSelect" name="unidad" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                    </select>
-                                </div>
-                                <!-- Tipo de unidad -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="tipounidad" class="form-label"><i class="bi bi-truck-front"></i> Tipo de
-                                        Unidad:</label>
-                                        <input required type="text" id="tipoUnidad" name="tipoUnidad" class="form-control" maxlength="25" readonly>
+    <!-- Modal de Mantenimiento -->
+    <div class="modal fade mt-5" id="maintenanceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Agregar mantenimiento
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalForm">
+                    <div class="container fade-in" style="max-width: 1100px;">
+                        <form id="formMaintenance" name="formMaintenance" class="bg-light p-4 border rounded-3">
+                            <div class="form-section">
+                                <div class="row">
+                                    <!-- Unidad -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="unidad" class="form-label"><i class="bi bi-hash"></i>
+                                            Unidad:</label>
+                                        <select required id="unidadSelect" name="unidad" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                        </select>
+                                    </div>
+                                    <!-- Tipo de unidad -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tipounidad" class="form-label"><i class="bi bi-truck-front"></i>
+                                            Tipo de Unidad:</label>
+                                        <input required type="text" id="tipoUnidad" name="tipoUnidad"
+                                            class="form-control" maxlength="25" readonly>
                                         <input type="hidden" id="IdTipoUnidadHidden">
+                                    </div>
+                                    <!-- Chofer -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="chofer" class="form-label"><i class="bi bi-person"></i>
+                                            Chofer:</label>
+                                        <input required type="text" id="chofer" name="chofer" class="form-control"
+                                            maxlength="25" readonly>
+                                        <input type="hidden" id="IdChoferHidden">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Kilometraje -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
+                                            Kilometraje:</label>
+                                        <input required type="number" id="kilometraje" name="kilometraje"
+                                            class="form-control" maxlength="25">
+                                    </div>
+                                    <!-- Fecha de mantenimiento -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fechaMantenimiento" class="form-label"><i
+                                                class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
+                                        <input type="date" id="fechaMantenimiento" name="fechaMantenimiento"
+                                            class="form-control date-input">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="tipoMantenimiento" class="form-label"><i class="bi bi-tools"></i>
+                                            Tipo de Mantenimiento:</label>
+                                        <select required id="tipoMantenimiento" name="tipoMantenimiento"
+                                            class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Programado">Programado</option>
+                                            <option value="Correctivo">Correctivo</option>
+                                            <!-- etc -->
+                                        </select>
+                                    </div>
+                                </div>
 
-                                    
-                                </div>
-                                <!-- Chofer -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer:</label>
-                                    <input required type="text" id="chofer" name="chofer" class="form-control" maxlength="25" readonly>
-                                    <input type="hidden" id="IdChoferHidden">
-                                </div>
                             </div>
-                            <div class="row">
-                                <!-- Kilometraje -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
-                                        Kilometraje:</label>
-                                    <input required type="number" id="kilometraje" name="kilometraje" class="form-control"
-                                        maxlength="25">
-                                </div>
-                                <!-- Fecha de mantenimiento -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="fechaMantenimiento" class="form-label"><i class="bi bi-calendar2-event"></i>
-                                        Fecha de mantenimiento:</label>
-                                    <input type="date" id="fechaMantenimiento" name="fechaMantenimiento"
-                                        class="form-control date-input">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="tipoMantenimiento" class="form-label"><i class="bi bi-tools"></i> Tipo de Mantenimiento:</label>
-                                    <select required id="tipoMantenimiento" name="tipoMantenimiento" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Programado">Programado</option>
-                                        <option value="Correctivo">Correctivo</option>
-                                        <!-- etc -->
-                                    </select>
-                              
-                            </div>
-                            <div class="row">
-                                <!-- Observacioens -->
-                                <div class="mb-3">
-                                    <label for="observaciones" class="form-label"><i class="bi bi-pencil-square"></i> Observaciones:</label>
-                                    <textarea required id="observaciones" name="observaciones" class="form-control"
-                                        maxlength="200"></textarea>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row justify-content-between">
-                                <div class="col-md-4 mb-3">
-                                    <button class="btn btn-success bi bi-plus mx-4" id="openTask" data-bs-toggle="modal" data-bs-placement="top"
-                                    data-bs-target="#addNewTask">
-                                    Lista Actividades
-                                  </button>
-                             </div>
-                             <div class="col-auto ms-auto" style="margin-bottom: 10px;">
-                                <button id="addActividadBtn" type="button" class="btn btn-outline-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                                      </svg>
-                                </button>
-                            </div>
-                            </div>
-                            <hr>
-                            <div class="row" id="actividadesDinamicas">
-                                <!-- Se cargaran las actividades de forma dinamica -->
-                            </div>
-
-
-                            <div class="row justify-content-end ">
-                                <!-- Botón Guardar Mantenimiento -->
-                                <div class="col-md-4 mb-3 align-content-end">
-                                    <button class="btn btn-primary bi bi-tools" id="saveMaintenance" type="submit">Guardar</button>
-                                </div>
+                        </form>
+                        <div class="row">
+                            <!-- Observaciones -->
+                            <div class="col-12 mb-3">
+                                <label for="observaciones" class="form-label"><i class="bi bi-pencil-square"></i>
+                                    Observaciones:</label>
+                                <textarea required id="observaciones" name="observaciones" class="form-control"
+                                    maxlength="200"></textarea>
                             </div>
                         </div>
-                    </form>
+                        <hr>
+                        <div class="row justify-content-between">
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-success bi bi-plus mx-4" id="openTask" data-bs-toggle="modal"
+                                    data-bs-placement="top" data-bs-target="#addNewTask">Lista Actividades</button>
+                            </div>
+                            <div class="col-auto ms-auto" style="margin-bottom: 10px;">
+                                <button id="addActividadBtn" type="button" class="btn btn-outline-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" id="actividadesDinamicas">
+                            <!-- Se cargarán las actividades de forma dinámica -->
+                        </div>
+                        <div class="row justify-content-end">
+                            <!-- Botón Guardar Mantenimiento -->
+                            <div class="col-md-4 mb-3">
+                                <button class="btn btn-primary bi bi-tools" id="saveMaintenance"
+                                    type="button">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-               
             </div>
         </div>
     </div>
-</div>
-<div data-script="js/maintenance.js"></div>
+
+
+
+
+
+
+
+
+
+    <div data-script="js/maintenance.js"></div>
 </body>
 
 </html>
