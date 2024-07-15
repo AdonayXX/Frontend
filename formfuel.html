@@ -49,21 +49,12 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje de
-                            Recarga</label>
-                        <input type="number" class="form-control" id="kilometraje" name="kilometraje" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required maxlength="6">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
                         <label for="tipoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Tipo de
                             Combustible</label>
                         <select class="form-select" id="tipoCombustible" name="tipoCombustible" required>
                             <option value="" disabled selected>Selecciona el tipo de combustible</option>
-                            <option value="Gasolina">Gasolina</option>
-                            <option value="Diesel">Diesel</option>
+                            <option value="1">Gasolina</option>
+                            <option value="2">Diesel</option>
                         </select>
                     </div>
                 </div>
@@ -89,13 +80,22 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
-                        <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="45">
+                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje de
+                            Recarga</label>
+                        <input type="number" class="form-control" id="kilometraje" name="kilometraje" min="0"
+                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            required maxlength="10">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="fecha" class="form-label"><i class="bi bi-calendar"></i> Fecha</label>
+                        <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
+                        <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="fecha" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha</label>
                         <input type="date" class="form-control" id="fecha" name="fecha" required>
                     </div>
                 </div>
