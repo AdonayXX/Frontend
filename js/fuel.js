@@ -169,8 +169,7 @@ async function getRegistroCombustible() {
 }
 
 
-
-function postRegistroCombustible() {
+async function postRegistroCombustible() {
     const chofer = document.getElementById('chofer');
     const unidadSelect = document.getElementById('unidad');
     const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
@@ -185,6 +184,16 @@ function postRegistroCombustible() {
     const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
+
+    if (await autorizacionDuplicado(numeroAutorizacion)) {
+        showToast('Error', `El número de autorización ${numeroAutorizacion} ya existe.`);
+        return;
+    }
+
+    if (await facturaDuplicado(numeroFactura)) {
+        showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
+        return;
+    }
 
     const fuelLogData = {
         numeroUnidad: unidad,
@@ -212,6 +221,36 @@ function postRegistroCombustible() {
             console.error('Error al crear el registro de combustible:', error);
             showToast('Error', 'Error al guardar el registro de combustible.');
         });
+}
+
+async function autorizacionDuplicado(numeroAutorizacion) {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
+        const registros = response.data.registros;
+
+        const duplicado = registros.some(registro => registro.numeroAutorizacion === numeroAutorizacion);
+
+        return duplicado;
+    } catch (error) {
+        console.error('Error al obtener los registros de combustible:', error);
+        showToast('Error', 'Error al obtener los registros de combustible.');
+        return false;
+    }
+}
+
+async function facturaDuplicado(numeroFactura) {
+    try {
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
+        const registros = response.data.registros;
+
+        const duplicado = registros.some(registro => registro.numeroFactura === numeroFactura);
+
+        return duplicado;
+    } catch (error) {
+        console.error('Error al obtener los registros de combustible:', error);
+        showToast('Error', 'Error al obtener los registros de combustible.');
+        return false;
+    }
 }
 
 async function getIdRegistroCombustible(unidad) {
@@ -349,6 +388,9 @@ async function deleteRegistroCombustible() {
         deleteModal.hide();
     }
 }
+
+
+
 
 getChoferes();
 getUnidades();

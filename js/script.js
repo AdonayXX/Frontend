@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadModalTemplate();
     //Cargar desde el incio el home.html
 
-    // loadContent('home.html', 'mainContent');
+    loadContent('home.html', 'mainContent');
 
  /*    loadContent('home.html', 'mainContent'); */
 
