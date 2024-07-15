@@ -129,7 +129,7 @@
         const formattedFechaCita = formatISODate(cita.fechaCita);
         rows += `
         <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
-          <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En Curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
+          <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
           <td class="text-center">${cita.Paciente}</td>
           <td class="text-center">${cita.ubicacionOrigen}</td>
           <td class="text-center">${cita.idUbicacionDestino}</td>
@@ -172,21 +172,31 @@
 
   function addCheckboxEventListeners() {
     document.querySelectorAll('.cita-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', function () {
+      checkbox.addEventListener('change', async function () {
         const isValid = checkcamilla();
         if (!isValid) {
           this.checked = !this.checked;
-        } else {
-          const row = this.closest('tr');
-          const idCita = this.value;
-          const idViaje = row.dataset.idviaje;
+          return;
+        }
 
-          if (this.checked) {
-            citasSeleccionadasGlobal.add(idCita);
-          } else {
-            citasSeleccionadasGlobal.delete(idCita);
-            if (idViaje) {
-              desasociarCitaDelViaje(idCita);
+        const row = this.closest('tr');
+        const idCita = this.value;
+        const idViaje = row.dataset.idviaje;
+
+        if (this.checked) {
+          citasSeleccionadasGlobal.add(idCita);
+        } else {
+          citasSeleccionadasGlobal.delete(idCita);
+          if (idViaje) {
+            try {
+              await desasociarCitaDelViaje(idCita);
+              row.dataset.idviaje = '';
+              this.disabled = false;
+              obtenerCitas(); 
+            } catch (error) {
+              console.error('Error al desasociar la cita del viaje:', error);
+              showToast('Error', 'No se pudo desasociar la cita del viaje');
+              this.checked = true;
             }
           }
         }
@@ -202,8 +212,10 @@
       showToast('Éxito', 'Cita desasociada del viaje exitosamente');
     } catch (error) {
       console.error('Error al desasociar la cita del viaje:', error.response.data);
+      throw error;
     }
   }
+
 
   function checkcamilla() {
     const checkboxes = document.querySelectorAll('.cita-checkbox:checked:not(:disabled)');
@@ -360,10 +372,10 @@
       IdChofer: idChofer,
       EstadoViaje: "Iniciado",
       fechaInicioViaje: fechaInicio,
-      idUsuario: 17, // dato quemado por ahora
+      idUsuario: idUsuario,
       Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
     };
-    const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}`;
+    const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
     console.log('URL para obtener el id del viaje:', getIdViaje)
 
     const url = 'https://backend-transporteccss.onrender.com/api/viaje';
@@ -435,8 +447,8 @@
     };
 
     try {
-      const response = await axios.put(url, datosAusencia);
-      console.log('Cita marcada como ausente:', response.data);
+      await axios.put(url, datosAusencia);
+      showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
       console.error('Error al marcar la cita como ausente:', error.response.data);
@@ -486,10 +498,22 @@
   // Ocultar el spinner
   function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
-  }
+}
 
-  // Mostrar el spinner
-  function mostrarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'flex';
+  function infoUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      return (decodedToken);
+    } catch (error) {
+      console.error(error);
+      showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
+
+    }
+
   }
+  const infoUsuario = infoUser();
+  console.log(infoUsuario);
+  const idUsuario = infoUsuario.usuario.IdUsuario;
+  console.log('IdUsuario:', idUsuario);
 })();
