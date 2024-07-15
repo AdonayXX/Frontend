@@ -101,11 +101,10 @@ document.getElementById('cedula').addEventListener('blur', async function (event
 
 async function getChofer(cedula) {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
-        const choferes = response.data.choferes;
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`);
+        const choferes = response.data.chofer;
 
-        const choferEncontrado = choferes.find(chofer => chofer.cedula === cedula);
-
+        const choferEncontrado = choferes[0]; // como la cedula es unica, solo se espera un chofer	
         if (choferEncontrado) {
             document.getElementById('nombre').value = choferEncontrado.nombre || '';
             document.getElementById('apellido1').value = choferEncontrado.apellido1 || '';

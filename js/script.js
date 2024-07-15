@@ -1,98 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
-     //Verificar token
-   /*  const token = localStorage.getItem('token');
-    if (token) {
-        setupAutoLogout(token);
-        const rolUser=  tokenrol(token);
-        getCatForm(rolUser);
-        
-
-    }  */
+    //Verificar token Descomentar para probar
+     const token = localStorage.getItem('token');
+     if (token) {
+         setupAutoLogout(token);
+         const rolUser=  tokenrol(token);
+         getCatForm(rolUser);
+         const userInfoSpan =   infoUser();
+         navbarUsername(userInfoSpan.usuario);
+     } 
     //Cerrar Sesión
-    document.querySelector('#logoutLink').addEventListener('click', ()=> {
-        logout(); 
+    document.querySelector('#logoutLink').addEventListener('click', () => {
+        logout();
     });
     loadToastTemplate();
     loadModalTemplate();
     //Cargar desde el incio el home.html
-    loadContent('home.html', 'mainContent');
 
-    document.getElementById('estadoViaje').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaInicio').addEventListener('change', handleEstadoChange);
-    document.getElementById('horaFin').addEventListener('change', handleEstadoChange);
-    document.getElementById('cancelar').addEventListener('click', cancelar);
-    document.getElementById('actualizar').addEventListener('click', actualizar);
-    document.getElementById('')
+    // loadContent('home.html', 'mainContent');
+
+ /*    loadContent('home.html', 'mainContent'); */
+
 });
 
-document.getElementById('registroViajesForm').addEventListener('submit', function (event) {
-    event.preventDefault();
 
-    const datosDelFormulario = {
-        citasAsociadas: document.getElementById('citasAsociadas').value,
-        choferAsignado: document.getElementById('choferAsignado').value,
-        capacidadRestante: document.getElementById('capacidadRestante').value,
-        estadoViaje: document.getElementById('estadoViaje').value,
-        kilometrajeInicial: document.getElementById('kilometrajeInicial').value,
-        kilometrajeFinal: document.getElementById('kilometrajeFinal').value,
-        duracionViaje: document.getElementById('duracionViaje').value,
-        consumoCombustible: document.getElementById('consumoCombustible').value,
-    };
-    axios.post('URL', datosDelFormulario)
-        .then(response => {
-            showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
-        })
-        .catch(error => {
-            console.error('Error en el registro:', error);
-            alert('Error en el registro');
-        });
-});
-
-function cancelar() {
-    showModal('¿Cancelar?', '¿Está seguro que desea cancelar el registro?', function () {
-        document.getElementById('registroViajesForm').reset();
-        showToast('Cancelación exitosa', 'Se ha cancelado el registro exitosamente.');
-    });
-}
-
-function handleEstadoChange() {
-    const estado = document.getElementById('estadoViaje').value;
-    const horaInicio = document.getElementById('horaInicio');
-    const horaFin = document.getElementById('horaFin');
-
-    if (estado === 'En curso' && !horaInicio.value) {
-        horaInicio.value = getCurrentTimeFormatted();
-        horaInicio.setAttribute('readonly', true);
-    } else if (estado === 'Cerrado' && !horaFin.value) {
-        horaFin.value = getCurrentTimeFormatted();
-        calcularDuracion();
-    }
-}
-
-function calcularDuracion() {
-    const horaInicio = document.getElementById('horaInicio').value;
-    const horaFin = document.getElementById('horaFin').value;
-    const inicio = new Date();
-    const fin = new Date();
-    const [horasInicio, minutosInicio] = horaInicio.split(':').map(Number);
-    const [horasFin, minutosFin] = horaFin.split(':').map(Number);
-
-    inicio.setHours(horasInicio, minutosInicio, 0);
-    fin.setHours(horasFin, minutosFin, 0);
-
-    const diferencia = (fin - inicio) / 1000 / 60;
-    const horas = Math.floor(diferencia / 60);
-    const minutos = diferencia % 60;
-
-    showToast('Duración del viaje', `Duración del viaje: ${horas} horas y ${minutos} minutos.`);
-}
-
-function getCurrentTimeFormatted() {
-    const ahora = new Date();
-    const horas = ahora.getHours();
-    const minutos = ahora.getMinutes();
-    return `${horas < 10 ? '0' + horas : horas}:${minutos < 10 ? '0' + minutos : minutos}`;
-}
 
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
@@ -160,7 +90,7 @@ function showModal(title, message, confirmCallback) {
 function decodeToken(token) {
     try {
         const decodedToken = jwt_decode(token);
-        return decodedToken.exp; 
+        return decodedToken.exp;
     } catch (error) {
         console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
@@ -176,7 +106,7 @@ function setupAutoLogout(token) {
 
             setTimeout(() => {
                 localStorage.setItem('sessionExpired', 'true');
-                
+
                 alert('Tu sesión ha expirado. Serás redirigido al login.');
                 localStorage.removeItem('token');
                 history.replaceState(null, '', 'login.html');
@@ -210,61 +140,83 @@ function tokenrol(token) {
     }
 }
 async function getCatForm(rolUser) {
-    console.log(rolUser);
     try {
-      const Api_Url = 'http://localhost:18026/';
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const rolesFr = response.data.roles;
-      const Rol = rolUser.Rol;
-      console.log(response.data);
-      obtenerFormulariosPorRol(rolesFr, Rol);
+        const Api_Url = 'http://localhost:18026/';
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const rolesFr = response.data.roles;
+        const Rol = rolUser.Rol;
+        obtenerFormulariosPorRol(rolesFr, Rol);
     } catch (error) {
-      console.error('Error al obtener datos :', error);
-      if (error.response && error.response.status === 400) {
-        const errorMessage = error.response.data.error;
-        showToast('Error','Inicie Sesión de nuevo');
-      }  else {
-        console.error('Ha ocurrido un problema:', error);
-        showToast('Atención','No tienes permisos, contacte al administrador.');
-        const allItems = document.querySelectorAll('.items');
+        console.error('Error al obtener datos :', error);
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            showToast('Error', 'Inicie Sesión de nuevo');
+        } else {
+            console.error('Ha ocurrido un problema:', error);
+            showToast('Atención', 'No tienes permisos, contacte al administrador.');
+            const allItems = document.querySelectorAll('.items');
+            allItems.forEach(item => {
+                if (item.classList.contains('no-hide')) {
+                    item.classList.remove('hidden');
+                }
+            });
+
+        }
+    }
+}
+
+function obtenerFormulariosPorRol(roles, rolBuscado) {
+    const formularios = roles
+        .filter(role => role.Rol === rolBuscado)
+        .map(role => role.Formulario);
+    
+    const allItems = document.querySelectorAll('.items');
+    if (formularios.length > 0) {
         allItems.forEach(item => {
             if (item.classList.contains('no-hide')) {
                 item.classList.remove('hidden');
             }
         });
 
-      } 
+        formularios.forEach(formulario => {
+            const item = document.getElementById(formulario.toString());
+            if (item) {
+                item.classList.remove('hidden');
+            }
+        });
+
     }
-  }
 
-  function obtenerFormulariosPorRol(roles, rolBuscado) {
-    const formularios = roles
-        .filter(role => role.Rol === rolBuscado)
-        .map(role => role.Formulario);
-        console.log(formularios);
-        const allItems = document.querySelectorAll('.items');
-        if (formularios.length > 0){
-            allItems.forEach(item => {
-                if (item.classList.contains('no-hide')) {
-                    item.classList.remove('hidden');
-                }
-            });
+}
+function infoUser(){
+    try {
+        const token = localStorage.getItem('token');
+        const decodedToken = jwt_decode(token);
+        return (decodedToken);
+    } catch (error) {
+        console.error(error);
+        showToast('Error','Ocurrio un problema al obtener loss datos del usuario')
         
-            formularios.forEach(formulario => {
-                const item = document.getElementById(formulario.toString());
-                if (item) {
-                    item.classList.remove('hidden');
-                }
-            });
+    }
 
-        }
-       
+}
+
+function navbarUsername(usuario){
+try {
+
+     const userNameSpan = document.querySelector('#user-name');
+     userNameSpan.textContent='';
+     const nombreCompleto = `${usuario.Nombre} ${usuario.Apellido1} ${usuario.Apellido2}`   
+     userNameSpan.textContent = nombreCompleto;
+} catch (error) {
+    console.error(error);
+    
+}
 }
 
 
- 

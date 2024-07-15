@@ -1,4 +1,8 @@
 
+getRutas();
+getEspecialidadesByDestino();
+applyMaskBasedOnType();
+
 
 document.getElementById('identificacion').addEventListener('blur', async function (event) {
     const identificacion = this.value.trim();
@@ -37,14 +41,14 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
 
                 const origenSelect = document.getElementById('origen');
-                origenSelect.value = pacienteEncontrado.Traslado;
+                origenSelect.value = pacienteEncontrado.LugarSalida;
     
            
                 showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
                 return true;
             } else {
                 showToast('Error', 'No se encontró ningún paciente con esa identificación.');
-                limpiarCampos();
+                loadContent('formAppointment.html', 'mainContent');
                 return false; 
             }
         } catch (error) {
@@ -88,8 +92,10 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         } catch (error) {
             console.error('Error fetching companions data:', error);
             showToast('Error', 'Error al obtener los datos de los acompañantes.');
+            console.log(acompanantes)
         }
     }
+
     function showAcompananteDetails(event, nombreField, apellido1Field, telefonoField, parentescoField) {
         const selectedOption = event.target.value;
         if (!acompanantes || acompanantes.length === 0) {
@@ -183,7 +189,7 @@ function limpiarCampos() {
     document.getElementById('especialidad').value = '';
     document.getElementById('destino').value = '';
     document.getElementById('origen').value = '';
-    document.getElementById('condicion').value = '';
+    // document.getElementById('condicion').value = '';
     
 
     limpiarCamposAcompanantes();
@@ -197,7 +203,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
     
  const guardarCita = async () => {
         if (!idPaciente) {
-            showToast('Error', 'No se ha obtenido el IdPaciente.');
+            console.log('Error', 'No se ha obtenido el IdPaciente.');
             this.disabled = false;
             return;
         }
@@ -228,6 +234,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
     const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
     const condicionCita = document.getElementById('condicion').value;
     const salida = document.getElementById('origen').value;
+    const tipoSeguro = document.getElementById('tipoSeguro').value;
  
     const citaData = {
         "idPaciente" : idPaciente,
@@ -239,6 +246,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         "camilla": camilla,
         "prioridad": prioridad,
         "condicionCita": condicionCita,
+        "tipoSeguro": tipoSeguro,
         "diagnostico": diagnostico,
         "fechaCita": fechaCita,
         "horaCita": horaCita,
@@ -265,47 +273,147 @@ await guardarCita();
 
 
 });
-
-
 function getRutas() {
     const selectDestino = document.getElementById('destino');
 
-    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
+    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad')
         .then(response => {
-            const destinos = response.data;
-            destinos.forEach(destino => {
+            const rutas = response.data;
+            rutas.forEach(ruta => {
                 const option = document.createElement('option');
-                option.value = destino.IdRuta;
-                option.textContent = destino.Descripcion;
+                option.value = ruta.IdRuta;
+                option.textContent = ruta.DescripcionRuta;
                 selectDestino.appendChild(option);
             });
         })
         .catch(error => {
             console.error('Error fetching destinos:', error);
         });
+}
 
+function getEspecialidadesByDestino(IdRuta) {
+    const selectEspecialidad = document.getElementById('especialidad');
+    selectEspecialidad.innerHTML = ''; // Limpiar las opciones existentes
 
-    }
+    const defaultOption = document.createElement('option');
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Seleccione una especialidad --';
+    selectEspecialidad.appendChild(defaultOption);
 
-    function getEspecialidades() {
-        const selectEspecialidad = document.getElementById('especialidad');
-
-        axios.get('https://backend-transporteccss.onrender.com/api/especialidad')
-            .then(response => {
-                const especialidades = response.data.Especialidad;
-                especialidades.forEach(especialidad => {
-                    const option = document.createElement('option');
-                    option.value = especialidad.idEspecialidad;
-                    option.textContent = especialidad.Especialidad;
-                    selectEspecialidad.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching especialidades:', error);
+    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`)
+        .then(response => {
+            const especialidades = response.data;
+            especialidades.forEach(especialidad => {
+                const option = document.createElement('option');
+                option.value = especialidad.idEspecialidad;
+                option.textContent = especialidad.Especialidad;
+                selectEspecialidad.appendChild(option);
             });
-    }
+        })
+        .catch(error => {
+            console.error('Error fetching especialidades:', error);
+        });
+}
+
+document.getElementById('destino').addEventListener('change', function () {
+    const IdRuta = this.value;
+    getEspecialidadesByDestino(IdRuta);
+});
 
 
-        getRutas();
-        getEspecialidades();
-
+    function applyIdentificationMask(elementId, mask) {
+        let inputElement = document.getElementById(elementId);
+        if (!inputElement) return;
+  
+        let content = '';
+  
+        inputElement.addEventListener('input', function () {
+          let maskedValue = maskIt(mask, this.value);
+          this.value = maskedValue;
+  
+          if (this.value.replace(/\D/g, '').length > 20) {
+            this.value = this.value.substring(0, this.value.length - 1);
+          }
+        });
+  
+        inputElement.addEventListener('keydown', function (e) {
+          if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+            return;
+          }
+  
+          e.preventDefault();
+  
+          if (!mask) {
+            mask = '';
+          }
+  
+          if (isNumeric(e.key) && content.length < mask.length) {
+            content += e.key;
+          }
+  
+          if (content.replace(/\D/g, '').length > 20) {
+            content = content.substring(0, content.length - 1);
+          }
+  
+          if (e.keyCode == 8) {
+            if (content.length > 0) {
+              content = content.substr(0, content.length - 1);
+            }
+          }
+  
+          inputElement.value = maskIt(mask, content);
+        });
+      }
+  
+      function maskIt(pattern, value) {
+        let maskedValue = '';
+        let valueIndex = 0;
+  
+        for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
+          if (valueIndex >= value.length) {
+            break;
+          }
+  
+          if (pattern[patternIndex] === '0') {
+            maskedValue += value[valueIndex];
+            valueIndex++;
+          } else {
+            maskedValue += pattern[patternIndex];
+          }
+        }
+  
+        return maskedValue;
+      }
+  
+      document.getElementById('tipoIdentificacion').addEventListener('change', function () {
+        applyMaskBasedOnType();
+      });
+  
+      function applyMaskBasedOnType() {
+        let tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+        let identificacionInput = document.getElementById('identificacion');
+        let mask = '';
+  
+        switch (tipoIdentificacion) {
+          case 'Cedula de Identidad':
+            mask = '0-0000-0000';
+            break;
+          case 'Número de Asegurado':
+            mask = '00000000000000000000';
+            break;
+          case 'Interno':
+            mask = '2536-00000000000000000000';
+            break;
+          default:
+            mask = '';
+            break;
+        }
+  
+        applyIdentificationMask('identificacion', mask);
+      }
+  
+      function isNumeric(char) {
+        return !isNaN(char - parseInt(char));
+      }

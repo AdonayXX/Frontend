@@ -1,56 +1,39 @@
 Promise.all([
     mostrarProximosViajes(),
+    mostrarFecha(),
     contarCitasHome(),
     mostrarChoferesPorVencer(),
     mostrarUnidadesPorDekra(),
     mostrarUnidadesPorKilometraje(),
-    mostrarUnidadesPorFecha(),
 
 ]);
 
 
+//CAMBIAR TODA LA FUNCION CUANDO SE TENGA LA RUTA DE LA API
 async function mostrarProximosViajes() {
     try {
         const ahora = new Date();
-        const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
-        const hoyUTC = ahoraUTC.toISOString().split('T')[0];
+        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        const hoyUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), 0, 0, 0));
+        const hoyUTCStr = hoyUTC.toISOString().split('T')[0];
 
-        const fechaFormateada = hoyUTC.split('-').reverse().join('-');
+        const fechaFormateada = hoyUTCStr.split('-').reverse().join('-');
         document.getElementById('fecha').textContent = fechaFormateada;
 
-        const [destinosRespuesta, viajesRespuesta, unidadesRespuesta] = await axios.all([
-            axios.get('https://backend-transporteccss.onrender.com/api/rutas'),
-            axios.get('https://backend-transporteccss.onrender.com/api/viaje'),
-            axios.get('https://backend-transporteccss.onrender.com/api/unidades')
-        ]);
+        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/destinos');
 
-        if (!destinosRespuesta.data || !viajesRespuesta.data || !unidadesRespuesta.data) {
-            throw new Error('Error al obtener los destinos, los viajes o las unidades');
+        if (!viajesRespuesta.data) {
+            throw new Error('Error al obtener los viajes');
         }
 
-        const [destinos, dataViajes, dataUnidades] = await axios.all([
-            destinosRespuesta.data,
-            viajesRespuesta.data,
-            unidadesRespuesta.data
-        ]);
-
-        const destinoMap = destinos.reduce((map, destino) => {
-            map[destino.IdRuta] = destino.Descripcion.toLowerCase().replace(/(^|\s)\S/g, (letra) => letra.toUpperCase());
-            return map;
-        }, {});
-
-        const unidadMap = dataUnidades.unidades.reduce((map, unidad) => {
-            map[unidad.id] = unidad.numeroUnidad;
-            return map;
-        }, {});
-
+        const dataViajes = viajesRespuesta.data;
         const viajes = dataViajes.viaje;
 
         const viajesHoyUTC = viajes.filter(viaje => {
-            const fechaViaje = new Date(viaje.FechaCita);
-            const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), fechaViaje.getUTCHours(), fechaViaje.getUTCMinutes(), fechaViaje.getUTCSeconds()));
+            const fechaViaje = new Date(viaje.fechaInicioViaje);
+            const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), 0, 0, 0));
             const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
-            return fechaViajeStr === hoyUTC && viaje.EstadoViaje === "Iniciado"; // Cambiar a 'En curso' cuando se implemente
+            return fechaViajeStr === hoyUTCStr && viaje.EstadoViaje === "Iniciado";
         });
 
         const proximosViajesContainer = document.getElementById('proximosViajesContainer');
@@ -61,24 +44,41 @@ async function mostrarProximosViajes() {
             mensajeNoViajes.textContent = 'No hay viajes asignados para el día de hoy.';
             mensajeNoViajes.classList.add('text-center');
             proximosViajesContainer.appendChild(mensajeNoViajes);
-        
+
         } else {
-            viajesHoyUTC.forEach(viaje => {
+            const viajesPorDestino = viajesHoyUTC.reduce((acc, viaje) => {
+                if (!acc[viaje.ubicacionDestino]) {
+                    acc[viaje.ubicacionDestino] = [];
+                }
+                acc[viaje.ubicacionDestino].push(viaje);
+                return acc;
+            }, {});
+
+            Object.keys(viajesPorDestino).forEach(destino => {
+                const viajesDestino = viajesPorDestino[destino];
+                const viaje = viajesDestino[0];
+
                 const viajeElement = document.createElement('div');
                 viajeElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
                 viajeElement.style.maxWidth = '18rem';
-                const destinoDescripcion = destinoMap[viaje.idUbicacionDestino] || viaje.idUbicacionDestino;
-                const numeroUnidad = unidadMap[viaje.idUnidad] || viaje.idUnidad;
+
+                const letraMayuscula = (string) => {
+                    const words = string.split(' ');
+                    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+                    return capitalizedWords.join(' ');
+                };
+
+                const badgeHTML = viajesDestino.length > 1 ? `<span class="badge position-absolute top-0 end-0" style="background-color: #094079;">${viajesDestino.length}</span>` : '';
 
                 viajeElement.innerHTML = `
-                    <div class="headerviaje card-header text-center text-white" style="background-color: #094079;">
-                        <h5 class="fw-bolder">Unidad ${numeroUnidad}</h5>
+                    <div class="headerviaje card-header text-center text-white position-relative" style="background-color: #094079;">
+                        <h5 class="fw-bolder">UNIDAD ${viaje.numeroUnidad}</h5>
+                        ${badgeHTML}
                     </div>
                     <div class="card-body text-center">
-                        
                         <h5 class="card-title">Fecha de viaje:</h5>
-                        <h5 class="card-title"> ${new Date(viaje.FechaCita).toISOString().split('T')[0]}</h5>
-                        <p class="card-text fs-5">Destino: ${destinoDescripcion}</p>
+                        <h5 class="card-title">${new Date(viaje.fechaInicioViaje).toISOString().split('T')[0]}</h5>
+                        <p class="card-text fs-5">Destino: ${letraMayuscula(viaje.ubicacionDestino)}</p>
                     </div>
                 `;
                 proximosViajesContainer.appendChild(viajeElement);
@@ -89,6 +89,21 @@ async function mostrarProximosViajes() {
         console.error('Error al mostrar los próximos viajes:', error);
     }
 }
+
+async function mostrarFecha() {
+    try {
+        const ahora = new Date();
+        ahora.setHours(0, 0, 0, 0); // Setear la hora a las 00:00:00
+        const ahoraUTC = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), ahora.getUTCHours(), ahora.getUTCMinutes(), ahora.getUTCSeconds()));
+        const hoyUTC = ahoraUTC.toISOString().split('T')[0];
+
+        const fechaFormateada = hoyUTC.split('-').reverse().join('-');
+        document.getElementById('fecha').textContent = fechaFormateada;
+    } catch (error) {
+        console.error('Error al mostrar la fecha:', error);
+    }
+}
+
 
 async function contarCitasHome() {
     try {
@@ -122,7 +137,7 @@ async function contarCitasHome() {
         // Filtrar viajes finalizados
         const viajesFinalizados = dataViajes.filter(viaje => {
             const viajeYear = viaje.idViaje.split('-')[0];
-            return viaje.EstadoViaje === null && viajeYear === year;
+            return viaje.EstadoViaje === "Finalizado" && viajeYear === year;
         });
 
         // Mostrar conteos en el DOM
@@ -152,7 +167,7 @@ async function mostrarUnidadesPorDekra() {
         const unidadesPorVencer = dataUnidades.unidades.filter(unidad => {
             const fechaVencimiento = new Date(unidad.fechaDekra);
             const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
-            return diasRestantes < 30 && diasRestantes > 0;
+            return diasRestantes < 30 && diasRestantes > 0 && unidad.idEstado === 1;
         });
 
         const unidadesPorVencerContainer = document.getElementById('proximosDekra');
@@ -203,7 +218,7 @@ async function mostrarChoferesPorVencer() {
         const choferesPorVencer = dataChoferes.choferes.filter(chofer => {
             const fechaVencimiento = new Date(chofer.vencimientoLicencia);
             const diasRestantes = Math.floor((fechaVencimiento - ahora) / (1000 * 60 * 60 * 24));
-            return diasRestantes <= 30 && diasRestantes > 0;
+            return diasRestantes <= 30 && diasRestantes > 0 && chofer.estadoChofer === "Activo";
         });
 
         const choferesPorVencerContainer = document.getElementById('proximoschoferes');
@@ -257,7 +272,7 @@ async function mostrarUnidadesPorKilometraje() {
         const dataUnidades = unidadesRespuesta.data.unidades;
 
         const unidadesPorKilometraje = dataUnidades.filter(unidad => {
-            if (unidad.tipoFrecuenciaCambio === "Kilometraje") {
+            if (unidad.idEstado === 1) {
                 const ultimoKilometraje = unidad.ultimoMantenimientoKilometraje || unidad.kilometrajeInicial;
                 const kilometrajeActual = unidad.kilometrajeActual;
                 const frecuenciaKilometraje = unidad.valorFrecuenciaC;
@@ -300,71 +315,3 @@ async function mostrarUnidadesPorKilometraje() {
         console.error('Error al mostrar las unidades por kilometraje:', error);
     }
 }
-
-
-
-async function mostrarUnidadesPorFecha() {
-    try {
-        const ahora = new Date();
-        const hoyUTC = ahora.toISOString().split('T')[0];
-
-        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
-
-        if (!unidadesRespuesta.data) {
-            throw new Error('Error al obtener las unidades');
-        }
-
-        const dataUnidades = unidadesRespuesta.data.unidades;
-
-        const unidadesPorFecha = dataUnidades.filter(unidad => {
-            if (unidad.tipoFrecuenciaCambio === "Fecha") {
-                const ultimoMantenimiento = new Date(unidad.ultimoMantenimientoFecha);
-                const frecuenciaDias = unidad.valorFrecuenciaC;
-                const proximoMantenimiento = new Date(ultimoMantenimiento);
-                proximoMantenimiento.setDate(proximoMantenimiento.getDate() + frecuenciaDias);
-                
-                const diasRestantes = Math.floor((proximoMantenimiento - ahora) / (1000 * 60 * 60 * 24));
-                const adelantoDias = Math.floor(frecuenciaDias * (unidad.adelanto / 100));
-                
-                return diasRestantes <= adelantoDias;
-            }
-            return false;
-        });
-
-        const unidadesPorFechaContainer = document.getElementById('proximosMantenimientoFecha');
-        unidadesPorFechaContainer.innerHTML = '';
-
-        if (unidadesPorFecha.length === 0) {
-            console.log('No hay unidades próximas a necesitar mantenimiento por fecha.');
-        } else {
-            const tituloMantenimientoFecha = document.createElement('h5');
-            tituloMantenimientoFecha.textContent = 'Mantenimiento por Fecha';
-            tituloMantenimientoFecha.classList.add('text-center', 'mt-4', 'mb-4', 'rounded');
-            unidadesPorFechaContainer.appendChild(tituloMantenimientoFecha);
-
-            unidadesPorFecha.forEach(unidad => {
-                const proximoMantenimiento = new Date(unidad.ultimoMantenimientoFecha);
-                proximoMantenimiento.setDate(proximoMantenimiento.getDate() + unidad.valorFrecuenciaC);
-                
-                const unidadElement = document.createElement('div');
-                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
-                unidadElement.style.maxWidth = '18rem';
-                unidadElement.innerHTML = `
-                    <div class="headerunidad card-header text-center text-white" style="background-color: #4244ad;">
-                        <h5 class="fw-bolder">Unidad ${unidad.numeroUnidad}</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Último Mantenimiento: </h5>
-                        <h5 class="card-title">${unidad.ultimoMantenimientoFecha.split('T')[0]}</h5>
-                        <h5 class="card-title">Próximo Mantenimiento: </h5>
-                        <h5 class="card-title">${proximoMantenimiento.toISOString().split('T')[0]}</h5>
-                    </div>
-                `;
-                unidadesPorFechaContainer.appendChild(unidadElement);
-            });
-        }
-    } catch (error) {
-        console.error('Error al mostrar las unidades por fecha:', error);
-    }
-}
-

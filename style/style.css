@@ -259,19 +259,33 @@ h1 {
     background-color: #02a834;
     color: white;
 }
+.excel{
+    background-color: #094079;
+
+}
+
+.pdf{
+    background-color: #094079;
+
+}
+
+.print{
+    background-color: #094079;
+
+}
 
 .excel:hover {
-    background-color: #094079;
+    color: rgb(169, 169, 169);
     color: white;
 }
 
 .pdf:hover {
-    background-color: #094079;
+    color: rgb(169, 169, 169);
     color: white;
 }
 
 .print:hover {
-    background-color: #094079;
+    color: rgb(169, 169, 169);
     color: white;
 }
 
@@ -302,7 +316,7 @@ h1 {
     top: 4%;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 75%;
     z-index: 1048;
     display: flex;
     justify-content: center;
@@ -317,7 +331,55 @@ h1 {
 
 
 }
-
-/* .hidden{
+/*Descomentar para probar*/
+/*  .hidden{
     display: none;
-} */
+} 
+  */
+
+td,
+tr {
+    text-align: center;
+}
+
+@media(max-width: 449px) {
+    #labelfila {
+        margin-top: 10px;
+    }
+}
+
+@media(max-width: 507px) {
+    #botones {
+        margin-top: 15px;
+    }
+}
+
+#spinnerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    margin-top: 46px;
+}
+
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(farthest-side, #094079 94%, #0000) top/8px 8px no-repeat,
+        conic-gradient(#0000 30%, #094079);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    animation: l13 0.7s infinite linear;
+}
+
+@keyframes l13 {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+#btnEliminarEspe {
+    width: 50px;
+}
