@@ -23,10 +23,16 @@ document.getElementById('identificacion').addEventListener('blur', async functio
  
     async function getPacienteCita(identificacion) {
         try {
+
+            const token = localStorage.getItem('token');
             const API_URL = `https://backend-transporteccss.onrender.com/api/paciente`;
-            const response = await axios.get(API_URL);
+            const response = await axios.get(API_URL, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             pacientes = response.data.pacientes; 
-    
             const pacienteEncontrado = pacientes.find(paciente => paciente.Identificacion === identificacion && paciente.Estado === 'Activo');
     
             if (pacienteEncontrado) {
@@ -60,9 +66,18 @@ document.getElementById('identificacion').addEventListener('blur', async functio
     
     async function getAcompanantes(identificacion) {
         try {
+
+
+            const token = localStorage.getItem('token');
             const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/${identificacion}`;
-            const responseAcompanante = await axios.get(API_URL_ACOMPANANTE);
-            acompanantes = responseAcompanante.data.acompanantes;
+            const response = await axios.get(API_URL_ACOMPANANTE, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+    
+            acompanantes = response.data.acompanantes;
 
             const acompanante1Select = document.getElementById('acompananteNombre1');
             const acompanante2Select = document.getElementById('acompananteNombre2');
