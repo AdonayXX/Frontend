@@ -23,7 +23,7 @@
             </div>
             <!-- Barra de búsqueda -->
             <div class="col-sm-3 search-bar input-group m-2">
-                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar...">
+                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar..."  aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="row">
@@ -115,6 +115,8 @@
 
     </div>
 
+    <!-- MOdal Editar Mantenimiento -->
+
     <div class="modal fade mt-5" id="maintenanceModalEdit" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -128,7 +130,7 @@
                 </div>
                 <div class="modal-body" id="modalFormEdit">
                     <div class="container fade-in" style="max-width: 1100px;">
-                        <form id="formMaintenance" name="formMaintenanceEdit" method="post"
+                        <form id="formMaintenance" name="formMaintenanceEdit"
                             class="bg-light p-4 border rounded-3">
                             <div class="form-section">
                                 <div class="row">
@@ -194,16 +196,39 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row" id="actividadesDinamicasEdit">
-                                    <!-- Se cargarán las actividades de forma dinámica -->
-                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="actividadEdit" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
+                                        <select required id="actividadEdit" name="actividadEdit" class="form-select">
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="unidadMedidaEdit" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
+                                           <select required id="unidadMedidaEdit" name="unidadMedidaEdit" class="form-select" readonly>    
+                                          </select>
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="cantidadEdit" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
+                                          <input required type="number" id="cantidadEdit" name="cantidadEdit" class="form-control">
+                                      </div>
+                                      <div class="col-md-3">
+                                          <label for="estadoEdit" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
+                                          <select required id="estadoEdit" name="estadoEdit" class="form-select">
+                                              <option selected disabled value="">Seleccionar</option>
+                                              <option value="Completado">Completado</option>
+                                              <option value="Pendiente">Pendiente</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <hr>
                                 <div class="row justify-content-end">
                                     <!-- Botón Guardar Mantenimiento -->
                                     <div class="col-md-4 mb-3">
                                         <button class="btn btn-primary bi bi-tools" id="saveMaintenanceEdit"
-                                            type="submit">Guardar</button>
+                                            type="button">Guardar Cambios</button>
                                     </div>
                                 </div>
+
                             </div>
                         </form>
                     </div>
@@ -409,7 +434,6 @@
 
 
     <div data-script="js/maintenance.js"></div>
-    <div data-script="js/activities.js"=""></div>
 </body>
 
 </html>

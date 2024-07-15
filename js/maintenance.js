@@ -1,3 +1,4 @@
+(async function () {
 getMaintenance();
 //Obtener los matenimientos
 async function getMaintenance() {
@@ -57,12 +58,32 @@ async function getMaintenance() {
         let inputValue = $(this).val().toLowerCase();
         table.search(inputValue).draw();
       });
-      $('#searchMaintenanceDate').on('change', function () {
-        let fechamaint = $('#searchMaintenanceDate').val();
-        $('#tableMaintenance').DataTable().column(2).search(fechamaint).draw();
-      });
+  // Captura el evento de cambio en el campo de fecha
+  $('#fechaMantenimientoFiltro').on('change', function () {
+    let fechamaint = $('#fechaMantenimientoFiltro').val();
+    if (fechamaint.trim() === '') {
+      table.column(2).search('').draw();
+    } else {
+      let formattedDate = formatDateFiltro(fechamaint);
+      table.column(2).search(formattedDate).draw();
+    }
+  });
+
+  // Captura el evento de cambio en el campo de unidad
+  $('#unidadFiltro').on('change', function () {
+    let unidadFiltro = $('#unidadFiltro').val();
+    if (unidadFiltro === 'All') {
+      table.column(0).search('').draw();
+    } else {
+      table.column(0).search(unidadFiltro).draw();
+    }
+  });
+
+  
+
     });
     ocultarSpinner();
+    getUnidadesFiltro();
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
@@ -127,7 +148,7 @@ function fillMaintenance(mantenimiento, actividades, actividadesT) {
     <i class="bi bi-check"></i>
 </button>
               <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
-          { activ })},${JSON.stringify(maintenance)})' ><i class="bi bi-pencil"></i></button>
+          { activfind })},${JSON.stringify(maintenance)})' ><i class="bi bi-pencil"></i></button>
 
               
               </tr>
@@ -167,11 +188,11 @@ $(document).on("click", "#btnCloseTask", function () {
 });
 
 document.querySelector("#openTask").addEventListener("click", () => {
-  getActividades();
+  getActividades1();
 });
 
 //Mostar Actividades
-async function getActividades() {
+async function getActividades1() {
   try {
     const token = localStorage.getItem("token");
     const API_URL = "http://localhost:18026/api/actividadMantenimiento";
@@ -223,7 +244,7 @@ async function cambioEstCop(activ) {
 }
 
 
-(async function () {
+
   let fieldCounter = 0;
   const actividadesLista = await getActiv();
 
@@ -330,6 +351,8 @@ async function cambioEstCop(activ) {
       // Añadir el event listener para cambio de selección
       unidadSelect.addEventListener("change", async () => {
         console.log(uniLlenado);
+        document.querySelector("#tipoUnidad").value = '';
+        document.querySelector("#chofer").value = '';
 
         const unidadFiltrda = uniLlenado.find(
           (unidad) => unidad.id === parseInt(unidadSelect.value)
@@ -445,8 +468,7 @@ async function cambioEstCop(activ) {
 
         if (activitySelect && unidadSelect && cantidadInput && estadoSelect) {
           actividades.push({
-            DescripcionTarea: activitySelect.value,
-            UnidadMedida: unidadMedida.value,
+            IdActividad: parseInt(activitySelect.value),
             Cantidad: parseInt(cantidadInput.value.trim()),
             Estado: estadoSelect.value,
           });
@@ -454,7 +476,7 @@ async function cambioEstCop(activ) {
       }
 
       const mantenimiento = {
-        IdChofer: document.querySelector("#IdChoferHidden").value.trim(),
+        IdChofer: parseInt(document.querySelector("#IdChoferHidden").value.trim()),
         IdUnidad: parseInt(
           document.querySelector("#unidadSelect").value.trim()
         ),
@@ -465,7 +487,7 @@ async function cambioEstCop(activ) {
         TipoMantenimiento: document
           .querySelector("#tipoMantenimiento")
           .value.trim(),
-        Observacion: document.querySelector("#observaciones").value.trim(),
+        Observacion: document.querySelector("#observaciones").value.trim() || "No hay observación",
         actividades: actividades,
       };
       console.log(mantenimiento);
@@ -507,66 +529,209 @@ async function cambioEstCop(activ) {
       }
     });
 
-  window.EditarMant = async function (activ, mantenimiento) {
-    try {
+    //Editar Mantenimiento
+    window.EditarMant = async function (activ, mantenimiento) {
+      try {
+           
+        
+        
+        const actividadesLista = await getActividades();
+         // Mostrar el modal de mantenimiento
+         $("#maintenanceModalEdit").modal("show");
+     
+        activitySelect(actividadesLista);
+       
 
-      // Mostrar el modal de mantenimiento luego de agregar actividades
-      $("#maintenanceModalEdit").modal("show");
-
-      const uniLlenado = await getUnidades();
-      console.log(uniLlenado);
-      const unidadSelect = document.querySelector("#unidadSelectEdit");
-
-      // Llenar el select con las opciones de unidad
-      unidadSelect.innerHTML =
-        '<option selected disabled value="">Seleccionar</option>';
-      uniLlenado.forEach((unidad) => {
-        const option = document.createElement("option");
-        option.value = unidad.id;
-        option.textContent = unidad.numeroUnidad;
-        unidadSelect.appendChild(option);
-      });
-      // Establecer el valor seleccionado
-      unidadSelect.value = mantenimiento.IdUnidad;
-      // Simular evento change
-      const changeEvent = new Event("change");
-      unidadSelect.dispatchEvent(changeEvent);
-
-      // Añadir el event listener para cambio de selección
-      unidadSelect.addEventListener("change", async () => {
+        document.querySelector('#actividadEdit').addEventListener('change', async () => {
+          try {
+            const valorSelectAct = document.querySelector('#actividadEdit').value;
+            
+            // Obtener el select de unidades
+            const selectUnidad = document.querySelector('#unidadMedidaEdit');
+        
+            // Limpiar opciones anteriores (si las hay)
+            selectUnidad.innerHTML = '';
+            // Llenar el select con las opciones de unidades basadas en la actividad seleccionada
+            actividadesLista.forEach(actividad => {
+              if (actividad.IdActividad == valorSelectAct) { // Asegúrate de comparar con la propiedad correcta de actividad
+                const option = document.createElement("option");
+                option.value = actividad.UnidadMedida;
+                option.textContent = actividad.UnidadMedida;
+                selectUnidad.appendChild(option);
+              }
+            });
+        
+          } catch (error) {
+            console.error("Error al llenar el select de unidades:", error);
+          }
+        });
+        
+      
+        document.querySelector('#kilometrajeEdit').value = mantenimiento.Kilometraje;
+        document.querySelector('#tipoMantenimientoEdit').value = mantenimiento.TipoMantenimiento;
+        document.querySelector('#fechaMantenimientoEdit').value = mantenimiento.FechaMantenimiento.substring(0, 10); 
+        document.querySelector('#observacionesEdit').value = mantenimiento.Observacion;
+        document.querySelector('#actividadEdit').value = activ.activfind.IdActividad;
+        document.querySelector('#unidadMedidaEdit').value = activ.activfind.UnidadMedida;
+        document.querySelector('#cantidadEdit').value =  activ.activfind.Cantidad;
+        document.querySelector('#estadoEdit').value = activ.activfind.Estado;
+             // Simular evento de cambio
+             const changeEvent1 = new Event("change");
+             document.querySelector('#actividadEdit').dispatchEvent(changeEvent1);
+        // Obtener las unidades disponibles
+        const uniLlenado = await getUnidades();
         console.log(uniLlenado);
+    
+        // Selector de unidad en el modal
+        const unidadSelect = document.querySelector("#unidadSelectEdit");
+    
+        // Limpiar opciones anteriores y agregar la opción por defecto
+        unidadSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+    
+        // Llenar el select con las opciones de unidad
+        uniLlenado.forEach((unidad) => {
+          const option = document.createElement("option");
+          option.value = unidad.id;
+          option.textContent = unidad.numeroUnidad;
+          unidadSelect.appendChild(option);
+        });
+    
+        // Establecer el valor seleccionado
+        unidadSelect.value = mantenimiento.IdUnidad;
+    
+    
+        // Añadir event listener para cambio de selección
+        document.querySelector("#unidadSelectEdit").addEventListener("change", async () => {
+          console.log("Evento Eje")
+          // Limpiar valores anteriores
+          document.querySelector("#choferEdit").value = '';
+          document.querySelector("#tipoUnidadEdit").value = '';
+          document.querySelector('#kilometrajeEdit').value = '';
 
-        const unidadFiltrda = uniLlenado.find(
-          (unidad) => unidad.id === parseInt(unidadSelect.value)
-        );
-        document.querySelector("#kilometraje").value =
-          unidadFiltrda.kilometrajeActual;
-        document.querySelector("#IdTipoUnidadHiddenEdit").value =
-          unidadFiltrda.idTipoUnidad;
-        document.querySelector("#IdChoferHiddenEdit").value =
-          unidadFiltrda.choferDesignado;
-        const idChofer = parseInt(unidadFiltrda.choferDesignado);
-        const idtipoUnidad = parseInt(unidadFiltrda.idTipoUnidad);
-        const choferfind = await getChoferNombre(idChofer);
-        const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
-        nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
-        document.querySelector("#choferEdit").value = nombreCompletoChofer;
-        document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
-      });
+    
+          // Obtener la unidad seleccionada
+          const unidadFiltrada = uniLlenado.find(
+            (unidad) => unidad.id === parseInt(unidadSelect.value)
+          );
+    
 
+          document.querySelector("#IdTipoUnidadHiddenEdit").value = unidadFiltrada.idTipoUnidad;
+          document.querySelector("#IdChoferHiddenEdit").value = unidadFiltrada.choferDesignado;
+          document.querySelector('#kilometrajeEdit').value = unidadFiltrada.kilometrajeActual
+    
+          // Obtener nombre completo del chofer
+          const idChofer = parseInt(unidadFiltrada.choferDesignado);
+          const idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
+          const choferfind = await getChoferNombre(idChofer);
+          const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
+          const nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
+    
+          // Mostrar el nombre del chofer y tipo de unidad
+          document.querySelector("#choferEdit").value = nombreCompletoChofer;
+          document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
+        });
 
+         // Simular evento de cambio
+         const changeEvent = new Event("change");
+         document.querySelector('#unidadSelectEdit').dispatchEvent(changeEvent);
 
+         //Evento click para guardar cambios
+         document.querySelector('#saveMaintenanceEdit').addEventListener('click', async function() {
+          try {
+            const mantenimientoData = {
+              IdChofer: parseInt(document.querySelector("#IdChoferHiddenEdit").value.trim()),
+              IdUnidad: parseInt(document.querySelector("#unidadSelectEdit").value.trim()),
+              FechaMantenimiento: document.querySelector("#fechaMantenimientoEdit").value.trim(),
+              Kilometraje: document.querySelector("#kilometrajeEdit").value.trim(),
+              TipoMantenimiento: document.querySelector("#tipoMantenimientoEdit").value.trim(),
+              Observacion: document.querySelector("#observacionesEdit").value.trim() || "No hay observación",
+            };
+        
+            const actividadMantenimientoData = {
+              IdMantenimiento: parseInt(mantenimiento.IdMantenimiento),
+              IdActividad: parseInt(document.querySelector('#actividadEdit').value),
+              Cantidad: parseInt(document.querySelector('#cantidadEdit').value.trim()),
+              Estado: document.querySelector('#estadoEdit').value
+            };
+        
+            console.log(mantenimientoData);
+            console.log(actividadMantenimientoData);
+        
+            const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.activfind.IdActividadMantenimiento}`;
+            const API_URL2 = `http://localhost:18026/api/mantenimiento/${mantenimiento.IdMantenimiento}`;
+            const token = localStorage.getItem('token');
+            const headers = { 'Authorization': `Bearer ${token}` };
+        
+            // Make API requests concurrently
+            const [response1, response2] = await Promise.all([
+              axios.put(API_URL, actividadMantenimientoData, { headers }),
+              axios.put(API_URL2, mantenimientoData, { headers })
+            ]);
+        
+            console.log(response1, response2);
+        
+            showToast('Éxito!', 'Mantenimiento actualizado correctamente.');
+            $("#maintenanceModalEdit").modal("hide");
+        
+            setTimeout(() => {
+              loadContent('dataTableMaintenance.html', 'mainContent');
+            }, 500);
+          } catch (error) {
+            handleError(error);
+          }
+        });
+        
+        function handleError(error) {
+          if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            console.error('Error específico:', errorMessage);
+            alert(errorMessage);
+          } else {
+            console.error('Ha ocurrido un problema:', error);
+            alert("Ocurrió un problema");
+          }
+        }
+        
 
-
-    } catch (error) {
-      console.error(error);
-
+         
+    
+      } catch (error) {
+        console.error(error);
+        showToast('Error', 'Al cargar los datos de mantenimiento.');
+      }
     }
-  }
 
-})();
+    //Llenar Select Actividades Editar
 
-//Funcion para validar que la fecha no pueda ser menor a la actual
+  function activitySelect(actividades){
+  
+  // Obtener el select de actividades
+  const selectActividad = document.getElementById("actividadEdit");
+
+  // Limpiar opciones anteriores (si las hay)
+  selectActividad.innerHTML = '';
+
+  // Crear opción por defecto
+  const optionDefault = document.createElement("option");
+  optionDefault.value = '';
+  optionDefault.textContent = 'Seleccionar';
+  selectActividad.appendChild(optionDefault);
+
+  // Llenar el select con las opciones de actividades
+  actividades.forEach(actividad => {
+    const option = document.createElement("option");
+    option.value = actividad.IdActividad;
+    option.textContent = actividad.Descripcion;
+    selectActividad.appendChild(option);
+  });
+
+
+
+
+} 
+
+
+//Funcion para validar qu#e la fecha no pueda ser menor a la actual
 document
   .getElementById("fechaMantenimiento")
   .addEventListener("focus", function () {
@@ -588,7 +753,7 @@ document
   });
 
 // Agrega esta función para obtener las unidades y llenar el select
-async function getUnidades() {
+async function getUnidadesFiltro() {
   try {
     const Api_Url = "https://backend-transporteccss.onrender.com/api/unidades"; // Actualiza la URL de la API según corresponda
     const token = localStorage.getItem("token");
@@ -603,11 +768,11 @@ async function getUnidades() {
     console.log("unidades", unidades);
 
     const unidadFiltroSelect = document.getElementById("unidadFiltro");
-    unidadFiltroSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+    unidadFiltroSelect.innerHTML = '<option value="All">Todas las Unidades</option>';
 
     unidades.forEach((unidad) => {
       const option = document.createElement("option");
-      option.value = unidad.id;
+      option.value = unidad.numeroUnidad;
       option.textContent = unidad.numeroUnidad;
       unidadFiltroSelect.appendChild(option);
     });
@@ -617,92 +782,167 @@ async function getUnidades() {
     showToast("Ups!", "Hubo un problema al obtener las unidades");
   }
 }
-getUnidades();
 
-// Función para filtrar la tabla por fecha de mantenimiento
-async function filterByFechaMantenimiento(selectedDate) {
-  const tableBody = document.querySelector("#maintenance-body");
-  const tableRows = tableBody.querySelectorAll("tr");
+// Función para formatear la fecha de YYYY-MM-DD a DD/MM/YYYY
+function formatDateFiltro(date) {
+  let parts = date.split("-");
+  return parts[2] + "/" + parts[1] + "/" + parts[0];
+}
 
-  let foundMantenimientos = false;
 
-  tableRows.forEach(row => {
-    const fechaMantenimientoCell = row.querySelector("td:nth-child(3)"); // Ajusta el selector según la posición de la fecha de mantenimiento en tu tabla
-    if (fechaMantenimientoCell) {
-      const fechaMantenimiento = fechaMantenimientoCell.textContent.trim();
-      console.log("La fecha de la db es", fechaMantenimiento);
-      console.log("La fecha seleccionada es", selectedDate);
 
-      // Ajusta el formato de la fecha de la db según el formato de selectedDate (yyyy-mm-dd)
-      const formattedFechaMantenimiento = formatDateForComparison(fechaMantenimiento);
 
-      if (formattedFechaMantenimiento === selectedDate) {
-        row.style.display = ""; // Muestra la fila si coincide con la fecha seleccionada
-        foundMantenimientos = true;
-      } else {
-        row.style.display = "none"; // Oculta la fila si no coincide con la fecha seleccionada
-      }
+
+// ACTIVIDADES 
+
+
+
+document.querySelector('#openTask').addEventListener('click',optimazadoactividades());
+
+async function optimazadoactividades(){
+  const actividades = await getActividades();
+  fillActividades(actividades);
+
+
+}
+async function getActividades() {
+    try {
+        const Api_Url = "http://localhost:18026/";
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(`${Api_Url}api/actividad`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const actividades = response.data.actividades || [];
+        console.log("Actividades obtenidas:", actividades);
+        
+        return actividades;
+
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            console.error("Error específico:", errorMessage);
+            showToast("Ups!", errorMessage);
+        } else {
+            showToast("Error", "Hubo un problema al obtener las actividades");
+        }
     }
-  });
-
-  if (!foundMantenimientos) {
-    showToast("Ups!", "No se encontraron mantenimientos para la fecha indicada");
-    getMaintenance(); // Vuelve a cargar todos los mantenimientos
-    document.querySelector("#fechaMantenimientoFiltro").value = ""; // Limpia el campo de fecha
-  }
 }
 
-// Función para formatear la fecha de la db para comparación
-function formatDateForComparison(isoDate) {
-  const parts = isoDate.split('/');
-  if (parts.length === 3) {
-    // Formato dd/mm/yyyy
-    const year = parts[2];
-    const month = parts[1].padStart(2, '0');
-    const day = parts[0].padStart(2, '0');
-    return `${year}-${month}-${day}`; // Formato yyyy-mm-dd
-  }
-  return isoDate; // Devuelve tal cual si no se puede formatear
+function fillActividades(actividades) {
+    try {
+        const tableBody = document.querySelector("#activity-body");
+
+        tableBody.innerHTML = "";
+        const fragment = document.createDocumentFragment();
+
+        actividades.forEach((actividad) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${actividad.IdActividad}</td>
+                <td>${actividad.Descripcion}</td>
+                <td>${actividad.UnidadMedida}</td>
+                <td class="actions">
+                    <button class="btn btn-outline-danger btn-sm text-center" onclick="deleteActividad(${actividad.IdActividad})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            `;
+            fragment.appendChild(row);
+        });
+
+        tableBody.appendChild(fragment);
+    } catch (error) {
+        console.error("There has been a problem:", error);
+    }
 }
 
-// Captura el evento de cambio en el campo de fecha
-document.getElementById("fechaMantenimientoFiltro").addEventListener("change", function () {
-  const selectedDate = this.value; // Obtén la fecha seleccionada
-  filterByFechaMantenimiento(selectedDate); // Llama a la función para filtrar por fecha de mantenimiento
+document.querySelector("#saveTask").addEventListener("click", function (event) {
+    event.preventDefault(); // Evita el comportamiento predeterminado del formulario
+    getActividad();
 });
 
-// Función para filtrar la tabla por unidad
-async function filterByUnidad(selectedUnidad) {
-  const tableBody = document.querySelector("#maintenance-body");
-  const tableRows = tableBody.querySelectorAll("tr");
+//Funcion para obtener los datos de la actividad
+function getActividad() {
+    const descripcion = document.querySelector("#tarea").value.trim();
+    const unidadMedida = document.querySelector("#unidadMedida").value.trim();
 
-  let foundMantenimientos = false;
-
-  tableRows.forEach(row => {
-    const unidadCell = row.querySelector("td:nth-child(1)"); // Ajusta el selector según la posición de la unidad en tu tabla
-    if (unidadCell) {
-      const unidad = unidadCell.textContent.trim();
-      console.log("La unidad en la db es", unidad);
-      console.log("La unidad seleccionada es", selectedUnidad);
-
-      if (unidad === selectedUnidad) {
-        row.style.display = ""; // Muestra la fila si coincide con la unidad seleccionada
-        foundMantenimientos = true;
-      } else {
-        row.style.display = "none"; // Oculta la fila si no coincide con la unidad seleccionada
-      }
+    if (descripcion && unidadMedida) {
+        const activityData = {
+            Descripcion: descripcion,
+            UnidadMedida: unidadMedida,
+        };
+        addActivity(activityData);
+    } else {
+        alert("Por favor, complete todos los campos.");
     }
-  });
-
-  if (!foundMantenimientos) {
-    showToast("Ups!", "No se encontraron mantenimientos para la unidad indicada");
-    getMaintenance(); // Vuelve a cargar todos los mantenimientos si no se encuentran mantenimientos para la unidad seleccionada
-  } else {
-  }
 }
 
-// Captura el evento de cambio en el select de unidad
-document.getElementById("unidadFiltro").addEventListener("change", function () {
-  const selectedUnidad = this.options[this.selectedIndex].text; // Obtén la unidad seleccionada
-  filterByUnidad(selectedUnidad); // Llama a la función para filtrar por unidad
-});
+//Funcion para agregar una actividad
+async function addActivity(activityData) {
+    try {
+        const API_URL = "http://localhost:18026/api/actividad";
+        const token = localStorage.getItem("token");
+        const response = await axios.post(API_URL, activityData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        console.log(response.data);
+        showToast("Actividad agregada", "La actividad se ha agregado correctamente");
+
+        // Cerrar el modal correctamente usando Bootstrap
+        const modalElement = document.querySelector("#saveTask").closest('.modal');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+
+        // Limpiar los campos del formulario después de guardar
+        limpiarCampos();
+        
+        // Recargar la lista de actividades
+        optimazadoactividades();
+    } catch (error) {
+        console.error('Ha ocurrido un problema:', error);
+        alert("Ocurrió un problema al agregar la actividad");
+    }
+}
+
+window.deleteActividad = async function (idActividad) {
+    try {
+        const token = localStorage.getItem('token');
+        const API_URL = `http://localhost:18026/api/actividad/${idActividad}`;
+        const response = await axios.delete(API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log(response.data);
+        showToast('Éxito', 'Actividad eliminada exitosamente');
+
+        // Recargar la lista de actividades
+        optimazadoactividades();
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+            console.error('Error específico:', errorMessage);
+            showToast('Ups!', 'Ocurrio un problema al eliminar la actividad.');
+        } else {
+            console.error('There has been a problem deleting the y:', error);
+            showToast('Ups!', 'Error al eliminar la actividad.');
+        }
+    }
+}
+
+// Función para limpiar los campos del formulario
+function limpiarCampos() {
+    document.querySelector("#tarea").value = "";
+    document.querySelector("#unidadMedida").value = "";
+}
+
+})();

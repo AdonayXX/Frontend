@@ -1,4 +1,6 @@
-getActividades();
+
+
+document.querySelector('#openTask').addEventListener('click',getActividades);
 async function getActividades() {
     try {
         const Api_Url = "http://localhost:18026/";
