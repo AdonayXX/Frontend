@@ -32,24 +32,12 @@
                         data-bs-toggle="modal" data-bs-target="#addNewUser">
                         <h6 class="text-center mt-1">Registrarse</h6>
                     </button>
-                    <!--  <a href="#" class="page-link">
-                    ¿Olvido su contraseña?
-                    
-                </a> -->
                 </div>
-
-
-
             </div>
-
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
-
-
         </div>
-
-
         <!-- Modal  -->
-        <div class="modal fade contenedor-Modal"  id="form-request" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <div class="modal fade contenedor-Modal" id="form-request" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -58,7 +46,9 @@
                             <div class="col-sm-12 col-md-4 col-lg-6 ">
                                 <h4 class="modal-title" id="exampleModalLabel">Generar Solicitud</h4>
                                 <span id="date"></span>
-
+                                <div id="valeIdContainer">
+                                    ID de Vale: <span id="valeId"></span>
+                                </div>
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -66,6 +56,7 @@
                     <div class="col-4 mt-4" style="margin-left:35px ;">
                         <button type="submit" class="btn btn-primary" id="btn-mostrar">Limpiar Campos</button>
                     </div>
+
                     <div class="modal-body p-5">
                         <form id="8" name="formManage" class="row needs-validation" method="get" novalidate>
                             <div class="row g-1">
@@ -76,9 +67,9 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_gen" class="form-label">Motivo de la gira: </label>
-                                    <select class="form-select" id="motivo" required>
-                                        <option selected disabled value="">Seleccionar</option>
+                                    <label for="motivo" class="form-label">Motivo de la gira: </label>
+                                    <select class="form-select" id="motivo" onchange="mostrarCampos()">
+                                        <option selected disabled value="">Seleccione una opción</option>
                                     </select>
                                 </div>
                             </div>
@@ -95,24 +86,31 @@
                                 </div>
                             </div>
                             <div class="row g-1">
-                                <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_name" class="form-label">Lugar de Salida: </label>
-                                    <select class="form-select" id="lugarSa" required>
-                                        <option selected disabled value="">Seleccionar</option>
+
+                                <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorSelectSalida" 
+                                    style="display: none;">
+                                    <label for="lugarSa" class="form-label">Lugar de Salida: </label>
+                                    <select class="form-select" id="lugarSa">
+                                        <!-- Opciones para lugar de salida si es Gira de Ebais -->
                                     </select>
-                                    <div class="valid-feedback">
-                                        Completo
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Incompleto
-                                    </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-4 col-lg-6">
+                                <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorSelectDestino"
+                                    style="display: none;">
                                     <label for="lugarDes" class="form-label">Lugar de Destino:</label>
-                                    <select class="form-select" id="lugarDes" required>
-                                        <option selected disabled value="">Seleccionar</option>
+                                    <select class="form-select" id="lugarDes">
+                                        <!-- Opciones para lugar de destino si es Gira de Ebais -->
                                     </select>
+                                </div>
+
+                                <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirSalida">
+                                    <label for="nameSoli" class="form-label">Lugar de Salida:</label>
+                                    <input type="text" class="form-control" id="nameSali" maxlength="25" required>
+                                </div>
+
+                                <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirDestino">
+                                    <label for="nameDestino" class="form-label">Lugar de Destino:</label>
+                                    <input type="text" class="form-control" id="nameDestino" maxlength="25" required>
                                 </div>
                                 <div class="col-sm-12  col-md-4 col-lg-6">
                                     <label for="b_date" class="form-label">Fecha para la Solicitud: </label>
@@ -122,6 +120,10 @@
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label">Hora de salida: </label>
                                     <input type="time" class="form-control" id="hora_salida" required>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-6">
+                                    <label for="user_gen" class="form-label">Solicitar Chofer: </label>
+                                    <input type="checkbox" name="chofer" id="chofer">
                                 </div>
                             </div>
                             <div class="row sectionCompanion">
@@ -250,12 +252,13 @@
                                 <label for="userRegisterEmail" class="form-label"><i class="bi bi-envelope"></i>
                                     Correo:</label>
                                 <input type="email" id="userRegisterEmail" name="userRegisterEmail" class="form-control"
-                                    maxlength="30" required  required oninput="this.value = this.value.toLowerCase();">
+                                    maxlength="30" required required oninput="this.value = this.value.toLowerCase();">
                             </div>
                         </div>
                         <div class="row justify-content-end">
                             <div class="col-md-3 mt-3">
-                                <button type="submit" id="saveUser" class="btn btn-primary" title="Guardar"><i class="bi bi-save"></i>
+                                <button type="submit" id="saveUser" class="btn btn-primary" title="Guardar"><i
+                                        class="bi bi-save"></i>
                                     Guardar</button>
                             </div>
                         </div>
