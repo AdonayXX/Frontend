@@ -255,15 +255,6 @@ async function postRegistroCombustible() {
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
-
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {
         showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
@@ -318,15 +309,6 @@ async function putRegistroCombustible() {
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
 
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
-
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {
         showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
@@ -380,15 +362,6 @@ async function deleteRegistroCombustible() {
     const tipoCombustible = tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text
     const numeroFactura = document.getElementById('numeroFactura').value;
     const numeroAutorizacion = document.getElementById('numeroAutorizacion').value;
-
-    const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unidad}`)
-    const unidadData = response.data.unidades;
-    const kilometrajeActual = unidadData[0].kilometrajeActual;
-
-    if (kilometraje < kilometrajeActual) {
-        showToast('Error', `El kilometraje de recarga de la unidad ${unidad} no puede ser menor que su kilometraje actual.`);
-        return;
-    }
 
     const idRegistro = await getIdRegistroCombustible(unidad);
     if (await facturaDuplicado(numeroFactura, idRegistro)) {
