@@ -279,7 +279,6 @@ function postTipoRecurso() {
     axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData)
         .then(response => {
             document.getElementById('addResource').value = '';
-            console.log('Tipo de recurso creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             getTiposRecursoSelect();
         })
@@ -306,7 +305,6 @@ function postTipoUnidad() {
         .then(response => {
             document.getElementById('addUnit').value = '';
             document.getElementById('addCapacity').value = '';
-            console.log('Tipo de unidad creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             getTiposUnidadSelect();
         })
@@ -395,7 +393,6 @@ async function postUnidad() {
     axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
         .then(response => {
             limpiar();
-            console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
         })
         .catch(error => {
@@ -477,7 +474,6 @@ async function putUnidad() {
     axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
         .then(response => {
             limpiar();
-            console.log('Unidad actualizada:', response.data);
             showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
         })
         .catch(error => {
@@ -529,7 +525,6 @@ async function deleteUnidad() {
         axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
             .then(response => {
                 limpiar();
-                console.log('Unidad eliminada:', response.data);
                 showToast('Eliminación exitosa', 'La unidad ' + unitNumber + ' se ha eliminado exitosamente.');
             })
             .catch(error => {
