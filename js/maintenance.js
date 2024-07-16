@@ -1,174 +1,178 @@
 (async function () {
   getMaintenance();
-  let actiLlenado =[];
-  //Obtener los matenimientos
+  // Variables globales para almacenar los datos
+  let mantenimientoData = [];
+  let actividadesData = [];
+  let actividadesTodoData = [];
+
+  // Función principal para obtener y llenar los mantenimientos
   async function getMaintenance() {
     try {
       const Api_Url = "http://localhost:18026/";
       const token = localStorage.getItem("token");
 
-      const mantenimientoResponse = await axios.get(
-        `${Api_Url}api/mantenimiento`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // Obtener datos de mantenimiento
+      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      mantenimientoData = mantenimientoResponse.data.mantenimientos || [];
 
-      const actividadesResponse = await axios.get(
-        `${Api_Url}api/actividadMantenimiento`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // Obtener datos de actividades de mantenimiento
+      const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
+
+      // Obtener todas las actividades
       const actividadesTodo = await axios.get(`${Api_Url}api/actividad`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
+      actividadesTodoData = actividadesTodo.data.actividades || [];
 
-      const mantenimiento = mantenimientoResponse.data.mantenimientos || [];
-      const actividades = actividadesResponse.data.actividadesMantenimiento || [];
-      const actividadesT = actividadesTodo.data.actividades || [];
-      actiLlenado = actividadesTodo.data.actividades;
-      console.log("manteniminento", mantenimiento);
-      console.log("actividades", actividades);
-      $(document).ready(function () {
-        if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
-          $("#tableMaintenance").DataTable().destroy();
-        }
-        fillMaintenance(mantenimiento, actividades, actividadesT);
-        let table = $("#tableMaintenance").DataTable({
-          dom:
-            "<'row'<'col-md-6'l>" +
-            "<'row'<'col-md-12't>>" +
-            "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
-          ordering: false,
-          searching: true,
-          paging: true,
-          language: {
-            url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
-          },
-          caseInsensitive: true,
-          smart: true,
-        });
-        // Búsqueda por nombre
-        $("#searchMaintenance").on("keyup", function () {
-          let inputValue = $(this).val().toLowerCase();
-          table.search(inputValue).draw();
-        });
-        // Captura el evento de cambio en el campo de fecha
-        $('#fechaMantenimientoFiltro').on('change', function () {
-          let fechamaint = $('#fechaMantenimientoFiltro').val();
-          if (fechamaint.trim() === '') {
-            table.column(3).search('').draw();
-          } else {
-            let formattedDate = formatDateFiltro(fechamaint);
-            table.column(3).search(formattedDate).draw();
-          }
-        });
+      // Llenar la tabla de mantenimientos con los últimos 20
+      fillMaintenanceTable(mantenimientoData.slice(-20), actividadesData, actividadesTodoData);
 
-        // Captura el evento de cambio en el campo de unidad
-        $('#unidadFiltro').on('change', function () {
-          let unidadFiltro = $('#unidadFiltro').val();
-          if (unidadFiltro === 'All') {
-            table.column(1).search('').draw();
-          } else {
-            table.column(1).search(unidadFiltro).draw();
-          }
-        });
-
-
-
-      });
+      // Configurar DataTables y eventos de cambio
+      setupDataTable();
+      setupFilterEvents();
       ocultarSpinner();
-      getUnidadesFiltro();
+      getUnidadesFiltro(); // Actualizar lista de unidades en el filtro
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        const errorMessage = error.response.data.error;
-        console.error("Error específico:", errorMessage);
-        showToast("Ups!", errorMessage);
-      } else {
-        showToast("Error", "Hubo un problema al obtener los manteniminetos");
-      }
+      handleMaintenanceError(error);
     }
   }
 
-  //llenar tabla mantenimiento
-  function fillMaintenance(mantenimiento, actividades, actividadesT) {
-    console.log(actividadesT);
+  // Función para llenar la tabla de mantenimientos
+  function fillMaintenanceTable(maintenance, activities, allActivities) {
     try {
       const tableBody = document.querySelector("#maintenance-body");
-
       tableBody.innerHTML = "";
+
+      if (maintenance.length === 0) {
+        const noDataMessage = document.createElement("tr");
+        noDataMessage.innerHTML = `
+        <td colspan="11" class="text-center">No hay datos disponibles</td>
+      `;
+        tableBody.appendChild(noDataMessage);
+        return;
+      }
+
       const fragment = document.createDocumentFragment();
 
-      mantenimiento.forEach((maintenance) => {
-        const activ = actividades.filter(
-          (actividad) => maintenance.IdMantenimiento === actividad.IdMantenimiento
+      maintenance.forEach((maintenanceItem) => {
+        // Filtrar actividades por IdMantenimiento
+        const relatedActivities = activities.filter(
+          (activity) => activity.IdMantenimiento === maintenanceItem.IdMantenimiento
         );
-        let activfind = null;
 
-        actividadesT.some((at) => {
-          activfind = activ.find(
-            (ac) =>
-              ac.IdActividad === at.IdActividad &&
-              at.Descripcion === maintenance.Descripcion
+        // Encontrar actividades coincidentes con todas las actividades
+        let foundActivity = null;
+        allActivities.some((activity) => {
+          foundActivity = relatedActivities.find(
+            (related) => related.IdActividad === activity.IdActividad && activity.Descripcion === maintenanceItem.Descripcion
           );
-          return activfind !== undefined;
+          return foundActivity !== undefined;
         });
 
-        if (activ) {
-          const idMantenimiento = maintenance.IdMantenimiento;
-          const cantidad = maintenance.Cantidad;
-          // Formatear la fecha en formato dd/mm/aaaa
-          const formattedDate = formatDate(maintenance.FechaMantenimiento);
-
-          const row = document.createElement("tr");
-          row.innerHTML = `
-              <tr>
-                <td >${maintenance.IdMantenimiento}</td>
-                <td >${maintenance.numeroUnidad}</td>
-                <td >${maintenance.TipoUnidad} </td>
-                <td >${formattedDate}</td>
-                <td class='text-center'>${maintenance.TipoMantenimiento}</td>
-                <td class='text-center'>${maintenance.Observacion}</td>
-                <td>${maintenance.Descripcion}</td>
-               <td class='text-center'>${maintenance.Cantidad}</td>
-                <td class='text-center'>${maintenance.UnidadMedida}</td>
-                <td class='text-center'>${maintenance.Estado} 
-                </td>
-                <td class="actions">
-                 <button class="btn btn-outline-success btn-sm text-center" 
-        data-toggle="tooltip" 
-        data-placement="bottom" 
-        title="Estado: Completado"  
-        onclick='cambioEstCop(${JSON.stringify({ activfind })})'
-        ${maintenance.Estado === 'Completado' ? 'disabled' : ''}>
-    <i class="bi bi-check"></i>
-</button>
-              <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
-            { activfind })},${JSON.stringify(maintenance)})' ><i class="bi bi-pencil"></i></button>
-
-              
-              </tr>
-            `;
-          fragment.appendChild(row);
-          if (maintenance.Estado) {
-
-          }
-        } else {
-          console.log("Ocurrio un error");
-        }
+        // Crear fila HTML
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${maintenanceItem.IdMantenimiento}</td>
+        <td>${maintenanceItem.numeroUnidad}</td>
+        <td>${maintenanceItem.TipoUnidad}</td>
+        <td>${formatDate(maintenanceItem.FechaMantenimiento)}</td>
+        <td>${maintenanceItem.TipoMantenimiento}</td>
+        <td>${maintenanceItem.Observacion}</td>
+        <td>${maintenanceItem.Descripcion}</td>
+        <td>${maintenanceItem.Cantidad}</td>
+        <td>${maintenanceItem.UnidadMedida}</td>
+        <td>${maintenanceItem.Estado}</td>
+        <td class="actions">
+          <button class="btn btn-outline-success btn-sm" 
+                  title="Estado: Completado" 
+                  onclick="cambioEstCop(${JSON.stringify({ foundActivity })})" 
+                  ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
+            <i class="bi bi-check"></i>
+          </button>
+          <button class="btn btn-outline-primary btn-sm" 
+                  onclick="EditarMant(${JSON.stringify({ foundActivity })},${JSON.stringify(maintenanceItem)})">
+            <i class="bi bi-pencil"></i>
+          </button>
+        </td>
+      `;
+        fragment.appendChild(row);
       });
 
       tableBody.appendChild(fragment);
     } catch (error) {
-      console.error("There has been a problem:", error);
+      console.error("Error al llenar la tabla de mantenimientos:", error);
     }
+  }
+
+
+  // Función para configurar DataTables
+  function setupDataTable() {
+    if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+      $("#tableMaintenance").DataTable().destroy();
+    }
+
+    $("#tableMaintenance").DataTable({
+      dom:
+        "<'row'<'col-md-6'l>" +
+        "<'row'<'col-md-12't>>" +
+        "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+      ordering: false,
+      searching: true,
+      paging: true,
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
+      },
+      caseInsensitive: true,
+      smart: true,
+    });
+  }
+
+  // Función para configurar eventos de cambio en filtros
+  function setupFilterEvents() {
+    // Captura el evento de cambio en el campo de fecha
+    $('#fechaMantenimientoFiltro').on('change', function () {
+      filterMaintenance();
+    });
+
+    // Captura el evento de cambio en el campo de unidad
+    $('#unidadFiltro').on('change', function () {
+      filterMaintenance();
+    });
+  }
+
+  function filterMaintenance() {
+    const selectedDate = $('#fechaMantenimientoFiltro').val();
+    const formattedSelectedDate = formatDateSelected(selectedDate); // Función para formatear la fecha seleccionada
+    console.log("Fecha seleccionada", formattedSelectedDate);
+
+    const selectedUnit = $('#unidadFiltro').val();
+
+    const filteredMaintenance = mantenimientoData.filter(maintenance => {
+      const formattedDate = formatDate(maintenance.FechaMantenimiento);
+      console.log("Fecha de la base", formattedDate);
+      const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
+      console.log("La fecha hace match?", matchDate);
+      const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
+      return matchDate && matchUnit;
+    });
+
+    fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
+  }
+
+  // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
+  function formatDateSelected(selectedDate) {
+    if (!selectedDate) return null;
+
+    const parts = selectedDate.split('-');
+    if (parts.length !== 3) return null;
+
+    const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return formattedDate;
   }
 
   //Funcion para formatear la fecha
@@ -218,7 +222,7 @@
     }
   }
   // Estado Completado
-  window. cambioEstCop = async function (activ) {
+  window.cambioEstCop = async function (activ) {
     console.log(activ);
     try {
       ActividadData = {
@@ -463,11 +467,11 @@
     .getElementById("saveMaintenance")
     .addEventListener("click", async function () {
       const idChofer = document.querySelector("#IdChoferHidden").value.trim();
-const idUnidad = document.querySelector("#unidadSelect").value.trim();
-const fechaMantenimiento = document.querySelector("#fechaMantenimiento").value.trim();
-const kilometraje = document.querySelector("#kilometraje").value.trim();
-const tipoMantenimiento = document.querySelector("#tipoMantenimiento").value.trim();
-const observacion = document.querySelector("#observaciones").value.trim() || "No hay observación";
+      const idUnidad = document.querySelector("#unidadSelect").value.trim();
+      const fechaMantenimiento = document.querySelector("#fechaMantenimiento").value.trim();
+      const kilometraje = document.querySelector("#kilometraje").value.trim();
+      const tipoMantenimiento = document.querySelector("#tipoMantenimiento").value.trim();
+      const observacion = document.querySelector("#observaciones").value.trim() || "No hay observación";
       // Recopilar datos del formulario
       const actividades = [];
       for (let i = 1; i <= fieldCounter; i++) {
@@ -485,22 +489,22 @@ const observacion = document.querySelector("#observaciones").value.trim() || "No
         }
       }
       // Verificar si todos los valores necesarios existen y no están vacíos
-if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento ) {
-   showToast('', 'Por favor completa todos los campos obligatorios.');
-   return;
-}
- 
+      if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
+        showToast('', 'Por favor completa todos los campos obligatorios.');
+        return;
+      }
+
 
       // Construir el objeto mantenimiento
-  const mantenimiento = {
-    IdChofer: parseInt(idChofer),
-    IdUnidad: parseInt(idUnidad),
-    FechaMantenimiento: fechaMantenimiento,
-    Kilometraje: kilometraje,
-    TipoMantenimiento: tipoMantenimiento,
-    Observacion: observacion,
-    actividades: actividades
-  };
+      const mantenimiento = {
+        IdChofer: parseInt(idChofer),
+        IdUnidad: parseInt(idUnidad),
+        FechaMantenimiento: fechaMantenimiento,
+        Kilometraje: kilometraje,
+        TipoMantenimiento: tipoMantenimiento,
+        Observacion: observacion,
+        actividades: actividades
+      };
 
       try {
         const token = localStorage.getItem("token");
@@ -586,7 +590,7 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
       document.querySelector('#unidadMedidaEdit').value = activ.activfind.UnidadMedida;
       document.querySelector('#cantidadEdit').value = activ.activfind.Cantidad;
       document.querySelector('#estadoEdit').value = activ.activfind.Estado;
-      document.querySelector("#IdTipoUnidadHiddenEdit").value =  mantenimiento.TipoUnidad;
+      document.querySelector("#IdTipoUnidadHiddenEdit").value = mantenimiento.TipoUnidad;
       document.querySelector("#IdChoferHiddenEdit").value = mantenimiento.IdChofer;
       // Simular evento de cambio
       const changeEvent1 = new Event("change");
@@ -596,17 +600,17 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
       let unidadFiltrada = uniLlenado.find(
         (unidad) => unidad.id === parseInt(mantenimiento.IdUnidad)
       );
-      console.log("Unidad:",unidadFiltrada)
-        // Obtener nombre completo del chofer
-        let idChofer = parseInt(unidadFiltrada.choferDesignado);
-        let idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
-        let choferfind = await getChoferNombre(idChofer);
-        let obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
-        let nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
+      console.log("Unidad:", unidadFiltrada)
+      // Obtener nombre completo del chofer
+      let idChofer = parseInt(unidadFiltrada.choferDesignado);
+      let idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
+      let choferfind = await getChoferNombre(idChofer);
+      let obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
+      let nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
 
-        // Mostrar el nombre del chofer y tipo de unidad
-        document.querySelector("#choferEdit").value = nombreCompletoChofer;
-        document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
+      // Mostrar el nombre del chofer y tipo de unidad
+      document.querySelector("#choferEdit").value = nombreCompletoChofer;
+      document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
 
 
       //Evento click para guardar cambios
@@ -726,21 +730,10 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
       this.min = fechaActual;
     });
 
-  // Agrega esta función para obtener las unidades y llenar el select
+  // Función para obtener y llenar las unidades en el filtro
   async function getUnidadesFiltro() {
     try {
-      const Api_Url = "https://backend-transporteccss.onrender.com/api/unidades"; // Actualiza la URL de la API según corresponda
-      const token = localStorage.getItem("token");
-
-      const unidadesResponse = await axios.get(Api_Url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const unidades = unidadesResponse.data.unidades || [];
-      console.log("unidades", unidades);
-
+      const unidades = await getUnidades(); // Utiliza la función existente para obtener unidades
       const unidadFiltroSelect = document.getElementById("unidadFiltro");
       unidadFiltroSelect.innerHTML = '<option value="All">Todas las Unidades</option>';
 
@@ -750,46 +743,72 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
         option.textContent = unidad.numeroUnidad;
         unidadFiltroSelect.appendChild(option);
       });
-
     } catch (error) {
-      console.error("Error al obtener unidades:", error);
+      console.error("Error al obtener las unidades:", error);
       showToast("Ups!", "Hubo un problema al obtener las unidades");
     }
   }
-  // Función para formatear la fecha de YYYY-MM-DD a DD/MM/YYYY
-  function formatDateFiltro(date) {
-    let parts = date.split("-");
-    return parts[2] + "/" + parts[1] + "/" + parts[0];
+
+  // Función para manejar errores en la obtención de mantenimientos
+  function handleMaintenanceError(error) {
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error("Error específico:", errorMessage);
+      showToast("Ups!", errorMessage);
+    } else {
+      showToast("Error", "Hubo un problema al obtener los mantenimientos");
+    }
   }
+
+  // Función para formatear la fecha en formato dd/mm/aaaa
+  function formatDate(isoDate) {
+    const date = new Date(isoDate);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  // Función para manejar errores en la obtención de mantenimientos
+  function handleMaintenanceError(error) {
+    if (error.response && error.response.status === 400) {
+      const errorMessage = error.response.data.error;
+      console.error("Error específico:", errorMessage);
+      showToast("Ups!", errorMessage);
+    } else {
+      showToast("Error", "Hubo un problema al obtener los mantenimientos");
+    }
+  }
+
   // ACTIVIDADES 
   document.querySelector('#openTask').addEventListener('click', optimazadoactividades());
 
   async function optimazadoactividades() {
     const actividades = await getActividades();
 
-      if ($.fn.DataTable.isDataTable("#tableActividad")) {
-        $("#tableActividad").DataTable().destroy();
-      }
-    
-      fillActividades(actividades);
-      let table = $("#tableActividad").DataTable({
-   
-        dom: "<'row justify-content-between'<'col-sm-5'l><'col-sm-5'f>>" +
+    if ($.fn.DataTable.isDataTable("#tableActividad")) {
+      $("#tableActividad").DataTable().destroy();
+    }
+
+    fillActividades(actividades);
+    let table = $("#tableActividad").DataTable({
+
+      dom: "<'row justify-content-between'<'col-sm-5'l><'col-sm-5'f>>" +
         "<'row'<'col-sm-12 mt-1't>>" +
         "<'row '<'col-sm-6'i><'col-sm-6'p>>",
-        ordering: false,
-        searching: true,
-        paging: true,
-        pageLength: 5,
-        lengthMenu: [5, 10, 25, 50],
-        pagingType: 'simple_numbers',
-        autoWidth: false,
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-        },
-        caseInsensitive: true,
-        smart: true
-      });
+      ordering: false,
+      searching: true,
+      paging: true,
+      pageLength: 5,
+      lengthMenu: [5, 10, 25, 50],
+      pagingType: 'simple_numbers',
+      autoWidth: false,
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+      },
+      caseInsensitive: true,
+      smart: true
+    });
 
   }
   async function getActividades() {
@@ -882,7 +901,7 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
       console.log(response.data);
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
-      
+
 
       // Limpiar los campos del formulario después de guardar
       limpiarCampos();
@@ -943,7 +962,7 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
     const capacidadCamas = parseInt(unidadEncontrada.capacidadCamas);
     const capacidadSillas = parseInt(unidadEncontrada.capacidadSillas);
     const kilometrajeInicial = parseInt(unidadEncontrada.kilometrajeInicial);
-    const kilometrajeActual = parseInt(unidadEncontrada.kilometrajeActual);
+    const kilometrajeActual = parseInt(kilometrajeActualMantenimiento);
     const adelanto = parseInt(unidadEncontrada.adelanto);
     const idEstado = parseInt(unidadEncontrada.idEstado);
     const valorFrecuenciaC = parseInt(unidadEncontrada.valorFrecuenciaC);
@@ -1017,12 +1036,12 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
   function convertISOStringToDate(isoString) {
     // Crear una instancia de Date usando el string ISO
     const date = new Date(isoString);
-    
+
     // Obtener el año, mes y día de la fecha
     const year = date.getUTCFullYear();
     const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
     const day = String(date.getUTCDate()).padStart(2, '0');
-    
+
     // Formatear la fecha en 'YYYY-MM-DD'
     return `${year}-${month}-${day}`;
   }
