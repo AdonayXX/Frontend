@@ -129,7 +129,7 @@
         const formattedFechaCita = formatISODate(cita.fechaCita);
         rows += `
         <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
-          <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En Curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
+          <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
           <td class="text-center">${cita.Paciente}</td>
           <td class="text-center">${cita.ubicacionOrigen}</td>
           <td class="text-center">${cita.idUbicacionDestino}</td>
