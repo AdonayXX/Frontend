@@ -261,6 +261,7 @@ function GuardarDatos() {
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
     const Chofer = document.getElementById('chofer').checked ? 1 : 0;
+
     function adjustToNullIfEmpty(value) {
         if (typeof value === 'string' && value.trim() === '') {
             value = null;
@@ -308,7 +309,7 @@ function GuardarDatos() {
 
 }
 //Limpia los campos del modal 
-document.getElementById('btn-mostrar').addEventListener('click', function () {
+document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';
     document.getElementById('acompananteNombre2').value = '';
     document.getElementById('acompananteNombre3').value = '';
