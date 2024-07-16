@@ -9,7 +9,7 @@ function mostrarCampos() {
     var contenedorEscribirDestino = document.getElementById('contenedorEscribirDestino');
 
     
-    if (motivoSeleccionado === '1') {
+    if (motivoSeleccionado === '3') {
         contenedorSelectSalida.style.display = 'block';
         contenedorSelectDestino.style.display = 'block';
         contenedorEscribirSalida.style.display = 'none';
