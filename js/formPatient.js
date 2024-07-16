@@ -6,7 +6,7 @@ document.querySelector('#guardarFormPatients').addEventListener('click', () => {
 
   if(identificacionAcomp1 && identificacionAcomp2){
     if (identificacionAcomp1 === identificacionAcomp2 ){
-      alert('Los dos acompañantes no pueden ser la misma persona');
+      showToast('Error', 'Los dos acompañantes no pueden ser la misma persona.');
       return;
     }
   }
@@ -29,7 +29,7 @@ function addPersona() {
     const tipoSangre = document.querySelector('#tipoSangre').value.trim();
     if (!nombre || !primerApellido || !segundoApellido || !identificacion || !tipoIdentificacion || !genero ||
       !telefono1  || !direccion || !tipoSangre) {
-      alert("Por favor, rellena todos los campos solicitados.");
+      showToast('', 'Por favor, rellena todos los campos solicitados.');
       return;
     }
     const personaData = {
@@ -47,7 +47,6 @@ function addPersona() {
       "Longitud": longitud,
       "Tipo_sangre": tipoSangre
     }
-    console.log(personaData);
     //Funcion para agregar persona
     addPerson(personaData);
 
@@ -63,8 +62,7 @@ function addPersona() {
 //2 Obtener Persona si  ya existe
 async function addPerson(personaData) {
   try {
-    //const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-    const API_URL = 'http://localhost:18026/api/persona';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.get(API_URL, {
       headers: {
@@ -98,8 +96,7 @@ async function addPerson(personaData) {
 //3 Agregar Persona
 async function addPeople(personaData) {
   try {
-    //const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
-    const API_URL = 'http://localhost:18026/api/persona';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, personaData, {
       headers: {
@@ -107,7 +104,7 @@ async function addPeople(personaData) {
       }
   });
     const idPersona = response.data.persona.insertId;
-    console.log(response);
+
     //getPatient(idPersona);
     addDataPatient(idPersona);
   } catch (error) {
@@ -169,35 +166,16 @@ function addDataPatient(IdPersonaCreada) {
     "Estado": "Activo",
     "LugarSalida": lugarSalida,
   }
-  console.log(pacienteData)
+
   addPatient(pacienteData);
 
 }
 
-//5 Obtener Paciente
-/* async function getPatient(IdPersonaCreada) {
-  try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
-    const response = await axios.get(API_URL);
-    const listaPacientes = response.data.pacientes;
-    const pacienteEncontrado = listaPacientes.find(paciente => paciente.IdPersona === IdPersonaCreada);
-    if (pacienteEncontrado) {
-      showToast('Ups!', 'El paciente ya se encuentra registrado')
-
-    } if (!pacienteEncontrado) {
-      addDataPatient(IdPersonaCreada);
-    }
-  } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
-  }
-} */
 
 //6
 async function addPatient(pacienteData) {
   try {
-   // const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
-   const API_URL = 'http://localhost:18026/api/paciente';
+   const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
    const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, pacienteData , {
       headers: {
@@ -260,44 +238,19 @@ function addCompanion(idPaciente) {
 
 }
 
-/* //8: Verifica si el acompañante ya está registrado
-async function getComp(companionData) {
-  try {
-   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-   const API_URL = 'http://localhost:18026/api/acompanante';
-   const token = localStorage.getItem('token');
-    const response = await axios.get(API_URL, {
-      headers: {
-          'Authorization': `Bearer ${token}`
-      }
-  });
-    const listaAcompanantes = response.data.acompanantes;
-    const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente);
-    if (acompananteEncontrado) {
-      alert('El acompañante ya esta registrado al paciente.');
-    } else {
-      addComp(companionData);
-    }
-  } catch (error) {
-    showToast('Ups!', 'Ocurrio un problema durante el envio de los datos.');
-    console.error(error);
-
-  }
-} */
 
 //9: Registra un nuevo acompañante
 async function addComp(companionData) {
   try {
 
-   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-    const API_URL = 'http://localhost:18026/api/acompanante';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
     const token = localStorage.getItem('token');
      const response = await axios.post(API_URL, companionData , {
        headers: {
            'Authorization': `Bearer ${token}`
        }
    });
-   console.log(response);
+
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;

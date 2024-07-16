@@ -1,5 +1,6 @@
 (async function () {
   getMaintenance();
+  let actiLlenado =[];
   //Obtener los matenimientos
   async function getMaintenance() {
     try {
@@ -32,6 +33,7 @@
       const mantenimiento = mantenimientoResponse.data.mantenimientos || [];
       const actividades = actividadesResponse.data.actividadesMantenimiento || [];
       const actividadesT = actividadesTodo.data.actividades || [];
+      actiLlenado = actividadesTodo.data.actividades;
       console.log("manteniminento", mantenimiento);
       console.log("actividades", actividades);
       $(document).ready(function () {
@@ -62,10 +64,10 @@
         $('#fechaMantenimientoFiltro').on('change', function () {
           let fechamaint = $('#fechaMantenimientoFiltro').val();
           if (fechamaint.trim() === '') {
-            table.column(2).search('').draw();
+            table.column(3).search('').draw();
           } else {
             let formattedDate = formatDateFiltro(fechamaint);
-            table.column(2).search(formattedDate).draw();
+            table.column(3).search(formattedDate).draw();
           }
         });
 
@@ -73,9 +75,9 @@
         $('#unidadFiltro').on('change', function () {
           let unidadFiltro = $('#unidadFiltro').val();
           if (unidadFiltro === 'All') {
-            table.column(0).search('').draw();
+            table.column(1).search('').draw();
           } else {
-            table.column(0).search(unidadFiltro).draw();
+            table.column(1).search(unidadFiltro).draw();
           }
         });
 
@@ -128,6 +130,7 @@
           const row = document.createElement("tr");
           row.innerHTML = `
               <tr>
+                <td >${maintenance.IdMantenimiento}</td>
                 <td >${maintenance.numeroUnidad}</td>
                 <td >${maintenance.TipoUnidad} </td>
                 <td >${formattedDate}</td>
@@ -215,7 +218,7 @@
     }
   }
   // Estado Completado
-  async function cambioEstCop(activ) {
+  window. cambioEstCop = async function (activ) {
     console.log(activ);
     try {
       ActividadData = {
@@ -459,6 +462,12 @@
   document
     .getElementById("saveMaintenance")
     .addEventListener("click", async function () {
+      const idChofer = document.querySelector("#IdChoferHidden").value.trim();
+const idUnidad = document.querySelector("#unidadSelect").value.trim();
+const fechaMantenimiento = document.querySelector("#fechaMantenimiento").value.trim();
+const kilometraje = document.querySelector("#kilometraje").value.trim();
+const tipoMantenimiento = document.querySelector("#tipoMantenimiento").value.trim();
+const observacion = document.querySelector("#observaciones").value.trim() || "No hay observación";
       // Recopilar datos del formulario
       const actividades = [];
       for (let i = 1; i <= fieldCounter; i++) {
@@ -475,22 +484,23 @@
           });
         }
       }
+      // Verificar si todos los valores necesarios existen y no están vacíos
+if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento ) {
+   showToast('', 'Por favor completa todos los campos obligatorios.');
+   return;
+}
+ 
 
-      const mantenimiento = {
-        IdChofer: parseInt(document.querySelector("#IdChoferHidden").value.trim()),
-        IdUnidad: parseInt(
-          document.querySelector("#unidadSelect").value.trim()
-        ),
-        FechaMantenimiento: document
-          .querySelector("#fechaMantenimiento")
-          .value.trim(),
-        Kilometraje: document.querySelector("#kilometraje").value.trim(),
-        TipoMantenimiento: document
-          .querySelector("#tipoMantenimiento")
-          .value.trim(),
-        Observacion: document.querySelector("#observaciones").value.trim() || "No hay observación",
-        actividades: actividades,
-      };
+      // Construir el objeto mantenimiento
+  const mantenimiento = {
+    IdChofer: parseInt(idChofer),
+    IdUnidad: parseInt(idUnidad),
+    FechaMantenimiento: fechaMantenimiento,
+    Kilometraje: kilometraje,
+    TipoMantenimiento: tipoMantenimiento,
+    Observacion: observacion,
+    actividades: actividades
+  };
 
       try {
         const token = localStorage.getItem("token");
@@ -536,14 +546,10 @@
   //Editar Mantenimiento
   window.EditarMant = async function (activ, mantenimiento) {
     try {
-
-
-
-      const actividadesLista = await getActividades();
       // Mostrar el modal de mantenimiento
       $("#maintenanceModalEdit").modal("show");
 
-      activitySelect(actividadesLista);
+      activitySelect(actiLlenado);
 
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
@@ -570,7 +576,8 @@
         }
       });
 
-
+      document.querySelector('#unidadEditHidden').value = mantenimiento.IdUnidad;
+      document.querySelector('#unidadEdit').value = mantenimiento.numeroUnidad;
       document.querySelector('#kilometrajeEdit').value = mantenimiento.Kilometraje;
       document.querySelector('#tipoMantenimientoEdit').value = mantenimiento.TipoMantenimiento;
       document.querySelector('#fechaMantenimientoEdit').value = mantenimiento.FechaMantenimiento.substring(0, 10);
@@ -579,72 +586,35 @@
       document.querySelector('#unidadMedidaEdit').value = activ.activfind.UnidadMedida;
       document.querySelector('#cantidadEdit').value = activ.activfind.Cantidad;
       document.querySelector('#estadoEdit').value = activ.activfind.Estado;
+      document.querySelector("#IdTipoUnidadHiddenEdit").value =  mantenimiento.TipoUnidad;
+      document.querySelector("#IdChoferHiddenEdit").value = mantenimiento.IdChofer;
       // Simular evento de cambio
       const changeEvent1 = new Event("change");
       document.querySelector('#actividadEdit').dispatchEvent(changeEvent1);
       // Obtener las unidades disponibles
       const uniLlenado = await getUnidades();
-      console.log(uniLlenado);
-
-      // Selector de unidad en el modal
-      const unidadSelect = document.querySelector("#unidadSelectEdit");
-
-      // Limpiar opciones anteriores y agregar la opción por defecto
-      unidadSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
-
-      // Llenar el select con las opciones de unidad
-      uniLlenado.forEach((unidad) => {
-        const option = document.createElement("option");
-        option.value = unidad.id;
-        option.textContent = unidad.numeroUnidad;
-        unidadSelect.appendChild(option);
-      });
-
-      // Establecer el valor seleccionado
-      unidadSelect.value = mantenimiento.IdUnidad;
-
-
-      // Añadir event listener para cambio de selección
-      document.querySelector("#unidadSelectEdit").addEventListener("change", async () => {
-        console.log("Evento Eje")
-        // Limpiar valores anteriores
-        document.querySelector("#choferEdit").value = '';
-        document.querySelector("#tipoUnidadEdit").value = '';
-        document.querySelector('#kilometrajeEdit').value = '';
-
-
-        // Obtener la unidad seleccionada
-        const unidadFiltrada = uniLlenado.find(
-          (unidad) => unidad.id === parseInt(unidadSelect.value)
-        );
-
-
-        document.querySelector("#IdTipoUnidadHiddenEdit").value = unidadFiltrada.idTipoUnidad;
-        document.querySelector("#IdChoferHiddenEdit").value = unidadFiltrada.choferDesignado;
-        document.querySelector('#kilometrajeEdit').value = unidadFiltrada.kilometrajeActual
-
+      let unidadFiltrada = uniLlenado.find(
+        (unidad) => unidad.id === parseInt(mantenimiento.IdUnidad)
+      );
+      console.log("Unidad:",unidadFiltrada)
         // Obtener nombre completo del chofer
-        const idChofer = parseInt(unidadFiltrada.choferDesignado);
-        const idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
-        const choferfind = await getChoferNombre(idChofer);
-        const obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
-        const nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
+        let idChofer = parseInt(unidadFiltrada.choferDesignado);
+        let idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
+        let choferfind = await getChoferNombre(idChofer);
+        let obTipoUnidad = await getTipoRecursoNombre(idtipoUnidad);
+        let nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
 
         // Mostrar el nombre del chofer y tipo de unidad
         document.querySelector("#choferEdit").value = nombreCompletoChofer;
         document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
-      });
 
-      // Simular evento de cambio
-      const changeEvent = new Event("change");
-      document.querySelector('#unidadSelectEdit').dispatchEvent(changeEvent);
 
       //Evento click para guardar cambios
       document.querySelector('#saveMaintenanceEdit').addEventListener('click', async function () {
         try {
           const mantenimientoData = {
             IdChofer: parseInt(document.querySelector("#IdChoferHiddenEdit").value.trim()),
-            IdUnidad: parseInt(document.querySelector("#unidadSelectEdit").value.trim()),
+            IdUnidad: parseInt(document.querySelector("#unidadEditHidden").value.trim()),
             FechaMantenimiento: document.querySelector("#fechaMantenimientoEdit").value.trim(),
             Kilometraje: document.querySelector("#kilometrajeEdit").value.trim(),
             TipoMantenimiento: document.querySelector("#tipoMantenimientoEdit").value.trim(),
@@ -796,8 +766,30 @@
 
   async function optimazadoactividades() {
     const actividades = await getActividades();
-    fillActividades(actividades);
 
+      if ($.fn.DataTable.isDataTable("#tableActividad")) {
+        $("#tableActividad").DataTable().destroy();
+      }
+    
+      fillActividades(actividades);
+      let table = $("#tableActividad").DataTable({
+   
+        dom: "<'row justify-content-between'<'col-sm-5'l><'col-sm-5'f>>" +
+        "<'row'<'col-sm-12 mt-1't>>" +
+        "<'row '<'col-sm-6'i><'col-sm-6'p>>",
+        ordering: false,
+        searching: true,
+        paging: true,
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50],
+        pagingType: 'simple_numbers',
+        autoWidth: false,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        },
+        caseInsensitive: true,
+        smart: true
+      });
 
   }
   async function getActividades() {
@@ -890,12 +882,7 @@
       console.log(response.data);
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
-      // Cerrar el modal correctamente usando Bootstrap
-      const modalElement = document.querySelector("#saveTask").closest('.modal');
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
+      
 
       // Limpiar los campos del formulario después de guardar
       limpiarCampos();
