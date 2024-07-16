@@ -1,164 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Combustible</title>
-</head>
-
-<body>
-    <div id="spinnerContainer">
-        <div class="loader"></div>
-    </div>
-    <div class="container mt-5 fade-in" style="max-width: 1100px;">
-        <h1 class="mb-4 text-center">Registro de Combustible</h1>
-        <form id="fuelForm" class="bg-light p-4 border rounded-3">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
-                        <select class="form-select" id="unidad" name="unidad" required>
-                            <!-- Aquí se cargan las unidades -->
-                        </select>
-                    </div>
+<div id="spinnerContainer">
+    <div class="loader"></div>
+</div>
+<div class="container mt-5 fade-in" style="max-width: 1100px;">
+    <h1 class="mb-4 text-center">Registro de Combustible</h1>
+    <form id="fuelForm" class="bg-light p-4 border rounded-3">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
+                    <select class="form-select" id="unidad" name="unidad" required>
+                        <!-- Aquí se cargan las unidades -->
+                    </select>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="numeroFactura" class="form-label"><i class="bi bi-receipt"></i> Número de
-                            Factura</label>
-                        <input type="text" class="form-control" id="numeroFactura" name="numeroFactura" maxlength="30"
-                            required>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="numeroFactura" class="form-label"><i class="bi bi-receipt"></i> Número de
+                        Factura</label>
+                    <input type="text" class="form-control" id="numeroFactura" name="numeroFactura" maxlength="30"
+                        required>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="numeroAutorizacion" class="form-label"><i class="bi bi-key"></i> Número de
-                            Autorización</label>
-                        <input type="text" class="form-control" id="numeroAutorizacion" name="numeroAutorizacion"
-                            maxlength="30" required>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="numeroAutorizacion" class="form-label"><i class="bi bi-key"></i> Número de
+                        Autorización</label>
+                    <input type="text" class="form-control" id="numeroAutorizacion" name="numeroAutorizacion"
+                        maxlength="30" required>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer</label>
-                        <select class="form-select" id="chofer" name="chofer" required>
-                            <!-- Aquí se cargan los choferes -->
-                        </select>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer</label>
+                    <select class="form-select" id="chofer" name="chofer" required>
+                        <!-- Aquí se cargan los choferes -->
+                    </select>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="tipoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Tipo de
-                            Combustible</label>
-                        <select class="form-select" id="tipoCombustible" name="tipoCombustible" required>
-                            <option value="" disabled selected>Selecciona el tipo de combustible</option>
-                            <option value="1">Gasolina</option>
-                            <option value="2">Diesel</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tipoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Tipo de
+                        Combustible</label>
+                    <select class="form-select" id="tipoCombustible" name="tipoCombustible" required>
+                        <option value="" disabled selected>Selecciona el tipo de combustible</option>
+                        <option value="1">Gasolina</option>
+                        <option value="2">Diesel</option>
+                    </select>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros
-                            Aproximados</label>
-                        <input type="number" class="form-control" id="litros" name="litros" maxlength="10" min="0"
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="litros" class="form-label"><i class="bi bi-fuel-pump"></i> Litros
+                        Aproximados</label>
+                    <input type="number" class="form-control" id="litros" name="litros" maxlength="10" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3 input-with-symbol">
+                    <label for="monto" class="form-label"><i class="bi bi-cash-stack"></i> Monto</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₡</span>
+                        <input type="number" class="form-control" id="monto" name="monto" maxlength="10" min="0"
                             oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                             required>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3 input-with-symbol">
-                        <label for="monto" class="form-label"><i class="bi bi-cash-stack"></i> Monto</label>
-                        <div class="input-group">
-                            <span class="input-group-text">₡</span>
-                            <input type="number" class="form-control" id="monto" name="monto" maxlength="10" min="0"
-                                oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje de
-                            Recarga</label>
-                        <input type="number" class="form-control" id="kilometraje" name="kilometraje" min="0"
-                            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                            required maxlength="10">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
-                        <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="fecha" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha" required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
-                        <input type="time" class="form-control" id="hora" name="hora" required>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje de
+                        Recarga</label>
+                    <input type="number" class="form-control" id="kilometraje" name="kilometraje" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required maxlength="10">
                 </div>
             </div>
-            <br>
-            <div class="row text-center">
-                <div class="col-md-12 mb-3">
-                    <button type="submit" id="btnGuardar" class="btn btn-primary text-white"
-                        style="background-color: #094079; border-color: #094079; margin: 5px;"
-                        onmouseover="this.style.backgroundColor='#073c64';"
-                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
-                    <button type="submit" id="btnBuscar" class="btn btn-primary text-white"
-                        style="background-color: #094079; border-color: #094079; margin: 5px;"
-                        onmouseover="this.style.backgroundColor='#073c64';"
-                        onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-search"></i> Buscar</button>
-                    <button type="submit" id="btnActualizar" class="btn btn-primary text-white"
-                        style="background-color: #094079; margin: 5px;"
-                        onmouseover="this.style.backgroundColor='#073c64';"
-                        onmouseout="this.style.backgroundColor='#094079';" disabled><i
-                            class="bi bi-arrow-clockwise"></i> Actualizar</button>
-                    <button type="submit" id="btnEliminar" class="btn btn-danger text-white" style="margin: 5px;"
-                        disabled><i class="bi bi-trash"></i> Eliminar</button>
-                </div>
-                <div class="col-md-12 mb-3 text-end">
-                    <button type="button" id="btnLimpiar" class="btn btn-danger" style="display: none;"><i
-                            class="bi bi-x-lg"></i></button>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="lugar" class="form-label"><i class="bi bi-geo-alt"></i> Lugar</label>
+                    <input type="text" class="form-control" id="lugar" name="lugar" required maxlength="50">
                 </div>
             </div>
-        </form>
-    </div>
-
-    <div class="modal fade" id="deleteFuelLogModal" tabindex="-1" aria-labelledby="deleteFuelLogModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:#094079; color: white;">
-                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                    <h5 class="modal-title" id="deleteFuelLogModalLabel">Eliminar Unidad</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="fecha" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha</label>
+                    <input type="date" class="form-control" id="fecha" name="fecha" required>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3" style="text-align: center;">
-                        <h4 id="deleteConfirmationMessage"></h4>
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-danger" id="confirmDelete" style="margin-right: 10px;"><i
-                            class="bi bi-check2"></i>
-                        Confirmar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="margin-left: 10px;"><i class="bi bi-x-lg"></i> Cancelar</button>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="hora" class="form-label"><i class="bi bi-clock"></i> Hora</label>
+                    <input type="time" class="form-control" id="hora" name="hora" required>
                 </div>
             </div>
         </div>
+        <br>
+        <div class="row text-center">
+            <div class="col-md-12 mb-3">
+                <button type="submit" id="btnGuardar" class="btn btn-primary text-white"
+                    style="background-color: #094079; border-color: #094079; margin: 5px;"
+                    onmouseover="this.style.backgroundColor='#073c64';"
+                    onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i> Guardar</button>
+                <button type="submit" id="btnBuscar" class="btn btn-primary text-white"
+                    style="background-color: #094079; border-color: #094079; margin: 5px;"
+                    onmouseover="this.style.backgroundColor='#073c64';"
+                    onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-search"></i> Buscar</button>
+                <button type="submit" id="btnActualizar" class="btn btn-primary text-white"
+                    style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';"
+                    onmouseout="this.style.backgroundColor='#094079';" disabled><i class="bi bi-arrow-clockwise"></i>
+                    Actualizar</button>
+                <button type="submit" id="btnEliminar" class="btn btn-danger text-white" style="margin: 5px;"
+                    disabled><i class="bi bi-trash"></i> Eliminar</button>
+            </div>
+            <div class="col-md-12 mb-3 text-end">
+                <button type="button" id="btnLimpiar" class="btn btn-danger" style="display: none;"><i
+                        class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="deleteFuelLogModal" tabindex="-1" aria-labelledby="deleteFuelLogModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="deleteFuelLogModalLabel">Eliminar Unidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3" style="text-align: center;">
+                    <h4 id="deleteConfirmationMessage"></h4>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" id="confirmDelete" style="margin-right: 10px;"><i
+                        class="bi bi-check2"></i>
+                    Confirmar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-left: 10px;"><i
+                        class="bi bi-x-lg"></i> Cancelar</button>
+            </div>
+        </div>
     </div>
-
-    <div data-script="js/formFuel.js"></div>
-</body>
-
-</html>
+</div>
+<div data-script="js/formFuel.js"></div>

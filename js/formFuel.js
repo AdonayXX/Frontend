@@ -1,6 +1,7 @@
 "use strict";
 
 (function () {
+
     document.getElementById('fuelForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'btnGuardar') {
             mostrarSpinner();
@@ -51,16 +52,12 @@
             const decodedToken = jwt_decode(token);
             return (decodedToken);
         } catch (error) {
-            console.error(error);
             showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
-
         }
-
     }
+
     const infoUsuario = infoUser();
-    console.log(infoUsuario);
     const idUsuario = infoUsuario.usuario.IdUsuario;
-    console.log('IdUsuario:', idUsuario);
 
     async function autorizacionDuplicado(numeroAutorizacion, idRegistro = null) {
         try {
