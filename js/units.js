@@ -1,8 +1,16 @@
 "use strict";
 
 document.getElementById('unitsForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    postUnidad();
+    if (event.submitter.id === 'submit-unit-button') {
+        event.preventDefault();
+        postUnidad();
+    } else if (event.submitter.id === 'update-unit-button') {
+        event.preventDefault();
+        putUnidad();
+    } else  if (event.submitter.id === 'delete-unit-button') {
+        event.preventDefault();
+        deleteUnidad();
+    }
 });
 
 document.getElementById('btnResourceType').addEventListener('click', function (event) {
@@ -35,16 +43,6 @@ document.getElementById('cerrarUnitType2').addEventListener('click', function (e
     event.preventDefault();
     document.getElementById('addUnit').value = '';
     document.getElementById('addCapacity').value = '';
-});
-
-document.getElementById('update-unit-button').addEventListener('click', function (event) {
-    event.preventDefault();
-    putUnidad();
-});
-
-document.getElementById('delete-unit-button').addEventListener('click', function (event) {
-    event.preventDefault();
-    deleteUnidad();
 });
 
 document.getElementById('clean-button').addEventListener('click', function (event) {
@@ -146,11 +144,9 @@ async function getTiposRecursoSelect() {
         defaultOption.disabled = true;
         resourceType.appendChild(defaultOption);
 
-        let counter = 1;
-
         tiposRecurso.forEach(recurso => {
             const option = document.createElement('option');
-            option.value = counter++;
+            option.value = recurso.idTipoRecurso;
             option.textContent = recurso.recurso;
             resourceType.appendChild(option);
         });
@@ -210,7 +206,7 @@ async function getEstadosUnidad() {
         return estadoMap;
     } catch (error) {
         console.error('Error al obtener los estados de las unidades:', error);
-        return {};
+        showToast('Error', 'Error al obtener los estados de las unidades.');
     }
 }
 
@@ -220,7 +216,7 @@ async function getTiposUnidad() {
         return response.data.tipounidad;
     } catch (error) {
         console.error('Error al obtener el tipo de unidad:', error);
-        return [];
+        showToast('Error', 'Error al obtener el tipo de unidad.');
     }
 }
 
@@ -280,12 +276,9 @@ function postTipoRecurso() {
         recurso: recurso
     };
 
-    console.log('Datos a enviar:', recursoData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData)
         .then(response => {
             document.getElementById('addResource').value = '';
-            console.log('Tipo de recurso creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             getTiposRecursoSelect();
         })
@@ -293,21 +286,13 @@ function postTipoRecurso() {
             console.error('Error al crear el tipo de recurso:', error);
             showToast('Error', 'Error al crear el tipo de recurso.');
         });
-
-
 }
-
 function postTipoUnidad() {
     const tipo = document.getElementById('addUnit').value;
-    const capacidad = parseInt(document.getElementById('addCapacity').value, 10);
+    const capacidad = document.getElementById('addCapacity').value;
 
-    if (tipo === '' && capacidad === '') {
+    if (tipo === '' || capacidad === '') {
         showToast('Error', 'Los campos no pueden estar vacíos.');
-        return;
-    }
-
-    if (capacidad < 0) {
-        showToast('Error', 'La capacidad no puede ser menor a 0.');
         return;
     }
 
@@ -316,13 +301,10 @@ function postTipoUnidad() {
         capacidad: capacidad
     };
 
-    console.log('Datos a enviar:', unidadData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData)
         .then(response => {
             document.getElementById('addUnit').value = '';
             document.getElementById('addCapacity').value = '';
-            console.log('Tipo de unidad creado:', response.data);
             showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
             getTiposUnidadSelect();
         })
@@ -330,7 +312,6 @@ function postTipoUnidad() {
             console.error('Error al crear el tipo de unidad:', error);
             showToast('Error', 'Error al crear el tipo de unidad.');
         });
-
 }
 
 async function postUnidad() {
@@ -409,12 +390,9 @@ async function postUnidad() {
         valorFrecuenciaC: periodicity,
     };
 
-    console.log('Datos a enviar:', unidadData);
-
     axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
         .then(response => {
             limpiar();
-            console.log('Unidad creada:', response.data);
             showToast('Registro exitoso', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
         })
         .catch(error => {
@@ -493,12 +471,9 @@ async function putUnidad() {
         valorFrecuenciaC: periodicity,
     };
 
-    console.log('Datos a enviar para actualizar:', unidadData);
-
     axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
         .then(response => {
             limpiar();
-            console.log('Unidad actualizada:', response.data);
             showToast('Actualización exitosa', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
         })
         .catch(error => {
@@ -550,7 +525,6 @@ async function deleteUnidad() {
         axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
             .then(response => {
                 limpiar();
-                console.log('Unidad eliminada:', response.data);
                 showToast('Eliminación exitosa', 'La unidad ' + unitNumber + ' se ha eliminado exitosamente.');
             })
             .catch(error => {
