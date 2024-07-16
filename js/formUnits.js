@@ -132,7 +132,7 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione el chofer...';
+            defaultOption.textContent = 'Seleccionar el chofer';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             assignedDriver.appendChild(defaultOption);
