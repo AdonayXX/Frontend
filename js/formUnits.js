@@ -195,22 +195,6 @@ async function getUnidades() {
     }
 }
 
-async function getEstadosUnidad() {
-    try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
-        const estadosUnidad = response.data.estadosUnidad;
-        const estadoMap = {};
-
-        estadosUnidad.forEach(estado => {
-            estadoMap[estado.idEstado] = estado.estado;
-        });
-
-        return estadoMap;
-    } catch (error) {
-        showToast('Error', 'Error al obtener los estados de las unidades.');
-    }
-}
-
 async function getTiposUnidad() {
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoUnidad');
