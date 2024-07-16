@@ -267,6 +267,7 @@ function postTipoRecurso() {
             showToast('Error', 'Error al crear el tipo de recurso.');
         });
 }
+
 function postTipoUnidad() {
     const tipo = document.getElementById('addUnit').value;
     const capacidad = document.getElementById('addCapacity').value;
