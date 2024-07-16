@@ -4,14 +4,15 @@
 
     document.getElementById('unitsForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'submit-unit-button') {
-            showToast('Cargando', 'Registrando unidad...');
+            showToast('Cargando', 'Guardando registro de unidad...');
             event.preventDefault();
             postUnidad();
         } else if (event.submitter.id === 'update-unit-button') {
-            showToast('Cargando', 'Actualizando unidad...');
+            showToast('Cargando', 'Actualizando registro de unidad...');
             event.preventDefault();
             putUnidad();
         } else if (event.submitter.id === 'delete-unit-button') {
+            showToast('Cargando', 'Eliminando registro de unidad...');
             event.preventDefault();
             deleteUnidad();
         }

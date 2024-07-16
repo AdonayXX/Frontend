@@ -4,12 +4,15 @@
 
     document.getElementById('fuelForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'btnGuardar') {
+            showToast('Cargando', 'Guardando registro de combustible...');
             event.preventDefault();
             postRegistroCombustible();
         } else if (event.submitter.id === 'btnActualizar') {
+            showToast('Cargando', 'Actualizando registro de combustible...');
             event.preventDefault();
             putRegistroCombustible();
         } else if (event.submitter.id === 'btnEliminar') {
+            showToast('Cargando', 'Eliminando registro de combustible...');
             event.preventDefault();
             deleteRegistroCombustible();
         }
@@ -41,7 +44,7 @@
             const decodedToken = jwt_decode(token);
             return (decodedToken);
         } catch (error) {
-            showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
+            showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
         }
     }
 
@@ -57,7 +60,6 @@
 
             return duplicado;
         } catch (error) {
-            console.error('Error al obtener los registros de combustible:', error);
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
         }
@@ -72,7 +74,6 @@
 
             return duplicado;
         } catch (error) {
-            console.error('Error al obtener los registros de combustible:', error);
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
         }
@@ -101,7 +102,7 @@
             });
 
         } catch (error) {
-            console.error('Error al obtener las unidades:', error);
+            showToast('Error', 'Error al obtener las unidades.');
         }
     }
 
@@ -127,7 +128,7 @@
                 assignedDriver.appendChild(option);
             });
         } catch (error) {
-            console.error('Error al obtener los choferes:', error);
+            showToast('Error', 'Error al obtener los choferes.');
         }
     }
 
@@ -162,7 +163,6 @@
             }
 
         } catch (error) {
-            console.error('Error al obtener el registro de combustible:', error);
             showToast('Error', 'Error al obtener el registro de combustible.');
         }
     }
@@ -237,7 +237,6 @@
             }
 
         } catch (error) {
-            console.error('Error al obtener el registro de combustible:', error);
             showToast('Error', 'Error al obtener el registro de combustible.');
         }
     }
@@ -411,7 +410,6 @@
                     showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);
                 })
                 .catch(error => {
-                    console.error('Error al eliminar el registro de combustible:', error);
                     showToast('Error', 'Error al eliminar el registro de combustible.');
                 });
 
