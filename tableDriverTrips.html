@@ -21,9 +21,6 @@
             <label for="destino" class="form-label">Destino</label>
             <select id="destino" class="form-select">
                 <option selected>Seleccionar Destino...</option>
-                <option value="1">Destino 1</option>
-                <option value="2">Destino 2</option>
-                <option value="3">Destino 3</option>
             </select>
         </div>
         <div class="col-md-4">
@@ -141,8 +138,8 @@
                 <form id="finalizarViajeForm">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label for="kilometraje" class="form-label">Kilometraje Final</label>
-                            <input type="text" id="kilometraje" class="form-control" placeholder="Kilometraje final">
+                            <label for="kilometrajeFinal" class="form-label">Kilometraje Final</label>
+                            <input type="text" id="kilometrajeFinal" class="form-control" placeholder="Kilometraje final">
                         </div>
                         <div class="col-md-4">
                             <label for="horasExtras" class="form-label">Horas Extras</label>
@@ -157,7 +154,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="confirmarFinalizarViaje()">Finalizar Viaje</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnFinalizarViaje">Finalizar Viaje</button>
             </div>
         </div>
     </div>

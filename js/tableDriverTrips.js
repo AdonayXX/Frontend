@@ -38,7 +38,6 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 
-
   async function obtenerUnidadAsignada(identificacion) {
     const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
     try {
@@ -62,18 +61,32 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 
-
-  async function obtenerViajes(idUnidad, fechaValue) {
-    const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
+  async function obtenerViajes(idUnidad, fechaValue, descripcionDestino = '') {
+    let apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
+    if (descripcionDestino) {
+      apiURLViajes += `?destino=${descripcionDestino}`;
+    }
     try {
       const responseViajes = await axios.get(apiURLViajes);
       const viajes = responseViajes.data.Data?.Data || [];
+      console.log('Viajes:', viajes);
+
       if (!Array.isArray(viajes)) {
         throw new Error('La respuesta no contiene un array de viajes');
       }
+
+      if (viajes.length > 0) {
+        showToast('Información', 'Hay viajes asignados');
+      } else {
+        showToast('Información', 'No hay viajes asignados, vuelve pronto');
+      }
+
       const viajesTableBody = document.getElementById('viajesTableBody');
       viajesTableBody.innerHTML = '';
       const fragment = document.createDocumentFragment();
+
+      actualizarSelectDestinos(viajes);
+
       viajes.forEach(data => {
         const acompanante1 = data.Acompanante1 || 'N/A';
         const acompanante2 = data.Acompanante2 || 'N/A';
@@ -92,12 +105,12 @@ function openAccomp(acompanante1, acompanante2) {
         `;
         fragment.appendChild(row);
       });
+
       viajesTableBody.appendChild(fragment);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
   }
-
 
   async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
     console.log("idUnidad en updateInitTrip:", idUnidad);
@@ -105,17 +118,45 @@ function openAccomp(acompanante1, acompanante2) {
     console.log("hora en updateInitTrip:", hourInitTrip);
     const API_INIT_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/start`;
     try {
-      const response = await axios.put(API_INIT_TRIP, {
+      await axios.put(API_INIT_TRIP, {
         idUnidad,
         fechaInicioViaje: fechaValue,
         horaInicioViaje: hourInitTrip
       });
-      console.log('Respuesta de updateInitTrip:', response.data);
+      localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue }));
+      showToast('Éxito', 'El viaje ha sido iniciado correctamente');
     } catch (error) {
-      console.error('Error al actualizar el viaje:', error);
+      showToast('Error', 'Ocurrió un problema al iniciar el viaje');
     }
   }
 
+  async function finishTrip() {
+    const kilometrajeFinal = parseInt(document.getElementById('kilometrajeFinal').value);
+    const horasExtras = document.getElementById('horasExtras').value;
+    const viaticos = document.getElementById('viaticos').value; 
+    const hourFinishTrip = obtenerHoraActual();
+    const idUnidad = await obtenerIdUnidad(document.getElementById('unidadAsignada').value);
+
+    console.log("Datos a enviar en finishTrip:", idUnidad, hourFinishTrip, kilometrajeFinal, horasExtras, viaticos);
+
+    const API_FINISH_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/end`;
+    try {
+      const response = await axios.put(API_FINISH_TRIP, {
+        idUnidad,
+        horaFinViaje: hourFinishTrip,
+        kilometrajeFinal,
+        horasExtras,
+        viaticos
+      });
+      showToast('Éxito', 'El viaje ha sido finalizado correctamente');
+      localStorage.removeItem('viajeIniciado');
+      console.log('Respuesta del servidor:', response);
+    } catch (error) {
+      showToast('Error', 'Ocurrió un problema al finalizar el viaje');
+    }
+  }
+
+  document.getElementById('btnFinalizarViaje').addEventListener('click', finishTrip);
 
   function obtenerHoraActual() {
     const d = new Date();
@@ -124,7 +165,6 @@ function openAccomp(acompanante1, acompanante2) {
     const s = String(d.getSeconds()).padStart(2, '0');
     return `${h}:${m}:${s}`;
   }
-
 
   async function inicializarPagina() {
     try {
@@ -151,21 +191,44 @@ function openAccomp(acompanante1, acompanante2) {
           const hourInitTrip = obtenerHoraActual();
           console.log('Hora de inicio de viaje:', hourInitTrip);
 
+          const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
+          if (viajeIniciado && viajeIniciado.idUnidad === idUnidad) {
+            await obtenerViajes(idUnidad, viajeIniciado.fechaValue);
+          } else {
+            await obtenerViajes(idUnidad, fechaValue);
+          }
+
           document.getElementById('btnIniciarViaje').addEventListener('click', async () => {
             await updateInitTrip(idUnidad, fechaValue, hourInitTrip);
+            await obtenerViajes(idUnidad, fechaValue);
           });
 
-          await obtenerViajes(idUnidad, fechaValue);
+          document.getElementById('destino').addEventListener('change', async (event) => {
+            const descripcionDestino = event.target.value;
+            await obtenerViajes(idUnidad, fechaValue, descripcionDestino);
+          });
+
         } else {
-          console.log('No se encontró el id de la unidad asignada para el chófer logueado');
+          console.log('No se encontró la unidad asignada para el chófer logueado');
         }
-      } else {
-        console.log('No se encontró la unidad asignada para el chófer logueado');
       }
     } catch (error) {
       console.error('Error en la inicialización de la página:', error);
     }
   }
 
-  inicializarPagina();
+  async function actualizarSelectDestinos(viajes) {
+    const destinosSet = new Set(viajes.map(viaje => viaje.ubicacionDestino));
+    const destinoSelect = document.getElementById('destino');
+    destinoSelect.innerHTML = '<option value="">Seleccionar destino...</option>';
+    destinosSet.forEach(destino => {
+      const option = document.createElement('option');
+      option.value = destino;
+      option.textContent = destino;
+      destinoSelect.appendChild(option);
+    });
+  }
+
+
+  await inicializarPagina();
 })();
