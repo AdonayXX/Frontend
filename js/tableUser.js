@@ -7,7 +7,7 @@ document.getElementById("addUserButton").addEventListener("click", function () {
 
 //Funcion para obtener datos ingresados del usuario
 function getUserRegisterData() {
- 
+
   const userIdentification = document.querySelector('#userRegisterIdentification').value;
   const userName = document.querySelector('#userRegisterName').value;
   const userFirstLastName = document.querySelector('#userRegisterFirstlastname').value;
@@ -30,7 +30,7 @@ function getUserRegisterData() {
 //Funcion para guardar el usuario
 async function saveUser(userData) {
   try {
-    const API_URL = 'http://localhost:18026/api/usuario/';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/usuario/';
     const response = await axios.post(API_URL, userData);
     const userExist = response.data.usuario;
     showToast('Éxito!', 'Usuario registrado correctamente');
@@ -80,7 +80,7 @@ async function deleteButton(userId, nombreCompleto, identificacion) {
 // Función para eliminar usuarios
 async function deleteUser(userId) {
   try {
-    const API_URL = `http://localhost:18026/api/usuario/${userId}`;
+    const API_URL = `https://backend-transporteccss.onrender.com/api/usuario/${userId}`;
     const token = localStorage.getItem('token'); // Obtén el token de autenticación del almacenamiento local
 
     if (!token) {
@@ -105,7 +105,7 @@ async function deleteUser(userId) {
 async function getUserData() {
   mostrarSpinner();
   try {
-    const Api_Url = 'http://localhost:18026/';
+    const Api_Url = 'https://backend-transporteccss.onrender.com/';
     const token = localStorage.getItem('token');
     const response = await axios.get(`${Api_Url}api/usuario`, {
       headers: {
@@ -141,20 +141,20 @@ async function getUserData() {
       });
     });
 
-setTimeout(function () {
+    setTimeout(function () {
 
-  ocultarSpinner();
-}, 500);
+      ocultarSpinner();
+    }, 500);
 
   } catch (error) {
     console.error('Error al obtener datos del usuario:', error);
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      showToast('Error',errorMessage);
-    }  else {
+      showToast('Error', errorMessage);
+    } else {
       console.error('Ha ocurrido un problema:', error);
-      showToast('Error','Ocurrio un problema al cargar los datos.')
-    } 
+      showToast('Error', 'Ocurrio un problema al cargar los datos.')
+    }
   }
 }
 function fillTableUsuarios(usuarios) {
@@ -171,7 +171,7 @@ function fillTableUsuarios(usuarios) {
       const isActive = usuario.Rol === 1 && usuario.Estado === 'Activo';
       row.innerHTML = `
               <tr>
-                <td class="text-start">${usuario.Identificacion}</td>
+                <td class="text-center">${usuario.Identificacion}</td>
                 <td>${nombreCompleto}</td>
                 <td>${usuario.Correo}</td>
                 <td>${roleDescription}</td>
@@ -240,13 +240,13 @@ window.sendUserData = function (button) {
       Rol: parseInt(document.getElementById('rol').value.trim()),
       Estado: document.getElementById('userState').value.trim()
     };
-    editUserData(userData,userIdentification);
+    editUserData(userData, userIdentification);
     console.log(userData);
   }
 
-  async function editUserData(userData,userIdentification) {
+  async function editUserData(userData, userIdentification) {
     try {
-      const API_URL = `http://localhost:18026/api/usuario/identificacion/${userIdentification}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/usuario/identificacion/${userIdentification}`;
       const token = localStorage.getItem('token');
       const response = await axios.put(API_URL, userData, {
         headers: {
@@ -278,7 +278,17 @@ window.sendUserData = function (button) {
     document.getElementById('userFirstlastnameEdit').value = user.Apellido1;
     document.getElementById('userSecondlastnameEdit').value = user.Apellido2;
     document.getElementById('userEmailEdit').value = user.Correo;
-    document.getElementById('rol').value = user.Rol;
+
+    const rolSelect = document.getElementById('rol');
+    if (user.Rol === 0) {
+      const unknownOption = rolSelect.querySelector('option[value="0"]');
+      unknownOption.hidden = false; // Mostrar la opción temporalmente
+      rolSelect.value = user.Rol;
+      unknownOption.hidden = true; // Ocultar la opción de nuevo
+    } else {
+      rolSelect.value = user.Rol;
+    }
+    
     document.getElementById('userState').value = user.Estado;
   }
 }

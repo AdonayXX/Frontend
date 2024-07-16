@@ -15,9 +15,8 @@ async function handleLogin() {
     try {
         const token = await loginUser(userEmail, userPassword);
         saveTokenLS(token);
-        window.location.href = 'Index.html'; // Redirigir al usuario
+        window.location.href = 'index.html'; // Redirigir al usuario
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
         showToast('Error', 'Usuario o Contraseña incorrectos')
     }
 };
@@ -30,8 +29,8 @@ async function loginUser(identificador, Contrasena) {
         });
          return response.data.usuario.token; 
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        throw new Error('Error al iniciar sesión');
+        showToast('Ups!','Error inesperado.');
+
     }
 };
 
@@ -41,7 +40,8 @@ function saveTokenLS(token){
     localStorage.setItem('token', token);
 
     } catch (error) {
-        console.error(error);
+        showToast('Ups!','Error inesperado.');
+
             
     }
     
@@ -106,7 +106,7 @@ async function saveUser(userData) {
         } else {
             showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
         }
-        console.error(error);
+        showToast('Ups!','Error inesperado.');
     }
 }
 

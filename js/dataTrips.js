@@ -498,8 +498,7 @@
   // Ocultar el spinner
   function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
-  }
-
+}
 
   function infoUser() {
     try {
