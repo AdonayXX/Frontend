@@ -8,22 +8,20 @@ function mostrarCampos() {
     var contenedorEscribirSalida = document.getElementById('contenedorEscribirSalida');
     var contenedorEscribirDestino = document.getElementById('contenedorEscribirDestino');
 
-    
     if (motivoSeleccionado === '3') {
         contenedorSelectSalida.style.display = 'block';
         contenedorSelectDestino.style.display = 'block';
         contenedorEscribirSalida.style.display = 'none';
         contenedorEscribirDestino.style.display = 'none';
-        document.getElementById('nameSali').setAttribute('disabled', 'disabled');
-        document.getElementById('nameDestino').setAttribute('disabled', 'disabled');
+        document.getElementById('lugarSa2').setAttribute('disabled', 'disabled');
+        document.getElementById('lugarDes2').setAttribute('disabled', 'disabled');
     } else {
-        
         contenedorSelectSalida.style.display = 'none';
         contenedorSelectDestino.style.display = 'none';
         contenedorEscribirSalida.style.display = 'block';
         contenedorEscribirDestino.style.display = 'block';
-        document.getElementById('nameSali').removeAttribute('disabled');
-        document.getElementById('nameDestino').removeAttribute('disabled');
+        document.getElementById('lugarSa2').removeAttribute('disabled');
+        document.getElementById('lugarDes2').removeAttribute('disabled');
     }
 }
 
@@ -113,6 +111,8 @@ function SolicitarVale() {
     ObtenerMotivos();
     ObtenerDestino();
     ObtenerSalida();
+    ObtenerRutaSalida();
+    ObtenerRutaDestino();
 }
 
 
@@ -201,7 +201,7 @@ function LlenarSalida(data) {
 function ObtenerDestino() {
     axios.get(`${url}api/ebais`)
         .then(response => {
-            LlenarDestino(response.data.ebais); // Asumiendo que "ebais" es el arreglo de EBAIS
+            LlenarDestino(response.data.ebais);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -216,7 +216,46 @@ function LlenarDestino(data) {
     });
     document.getElementById('lugarDes').innerHTML = body;
 }
+//------------------------------------------------------------------------------------------
+//Funciones para obtener las rutas
+function ObtenerRutaSalida() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
+            LlenarRutaSalida(response.data);
+        })
+        .catch(error => {
+            console.error('Hubo un problema al obtener los datos:', error);
+        });
+}
 
+function LlenarRutaSalida(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarSa2').innerHTML = body;
+}
+//body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
+
+function ObtenerRutaDestino() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
+            LlenarRutaDestino(response.data);
+        })
+        .catch(error => {
+            console.error('Hubo un problema al obtener los datos:', error);
+        });
+}
+
+function LlenarRutaDestino(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarDes2').innerHTML = body;
+}
+
+//------------------------------------------------------------------------------------------
 //Valida que los campos se deban llenar
 //guarda los datos
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {

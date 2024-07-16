@@ -74,7 +74,8 @@
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="nameSoli" class="form-label">Nombre del Solicitante:</label>
-                                    <input type="text" class="form-control" id="nameSoli" maxlength="25" required>
+                                    <input type="text" class="form-control" id="nameSoli" maxlength="25" required
+                                        placeholder="Ingrese su nombre">
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="service" class="form-label">Servicios:</label>
@@ -89,7 +90,6 @@
                                     style="display: none;">
                                     <label for="lugarSa" class="form-label">Lugar de Salida: </label>
                                     <select class="form-select" id="lugarSa">
-                                        <!-- Opciones para lugar de salida si es Gira de Ebais -->
                                     </select>
                                 </div>
 
@@ -97,32 +97,41 @@
                                     style="display: none;">
                                     <label for="lugarDes" class="form-label">Lugar de Destino:</label>
                                     <select class="form-select" id="lugarDes">
-                                        <!-- Opciones para lugar de destino si es Gira de Ebais -->
                                     </select>
                                 </div>
 
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirSalida">
-                                    <label for="nameSoli" class="form-label">Lugar de Salida:</label>
-                                    <input type="text" class="form-control" id="nameSali" maxlength="25" required>
+                                    <label for="lugarSa2" class="form-label">Lugar de Salida: </label>
+                                    <select class="form-select" id="lugarSa2">
+                                    </select>
                                 </div>
 
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirDestino">
-                                    <label for="nameDestino" class="form-label">Lugar de Destino:</label>
-                                    <input type="text" class="form-control" id="nameDestino" maxlength="25" required>
+                                    <label for="lugarDes2" class="form-label">Lugar de Destino:</label>
+                                    <select class="form-select" id="lugarDes2">
+                                    </select>
                                 </div>
+
                                 <div class="col-sm-12  col-md-4 col-lg-6">
                                     <label for="b_date" class="form-label">Fecha para la Solicitud: </label>
                                     <input type="date" class="form-control" min="1910-02-01" id="b_date"
                                         placeholder="dd/mm/aaaa" required>
                                 </div>
+
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label">Hora de salida: </label>
                                     <input type="time" class="form-control" id="hora_salida" required>
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-lg-6">
-                                    <label for="user_gen" class="form-label">Solicitar Chofer: </label>
-                                    <input type="checkbox" name="chofer" id="chofer">
+
+                                <div class="col-sm-12 col-md-4 col-lg-6 ">
+                                    <label class="form-label"><i class="bi bi-exclamation-circle"></i> Solicitar
+                                        Chofer:</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="chofer">
+                                        <label class="form-check-label" for="user_gen">Si</label>
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="row sectionCompanion">
                                 <div
