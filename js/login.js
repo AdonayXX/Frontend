@@ -364,6 +364,9 @@ document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('hora_salida').value = '';
     document.getElementById('b_date').value = '';
     document.addEventListener('DOMContentLoaded', getVales);
+    document.getElementById('chofer').checked = false;
+    document.getElementById('lugarSa2').value = '';
+    document.getElementById('lugarDes2').value = '';
 });
 
 var error;
