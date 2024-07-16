@@ -171,7 +171,7 @@ function fillTableUsuarios(usuarios) {
       const isActive = usuario.Rol === 1 && usuario.Estado === 'Activo';
       row.innerHTML = `
               <tr>
-                <td class="text-start">${usuario.Identificacion}</td>
+                <td class="text-center">${usuario.Identificacion}</td>
                 <td>${nombreCompleto}</td>
                 <td>${usuario.Correo}</td>
                 <td>${roleDescription}</td>

@@ -830,7 +830,7 @@ if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoManten
       actividades.forEach((actividad) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-                <td>${actividad.IdActividad}</td>
+                <td class="text-center">${actividad.IdActividad}</td>
                 <td>${actividad.Descripcion}</td>
                 <td>${actividad.UnidadMedida}</td>
                 <td class="actions">

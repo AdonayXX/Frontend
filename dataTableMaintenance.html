@@ -7,11 +7,10 @@
 </head>
 
 <body>
-    <div id="spinnerContainer" class="text-center mt-5">
-        <div class="spinner-border mt-5" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
+    <div id="spinnerContainer">
+        <div class="loader"></div>
     </div>
+    
 
     <!-- Contenedor -->
     <div class="fade-in">
@@ -257,8 +256,8 @@
                 </div>
                 <div class="modal-body">
                     <!-- Formulario para agregar tarea -->
-                    <form action="" id="formAddtask">
-                        <div class="row">
+                    <form action="" id="formAddtask" class="bg-light p-2 border rounded-3">
+                        <div class="row justify-content-center">
                             <!-- Campo para ingresar tarea -->
                             <div class="col-md-4 mb-3">
                                 <label for="tarea" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
@@ -272,11 +271,12 @@
                                     maxlength="10" required>
                             </div>
                             <!-- Botón para guardar nueva tarea -->
-                            <div class="col-md-4 mb-3 align-self-md-end">
+                            <div class="col-md-3 mb-3 align-self-md-end">
                                 <button class="btn btn-primary bi bi-plus" id="saveTask" type="submit">Guardar</button>
                             </div>
                         </div>
                     </form>
+                    <hr>
 
                    
                 
