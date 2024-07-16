@@ -1,6 +1,3 @@
-<div id="spinnerContainer">
-    <div class="loader"></div>
-</div>
 <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
     <h1 class="mb-4 text-center">Registro de Unidades</h1>
     <form id="unitsForm" class="bg-light p-4 border rounded-3">
@@ -13,6 +10,7 @@
                 <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
                 <div class="input-group">
                     <select class="form-select" id="resourceType" required>
+                        <option selected disabled>Seleccione un tipo de recurso...</option>
                         <!-- Aquí se cargan los tipos de recurso -->
                     </select>
                     <button class="btn btn-outline-secondary ms-2" type="button" id="btnAddResource"
@@ -23,6 +21,7 @@
                 <label for="unitType"><i class="bi bi-truck-front"></i> Tipo de Unidad</label>
                 <div class="input-group">
                     <select class="form-select" id="unitType" required>
+                        <option selected disabled>Seleccione un tipo de unidad...</option>
                         <!-- Aquí se cargan los tipos de unidad -->
                     </select>
                     <button class="btn btn-outline-secondary ms-2" type="button" id="btnAddUnit" data-bs-toggle="modal"
@@ -32,6 +31,7 @@
             <div class="col-md-4 mb-3">
                 <label for="assignedDriver"><i class="bi bi-person"></i> Chofer Designado</label>
                 <select class="form-select" id="assignedDriver" required>
+                    <option selected disabled>Seleccione un chofer...</option>
                     <!-- Aquí se cargan los choferes -->
                 </select>
             </div>
@@ -65,10 +65,6 @@
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     readonly>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="dekraDate"><i class="bi bi-calendar2-event"></i> Fecha de DEKRA</label>
-                <input type="date" class="form-control" id="dekraDate" required>
-            </div>
             <div class="col-md-4 mb-3" id="mileageField">
                 <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                     Mantenimiento</label>
@@ -84,6 +80,18 @@
                         required>
                     <span class="input-group-text">km</span>
                 </div>
+            </div>
+            <div class="col-md-4 mb-3" id="advanceField">
+                <label for="advance"><i class="bi bi-tools"></i> Adelanto del Mantenimiento</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="advance" maxlength="3" min="0"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="dekraDate"><i class="bi bi-calendar2-event"></i> Fecha de DEKRA</label>
+                <input type="date" class="form-control" id="dekraDate" required>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="status"><i class="bi bi-exclamation-circle"></i> Estado</label>
