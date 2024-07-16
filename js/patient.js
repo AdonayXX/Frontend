@@ -8,7 +8,6 @@ async function getPatientComp() {
   try {
     const token = localStorage.getItem('token');
     const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
-   // const API_URL = 'http://localhost:18026/api/paciente/acompanantes/';
 
     const response = await axios.get(API_URL, {
       headers: {
@@ -49,8 +48,9 @@ async function getPatientComp() {
 
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error('Error específico:', errorMessage);
       showToast('Ups!', errorMessage);
+    }else{
+      showToast('Error', 'Inesperado.');
 
     }
   }
@@ -70,7 +70,7 @@ function fillAccomp(acompanantes) {
     if (activeAcompanantes === 0) {
       tableComp.style.display = 'none';
       noAcompanantesMessage.style.display = 'block';
-      console.log();
+
     } else {
       tableComp.style.display = 'block';
       noAcompanantesMessage.style.display = 'none';
@@ -98,7 +98,8 @@ function fillAccomp(acompanantes) {
 
     }
   } catch (error) {
-    console.error('There has been a problem:', error);
+    showToast('Error', 'Inesperado.');
+
   }
 }
 
@@ -165,18 +166,13 @@ function fillPatientComp(listPatientComp) {
 
 
     } else {
-      throw new Error('Error al cargar los pacientes');
+      showToast('Ups!', ' Error inesperado.');
 
     }
 
   } catch (error) {
-
-    console.error('There has been a problem:', error);
-
-
+    showToast('Error', 'Inesperado.');
   }
-
-
 }
 
 function getLocation(latitude, longitude) {
@@ -240,8 +236,7 @@ window.editAccomp = function (button) {
 
     try {
       const token = localStorage.getItem('token');
-      //const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
-      const API_URL = `http://localhost:18026/api/acompanante/${IdAcompanante}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
       const response = await axios.put(API_URL, companionData , {
         headers: {
             'Authorization': `Bearer ${token}`
@@ -256,11 +251,10 @@ window.editAccomp = function (button) {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error('Error específico:', errorMessage);
-        alert(errorMessage);
+        showToast('Ups!', errorMessage);
       } else {
-        console.error('Ha ocurrido un problema:', error);
-        alert("Ocurrió un problema");
+        showToast('Ups!', ' Error inesperado.');
+
       }
     }
 
@@ -298,22 +292,19 @@ window.patientEdit = function (button) {
   async function editPatientPerson(personaData, pacienteData) {
     try {
       const token = localStorage.getItem('token');
-      const API_URL_PERSONA = `http://localhost:18026/api/persona/${IdPersona}`;
-     // const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
+      const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
       const responsePersona = await axios.put(API_URL_PERSONA, personaData , {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
-      const API_URL_PACIENTE = `http://localhost:18026/api/paciente/${IdPaciente}`;
-     // const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
+      const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
       const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData , {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
-      console.log(responsePersona);
-      console.log(responsePaciente);
+
 
       modal.hide();
       showToast('Paciente', 'Se han guardado los cambios')
@@ -323,11 +314,10 @@ window.patientEdit = function (button) {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error('Error específico:', errorMessage);
-        alert(errorMessage);
+        showToast('Ups!', errorMessage);
       } else {
-        console.error('Ha ocurrido un problema:', error);
-        alert("Ocurrió un problema");
+        showToast('Ups!', ' Error inesperado.');
+
       }
     }
 
@@ -364,7 +354,7 @@ window.patientEdit = function (button) {
 
   }
   function llenarcampos(pacientes) {
-    console.log(pacientes);
+
     document.querySelector('#primerApellido').value = pacientes.Apellido1 || '';
     document.querySelector('#nombre').value = pacientes.Nombre || '';
     document.querySelector('#segundoApellido').value = pacientes.Apellido2 || '';
@@ -430,8 +420,7 @@ window.patientDelete = function (idPatient, nombreCompleto, identificacion) {
 async function deletePatient(patientId) {
   try {
     const token = localStorage.getItem('token');
-  //  const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
-    const API_URL = `http://localhost:18026/api/paciente/${patientId}`;
+   const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
     const response = await axios.delete(API_URL , {
       headers: {
           'Authorization': `Bearer ${token}`
@@ -444,7 +433,6 @@ async function deletePatient(patientId) {
 
 
   } catch (error) {
-    console.error('There has been a problem deleting the patient:', error);
     showToast('Ups!', 'Error al eliminar el paciente.')
   }
 }
@@ -508,37 +496,12 @@ function addCompanion(idPacienteCapturado) {
 
   agregarAcompanante(companionData);
 }
-/* 
-//8: Verifica si el acompañante ya está registrado
-async function obtenerAcompanante(companionData) {
-  try {
-
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes/';
-    const response = await axios.get(API_URL);
-    const listaAcompanantes = response.data.acompanantes;
-    const acompananteEncontrado = listaAcompanantes.find(acompanante => acompanante.Identificacion === companionData.Identificacion && acompanante.IdPaciente === companionData.IdPaciente);
-    if (acompananteEncontrado) {
-      alert("Acompañante ya registrado");
-
-      ;
-
-    } else {
-      agregarAcompanante(companionData);
-    }
-
-
-
-  } catch (error) {
-
-  }
-} */
 
 //9: Registra un nuevo acompañante
 async function agregarAcompanante(companionData) {
   try {
 
-   // const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
-    const API_URL = 'http://localhost:18026/api/acompanante/';
+   const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
 
    const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, companionData, {
@@ -546,7 +509,7 @@ async function agregarAcompanante(companionData) {
           'Authorization': `Bearer ${token}`
       }
   });
-    console.log(response.data);
+
     showToast('Acompañante Registrado', 'El registro se ha realizado exitosamente.');
      // Cerrar el modal correctamente usando Bootstrap
      const modalElement = document.querySelector('#addAccomp');
@@ -564,11 +527,10 @@ async function agregarAcompanante(companionData) {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error('Error específico:', errorMessage);
-      alert(errorMessage);
+      showToast('Ups!', errorMessage);
     } else {
-      console.error('Ha ocurrido un problema:', error);
-      alert("Ocurrió un problema");
+      showToast('Ups!', ' Error inesperado.');
+
     }
   }
 }
@@ -715,7 +677,6 @@ document.getElementById('direccion').addEventListener('input', (event) => {
 });
 
 async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
-  console.log(IdAcompanante, Identificacion, nombreCompleto);
   let modal = new bootstrap.Modal(document.getElementById('confirmDeleteModalComp'), {
     backdrop: 'static',
     keyboard: false
@@ -754,9 +715,8 @@ async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
 }
 async function deleteComp(IdAcompanante) {
   try {
-   // const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+    const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
     const token = localStorage.getItem('token');
-    const API_URL = `http://localhost:18026/api/acompanante/${IdAcompanante}`;
    const response = await axios.delete(API_URL , {
     headers: {
         'Authorization': `Bearer ${token}`
@@ -771,7 +731,7 @@ async function deleteComp(IdAcompanante) {
 
 
   } catch (error) {
-    console.error('There has been a problem deleting the patient:', error);
+
     showToast('Ups!', 'Error al eliminar el acompañante.')
   }
 
