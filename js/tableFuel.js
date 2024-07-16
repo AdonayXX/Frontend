@@ -22,9 +22,10 @@ async function getFuelRecords() {
             tableBody.innerHTML = '';
 
             registros.forEach(record => {
-                const row = document.createElement('tr');
+                if (record.estado === 'activo') {
+                    const row = document.createElement('tr');
 
-                row.innerHTML = `
+                    row.innerHTML = `
                     <td class="text-center">${record.chofer || 'N/A'}</td>
                     <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
                     <td class="text-center">${record.numeroFactura || 'N/A'}</td>
@@ -35,7 +36,8 @@ async function getFuelRecords() {
                     <td class="text-center">${record.montoColones || 'N/A'}</td>
                 `;
 
-                tableBody.appendChild(row);
+                    tableBody.appendChild(row);
+                }
             });
 
             $('#fuelTable').DataTable({
@@ -60,9 +62,9 @@ async function getFuelRecords() {
         });
         ocultarSpinner();
     } catch (error) {
-        console.error('Error al obtener los registros de combustible:', error);
+        showToast('Error', 'No se pudo cargar la información de los registros de combustible');
+        ocultarSpinner();
     }
 }
 
 getFuelRecords();
-

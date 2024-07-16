@@ -20,7 +20,7 @@ async function getNombreChofer() {
 
         return choferMap;
     } catch (error) {
-        console.error('Error al obtener los nombres de los choferes:', error);
+        showToast('Error', 'Error al obtener los choferes.');
         return {};
     }
 }
@@ -37,7 +37,7 @@ async function getTiposRecurso() {
 
         return recursoMap;
     } catch (error) {
-        console.error('Error al obtener los tipos de recurso:', error);
+
         return {};
     }
 }
@@ -54,7 +54,7 @@ async function getEstadosUnidad() {
 
         return estadoMap;
     } catch (error) {
-        console.error('Error al obtener los estados de las unidades:', error);
+        showToast('Error', 'Error al obtener los estados de las unidades.');
         return {};
     }
 }
@@ -94,7 +94,6 @@ async function getUnidades() {
                     `;
 
                     tableBody.appendChild(row);
-                    ocultarSpinner();
                 }
             });
 
@@ -120,11 +119,9 @@ async function getUnidades() {
         });
         ocultarSpinner();
     } catch (error) {
-        console.error('Error al obtener las unidades:', error);
+        showToast('Error', 'Error al obtener las unidades.');
+        ocultarSpinner();
     }
 }
 
-function ocultarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'none';
-}
 getUnidades();
