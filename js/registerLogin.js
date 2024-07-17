@@ -97,16 +97,11 @@ async function saveUser(userData) {
         if (error.response && error.response.status === 400) {
             const errorMessage = error.response.data.error;
             if (errorMessage.includes('Ya existe un usuario con esa identificación')) {
-                showToast('Ups!', 'La identificación del usuario ya existe.');
-            } else if (errorMessage.includes('Ya existe un usuario con ese correo')) {
-                showToast('Ups!', 'El correo del usuario ya existe.');
-            } else {
-                showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
-            }
+                showToast('Ups!', errorMessage);
+            } 
         } else {
             showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
         }
-        showToast('Ups!','Error inesperado.');
     }
 }
 
