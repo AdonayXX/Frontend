@@ -1,17 +1,15 @@
 "use strict";
 
 (function () {
+
     document.getElementById('fuelForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'btnGuardar') {
-            mostrarSpinner();
             event.preventDefault();
             postRegistroCombustible();
         } else if (event.submitter.id === 'btnActualizar') {
-            mostrarSpinner();
             event.preventDefault();
             putRegistroCombustible();
         } else if (event.submitter.id === 'btnEliminar') {
-            mostrarSpinner();
             event.preventDefault();
             deleteRegistroCombustible();
         }
@@ -26,14 +24,6 @@
         event.preventDefault();
         limpiar();
     });
-
-    function mostrarSpinner() {
-        document.getElementById('spinnerContainer').style.display = 'flex';
-    }
-
-    function ocultarSpinner() {
-        document.getElementById('spinnerContainer').style.display = 'none';
-    }
 
     function limpiar() {
         document.getElementById('fuelForm').reset();
@@ -51,16 +41,12 @@
             const decodedToken = jwt_decode(token);
             return (decodedToken);
         } catch (error) {
-            console.error(error);
             showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
-
         }
-
     }
+
     const infoUsuario = infoUser();
-    console.log(infoUsuario);
     const idUsuario = infoUsuario.usuario.IdUsuario;
-    console.log('IdUsuario:', idUsuario);
 
     async function autorizacionDuplicado(numeroAutorizacion, idRegistro = null) {
         try {
@@ -102,7 +88,7 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione la unidad...';
+            defaultOption.textContent = 'Seleccionar la unidad';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             unit.appendChild(defaultOption);
@@ -113,7 +99,6 @@
                 option.textContent = unidad.numeroUnidad;
                 unit.appendChild(option);
             });
-            ocultarSpinner();
 
         } catch (error) {
             console.error('Error al obtener las unidades:', error);
@@ -130,7 +115,7 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione el chofer...';
+            defaultOption.textContent = 'Seleccionar el chofer';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             assignedDriver.appendChild(defaultOption);
@@ -282,6 +267,11 @@
             return;
         }
 
+        if (fecha > new Date().toISOString().split('T')[0]) {
+            showToast('Error', 'La fecha del registro de combustible no puede ser mayor a la fecha de hoy.');
+            return;
+        }
+
         const fuelLogData = {
             numeroUnidad: unidad,
             montoColones: monto,
@@ -301,11 +291,9 @@
         axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData)
             .then(response => {
                 limpiar();
-                ocultarSpinner();
-                showToast('Registro exitoso', `El registro de combustible de la unidad ${unidad} se ha realizado exitosamente.`);
+                showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha realizado exitosamente.`);
             })
             .catch(error => {
-                ocultarSpinner();
                 console.error('Error al crear el registro de combustible:', error);
                 showToast('Error', 'Error al guardar el registro de combustible.');
             });
@@ -329,10 +317,15 @@
 
         const idRegistro = await getIdRegistroCombustible(unidad);
         if (await facturaDuplicado(numeroFactura, idRegistro)) {
-            showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
+            showToast('Error', `Ya existe un registro de combustible con el número de factura ${numeroFactura}.`);
             return;
         } else if (await autorizacionDuplicado(numeroAutorizacion, idRegistro)) {
-            showToast('Error', `El número de autorización ${numeroAutorizacion} ya existe.`);
+            showToast('Error', `Ya existe un registro de combustible con el número de autorización ${numeroAutorizacion}.`);
+            return;
+        }
+
+        if (fecha > new Date().toISOString().split('T')[0]) {
+            showToast('Error', 'La fecha del registro de combustible no puede ser mayor a la fecha de hoy.');
             return;
         }
 
@@ -355,11 +348,9 @@
         axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
             .then(response => {
                 limpiar();
-                ocultarSpinner();
-                showToast('Actualización exitosa', 'El registro de combustible se ha actualizado exitosamente.');
+                showToast('Éxito', 'El registro de combustible se ha actualizado exitosamente.');
             })
             .catch(error => {
-                ocultarSpinner();
                 console.error('Error al actualizar el registro de combustible:', error);
                 showToast('Error', 'Error al actualizar el registro de combustible.');
             });
@@ -391,7 +382,6 @@
         }
 
         const confirmationMessage = document.getElementById('deleteConfirmationMessage');
-        ocultarSpinner();
 
         confirmationMessage.innerText = `¿Está seguro que desea eliminar este registro de combustible de la unidad ${unidad}?`;
 
@@ -415,15 +405,12 @@
         };
 
         document.getElementById('confirmDelete').onclick = function () {
-            mostrarSpinner();
             axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
                 .then(response => {
                     limpiar();
-                    ocultarSpinner();
-                    showToast('Eliminación exitosa', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);
+                    showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);
                 })
                 .catch(error => {
-                    ocultarSpinner();
                     console.error('Error al eliminar el registro de combustible:', error);
                     showToast('Error', 'Error al eliminar el registro de combustible.');
                 });

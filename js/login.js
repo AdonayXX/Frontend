@@ -1,4 +1,30 @@
 //funciones dinamicas
+
+// Función para mostrar los campos según el motivo seleccionado
+function mostrarCampos() {
+    var motivoSeleccionado = document.getElementById('motivo').value;
+    var contenedorSelectSalida = document.getElementById('contenedorSelectSalida');
+    var contenedorSelectDestino = document.getElementById('contenedorSelectDestino');
+    var contenedorEscribirSalida = document.getElementById('contenedorEscribirSalida');
+    var contenedorEscribirDestino = document.getElementById('contenedorEscribirDestino');
+
+    if (motivoSeleccionado === '3') {
+        contenedorSelectSalida.style.display = 'block';
+        contenedorSelectDestino.style.display = 'block';
+        contenedorEscribirSalida.style.display = 'none';
+        contenedorEscribirDestino.style.display = 'none';
+        document.getElementById('lugarSa2').setAttribute('disabled', 'disabled');
+        document.getElementById('lugarDes2').setAttribute('disabled', 'disabled');
+    } else {
+        contenedorSelectSalida.style.display = 'none';
+        contenedorSelectDestino.style.display = 'none';
+        contenedorEscribirSalida.style.display = 'block';
+        contenedorEscribirDestino.style.display = 'block';
+        document.getElementById('lugarSa2').removeAttribute('disabled');
+        document.getElementById('lugarDes2').removeAttribute('disabled');
+    }
+}
+
 function loadToastTemplate(callback) {
     fetch('toast-template.html')
         .then(response => response.text())
@@ -77,13 +103,18 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
     }
 });
 
+
+//Funcion para obtener los datos de la solicitud
 function SolicitarVale() {
     ObtenerUnidades();
     ObtenerServicios();
-    ObtenerMotivo();
+    ObtenerMotivos();
     ObtenerDestino();
     ObtenerSalida();
+    ObtenerRutaSalida();
+    ObtenerRutaDestino();
 }
+
 
 var url = 'https://backend-transporteccss.onrender.com/';
 //Obtener Unidades
@@ -127,64 +158,104 @@ function LlenarServicios(data) {
 }
 
 //Obtener los Motivos
-function ObtenerMotivo() {
+function ObtenerMotivos() {
     axios.get(`${url}api/motivoVale`)
         .then(response => {
-
-            LlenarMotivo(response.data);
+            llenarMotivos(response.data);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Hubo un problema al obtener los datos:', error);
         });
 }
 
-function LlenarMotivo(data) {
-    let body = '<option selected disabled value="">Seleccione una opción</option>';
-    for (let index = 0; index < data.length; index++) {
-        body += `<option value = ${data[index].id}>${data[index].descripcion}</option>`;
-    }
-    document.getElementById('motivo').innerHTML = body;
+// Función para llenar las opciones del select de motivo
+function llenarMotivos(data) {
+    let options = '<option selected disabled value="">Seleccione una opción</option>';
+    data.forEach(motivo => {
+        options += `<option value="${motivo.id}">${motivo.descripcion}</option>`;
+    });
+    document.getElementById('motivo').innerHTML = options;
 }
 
 //Obtener Lugar de Salida
 function ObtenerSalida() {
-    axios.get(`${url}api/rutas`)
+    axios.get(`${url}api/ebais`)
         .then(response => {
-
-            LlenarSalida(response.data);
+            LlenarSalida(response.data.ebais);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Hubo un problema con la operación de obtención:', error);
         });
 }
 
+// Llenar selector de lugar de salida con EBAIS
 function LlenarSalida(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
-    for (let index = 0; index < data.length; index++) {
-        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
-    }
+    data.forEach(ebai => {
+        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+    });
     document.getElementById('lugarSa').innerHTML = body;
 }
 
-//Obtener Lugar Destino
+// Obtener EBAIS para lugar de destino
 function ObtenerDestino() {
-    axios.get(`${url}api/rutas`)
+    axios.get(`${url}api/ebais`)
         .then(response => {
-            LlenarDestino(response.data);
+            LlenarDestino(response.data.ebais);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Hubo un problema con la operación de obtención:', error);
         });
 }
 
+// Llenar selector de lugar de destino con EBAIS
 function LlenarDestino(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    data.forEach(ebai => {
+        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+    });
+    document.getElementById('lugarDes').innerHTML = body;
+}
+//------------------------------------------------------------------------------------------
+//Funciones para obtener las rutas
+function ObtenerRutaSalida() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
+            LlenarRutaSalida(response.data);
+        })
+        .catch(error => {
+            console.error('Hubo un problema al obtener los datos:', error);
+        });
+}
+
+function LlenarRutaSalida(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     for (let index = 0; index < data.length; index++) {
         body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
     }
-    document.getElementById('lugarDes').innerHTML = body;
+    document.getElementById('lugarSa2').innerHTML = body;
+}
+//body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
+
+function ObtenerRutaDestino() {
+    axios.get(`${url}api/rutas`)
+        .then(response => {
+            LlenarRutaDestino(response.data);
+        })
+        .catch(error => {
+            console.error('Hubo un problema al obtener los datos:', error);
+        });
 }
 
+function LlenarRutaDestino(data) {
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarDes2').innerHTML = body;
+}
+
+//------------------------------------------------------------------------------------------
 //Valida que los campos se deban llenar
 //guarda los datos
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
@@ -197,9 +268,8 @@ function validateModalForm() {
     let isValid = true;
 
     inputs.forEach(input => {
-
         if (input.id.startsWith('acompananteNombre')) return;
-
+        if (input.offsetParent === null) return;
         if (input.value.trim() === '' || input.value === null) {
             isValid = false;
         }
@@ -210,7 +280,6 @@ function validateModalForm() {
 
 function GuardarDatos() {
     if (!validateModalForm()) {
-        console.error('Formulario no válido');
         showToast("Error", "Se deben llenar todos los campos");
         return;
     }
@@ -230,6 +299,7 @@ function GuardarDatos() {
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
+    const Chofer = document.getElementById('chofer').checked ? 1 : 0;
 
     function adjustToNullIfEmpty(value) {
         if (typeof value === 'string' && value.trim() === '') {
@@ -259,13 +329,14 @@ function GuardarDatos() {
         Acompanante2: Acompanante2,
         Acompanante3: Acompanante3,
         Acompanante4: Acompanante4,
-        Acompanante5: Acompanante5
+        Acompanante5: Acompanante5,
+        Chofer: Chofer
     };
 
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
-            
+
         })
         .catch(error => {
             if (error.response) {
@@ -274,9 +345,10 @@ function GuardarDatos() {
                 console.error('Error desconocido:', error);
             }
         });
+
 }
 //Limpia los campos del modal 
-document.getElementById('btn-mostrar').addEventListener('click', function () {
+document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';
     document.getElementById('acompananteNombre2').value = '';
     document.getElementById('acompananteNombre3').value = '';
@@ -291,59 +363,35 @@ document.getElementById('btn-mostrar').addEventListener('click', function () {
     document.getElementById('nameSoli').value = '';
     document.getElementById('hora_salida').value = '';
     document.getElementById('b_date').value = '';
+    document.addEventListener('DOMContentLoaded', getVales);
+    document.getElementById('chofer').checked = false;
+    document.getElementById('lugarSa2').value = '';
+    document.getElementById('lugarDes2').value = '';
 });
 
-
 var error;
-//Login
-// fetchLogin.js
-/* const loginUser = async (identificador, Contrasena) => {
+
+//Mostrar ID de Vale
+async function getVales() {
     try {
-        const response = await axios.post(`${url}api/user/login`, {
-            identificador,
-            Contrasena
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await axios.get(`${url}api/vales`);
+        const data = response.data;
+        const vales = data.vales;
 
-        return response.data.token; // Supón que el token viene en la propiedad token
+        if (vales.length > 0) {
+            const ids = vales.map(vale => vale.IdVale);
+            const lastId = ids.sort().reverse()[0];
+            const [year, number] = lastId.split('-');
+            const newNumber = String(parseInt(number) + 1).padStart(3, '0');
+            const nuevoId = `${year}-${newNumber}`;
+            document.getElementById('valeId').textContent = nuevoId;
+        } else {
+            document.getElementById('valeId').textContent = '2024-001';
+        }
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        throw new Error('Error al iniciar sesión');
+        console.error('Hubo un problema con la operación de obtención:', error);
+        document.getElementById('valeId').textContent = 'Error al obtener vales';
     }
-};
+}
 
-//  */// Llama a la función y almacena el token
-// loginUser()
-//     .then(token => {
-//         localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
-//         console.log('Token guardado:', token);
-//     })
-//     .catch(error => {
-//         console.error('Error al obtener el token:', error);
-//     });
-
-
-/* const handleLogin = async () => {
-    const userEmail = document.getElementById('userEmail').value;
-    const userPassword = document.getElementById('userPassword').value;
-    try {
-        const token = await loginUser(userEmail, userPassword);
-        localStorage.setItem('token', token); // Guarda el token en localStorage para usarlo en solicitudes protegidas
-        console.log('Token:', token);
-        window.location.href = 'Index.html';
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        showToast("Error", "Usuario o Contraseña incorrectos", () => {
-            setTimeout(() => {
-                location.reload();
-            }, 0);
-        });
-    }
-};
-
-document.getElementById('loginButton').addEventListener('click', handleLogin);
-document.getElementById('loginButton').addEventListener('click', handleLogin); */
-
+document.addEventListener('DOMContentLoaded', getVales);
