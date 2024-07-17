@@ -98,6 +98,12 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
 document.getElementById('cedula').addEventListener('blur', async function (event) {
     const cedula = this.value.trim();
+    if (cedula === '') {
+        limpiarCampos();
+        document.getElementById('btnGuardar').disabled = false;
+        document.getElementById('btnActualizar').disabled = true;
+        return;
+    }
     await getChofer(cedula);
 });
 
@@ -154,7 +160,6 @@ async function getChofer(cedula) {
             showToast('Error', 'No se encuentra ningun chofer registrado con la cédula ingresada.');
             document.getElementById('btnGuardar').disabled = false;
             document.getElementById('btnActualizar').disabled = true;
-            limpiarCampos();
             }
             , 0);
             return false;
@@ -233,33 +238,22 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
 });
 
 // ---------------------------------LIMPIAR CAMPOS------------------------------------------------ //
-
 function limpiarCampos() {
-
     // document.getElementById('cedula').value = '';
     document.getElementById('nombre').value = '';
     document.getElementById('apellido1').value = '';
     document.getElementById('apellido2').value = '';
     document.getElementById('contacto').value = '';
-    document.getElementById('tipoSangre').value = '';
+    document.getElementById('tipoSangre').value = 'A+';
     document.getElementById('tipoLicencia').value = '';
     document.getElementById('fechaVencimientoLicencia').value = '';
-    document.getElementById('estado').value = '';
+    document.getElementById('estado').value = 'Activo';
     document.getElementById('acompananteNombreN1').value = '';
-    document.getElementById('apellido1CE').value = '';
-    document.getElementById('apellido2CE').value = '';
+    document.getElementById('apellido1CE1').value = '';
+    document.getElementById('apellido2CE1').value = '';
     document.getElementById('contactoEmergencia').value = '';
-
-    document.getElementById('nombre').disabled = false;
-    document.getElementById('apellido1').disabled = false;
-    document.getElementById('apellido2').disabled = false;
-    document.getElementById('contacto').disabled = false;
-    document.getElementById('tipoLicencia').disabled = false;
-    document.getElementById('fechaVencimientoLicencia').disabled = false;
-    document.getElementById('estado').disabled = false;
-    document.getElementById('acompananteNombreN1').disabled = false;
-    document.getElementById('apellido1CE').disabled = false;
-    document.getElementById('apellido2CE').disabled = false;
-    document.getElementById('contactoEmergencia').disabled = false;
-
+    document.getElementById('acompananteNombreN2').value = '';
+    document.getElementById('apellido1CE2').value = '';
+    document.getElementById('apellido2CE2').value = '';
+    document.getElementById('contactoEmergencia2').value = '';
 }
