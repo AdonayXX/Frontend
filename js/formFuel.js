@@ -102,10 +102,12 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar la unidad';
+            defaultOption.textContent = 'Seleccionar unidad';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             unit.appendChild(defaultOption);
+
+            unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
 
             unidades.forEach(unidad => {
                 const option = document.createElement('option');
@@ -129,16 +131,24 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar el chofer';
+            defaultOption.textContent = 'Seleccionar chofer';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             assignedDriver.appendChild(defaultOption);
 
+            choferes.sort((a, b) => {
+                const nombreA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toLowerCase();
+                const nombreB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toLowerCase();
+                return nombreA.localeCompare(nombreB);
+            });
+
             choferes.forEach(chofer => {
-                const option = document.createElement('option');
-                option.value = chofer.idChofer;
-                option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
-                assignedDriver.appendChild(option);
+                if (chofer.estadoChofer === 'Activo') {
+                    const option = document.createElement('option');
+                    option.value = chofer.idChofer;
+                    option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+                    assignedDriver.appendChild(option);
+                }
             });
         } catch (error) {
             showToast('Error', 'Error al obtener los choferes.');
@@ -309,7 +319,7 @@
         axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData)
             .then(response => {
                 limpiar();
-                showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha realizado exitosamente.`);
+                showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha realizado exitosamente.`);
             })
             .catch(error => {
                 console.error('Error al crear el registro de combustible:', error);
@@ -372,7 +382,7 @@
         axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
             .then(response => {
                 limpiar();
-                showToast('Éxito', 'El registro de combustible se ha actualizado exitosamente.');
+                showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha actualizado exitosamente.`);
             })
             .catch(error => {
                 console.error('Error al actualizar el registro de combustible:', error);

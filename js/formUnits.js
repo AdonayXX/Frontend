@@ -133,16 +133,24 @@
 
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar el chofer';
+            defaultOption.textContent = 'Seleccionar chofer';
             defaultOption.selected = true;
             defaultOption.disabled = true;
             assignedDriver.appendChild(defaultOption);
 
+            choferes.sort((a, b) => {
+                const nombreA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toLowerCase();
+                const nombreB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toLowerCase();
+                return nombreA.localeCompare(nombreB);
+            });
+
             choferes.forEach(chofer => {
-                const option = document.createElement('option');
-                option.value = chofer.idChofer;
-                option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
-                assignedDriver.appendChild(option);
+                if (chofer.estadoChofer === "Activo") {
+                    const option = document.createElement('option');
+                    option.value = chofer.idChofer;
+                    option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+                    assignedDriver.appendChild(option);
+                }
             });
 
         } catch (error) {
@@ -157,6 +165,13 @@
 
             const resourceType = document.getElementById('resourceType');
             resourceType.innerHTML = '';
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Seleccionar tipo de recurso';
+            defaultOption.selected = true;
+            defaultOption.disabled = true;
+            resourceType.appendChild(defaultOption);
 
             tiposRecurso.forEach(recurso => {
                 const option = document.createElement('option');
@@ -177,11 +192,16 @@
             const unitType = document.getElementById('unitType');
             unitType.innerHTML = '';
 
-            let counter = 1;
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Seleccionar tipo de unidad';
+            defaultOption.selected = true;
+            defaultOption.disabled = true;
+            unitType.appendChild(defaultOption);
 
             tiposUnidad.forEach(unidad => {
                 const option = document.createElement('option');
-                option.value = counter++;
+                option.value = unidad.idTipoUnidad;
                 option.textContent = unidad.tipo;
                 unitType.appendChild(option);
             });
