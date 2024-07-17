@@ -44,6 +44,7 @@
 
   // Función para llenar la tabla de mantenimientos
   function fillMaintenanceTable(maintenance, activities, allActivities) {
+    console.log("Mantenimientos:", maintenance);
     try {
       const tableBody = document.querySelector("#maintenance-body");
       tableBody.innerHTML = "";
@@ -88,17 +89,16 @@
         <td>${maintenanceItem.UnidadMedida}</td>
         <td>${maintenanceItem.Estado}</td>
         <td class="actions">
-          <button class="btn btn-outline-success btn-sm" 
-                  title="Estado: Completado" 
-                  onclick="cambioEstCop(${JSON.stringify({ foundActivity })})" 
+                <button class="btn btn-outline-success btn-sm text-center"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Estado: Completado"
+                  onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
                   ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
-            <i class="bi bi-check"></i>
-          </button>
-          <button class="btn btn-outline-primary btn-sm" 
-                  onclick="EditarMant(${JSON.stringify({ foundActivity })},${JSON.stringify(maintenanceItem)})">
-            <i class="bi bi-pencil"></i>
-          </button>
-        </td>
+                  <i class="bi bi-check"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
+          { foundActivity })},${JSON.stringify(maintenanceItem)})' ><i class="bi bi-pencil"></i></button>
       `;
         fragment.appendChild(row);
       });
@@ -108,7 +108,8 @@
       console.error("Error al llenar la tabla de mantenimientos:", error);
     }
   }
-
+  console.log("Actividades:", actividadesData);
+  console.log("Mantenimientos", mantenimientoData);
 
   // Función para configurar DataTables
   function setupDataTable() {
@@ -223,18 +224,18 @@
   }
   // Estado Completado
   window.cambioEstCop = async function (activ) {
-    console.log(activ);
+    console.log(activ.foundActivity);
     try {
       ActividadData = {
-        IdMantenimiento: parseInt(activ.activfind.IdMantenimiento),
-        IdActividad: activ.activfind.IdActividad,
-        Cantidad: parseInt(activ.activfind.Cantidad),
+        IdMantenimiento: parseInt(activ.foundActivity.IdMantenimiento),
+        IdActividad: activ.foundActivity.IdActividad,
+        Cantidad: parseInt(activ.foundActivity.Cantidad),
         Estado: "Completado",
       };
 
       console.log(ActividadData);
       const token = localStorage.getItem("token");
-      const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.activfind.IdActividadMantenimiento}`;
+      const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
 
       const response = await axios.put(API_URL, ActividadData, {
         headers: {
@@ -243,7 +244,9 @@
       });
       console.log(response);
       showToast("Exito", "Estado actulizado correctamente.");
-      getMaintenance();
+      setTimeout(() => {
+        loadContent("dataTableMaintenance.html", "mainContent");
+      }, 500);
     } catch (error) {
       console.error(error);
       showToast("Error", "No se logro cambiar el estado");
@@ -548,12 +551,17 @@
     });
 
   //Editar Mantenimiento
-  window.EditarMant = async function (activ, mantenimiento) {
+  window.EditarMant = async function (activ, maintenanceItem) {
+    console.log("Actividades a editar:", activ);
+    console.log("foundActivity a editar:", activ.foundActivity);
+    console.log("Mantenimiento a editar:", maintenanceItem);
     try {
       // Mostrar el modal de mantenimiento
       $("#maintenanceModalEdit").modal("show");
 
-      activitySelect(actiLlenado);
+      // Pasar la lista de actividades correcta a activitySelect
+      activitySelect(actividadesTodoData);
+      console.log("Actividad enviada a la funcion activity Select", actividadesTodoData);
 
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
@@ -566,7 +574,7 @@
           // Limpiar opciones anteriores (si las hay)
           selectUnidad.innerHTML = '';
           // Llenar el select con las opciones de unidades basadas en la actividad seleccionada
-          actividadesLista.forEach(actividad => {
+          actividadesTodoData.forEach(actividad => {
             if (actividad.IdActividad == valorSelectAct) { // Asegúrate de comparar con la propiedad correcta de actividad
               const option = document.createElement("option");
               option.value = actividad.UnidadMedida;
@@ -580,25 +588,26 @@
         }
       });
 
-      document.querySelector('#unidadEditHidden').value = mantenimiento.IdUnidad;
-      document.querySelector('#unidadEdit').value = mantenimiento.numeroUnidad;
-      document.querySelector('#kilometrajeEdit').value = mantenimiento.Kilometraje;
-      document.querySelector('#tipoMantenimientoEdit').value = mantenimiento.TipoMantenimiento;
-      document.querySelector('#fechaMantenimientoEdit').value = mantenimiento.FechaMantenimiento.substring(0, 10);
-      document.querySelector('#observacionesEdit').value = mantenimiento.Observacion;
-      document.querySelector('#actividadEdit').value = activ.activfind.IdActividad;
-      document.querySelector('#unidadMedidaEdit').value = activ.activfind.UnidadMedida;
-      document.querySelector('#cantidadEdit').value = activ.activfind.Cantidad;
-      document.querySelector('#estadoEdit').value = activ.activfind.Estado;
-      document.querySelector("#IdTipoUnidadHiddenEdit").value = mantenimiento.TipoUnidad;
-      document.querySelector("#IdChoferHiddenEdit").value = mantenimiento.IdChofer;
+      document.querySelector('#unidadEditHidden').value = maintenanceItem.IdUnidad;
+      document.querySelector('#unidadEdit').value = maintenanceItem.numeroUnidad;
+      document.querySelector('#kilometrajeEdit').value = maintenanceItem.Kilometraje;
+      document.querySelector('#tipoMantenimientoEdit').value = maintenanceItem.TipoMantenimiento;
+      document.querySelector('#fechaMantenimientoEdit').value = maintenanceItem.FechaMantenimiento.substring(0, 10);
+      document.querySelector('#observacionesEdit').value = maintenanceItem.Observacion;
+      document.querySelector('#actividadEdit').value = activ.foundActivity.IdActividad;
+      document.querySelector('#unidadMedidaEdit').value = activ.foundActivity.UnidadMedida;
+      document.querySelector('#cantidadEdit').value = activ.foundActivity.Cantidad;
+      document.querySelector('#estadoEdit').value = activ.foundActivity.Estado;
+      document.querySelector("#IdTipoUnidadHiddenEdit").value = maintenanceItem.TipoUnidad;
+      document.querySelector("#IdChoferHiddenEdit").value = maintenanceItem.IdChofer;
+
       // Simular evento de cambio
       const changeEvent1 = new Event("change");
       document.querySelector('#actividadEdit').dispatchEvent(changeEvent1);
       // Obtener las unidades disponibles
       const uniLlenado = await getUnidades();
       let unidadFiltrada = uniLlenado.find(
-        (unidad) => unidad.id === parseInt(mantenimiento.IdUnidad)
+        (unidad) => unidad.id === parseInt(maintenanceItem.IdUnidad)
       );
       console.log("Unidad:", unidadFiltrada)
       // Obtener nombre completo del chofer
@@ -626,7 +635,7 @@
           };
 
           const actividadMantenimientoData = {
-            IdMantenimiento: parseInt(mantenimiento.IdMantenimiento),
+            IdMantenimiento: parseInt(maintenanceItem.IdMantenimiento),
             IdActividad: parseInt(document.querySelector('#actividadEdit').value),
             Cantidad: parseInt(document.querySelector('#cantidadEdit').value.trim()),
             Estado: document.querySelector('#estadoEdit').value
@@ -635,8 +644,8 @@
           console.log(mantenimientoData);
           console.log(actividadMantenimientoData);
 
-          const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.activfind.IdActividadMantenimiento}`;
-          const API_URL2 = `http://localhost:18026/api/mantenimiento/${mantenimiento.IdMantenimiento}`;
+          const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+          const API_URL2 = `http://localhost:18026/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
           const token = localStorage.getItem('token');
           const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -681,8 +690,14 @@
 
   //Llenar Select Actividades Editar
 
+  // Llenar Select Actividades Editar
   function activitySelect(actividades) {
-
+    // Verificar si actividades es un array
+    if (!Array.isArray(actividades)) {
+      console.error("actividades no es un array:", actividades);
+      return;
+    }
+    console.log("Array de actividades:", actividades);
     // Obtener el select de actividades
     const selectActividad = document.getElementById("actividadEdit");
 
