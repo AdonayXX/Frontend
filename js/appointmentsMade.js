@@ -38,7 +38,7 @@ async function loadCitas() {
 
             $('#seleccionar-estado').on('change', function () {
                 let selectedState = $(this).val().toLowerCase();
-                $('#TableAppointment').DataTable().column(5).search(selectedState).draw();
+                $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
 
                 let tituloCitas = document.getElementById('tituloCitas');
                 tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
@@ -83,6 +83,7 @@ function renderTable(citas) {
             <td class="text-center">${cita.fechaCita}</td>
             <td class="text-center">${cita.horaCita}</td>
             <td class="text-center">${cita.ubicacionDestino}</td>
+            <td class="text-center">${cita.tipoSeguro}</td>
             <td class="text-center">${cita.estadoCita}</td>
             <td>
                 <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>

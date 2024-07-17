@@ -10,6 +10,7 @@ async function loadDestinations() {
             option.textContent = destino.Descripcion;
             select.appendChild(option);
         });
+
         ocultarSpinner()
 
     } catch (error) {
@@ -17,9 +18,12 @@ async function loadDestinations() {
 
     }
 }
+
 loadDestinations();
 
 async function loadEspecialidades() {
+    let especialidadesMarcadasInicial = [];
+
     try {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
         const especialidades = response.data.Especialidad;
@@ -58,13 +62,114 @@ async function loadEspecialidades() {
             $('#tableEspecialidades').DataTable().search(inputValue).draw();
         });
 
-        ocultarSpinner()
+        const handleSelectDestinosChange = async () => {
+            try {
+                const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad');
+                const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
 
+                if (response2.data && Array.isArray(response2.data.Especialidad)) {
+                    const p1 = response2.data.Especialidad;
+
+                    const selectedRutaId = document.querySelector("#select-destinos").value;
+                    const selectedRuta = response.data.find(ruta => ruta.IdRuta === selectedRutaId);
+
+                    if (!selectedRuta) {
+                        document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                            checkbox.checked = false;
+                            checkbox.disabled = false;
+                        });
+                        console.warn('Ruta seleccionada no encontrada. Se limpiaron las especialidades seleccionadas.');
+                        return;
+                    }
+
+                    const especialidadesArray = selectedRuta.Especialidades.split(',').map(e => e.trim());
+                    let espeEncontrada = [];
+
+                    especialidadesArray.forEach(espe => {
+                        const found = p1.filter(a => a.Especialidad === espe);
+                        espeEncontrada = espeEncontrada.concat(found);
+                    });
+
+                    especialidadesMarcadasInicial = espeEncontrada.map(especialidad => especialidad.idEspecialidad);
+                    console.log('Especialidades marcadas inicialmente:', especialidadesMarcadasInicial);
+
+                    document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = false;
+                        checkbox.disabled = false;
+                    });
+
+                    espeEncontrada.forEach(especialidad => {
+                        const checkbox = document.querySelector(`#espe input[type="checkbox"][data-id="${especialidad.idEspecialidad}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            checkbox.disabled = true;
+                        }
+                    });
+
+                } else {
+                    console.error('Datos de respuesta no son válidos o están mal estructurados.');
+                }
+            } catch (error) {
+                console.error('Error al hacer la solicitud:', error);
+            }
+        };
+
+        document.querySelector("#select-destinos").addEventListener('change', handleSelectDestinosChange);
+
+        const handleBtnGuardar2Click = async () => {
+
+            const rutaSeleccionada = document.getElementById('select-destinos').value.trim();
+            const especialidadesSeleccionadas = [];
+
+            if (!rutaSeleccionada) {
+                showToast('Error', 'Debes seleccionar un destino.');
+                return;
+            }
+
+            document.querySelectorAll('#espe input[type="checkbox"]:checked').forEach(checkbox => {
+                const idEspecialidad = parseInt(checkbox.dataset.id);
+
+                if (!especialidadesMarcadasInicial.includes(idEspecialidad)) {
+                    especialidadesSeleccionadas.push(idEspecialidad);
+                }
+            });
+
+            if (especialidadesSeleccionadas.length === 0) {
+                showToast('Error', 'Debes seleccionar al menos una especialidad.');
+                return;
+            }
+
+            console.log('Especialidades seleccionadas:', especialidadesSeleccionadas);
+
+            try {
+                const data = {
+                    idRuta: rutaSeleccionada,
+                    especialidades: especialidadesSeleccionadas
+                };
+                console.log('Data a enviar:', data);
+
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', data);
+                console.log('Respuesta del servidor:', response.data);
+                showToast('¡Éxito!', 'Especialidades asignadas correctamente.');
+                setTimeout(function () {
+                    loadContent('formUbi.html', 'mainContent');
+                }, 1400);
+
+            } catch (error) {
+                console.error('Error al asignar especialidades:', error);
+                showToast('Error', 'No se pudo asignar las especialidades.');
+            }
+        };
+
+        document.getElementById('BtnGuardar2').addEventListener('click', handleBtnGuardar2Click);
+
+        ocultarSpinner();
 
     } catch (error) {
         console.error('Error al obtener las especialidades:', error);
     }
 }
+
 
 loadEspecialidades();
 
@@ -204,7 +309,7 @@ function renderTableEspecialidades(especialidades) {
         const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
 
         row.innerHTML = `
-            <td class="text-center"><input type="checkbox"></td>
+            <td class="text-center"><input type="checkbox" data-id="${especialidad.idEspecialidad}"></td>
             <td class="text-center">${especialidad.Especialidad}</td>
             <td>
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick='createDeleteModal2(${idEspecialidadStr})'>
@@ -322,6 +427,7 @@ async function deleteEspecialidad(idEspecialidad) {
         console.log('Especialidad eliminada:', response.data);
 
         $('#confirmarEliminarModal2').modal('hide');
+
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
         }, 1000);
@@ -384,12 +490,6 @@ document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
 });
 
 document.querySelector('#AgregarAbre').addEventListener('input', function (e) {
-    if (this.value.length > 10) {
-        this.value = this.value.slice(0, 10);
-    }
-});
-
-document.querySelector('#buscarEspecialidad').addEventListener('input', function (e) {
     if (this.value.length > 10) {
         this.value = this.value.slice(0, 10);
     }

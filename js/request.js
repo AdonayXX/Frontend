@@ -15,7 +15,7 @@
                 const row = `
                     <tr>
                         <td>${vale.IdVale}</td>
-                        <td>${fechaFormateada}</td>
+                        <td class="text-center">${fechaFormateada}</td>
                         <td>${vale.NombreSolicitante}</td>
                         <td>${vale.NombreMotivo}</td>
                         <td><div class="mx-auto text-start" style="width: 8rem">${processStatus(vale.NombreEstado)}</div></td> 
@@ -35,24 +35,25 @@
 
     function createTableRequest() {
         $('#tableRequest').DataTable({
-            dom: "<'row'<'col-md-6'l>" +
-                "<'row'<'col-md-12't>>" +
-                "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
-            ordering: false,
-            searching: true,
-            paging: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-            },
-            caseInsensitive: true,
-            smart: true,
-            columnDefs: [
-                { className: 'text-center', targets: '_all' }
-            ]
-        });
+            dom: "<'row'<'col-sm-6'l>" +
+            "<'row'<'col-sm-12't>>" +
+            "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+        ordering: false,
+        searching: true,
+        paging: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        },
+        caseInsensitive: true,
+        smart: true
+    });
+
+    $('#searchVale').on('keyup', function () {
+        let inputValue = $(this).val().toLowerCase();
+        $('#tableRequest').DataTable().search(inputValue).draw();
+    });
     }
 
-    //Funcion para agregar el simbolo segun el estado en la tabla
     function processStatus(status){
         switch (status) {
             case "Pendiente":
@@ -74,23 +75,6 @@
         loadContent('formVale.html', 'mainContent');
     }
 
-    document.getElementById('searchVale').addEventListener('keyup', function () {
-        let input = document.getElementById('searchVale').value.trim().toLowerCase();
-        let table = document.getElementById('tableRequest');
-        let rows = table.getElementsByTagName('tr');
-
-        for (let i = 0; i < rows.length; i++) {
-            let dateCell = rows[i].getElementsByTagName('td')[1];
-            if (dateCell) {
-                let dateText = dateCell.textContent || dateCell.innerText;
-                if (dateText.toLowerCase().includes(input)) {
-                    rows[i].style.display = '';
-                } else {
-                    rows[i].style.display = 'none';
-                }
-            }
-        }
-    });
 
     getVales();
     window.handleCoordinateButton = handleCoordinateButton;

@@ -383,3 +383,8 @@ tr {
 #btnEliminarEspe {
     width: 50px;
 }
+
+#color-th{
+    background-color: #094079;
+    color: white;
+}
