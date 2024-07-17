@@ -68,17 +68,15 @@ async function mostrarProximosViajes() {
                     return capitalizedWords.join(' ');
                 };
 
-                const badgeHTML = viajesDestino.length > 1 ? `<span class="badge position-absolute top-0 end-0" style="background-color: #094079;">${viajesDestino.length}</span>` : '';
-
                 viajeElement.innerHTML = `
                     <div class="headerviaje card-header text-center text-white position-relative" style="background-color: #094079;">
                         <h5 class="fw-bolder">UNIDAD ${viaje.numeroUnidad}</h5>
-                        ${badgeHTML}
                     </div>
                     <div class="card-body text-center">
                         <h5 class="card-title">Fecha de viaje:</h5>
                         <h5 class="card-title">${new Date(viaje.fechaInicioViaje).toISOString().split('T')[0]}</h5>
                         <p class="card-text fs-5">Destino: ${letraMayuscula(viaje.ubicacionDestino)}</p>
+                          ${viajesDestino.length > 1 ? `<span class="badge position-absolute bottom-0 end-0" style="background-color: #094079; border-radius: 50%; margin:5px;" >${viajesDestino.length}</span>` : ''}
                     </div>
                 `;
                 proximosViajesContainer.appendChild(viajeElement);
