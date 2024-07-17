@@ -12,16 +12,10 @@
             <input type="text" class="form-control" id="searchPatient" placeholder="Buscar...">
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-3 d-flex justify-content-center">
         <div class="col-md-4">
             <label for="unidad" class="form-label">Unidad</label>
             <input class="form-control" id="unidadAsignada" type="text" readonly>
-        </div>
-        <div class="col-md-4">
-            <label for="destino" class="form-label">Destino</label>
-            <select id="destino" class="form-select">
-                <option selected>Seleccionar Destino...</option>
-            </select>
         </div>
         <div class="col-md-4">
             <label for="fecha" class="form-label">Fecha</label>
@@ -47,14 +41,17 @@
     <br>
     <div class="row text-end">
         <div class="col-md-12 mt-auto col-sm-12">
-            <button class="btn btn-primary" id="btnInitTripDriver"data-bs-toggle="modal"  data-bs-target="#iniciarViajeModal">Iniciar Viaje</button>
-            <button class="btn btn-danger" id="finalizarViajeBtn" data-bs-toggle="modal" data-bs-target="#finalizarViajeModal">Finalizar Viaje</button>
+            <button class="btn btn-primary" id="btnInitTripDriver" data-bs-toggle="modal"
+                data-bs-target="#iniciarViajeModal">Iniciar Viaje</button>
+            <button class="btn btn-danger" id="finalizarViajeBtn" data-bs-toggle="modal"
+                data-bs-target="#finalizarViajeModal">Finalizar Viaje</button>
         </div>
     </div>
 </div>
 
 <!-- Modal de Iniciar Viaje -->
-<div class="modal fade" id="iniciarViajeModal" tabindex="-1" aria-labelledby="iniciarViajeModalLabel" aria-hidden="true">
+<div class="modal fade" id="iniciarViajeModal" tabindex="-1" aria-labelledby="iniciarViajeModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -66,10 +63,11 @@
                 <div class="mb-3">
                     <h4>¿Está seguro de Iniciar el Viaje?</h4>
                 </div>
-            </div> 
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnIniciarViaje">Iniciar Viaje</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnIniciarViaje">Iniciar
+                    Viaje</button>
             </div>
         </div>
     </div>
@@ -104,7 +102,8 @@
 </div>
 
 <!-- Modal de Finalizar Viaje -->
-<div class="modal fade" id="finalizarViajeModal" tabindex="-1" aria-labelledby="finalizarViajeModalLabel" aria-hidden="true">
+<div class="modal fade" id="finalizarViajeModal" tabindex="-1" aria-labelledby="finalizarViajeModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -118,14 +117,16 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <!-- Cambia el onclick para abrir el segundo modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmarFinalizarModal">Finalizar Viaje</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#confirmarFinalizarModal">Finalizar Viaje</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal de Confirmación Final de Viaje -->
-<div class="modal fade" id="confirmarFinalizarModal" tabindex="-1" aria-labelledby="confirmarFinalizarModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmarFinalizarModal" tabindex="-1" aria-labelledby="confirmarFinalizarModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -134,16 +135,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el viaje.</p>
+                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el viaje.
+                </p>
                 <form id="finalizarViajeForm">
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="kilometrajeFinal" class="form-label">Kilometraje Final</label>
-                            <input type="text" id="kilometrajeFinal" class="form-control" placeholder="Kilometraje final">
+                            <input type="text" id="kilometrajeFinal" class="form-control"
+                                placeholder="Kilometraje final">
                         </div>
                         <div class="col-md-4">
                             <label for="horasExtras" class="form-label">Horas Extras</label>
-                            <textarea class="form-control" name="horasExtras" id="horasExtras" placeholder="Horas extras realizadas"></textarea>
+                            <textarea class="form-control" name="horasExtras" id="horasExtras"
+                                placeholder="Horas extras realizadas"></textarea>
                         </div>
                         <div class="col-md-4">
                             <label for="viaticos" class="form-label">Viáticos</label>
@@ -154,7 +158,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnFinalizarViaje">Finalizar Viaje</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnFinalizarViaje">Finalizar
+                    Viaje</button>
             </div>
         </div>
     </div>
