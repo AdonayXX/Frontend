@@ -251,22 +251,31 @@
         }
     }
 
-    function postTipoRecurso() {
-        const recurso = document.getElementById('addResource').value;
+    async function postTipoRecurso() {
+        const tipoRecurso = document.getElementById('addResource').value.toUpperCase();
 
-        if (recurso === '') {
+        const recursos = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso');
+        const recursoExistente = recursos.data.tiporecurso.find(recurso => recurso.recurso === tipoRecurso);
+
+        if (tipoRecurso === '') {
             showToast('Error', 'El campo no puede estar vacío.');
             return;
         }
 
+        if (recursoExistente) {
+            showToast('Error', `El tipo de recurso "${tipoRecurso}" ya se encuentra registrado.`);
+            return;
+        }
+
         const recursoData = {
-            recurso: recurso
+            recurso: tipoRecurso
         };
 
         axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData)
             .then(response => {
+                $('#addResourceModal').modal('hide');
                 document.getElementById('addResource').value = '';
-                showToast('Registro exitoso', 'El registro se ha realizado exitosamente.');
+                showToast('Registro exitoso', 'El registro del tipo de recurso "' + tipoRecurso + '" se ha realizado exitosamente.');
                 getTiposRecursoSelect();
             })
             .catch(error => {
@@ -274,25 +283,39 @@
             });
     }
 
-    function postTipoUnidad() {
-        const tipo = document.getElementById('addUnit').value;
+    async function postTipoUnidad() {
+        const tipoUnidad = document.getElementById('addUnit').value.toUpperCase();
         const capacidad = document.getElementById('addCapacity').value;
 
-        if (tipo === '' || capacidad === '') {
+        const unidades = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad');
+        const unidadExistente = unidades.data.tipounidad.find(unidad => unidad.tipo === tipoUnidad);
+
+        if (tipoUnidad === '' || capacidad === '') {
             showToast('Error', 'Los campos no pueden estar vacíos.');
             return;
         }
 
+        if (unidadExistente) {
+            showToast('Error', `El tipo de unidad "${tipoUnidad}" ya se encuentra registrado.`);
+            return;
+        }
+
+        if (capacidad <= 0) {
+            showToast('Error', 'La capacidad de la unidad no puede ser menor ó igual a 0.');
+            return;
+        }
+
         const unidadData = {
-            tipo: tipo,
+            tipo: tipoUnidad,
             capacidad: capacidad
         };
 
         axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData)
             .then(response => {
+                $('#addUnitModal').modal('hide');
                 document.getElementById('addUnit').value = '';
                 document.getElementById('addCapacity').value = '';
-                showToast('Éxito', 'El registro se ha realizado exitosamente.');
+                showToast('Éxito', 'El registro del tipo de unidad "' + tipoUnidad + '" se ha realizado exitosamente.');
                 getTiposUnidadSelect();
             })
             .catch(error => {
@@ -345,7 +368,7 @@
         const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
 
         if (selectedUnitType && totalCapacity > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad (${selectedUnitType.tipo}) no puede ser mayor que ${selectedUnitType.capacidad}.`);
+            showToast('Error', `La capacidad total de la unidad "${selectedUnitType.tipo}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
             return;
         }
 
@@ -359,7 +382,7 @@
         }
 
         if (unitAlreadyExists) {
-            showToast('Error', `La unidad ${unitNumber} ya se encuentra registrada.`);
+            showToast('Error', `La unidad "${unitNumber}" ya se encuentra registrada.`);
             return;
         }
 
@@ -385,7 +408,7 @@
         axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
             .then(response => {
                 limpiar();
-                showToast('Éxito', 'El registro de la unidad ' + unitNumber + ' se ha realizado exitosamente.');
+                showToast('Éxito', 'El registro de la unidad "' + unitNumber + '" se ha realizado exitosamente.');
             })
             .catch(error => {
                 showToast('Error', 'Error al crear la unidad.');
@@ -437,7 +460,7 @@
         }
 
         if (selectedUnitType && totalCapacity > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad (${selectedUnitType.tipo}) no puede ser mayor que ${selectedUnitType.capacidad}.`);
+            showToast('Error', `La capacidad total de la unidad "${selectedUnitType.tipo}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
             return;
         }
 
@@ -471,7 +494,7 @@
         axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
             .then(response => {
                 limpiar();
-                showToast('Éxito', 'La unidad ' + unitNumber + ' se ha actualizado exitosamente.');
+                showToast('Éxito', 'La unidad "' + unitNumber + '" se ha actualizado exitosamente.');
             })
             .catch(error => {
                 showToast('Error', 'Error al actualizar la unidad.');
@@ -494,7 +517,7 @@
         const advance = getValorAdelanto();
 
         const confirmationMessage = document.getElementById('deleteConfirmationMessage');
-        confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad ${unitNumber}?`;
+        confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad "${unitNumber}"?`;
 
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteUnitModal'));
         deleteModal.show();
@@ -522,7 +545,7 @@
             axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
                 .then(response => {
                     limpiar();
-                    showToast('Éxito', 'La unidad ' + unitNumber + ' se ha eliminado exitosamente.');
+                    showToast('Éxito', 'La unidad "' + unitNumber + '" se ha eliminado exitosamente.');
                 })
                 .catch(error => {
                     showToast('Error', 'Error al eliminar la unidad.');

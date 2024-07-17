@@ -18,6 +18,18 @@
         }
     });
 
+    document.getElementById('unidad').addEventListener('change', function () {
+        const unidadSelect = document.getElementById('unidad').textContent;
+
+        if (unidadSelect !== 'Seleccionar la unidad') {
+            document.getElementById('btnBuscar').disabled = false;
+        }
+
+        document.getElementById('btnActualizar').disabled = true;
+        document.getElementById('btnEliminar').disabled = true;
+        document.getElementById('btnGuardar').disabled = false;
+    });
+
     document.getElementById('btnBuscar').addEventListener('click', function (event) {
         event.preventDefault();
         getRegistroCombustible();
@@ -36,6 +48,7 @@
         document.getElementById('btnActualizar').disabled = true;
         document.getElementById('btnEliminar').disabled = true;
         document.getElementById('btnGuardar').disabled = false;
+        document.getElementById('btnBuscar').disabled = true;
     }
 
     function infoUser() {
@@ -175,7 +188,7 @@
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
             const registros = response.data.registro;
 
-            if (registros.length === 0 && unidad !== 'Seleccione la unidad...') {
+            if (registros.length === 0) {
                 showToast('Error', `No hay registros de combustible de la unidad ${unidad}.`);
                 return;
             }
@@ -259,15 +272,21 @@
 
         const idRegistro = await getIdRegistroCombustible(unidad);
         if (await facturaDuplicado(numeroFactura, idRegistro)) {
-            showToast('Error', `El número de factura ${numeroFactura} ya existe.`);
+            showToast('Error', `Ya existe un registro de combustible con el número de factura ${numeroFactura}.`);
             return;
         } else if (await autorizacionDuplicado(numeroAutorizacion, idRegistro)) {
-            showToast('Error', `El número de autorización ${numeroAutorizacion} ya existe.`);
+            showToast('Error', `Ya existe un registro de combustible con el número de autorización ${numeroAutorizacion}.`);
             return;
         }
 
         if (fecha > new Date().toISOString().split('T')[0]) {
-            showToast('Error', 'La fecha del registro de combustible no puede ser mayor a la fecha de hoy.');
+            showToast('Error', 'La fecha del registro de combustible no puede ser posterior a la fecha de hoy.');
+            return;
+        }
+
+        const horaActual = new Date().toLocaleTimeString('en-US', { hour12: false });
+        if (hora > horaActual) {
+            showToast('Error', 'La hora del registro de combustible no puede ser posterior a la hora actual.');
             return;
         }
 
@@ -324,7 +343,13 @@
         }
 
         if (fecha > new Date().toISOString().split('T')[0]) {
-            showToast('Error', 'La fecha del registro de combustible no puede ser mayor a la fecha de hoy.');
+            showToast('Error', 'La fecha del registro de combustible no puede ser porterior a la fecha de hoy.');
+            return;
+        }
+
+        const horaActual = new Date().toLocaleTimeString('en-US', { hour12: false });
+        if (hora > horaActual) {
+            showToast('Error', 'La hora del registro de combustible no puede ser posterior a la hora actual.');
             return;
         }
 
