@@ -59,9 +59,11 @@
 
 <body>
     <button id="saveBtn">Descargar como PDF</button>
+
     <div id="content">
       <!-- Contenido se agregará dinámicamente aquí -->
     </div>
+   
     <script>
         document.getElementById('saveBtn').addEventListener('click', function () {
             fetch("https://backend-transporteccss.onrender.com/api/viaje")
@@ -156,5 +158,6 @@
                 );
         });
     </script>
+    
 </body>
 </html>
