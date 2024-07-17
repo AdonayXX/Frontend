@@ -44,24 +44,22 @@
             </button>
         </div>
         <div class="table-responsive-xxl mt-3">
-            <table class=" table table-light table-striped table-hover table-bordered" id="tablePatient">
-                <thead>
+                <table class="table table-light table-striped table-hover table-bordered" id="tablePatient"
+                style="margin-left: 20px; margin-block: 10px;">
+                <thead >
                     <tr>
-                        <th class="text-center">Nombre Completo</th>
-                        <th class="text-center">Tipo Identificación</th>
-
-
-                        <th class="text-center">Identificación</th>
-                        <th class="text-center">Genero</th>
-                        <th class="text-center">Prioridad</th>
-                        <th class="text-center">Teléfonos</th>
-
-                        <th class="text-center">Trasladable</th>
-                        <th class="text-center">Dirección</th>
-                        <th class="text-center">Ubicación</th>
-
-                        <th class="text-center">Acompañante</th>
-                        <th class="text-center">Acciones</th>
+                        
+                        <th class="text-center" id="color-th">Tipo Identificación</th>
+                        <th class="text-center" id="color-th">Identificación</th>
+                        <th class="text-center" id="color-th">Nombre Completo</th>
+                        <th class="text-center" id="color-th">Genero</th>
+                        <th class="text-center" id="color-th">Teléfonos</th>
+                        <th class="text-center" id="color-th">Dirección</th>
+                        <th class="text-center" id="color-th">Prioridad</th>
+                        <th class="text-center" id="color-th">Trasladable</th>
+                        <th class="text-center" id="color-th">Ubicación</th>
+                        <th class="text-center" id="color-th">Acompañante</th>
+                        <th class="text-center" id="color-th">Acciones</th>
 
                     </tr>
                 </thead>
@@ -89,11 +87,11 @@
                         <table class="table table-light table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Identificación</th>
-                                    <th>Nombre Completo</th>
-                                    <th>Teléfonos</th>
-                                    <th>Parentesco</th>
-                                    <th>Acciones</th>
+                                    <th id="color-th">Identificación</th>
+                                    <th id="color-th">Nombre Completo</th>
+                                    <th id="color-th">Teléfonos</th>
+                                    <th id="color-th">Parentesco</th>
+                                    <th id="color-th">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="accomp-tbody">
@@ -125,32 +123,32 @@
                     <form action="" id="formEditComp" class="bg-light p-4 border rounded-3">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="identification" class="form-label">Identificación:</label>
-                                <input type="text" id="identification" name="identification" class="form-control"
-                                    maxlength="20" required>
+                                <label for="identification" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
+                                <input type="text" id="identification" name="identification" class="form-control" maxlength="20"
+                                    required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="name" class="form-label">Nombre:</label>
-                                <input type="text" id="name" name="Nombre" class="form-control" required maxlength="25">
+                                <label for="name" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
+                                <input type="text" id="name" name="Nombre" class="form-control" required maxlength="25"> 
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="firstlastname" class="form-label">Primer Apellido:</label>
-                                <input type="text" id="firstlastname" name="firstlastname" class="form-control "
-                                    maxlength="25" required>
+                                <label for="firstlastname" class="form-label"><i class="bi bi-person-badge"></i> Primer Apellido:</label>
+                                <input type="text" id="firstlastname" name="firstlastname" class="form-control " maxlength="25"
+                                    required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="secondlastname" class="form-label">Segundo Apellido:</label>
-                                <input type="text" id="secondlastname" name="secondlastname" class="form-control"
-                                    maxlength="25" required>
+                                <label for="secondlastname" class="form-label"><i class="bi bi-person-badge"></i> Segundo Apellido:</label>
+                                <input type="text" id="secondlastname" name="secondlastname" class="form-control" maxlength="25"
+                                    required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="phone1" class="form-label">Telefono 1:</label>
+                                <label for="phone1" class="form-label"><i class="bi bi-telephone"></i> Telefono 1:</label>
                                 <input type="number" id="phone1" name="phone1" class="form-control" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="phone2" class="form-label">Telefono 2:</label>
+                                <label for="phone2" class="form-label"><i class="bi bi-telephone"></i> Telefono 2:</label>
                                 <input type="number" id="phone2" name="phone2" class="form-control"
                                     placeholder="(Opcional)" required>
                             </div>
@@ -159,7 +157,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="parentesco" class="form-label">Parentesco:</label>
+                                <label for="parentesco" class="form-label"><i class="bi bi-people"></i> Parentesco:</label>
                                 <select id="parentesco" name="acompananteParentesco1" class="form-select" required>
                                     <option selected disabled value="">Seleccionar...</option>
                                     <option value="Hijo/a">Hijo/a</option>

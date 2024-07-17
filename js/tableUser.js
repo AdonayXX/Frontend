@@ -141,10 +141,8 @@ async function getUserData() {
       });
     });
 
-    setTimeout(function () {
-
-      ocultarSpinner();
-    }, 500);
+   
+    ocultarSpinner();
 
   } catch (error) {
     console.error('Error al obtener datos del usuario:', error);
