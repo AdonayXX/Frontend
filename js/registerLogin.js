@@ -11,13 +11,17 @@ document.querySelector('#formLogin').addEventListener('submit', function(event){
 async function handleLogin() {
     const userEmail = document.querySelector('#userEmail').value.trim();
     const userPassword = document.getElementById('userPassword').value.trim();
-
     try {
         const token = await loginUser(userEmail, userPassword);
-        saveTokenLS(token);
-        window.location.href = 'index.html'; // Redirigir al usuario
+        if (token){
+            saveTokenLS(token);
+            window.location.href = 'index.html'; 
+        }else{
+            return;
+        }
+      
     } catch (error) {
-        showToast('Error', 'Usuario o Contraseña incorrectos')
+        showToast('Error', 'Inesperado.')
     }
 };
 
@@ -29,7 +33,7 @@ async function loginUser(identificador, Contrasena) {
         });
          return response.data.usuario.token; 
     } catch (error) {
-        showToast('Ups!','Error inesperado.');
+        showToast('Error', 'Usuario o Contraseña incorrectos')
 
     }
 };
