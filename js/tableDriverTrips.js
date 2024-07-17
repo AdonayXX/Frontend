@@ -24,6 +24,9 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 }
+// si no se ha iniciado el viaje mantener el botón de finalizar deshabilitado
+// si se inicia el viaje deshabilitar el botón de inciar viaje y cambiarle el texto a el botón a: "Viaje en tránsito."
+// darle a entender al chófer que el viaje se encuentra en curso.
 
 (async function () {
 
@@ -61,11 +64,8 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 
-  async function obtenerViajes(idUnidad, fechaValue, descripcionDestino = '') {
-    let apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
-    if (descripcionDestino) {
-      apiURLViajes += `?destino=${descripcionDestino}`;
-    }
+  async function obtenerViajes(idUnidad, fechaValue) {
+    const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
     try {
       const responseViajes = await axios.get(apiURLViajes);
       const viajes = responseViajes.data.Data?.Data || [];
@@ -85,7 +85,6 @@ function openAccomp(acompanante1, acompanante2) {
       viajesTableBody.innerHTML = '';
       const fragment = document.createDocumentFragment();
 
-      actualizarSelectDestinos(viajes);
 
       viajes.forEach(data => {
         const acompanante1 = data.Acompanante1 || 'N/A';
@@ -118,15 +117,17 @@ function openAccomp(acompanante1, acompanante2) {
     console.log("hora en updateInitTrip:", hourInitTrip);
     const API_INIT_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/start`;
     try {
-      await axios.put(API_INIT_TRIP, {
+      const response= await axios.put(API_INIT_TRIP, {
         idUnidad,
         fechaInicioViaje: fechaValue,
         horaInicioViaje: hourInitTrip
       });
       localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue }));
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
+      console.log("Response", response);
     } catch (error) {
-      showToast('Error', 'Ocurrió un problema al iniciar el viaje');
+      // respuesta del servidor backend
+      console.log("Response del backend", response);
     }
   }
 
@@ -217,17 +218,8 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 
-  async function actualizarSelectDestinos(viajes) {
-    const destinosSet = new Set(viajes.map(viaje => viaje.ubicacionDestino));
-    const destinoSelect = document.getElementById('destino');
-    destinoSelect.innerHTML = '<option value="">Seleccionar destino...</option>';
-    destinosSet.forEach(destino => {
-      const option = document.createElement('option');
-      option.value = destino;
-      option.textContent = destino;
-      destinoSelect.appendChild(option);
-    });
-  }
+ 
+
 
 
   await inicializarPagina();
