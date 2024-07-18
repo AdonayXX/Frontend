@@ -65,50 +65,49 @@ async function loadEspecialidades() {
         const handleSelectDestinosChange = async () => {
             try {
                 const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad');
+                const rutas = response.data;
+
                 const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
+                const especialidades = response2.data.Especialidad;
 
-                if (response2.data && Array.isArray(response2.data.Especialidad)) {
-                    const p1 = response2.data.Especialidad;
+                const selectedRutaId = document.querySelector("#select-destinos").value;
+                const selectedRuta = rutas.find(ruta => ruta.IdRuta === selectedRutaId);
 
-                    const selectedRutaId = document.querySelector("#select-destinos").value;
-                    const selectedRuta = response.data.find(ruta => ruta.IdRuta === selectedRutaId);
-
-                    if (!selectedRuta) {
-                        document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
-                            checkbox.checked = false;
-                            checkbox.disabled = false;
-                        });
-                        console.warn('Ruta seleccionada no encontrada. Se limpiaron las especialidades seleccionadas.');
-                        return;
-                    }
-
-                    const especialidadesArray = selectedRuta.Especialidades.split(',').map(e => e.trim());
-                    let espeEncontrada = [];
-
-                    especialidadesArray.forEach(espe => {
-                        const found = p1.filter(a => a.Especialidad === espe);
-                        espeEncontrada = espeEncontrada.concat(found);
-                    });
-
-                    especialidadesMarcadasInicial = espeEncontrada.map(especialidad => especialidad.idEspecialidad);
-                    console.log('Especialidades marcadas inicialmente:', especialidadesMarcadasInicial);
-
+                if (!selectedRuta) {
                     document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
                         checkbox.checked = false;
                         checkbox.disabled = false;
                     });
-
-                    espeEncontrada.forEach(especialidad => {
-                        const checkbox = document.querySelector(`#espe input[type="checkbox"][data-id="${especialidad.idEspecialidad}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
-                            checkbox.disabled = true;
-                        }
-                    });
-
-                } else {
-                    console.error('Datos de respuesta no son válidos o están mal estructurados.');
+                    console.warn('Ruta seleccionada no encontrada. Se limpiaron las especialidades seleccionadas.');
+                    return;
                 }
+
+                const especialidadesArray = selectedRuta.Especialidades.map(especialidad => especialidad.Especialidad);
+                let espeEncontrada = [];
+
+                especialidadesArray.forEach(espe => {
+                    const found = especialidades.find(a => a.Especialidad === espe);
+                    if (found) {
+                        espeEncontrada.push(found);
+                    }
+                });
+
+                especialidadesMarcadasInicial = espeEncontrada.map(especialidad => especialidad.idEspecialidad);
+                console.log('Especialidades marcadas inicialmente:', especialidadesMarcadasInicial);
+
+                document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                    checkbox.disabled = false;
+                });
+
+                espeEncontrada.forEach(especialidad => {
+                    const checkbox = document.querySelector(`#espe input[type="checkbox"][data-id="${especialidad.idEspecialidad}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.disabled = true;
+                    }
+                });
+
             } catch (error) {
                 console.error('Error al hacer la solicitud:', error);
             }
@@ -170,8 +169,9 @@ async function loadEspecialidades() {
     }
 }
 
-
 loadEspecialidades();
+
+
 
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
@@ -419,12 +419,6 @@ function createDeleteModal2(idEspecialidad) {
     modal.show();
 }
 
-document.querySelector('#AgregarEspe').addEventListener('input', function (e) {
-    if (this.value.length > 20) {
-        this.value = this.value.slice(0, 20);
-    }
-
-});
 
 document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
     if (this.value.length > 40) {
