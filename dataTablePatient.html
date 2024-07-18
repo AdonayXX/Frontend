@@ -119,7 +119,10 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body mt-1">
+                <div class="modal-body">
+                    <div class="loader-overlay" id="loaderModalComp">
+                        <div class="loader"></div>
+                    </div>
                     <form action="" id="formEditComp" class="bg-light p-4 border rounded-3">
                         <div class="row">
                             <div class="col-md-4 mb-3">
@@ -227,6 +230,7 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
+
                 <div class="modal-header" style="background-color:#094079; color: white;">
                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Editar Paciente</h5>
@@ -234,6 +238,9 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalFormEdit">
+                    <div class="loader-overlay" id="loaderModalPatEdit">
+                        <div class="loader"></div>
+                    </div>
                     <div class="container  fade-in" style="max-width: 1100px;">
                         <form id="formEditPatient" method="post" class="bg-light p-4 border rounded-3">
 
