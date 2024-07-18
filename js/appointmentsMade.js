@@ -1,6 +1,12 @@
 async function loadCitas() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+
+        });
         const citas = response.data;
         renderTable(citas);
 
@@ -9,17 +15,17 @@ async function loadCitas() {
         }
         $('#TableAppointment').DataTable({
             dom: "<'row'<'col-sm-6'l>" +
-            "<'row'<'col-sm-12't>>" +
-            "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-        ordering: false,
-        searching: true,
-        paging: true,
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-        },
-        caseInsensitive: true,
-        smart: true
-    });
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true
+        });
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
             let selectedState = $('#seleccionar-estado').val().toLowerCase();
@@ -100,7 +106,7 @@ function renderTable(citas) {
 
 
 function getAcompanantes(cita) {
-    console.log(cita);
+
     try {
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
@@ -140,8 +146,6 @@ document.querySelector('#searchAppointment').addEventListener('input', function 
 });
 
 function editarCita(cita) {
-    console.log(cita);
-
     document.querySelector('#editarIdCita').value = cita.idCita;
     document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
     document.querySelector('#editarFechaCita').value = cita.fechaCita;
@@ -180,28 +184,31 @@ async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;
     const horaCita = document.querySelector('#editarHora').value;
     const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
-    // const estadoCita = document.querySelector('#editarEstado').value;
     const tipoSeguro = document.querySelector("#tipoSeguro").value;
 
     const updatedCitas = {
         idUbicacionDestino: idUbicacionDestino,
-        // estadoCita: estadoCita,
         fechaCita: fechaCita,
         horaCita: horaCita,
         tipoSeguro: tipoSeguro
     };
 
-    console.log('Datos enviados al backend:', updatedCitas);
-
     try {
-        const response = await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas);
-        console.log(response);
+        const token = localStorage.getItem('token');
+        const response = await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
+
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
         $('#editarModal').modal('hide');
         setTimeout(function () {
             loadContent('AppointmentsMade.html', 'mainContent');
         }, 1400);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
+
         $('#editarModal').modal('hide');
         console.error('Error al actualizar la cita:', error);
         showToast("Error", "Error al actualizar la cita.");

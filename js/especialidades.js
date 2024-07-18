@@ -1,7 +1,12 @@
 async function loadEspecialidades() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
-        const especialidades = response.data.Especialidad; // Acceder a la propiedad correcta
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const especialidades = response.data.Especialidad;
 
         renderTableEspecialidades(especialidades);
 
@@ -11,17 +16,17 @@ async function loadEspecialidades() {
 
         let table = $('#tableEspecialidades').DataTable({
             dom: "<'row'<'col-sm-6'l>" +
-            "<'row'<'col-sm-12't>>" +
-            "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-        ordering: false,
-        searching: true,
-        paging: true,
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-        },
-        caseInsensitive: true,
-        smart: true
-    });
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true
+        });
 
         $('#searchEspecialidad').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
@@ -60,8 +65,13 @@ function renderTableEspecialidades(especialidades) {
 
 async function deleteEspecialidad(idEspecialidad) {
     try {
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`);
-        console.log('Especialidad eliminada:', response.data);
+        const token = localStorage.getItem('token');
+
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         $('#confirmarEliminarModal2').modal('hide');
 
@@ -121,7 +131,13 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
     }
 
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
+        const token = localStorage.getItem('token');
+
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const especialidades = response.data.Especialidad;
 
         const especialidadExistente = especialidades.find(
@@ -133,23 +149,16 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
             return;
         }
 
-        let maxId = 0;
-        especialidades.forEach(especialidad => {
-            if (especialidad.idEspecialidad > maxId) {
-                maxId = especialidad.idEspecialidad;
-            }
-        });
-        const nuevoId = maxId + 1;
-
         const especialidadData = {
-            idEspecialidad: nuevoId,
             Especialidad: nuevaEspecialidad
         };
-        console.log('Datos a enviar:', especialidadData);
 
-        const postResponse = await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData);
+        await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-        console.log('Especialidad agregada:', postResponse.data);
         $('#AgregarEspeModal').modal('hide');
         setTimeout(function () {
             loadContent('especialidades.html', 'mainContent');
