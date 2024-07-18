@@ -222,62 +222,6 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('BtnGuardarEspe').addEventListener('click', async () => {
-    const nuevaEspecialidad = document.getElementById('AgregarEspe').value.trim();
-
-    if (!nuevaEspecialidad) {
-        showToast('Error', 'El campo es obligatorio.');
-        return;
-    }
-
-    try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad');
-        const especialidades = response.data.Especialidad;
-
-        const especialidadExistente = especialidades.find(
-            especialidad => especialidad.Especialidad.toLowerCase() === nuevaEspecialidad.toLowerCase()
-        );
-
-        if (especialidadExistente) {
-            showToast('Error', 'La especialidad ya existe.');
-            return;
-        }
-
-        let maxId = 0;
-        especialidades.forEach(especialidad => {
-            if (especialidad.idEspecialidad > maxId) {
-                maxId = especialidad.idEspecialidad;
-            }
-        });
-        const nuevoId = maxId + 1;
-
-        const especialidadData = {
-            idEspecialidad: nuevoId,
-            Especialidad: nuevaEspecialidad
-        };
-        console.log('Datos a enviar:', especialidadData);
-
-        const postResponse = await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData);
-
-        console.log('Especialidad agregada:', postResponse.data);
-        $('#AgregarEspeModal').modal('hide');
-        setTimeout(function () {
-            loadContent('formUbi.html', 'mainContent');
-        }, 1000);
-        showToast('¡Éxito!', 'Especialidad agregada correctamente.');
-
-        document.getElementById('AgregarEspe').value = '';
-
-        const modalElement = document.getElementById('AgregarEspeModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-
-        modalInstance.hide();
-
-    } catch (error) {
-        console.error('Error al agregar la especialidad:', error.response ? error.response.data : error.message);
-    }
-});
-
 
 function renderTableDestinations(ubicaciones) {
     const tableBody = document.getElementById('destinosTableBody');
