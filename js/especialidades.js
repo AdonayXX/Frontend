@@ -172,3 +172,10 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
 function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
 }
+
+document.querySelector('#AgregarEspe').addEventListener('input', function (e) {
+    if (this.value.length > 20) {
+        this.value = this.value.slice(0, 20);
+    }
+
+});
