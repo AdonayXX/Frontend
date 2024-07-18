@@ -365,27 +365,38 @@ async function deleteDestination(idRuta) {
     }
 }
 
-async function deleteEspecialidad(idEspecialidad) {
+async function deleteEspecialidad(idEspecialidad, idRuta) {
     try {
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`);
-        console.log('Especialidad eliminada:', response.data);
+        const select = document.getElementById('select-destinos');
+        idRuta = select.value;
+
+        if (!idRuta) {
+            showToast('Error', 'Debes seleccionar un destino antes de eliminar la especialidad.');
+            $('#confirmarEliminarModal2').modal('hide');
+            return;
+        }
+
+        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${idRuta}/${idEspecialidad}`);
+        console.log('Relación entre especialidad y destino eliminada:', response.data);
 
         $('#confirmarEliminarModal2').modal('hide');
 
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
         }, 1000);
+
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
     } catch (error) {
-        console.error('Error al eliminar la especialidad:', error);
-        showToast('Error', 'No se pudo eliminar la especialidad.');
-        $('#confirmarEliminarModal2').modal('hide');
+        console.error('Error al eliminar la especialidad o su relación:', error);
+        showToast('Error', 'No se pudo eliminar la especialidad o su relación.');
 
+        $('#confirmarEliminarModal2').modal('hide');
     }
 }
 
-function createDeleteModal2(idEspecialidad) {
+
+function createDeleteModal2(idEspecialidad, idRuta) {
     const existingModal = document.getElementById('confirmarEliminarModal2');
     if (existingModal) {
         existingModal.remove();
@@ -406,7 +417,7 @@ function createDeleteModal2(idEspecialidad) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)})'>Eliminar</button>
+                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)}, ${JSON.stringify(idRuta)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
