@@ -1,9 +1,13 @@
 (async function () {
   getMaintenance();
+
+
   // Variables globales para almacenar los datos
   let mantenimientoData = [];
   let actividadesData = [];
   let actividadesTodoData = [];
+  let fieldCounter = 0;
+  let actividadesLista =[];
 
   // Función principal para obtener y llenar los mantenimientos
   async function getMaintenance() {
@@ -85,7 +89,7 @@
         <td>${maintenanceItem.TipoMantenimiento}</td>
         <td>${maintenanceItem.Observacion}</td>
         <td>${maintenanceItem.Descripcion}</td>
-        <td>${maintenanceItem.Cantidad}</td>
+        <td class="text-center">${maintenanceItem.Cantidad}</td>
         <td>${maintenanceItem.UnidadMedida}</td>
         <td>${maintenanceItem.Estado}</td>
         <td class="actions">
@@ -189,17 +193,25 @@
   function ocultarSpinner() {
     document.getElementById("spinnerContainer").style.display = "none";
   }
+ 
+
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
-  $(document).on("click", "#btnCloseTask", function () {
+  $(document).on("click", "#btnCloseTask", async function () {
+    actividadesLista = [];
     $("#maintenanceModal").modal("show");
+    actividadesLista = await  getActiv();
+    console.log("funcion btn close",actividadesLista);
+    activitySelect(actividadesLista);
+
+    
+
   });
 
-  document.querySelector("#openTask").addEventListener("click", () => {
-    getActividades1();
-  });
+ 
 
-  //Mostar Actividades
+
+  //Mostar Actividades/Mantenimiento
   async function getActividades1() {
     try {
       const token = localStorage.getItem("token");
@@ -211,7 +223,8 @@
         },
       });
       const listAct = response;
-      console.log(listAct);
+      console.log("Lista Actividades",listAct);
+
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
@@ -255,12 +268,11 @@
 
 
 
-  let fieldCounter = 0;
-  const actividadesLista = await getActiv();
+
 
   document
     .getElementById("addActividadBtn")
-    .addEventListener("click", function () {
+    .addEventListener("click", async function () {
       addFields(actividadesLista);
       console.log("Entro");
     });
@@ -361,6 +373,7 @@
 
       // Añadir el event listener para cambio de selección
       unidadSelect.addEventListener("change", async () => {
+        showLoaderModalMant();
         console.log(uniLlenado);
         document.querySelector("#tipoUnidad").value = '';
         document.querySelector("#chofer").value = '';
@@ -381,7 +394,9 @@
         nombreCompletoChofer = `${choferfind.nombre} ${choferfind.apellido1} ${choferfind.apellido2}`;
         document.querySelector("#chofer").value = nombreCompletoChofer;
         document.querySelector("#tipoUnidad").value = obTipoUnidad;
+        hideLoaderModalMant();
       });
+      
     });
 
   //Obtener nombre de Tipo unidadd
@@ -468,7 +483,8 @@
   // Manejar el envío del formulario
   document
     .getElementById("saveMaintenance")
-    .addEventListener("click", async function () {
+    .addEventListener("click", async function () {     
+      showLoaderModalMant()
       const idChofer = document.querySelector("#IdChoferHidden").value.trim();
       const idUnidad = document.querySelector("#unidadSelect").value.trim();
       const fechaMantenimiento = document.querySelector("#fechaMantenimiento").value.trim();
@@ -494,7 +510,9 @@
       // Verificar si todos los valores necesarios existen y no están vacíos
       if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
         showToast('', 'Por favor completa todos los campos obligatorios.');
+        showLoaderModalMant();
         return;
+        
       }
 
 
@@ -508,6 +526,7 @@
         Observacion: observacion,
         actividades: actividades
       };
+   
 
       try {
         const token = localStorage.getItem("token");
@@ -519,7 +538,9 @@
         });
 
         if (response) {
-          await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
+          if (mantenimiento.TipoMantenimiento === 'Programado'){
+            await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
+          }
           showToast("Exito", "Mantenimiento Creado.");
           // Cerrar el modal correctamente usando Bootstrap
           const modalElement = document.querySelector("#maintenanceModal");
@@ -530,9 +551,9 @@
             const newModalInstance = new bootstrap.Modal(modalElement);
             newModalInstance.hide();
           }
-          setTimeout(function () {
-            loadContent("dataTableMaintenance.html", "mainContent");
-          }, 500);
+          hideLoaderModalMant();
+          loadContent("dataTableMaintenance.html", "mainContent");
+          
 
         }
 
@@ -546,18 +567,23 @@
           showToast("Error", "Hubo un problema al enviar los datos.");
           console.error(error);
         }
+        hideLoaderModalMant();
         // Manejar el error aquí
       }
     });
 
   //Editar Mantenimiento
   window.EditarMant = async function (activ, maintenanceItem) {
+    showLoaderModalMantEdit();
+ 
     console.log("Actividades a editar:", activ);
     console.log("foundActivity a editar:", activ.foundActivity);
     console.log("Mantenimiento a editar:", maintenanceItem);
     try {
+     
       // Mostrar el modal de mantenimiento
       $("#maintenanceModalEdit").modal("show");
+     
 
       // Pasar la lista de actividades correcta a activitySelect
       activitySelect(actividadesTodoData);
@@ -566,6 +592,7 @@
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
         try {
+          
           const valorSelectAct = document.querySelector('#actividadEdit').value;
 
           // Obtener el select de unidades
@@ -621,10 +648,13 @@
       document.querySelector("#choferEdit").value = nombreCompletoChofer;
       document.querySelector("#tipoUnidadEdit").value = obTipoUnidad;
 
+      hideLoaderModalMantEdit();
+
 
       //Evento click para guardar cambios
       document.querySelector('#saveMaintenanceEdit').addEventListener('click', async function () {
         try {
+          showLoaderModalMantEdit();
           const mantenimientoData = {
             IdChofer: parseInt(document.querySelector("#IdChoferHiddenEdit").value.trim()),
             IdUnidad: parseInt(document.querySelector("#unidadEditHidden").value.trim()),
@@ -676,6 +706,7 @@
         } else {
           console.error('Ha ocurrido un problema:', error);
           alert("Ocurrió un problema");
+          hideLoaderModalMantEdit();
         }
       }
 
@@ -685,6 +716,7 @@
     } catch (error) {
       console.error(error);
       showToast('Error', 'Al cargar los datos de mantenimiento.');
+      hideLoaderModalMantEdit()
     }
   }
 
@@ -824,6 +856,7 @@
       caseInsensitive: true,
       smart: true
     });
+    hideLoaderModalAct();
 
   }
   async function getActividades() {
@@ -914,6 +947,7 @@
         },
       });
       console.log(response.data);
+      
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
 
@@ -922,6 +956,7 @@
       limpiarCampos();
 
       // Recargar la lista de actividades
+      showLoaderModalAct();
       optimazadoactividades();
     } catch (error) {
       console.error('Ha ocurrido un problema:', error);
@@ -941,6 +976,7 @@
       console.log(response.data);
       showToast('Éxito', 'Actividad eliminada exitosamente');
       // Recargar la lista de actividades
+      showLoaderModalAct();
       optimazadoactividades();
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -1060,6 +1096,34 @@
     // Formatear la fecha en 'YYYY-MM-DD'
     return `${year}-${month}-${day}`;
   }
+
+  actividadesLista = await getActiv();
+ 
+  function showLoaderModalAct() {
+    document.querySelector('#loaderModalAct').style.display = 'flex';
+}
+
+function hideLoaderModalAct() {
+    document.querySelector('#loaderModalAct').style.display = 'none';
+}
+
+function showLoaderModalMant() {
+  document.querySelector('#loaderModalMant').style.display = 'flex';
+}
+
+function hideLoaderModalMant() {
+  document.querySelector('#loaderModalMant').style.display = 'none';
+}
+function showLoaderModalMantEdit() {
+  document.querySelector('#loaderModalMantEdit').style.display = 'flex';
+}
+
+function hideLoaderModalMantEdit() {
+  document.querySelector('#loaderModalMantEdit').style.display = 'none';
+}
+
+
+
 
 })();
 

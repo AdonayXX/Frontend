@@ -230,6 +230,7 @@ window.sendUserData = function (button) {
   const form = document.querySelector("#formUserEdit");
   form.onsubmit = function (event) {
     event.preventDefault();
+    showLoaderModalUser();
     getEditUserData(userIdentification);
   };
 
@@ -254,6 +255,7 @@ window.sendUserData = function (button) {
       console.log(response);
       modal.hide();
       showToast('Éxito!', 'Usuario actualizado correctamente');
+      hideLoaderModalUser();
       setTimeout(function () {
         loadContent('dataTableUsers.html', 'mainContent');
       }, 1000);
@@ -267,6 +269,7 @@ window.sendUserData = function (button) {
         console.error('Ha ocurrido un problema:', error);
         alert("Ocurrió un problema");
       }
+      hideLoaderModalUser();
     }
   }
 
@@ -383,3 +386,12 @@ function initializePasswordValidations() {
 document.getElementById('addUserAdmin').addEventListener('shown.bs.modal', function () {
   initializePasswordValidations();
 });
+
+function showLoaderModalUser() {
+  document.querySelector('#loaderModalUserEdit').style.display = 'flex';
+}
+
+function hideLoaderModalUser() {
+  document.querySelector('#loaderModalUserEdit').style.display = 'none';
+}
+
