@@ -251,7 +251,6 @@ window.editAccomp = function (button) {
         loadContent('dataTablePatient.html', 'mainContent');
       }, 1000);
     } catch (error) {
-      console.error(error)
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
         showToast('Ups!', errorMessage);
@@ -322,7 +321,7 @@ window.patientEdit = function (button) {
         showToast('Ups!', ' Error inesperado.');
 
       }
-      console.error(error);
+     
     }finally{
       hideLoaderModalPatEdit();
     }
