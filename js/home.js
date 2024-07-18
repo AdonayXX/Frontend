@@ -20,7 +20,12 @@ async function mostrarProximosViajes() {
         const fechaFormateada = hoyUTCStr.split('-').reverse().join('-');
         document.getElementById('fecha').textContent = fechaFormateada;
 
-        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/destinos');
+        const token = localStorage.getItem('token');
+        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/destinos',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         if (!viajesRespuesta.data) {
             throw new Error('Error al obtener los viajes');
@@ -108,14 +113,24 @@ async function contarCitasHome() {
         const year = new Date().getFullYear().toString();
 
         // Obtener datos de citas
-        const citasRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/cita');
+        const token = localStorage.getItem('token');
+
+        const citasRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/cita',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (!citasRespuesta.data) {
             throw new Error('Error al obtener las citas');
         }
         const dataCitas = citasRespuesta.data;
 
         // Obtener datos de viajes
-        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje');
+        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (!viajesRespuesta.data) {
             throw new Error('Error al obtener los viajes');
         }
@@ -154,7 +169,12 @@ async function mostrarUnidadesPorDekra() {
         const ahora = new Date();
         const hoyUTC = ahora.toISOString().split('T')[0];
 
-        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+        const token = localStorage.getItem('token');
+        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         if (!unidadesRespuesta.data) {
             throw new Error('Error al obtener las unidades');
@@ -205,7 +225,13 @@ async function mostrarChoferesPorVencer() {
     try {
         const ahora = new Date();
 
-        const choferesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+        const token = localStorage.getItem('token');
+
+        const choferesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/chofer',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         if (!choferesRespuesta.data) {
             throw new Error('Error al obtener los choferes');
@@ -261,7 +287,12 @@ async function mostrarUnidadesPorKilometraje() {
         const ahora = new Date();
         const hoyUTC = ahora.toISOString().split('T')[0];
 
-        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+        const token = localStorage.getItem('token');
+        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         if (!unidadesRespuesta.data) {
             throw new Error('Error al obtener las unidades');

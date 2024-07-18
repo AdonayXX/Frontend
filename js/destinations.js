@@ -177,7 +177,7 @@ async function loadEspecialidades() {
                 };
 
                 const token = localStorage.getItem('token');
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', data, {
+                await axios.post('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -205,9 +205,6 @@ async function loadEspecialidades() {
 loadEspecialidades();
 
 
-
-
-
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
     const nuevaAbreviacion = document.getElementById('AgregarAbre').value.trim();
@@ -227,7 +224,7 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
         );
 
         if (!ubicacionExistente) {
-            const postResponse = await axios.post(apiUrl, {
+            await axios.post(apiUrl, {
                 IdRuta: nuevaAbreviacion,
                 Descripcion: nuevaUbicacion
             });
@@ -384,7 +381,7 @@ function createDeleteModal(idDestino) {
 async function deleteDestination(idRuta) {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idRuta}`, {
+        await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idRuta}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -422,7 +419,7 @@ async function deleteEspecialidad(idEspecialidad, idRuta) {
 
         const token = localStorage.getItem('token');
 
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${idRuta}/${idEspecialidad}`, {
+        await axios.delete(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${idRuta}/${idEspecialidad}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -478,20 +475,6 @@ function createDeleteModal2(idEspecialidad, idRuta) {
     const modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal2'));
     modal.show();
 }
-
-
-document.querySelector('#AgregarUbi').addEventListener('input', function (e) {
-    if (this.value.length > 40) {
-        this.value = this.value.slice(0, 40);
-    }
-
-});
-
-document.querySelector('#AgregarAbre').addEventListener('input', function (e) {
-    if (this.value.length > 10) {
-        this.value = this.value.slice(0, 10);
-    }
-});
 
 function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
