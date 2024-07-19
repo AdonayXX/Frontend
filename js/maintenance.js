@@ -1,4 +1,5 @@
 (async function () {
+  getlastMaintenance();
   getMaintenance();
 
 
@@ -7,9 +8,156 @@
   let actividadesData = [];
   let actividadesTodoData = [];
   let fieldCounter = 0;
-  let actividadesLista =[];
+  let actividadesLista = [];
 
-  // Función principal para obtener y llenar los mantenimientos
+  //Funcion para obtener los ultimos 20 mantenimientos para llenar la tabla
+  async function getlastMaintenance() {
+    try {
+      const Api_Url = "http://localhost:18026/";
+      const token = localStorage.getItem("token");
+
+      // Obtener datos de mantenimiento
+      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento/last`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      last20Maintenance = mantenimientoResponse.data.mantenimientos || [];
+      console.log("Ultimos 20 mantenimientos:", last20Maintenance);
+
+      // Obtener datos de actividades de mantenimiento
+      const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
+      console.log("Actividades de mantenimiento:", actividadesData);
+
+      // Obtener todas las actividades
+      const actividadesTodo = await axios.get(`${Api_Url}api/actividad`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      actividadesTodoData = actividadesTodo.data.actividades || [];
+      console.log("Todas las actividades:", actividadesTodoData);
+
+      // Destruir la instancia existente de DataTables
+      if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+        $("#tableMaintenance").DataTable().destroy();
+      }
+
+      // Vaciar el cuerpo de la tabla
+      $("#maintenance-body").empty();
+      // Llenar la tabla de mantenimientos con los últimos 20
+      fillMaintenanceTable(last20Maintenance, actividadesData, actividadesTodoData);
+
+
+      // Configurar DataTables y eventos de cambio
+      setupDataTable();
+      ocultarSpinner();
+      getUnidadesFiltro();
+    } catch (error) {
+      console.error("Error al obtener los mantenimientos:", error);
+
+    }
+  }
+
+  // Función para llenar la tabla de mantenimientos
+  function fillMaintenanceTable(maintenance, activities, allActivities) {
+    console.log("Mantenimientos:", maintenance);
+    try {
+      const tableBody = document.querySelector("#maintenance-body");
+      tableBody.innerHTML = "";
+      console.log("Cantidad de mantenimientos:", maintenance.length);
+      if (maintenance.length === 0) {
+        const noDataMessage = document.createElement("tr");
+        noDataMessage.innerHTML =
+          `<td colspan="11" class="text-center">No hay datos disponibles</td>`
+          ;
+        console.log("No hay datos disponibles", maintenance.length);
+        tableBody.appendChild(noDataMessage);
+        return;
+      }
+
+
+
+      const fragment = document.createDocumentFragment();
+
+      maintenance.forEach((maintenanceItem) => {
+        // Filtrar actividades por IdMantenimiento
+        const relatedActivities = activities.filter(
+          (activity) => activity.IdMantenimiento === maintenanceItem.IdMantenimiento
+        );
+        console.log("Actividades relacionadas:", relatedActivities);
+
+        // Encontrar actividades coincidentes con todas las actividades
+        let foundActivity = null;
+        allActivities.some((activity) => {
+          foundActivity = relatedActivities.find(
+            (related) => related.IdActividad === activity.IdActividad && activity.Descripcion === maintenanceItem.Descripcion
+          );
+          return foundActivity !== undefined;
+        });
+        console.log("Actividad encontrada:", foundActivity);
+
+        // Crear fila HTML
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${maintenanceItem.IdMantenimiento || ''}</td>
+          <td>${maintenanceItem.numeroUnidad || ''}</td>
+          <td>${maintenanceItem.TipoUnidad || ''}</td>
+          <td>${formatDate(maintenanceItem.FechaMantenimiento) || ''}</td>
+          <td>${maintenanceItem.TipoMantenimiento || ''}</td>
+          <td>${maintenanceItem.Observacion || ''}</td>
+          <td>${maintenanceItem.Descripcion || ''}</td>
+          <td class="text-center">${maintenanceItem.Cantidad || ''}</td>
+          <td>${maintenanceItem.UnidadMedida || ''}</td>
+          <td>${maintenanceItem.Estado || ''}</td>
+          <td class="actions">
+              <button class="btn btn-outline-success btn-sm text-center"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Estado: Completado"
+                onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
+                ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
+                <i class="bi bi-check"></i>
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
+          { foundActivity })},${JSON.stringify(maintenanceItem)})' ><i class="bi bi-pencil"></i></button>
+        </td>`
+          ;
+        fragment.appendChild(row);
+        console.log("row:", row);
+      });
+
+      tableBody.appendChild(fragment);
+      console.log("Fragment:", fragment);
+      console.log("TableBody:", tableBody);
+    } catch (error) {
+      console.error("Error al llenar la tabla de mantenimientos:", error);
+    }
+  }
+
+
+
+  function setupDataTable() {
+
+    // Inicializar DataTables
+    $("#tableMaintenance").DataTable({
+      dom: "<'row'<'col-md-6'l>" +
+        "<'row'<'col-md-12't>>" +
+        "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
+      ordering: false,
+      searching: true,
+      paging: true,
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
+      },
+      caseInsensitive: true,
+      smart: true,
+    });
+    console.log("DataTable inicializado");
+  }
+
+
+
+  // Función para obtener todos los mantenimientos
   async function getMaintenance() {
     try {
       const Api_Url = "http://localhost:18026/";
@@ -33,108 +181,10 @@
       });
       actividadesTodoData = actividadesTodo.data.actividades || [];
 
-      // Llenar la tabla de mantenimientos con los últimos 20
-      fillMaintenanceTable(mantenimientoData.slice(-20), actividadesData, actividadesTodoData);
-
-      // Configurar DataTables y eventos de cambio
-      setupDataTable();
       setupFilterEvents();
-      ocultarSpinner();
-      getUnidadesFiltro(); // Actualizar lista de unidades en el filtro
     } catch (error) {
       handleMaintenanceError(error);
     }
-  }
-
-  // Función para llenar la tabla de mantenimientos
-  function fillMaintenanceTable(maintenance, activities, allActivities) {
-    console.log("Mantenimientos:", maintenance);
-    try {
-      const tableBody = document.querySelector("#maintenance-body");
-      tableBody.innerHTML = "";
-
-      if (maintenance.length === 0) {
-        const noDataMessage = document.createElement("tr");
-        noDataMessage.innerHTML = `
-        <td colspan="11" class="text-center">No hay datos disponibles</td>
-      `;
-        tableBody.appendChild(noDataMessage);
-        return;
-      }
-
-      const fragment = document.createDocumentFragment();
-
-      maintenance.forEach((maintenanceItem) => {
-        // Filtrar actividades por IdMantenimiento
-        const relatedActivities = activities.filter(
-          (activity) => activity.IdMantenimiento === maintenanceItem.IdMantenimiento
-        );
-
-        // Encontrar actividades coincidentes con todas las actividades
-        let foundActivity = null;
-        allActivities.some((activity) => {
-          foundActivity = relatedActivities.find(
-            (related) => related.IdActividad === activity.IdActividad && activity.Descripcion === maintenanceItem.Descripcion
-          );
-          return foundActivity !== undefined;
-        });
-
-        // Crear fila HTML
-        const row = document.createElement("tr");
-        row.innerHTML = `
-        <td>${maintenanceItem.IdMantenimiento}</td>
-        <td>${maintenanceItem.numeroUnidad}</td>
-        <td>${maintenanceItem.TipoUnidad}</td>
-        <td>${formatDate(maintenanceItem.FechaMantenimiento)}</td>
-        <td>${maintenanceItem.TipoMantenimiento}</td>
-        <td>${maintenanceItem.Observacion}</td>
-        <td>${maintenanceItem.Descripcion}</td>
-        <td class="text-center">${maintenanceItem.Cantidad}</td>
-        <td>${maintenanceItem.UnidadMedida}</td>
-        <td>${maintenanceItem.Estado}</td>
-        <td class="actions">
-                <button class="btn btn-outline-success btn-sm text-center"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title="Estado: Completado"
-                  onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
-                  ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
-                  <i class="bi bi-check"></i>
-                </button>
-                <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
-          { foundActivity })},${JSON.stringify(maintenanceItem)})' ><i class="bi bi-pencil"></i></button>
-      `;
-        fragment.appendChild(row);
-      });
-
-      tableBody.appendChild(fragment);
-    } catch (error) {
-      console.error("Error al llenar la tabla de mantenimientos:", error);
-    }
-  }
-  console.log("Actividades:", actividadesData);
-  console.log("Mantenimientos", mantenimientoData);
-
-  // Función para configurar DataTables
-  function setupDataTable() {
-    if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
-      $("#tableMaintenance").DataTable().destroy();
-    }
-
-    $("#tableMaintenance").DataTable({
-      dom:
-        "<'row'<'col-md-6'l>" +
-        "<'row'<'col-md-12't>>" +
-        "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
-      ordering: false,
-      searching: true,
-      paging: true,
-      language: {
-        url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
-      },
-      caseInsensitive: true,
-      smart: true,
-    });
   }
 
   // Función para configurar eventos de cambio en filtros
@@ -150,24 +200,40 @@
     });
   }
 
+  // Llamada a la función de filtrado
   function filterMaintenance() {
     const selectedDate = $('#fechaMantenimientoFiltro').val();
-    const formattedSelectedDate = formatDateSelected(selectedDate); // Función para formatear la fecha seleccionada
+    const formattedSelectedDate = formatDateSelected(selectedDate);
     console.log("Fecha seleccionada", formattedSelectedDate);
 
     const selectedUnit = $('#unidadFiltro').val();
 
-    const filteredMaintenance = mantenimientoData.filter(maintenance => {
-      const formattedDate = formatDate(maintenance.FechaMantenimiento);
-      console.log("Fecha de la base", formattedDate);
-      const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
-      console.log("La fecha hace match?", matchDate);
-      const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
-      return matchDate && matchUnit;
-    });
+    const filteredMaintenance = selectedUnit === 'last20'
+      ? last20Maintenance
+      : mantenimientoData.filter(maintenance => {
+        const formattedDate = formatDate(maintenance.FechaMantenimiento);
+        const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
+        const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
+        return matchDate && matchUnit;
+      });
 
+    // Verificar si DataTables ya está inicializado
+    if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+      console.log("DataTable ya está inicializado");
+      // Destruir la instancia existente
+      $("#tableMaintenance").DataTable().clear().destroy();
+      console.log("Instancia de DataTable destruida");
+    }
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
+
+    // Solo inicializar DataTables si hay datos disponibles
+    console.log("Mantenimientos filtrados:", filteredMaintenance.length);
+    if (filteredMaintenance.length > 0) {
+      console.log("Inicializando DataTables");
+      setupDataTable();
+    }
   }
+
 
   // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
   function formatDateSelected(selectedDate) {
@@ -193,22 +259,22 @@
   function ocultarSpinner() {
     document.getElementById("spinnerContainer").style.display = "none";
   }
- 
+
 
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
   $(document).on("click", "#btnCloseTask", async function () {
     actividadesLista = [];
     $("#maintenanceModal").modal("show");
-    actividadesLista = await  getActiv();
-    console.log("funcion btn close",actividadesLista);
+    actividadesLista = await getActiv();
+    console.log("funcion btn close", actividadesLista);
     activitySelect(actividadesLista);
 
-    
+
 
   });
 
- 
+
 
 
   //Mostar Actividades/Mantenimiento
@@ -223,7 +289,7 @@
         },
       });
       const listAct = response;
-      console.log("Lista Actividades",listAct);
+      console.log("Lista Actividades", listAct);
 
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -396,7 +462,7 @@
         document.querySelector("#tipoUnidad").value = obTipoUnidad;
         hideLoaderModalMant();
       });
-      
+
     });
 
   //Obtener nombre de Tipo unidadd
@@ -483,7 +549,7 @@
   // Manejar el envío del formulario
   document
     .getElementById("saveMaintenance")
-    .addEventListener("click", async function () {     
+    .addEventListener("click", async function () {
       showLoaderModalMant()
       const idChofer = document.querySelector("#IdChoferHidden").value.trim();
       const idUnidad = document.querySelector("#unidadSelect").value.trim();
@@ -510,9 +576,10 @@
       // Verificar si todos los valores necesarios existen y no están vacíos
       if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
         showToast('', 'Por favor completa todos los campos obligatorios.');
-        showLoaderModalMant();
+        console.log(idChofer, idUnidad, fechaMantenimiento, kilometraje, tipoMantenimiento);
+        // showLoaderModalMant();
         return;
-        
+
       }
 
 
@@ -526,7 +593,7 @@
         Observacion: observacion,
         actividades: actividades
       };
-   
+
 
       try {
         const token = localStorage.getItem("token");
@@ -538,7 +605,7 @@
         });
 
         if (response) {
-          if (mantenimiento.TipoMantenimiento === 'Programado'){
+          if (mantenimiento.TipoMantenimiento === 'Programado') {
             await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
           }
           showToast("Exito", "Mantenimiento Creado.");
@@ -553,7 +620,7 @@
           }
           hideLoaderModalMant();
           loadContent("dataTableMaintenance.html", "mainContent");
-          
+
 
         }
 
@@ -575,15 +642,15 @@
   //Editar Mantenimiento
   window.EditarMant = async function (activ, maintenanceItem) {
     showLoaderModalMantEdit();
- 
+
     console.log("Actividades a editar:", activ);
     console.log("foundActivity a editar:", activ.foundActivity);
     console.log("Mantenimiento a editar:", maintenanceItem);
     try {
-     
+
       // Mostrar el modal de mantenimiento
       $("#maintenanceModalEdit").modal("show");
-     
+
 
       // Pasar la lista de actividades correcta a activitySelect
       activitySelect(actividadesTodoData);
@@ -592,7 +659,7 @@
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
         try {
-          
+
           const valorSelectAct = document.querySelector('#actividadEdit').value;
 
           // Obtener el select de unidades
@@ -782,7 +849,8 @@
     try {
       const unidades = await getUnidades(); // Utiliza la función existente para obtener unidades
       const unidadFiltroSelect = document.getElementById("unidadFiltro");
-      unidadFiltroSelect.innerHTML = '<option value="All">Todas las Unidades</option>';
+      unidadFiltroSelect.innerHTML = '<option value="last20">Últimas 20 Unidades</option>';
+      unidadFiltroSelect.innerHTML += '<option value="All">Todas las Unidades</option>';
 
       unidades.forEach((unidad) => {
         const option = document.createElement("option");
@@ -790,6 +858,9 @@
         option.textContent = unidad.numeroUnidad;
         unidadFiltroSelect.appendChild(option);
       });
+
+      // Establecer "Últimas 20 Unidades" como la opción por defecto
+      unidadFiltroSelect.value = "last20";
     } catch (error) {
       console.error("Error al obtener las unidades:", error);
       showToast("Ups!", "Hubo un problema al obtener las unidades");
@@ -947,7 +1018,7 @@
         },
       });
       console.log(response.data);
-      
+
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
 
@@ -1017,6 +1088,7 @@
     const adelanto = parseInt(unidadEncontrada.adelanto);
     const idEstado = parseInt(unidadEncontrada.idEstado);
     const valorFrecuenciaC = parseInt(unidadEncontrada.valorFrecuenciaC);
+    const usuario = parseInt(unidadEncontrada.usuario);
 
     return {
       idTipoUnidad,
@@ -1034,15 +1106,22 @@
       kilometrajeActual,
       adelanto,
       idEstado,
-      valorFrecuenciaC
+      valorFrecuenciaC,
+      usuario
     };
   }
 
   async function actualizarUnidad(numeroUnidad, unidadData) {
     console.log('Datos a enviar para actualizar:', numeroUnidad, unidadData);
     try {
+      const token = localStorage.getItem("token"); // Obtén el token desde el almacenamiento local
+
       // Hacer la petición PUT para actualizar la unidad
-      const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData);
+      const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la petición
+        }
+      });
       console.log(response);
 
       // Verificar la respuesta del servidor
@@ -1098,29 +1177,29 @@
   }
 
   actividadesLista = await getActiv();
- 
+
   function showLoaderModalAct() {
     document.querySelector('#loaderModalAct').style.display = 'flex';
-}
+  }
 
-function hideLoaderModalAct() {
+  function hideLoaderModalAct() {
     document.querySelector('#loaderModalAct').style.display = 'none';
-}
+  }
 
-function showLoaderModalMant() {
-  document.querySelector('#loaderModalMant').style.display = 'flex';
-}
+  function showLoaderModalMant() {
+    document.querySelector('#loaderModalMant').style.display = 'flex';
+  }
 
-function hideLoaderModalMant() {
-  document.querySelector('#loaderModalMant').style.display = 'none';
-}
-function showLoaderModalMantEdit() {
-  document.querySelector('#loaderModalMantEdit').style.display = 'flex';
-}
+  function hideLoaderModalMant() {
+    document.querySelector('#loaderModalMant').style.display = 'none';
+  }
+  function showLoaderModalMantEdit() {
+    document.querySelector('#loaderModalMantEdit').style.display = 'flex';
+  }
 
-function hideLoaderModalMantEdit() {
-  document.querySelector('#loaderModalMantEdit').style.display = 'none';
-}
+  function hideLoaderModalMantEdit() {
+    document.querySelector('#loaderModalMantEdit').style.display = 'none';
+  }
 
 
 
