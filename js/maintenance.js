@@ -1,4 +1,5 @@
 (async function () {
+  getlastMaintenance();
   getMaintenance();
 
 
@@ -7,42 +8,47 @@
   let actividadesData = [];
   let actividadesTodoData = [];
   let fieldCounter = 0;
-  let actividadesLista =[];
+  let actividadesLista = [];
 
-  // Función principal para obtener y llenar los mantenimientos
-  async function getMaintenance() {
+  //Funcion para obtener los ultimos 20 mantenimientos para llenar la tabla
+  async function getlastMaintenance() {
     try {
       const Api_Url = "http://localhost:18026/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
-      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento`, {
+      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento/last`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      mantenimientoData = mantenimientoResponse.data.mantenimientos || [];
+      last20Maintenance = mantenimientoResponse.data.mantenimientos || [];
+      console.log("Ultimos 20 mantenimientos:", last20Maintenance);
 
       // Obtener datos de actividades de mantenimiento
       const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
+      const actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
+      console.log("Actividades de mantenimiento:", actividadesData);
 
       // Obtener todas las actividades
       const actividadesTodo = await axios.get(`${Api_Url}api/actividad`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       actividadesTodoData = actividadesTodo.data.actividades || [];
+      console.log("Todas las actividades:", actividadesTodoData);
 
       // Llenar la tabla de mantenimientos con los últimos 20
-      fillMaintenanceTable(mantenimientoData.slice(-20), actividadesData, actividadesTodoData);
+      fillMaintenanceTable(last20Maintenance, actividadesData, actividadesTodoData);
+
 
       // Configurar DataTables y eventos de cambio
       setupDataTable();
       setupFilterEvents();
       ocultarSpinner();
-      getUnidadesFiltro(); // Actualizar lista de unidades en el filtro
+      getUnidadesFiltro();
     } catch (error) {
-      handleMaintenanceError(error);
+      console.error("Error al obtener los mantenimientos:", error);
+
     }
   }
 
@@ -56,8 +62,8 @@
       if (maintenance.length === 0) {
         const noDataMessage = document.createElement("tr");
         noDataMessage.innerHTML = `
-        <td colspan="11" class="text-center">No hay datos disponibles</td>
-      `;
+          <td colspan="11" class="text-center">No hay datos disponibles</td>
+        `;
         tableBody.appendChild(noDataMessage);
         return;
       }
@@ -82,28 +88,28 @@
         // Crear fila HTML
         const row = document.createElement("tr");
         row.innerHTML = `
-        <td>${maintenanceItem.IdMantenimiento}</td>
-        <td>${maintenanceItem.numeroUnidad}</td>
-        <td>${maintenanceItem.TipoUnidad}</td>
-        <td>${formatDate(maintenanceItem.FechaMantenimiento)}</td>
-        <td>${maintenanceItem.TipoMantenimiento}</td>
-        <td>${maintenanceItem.Observacion}</td>
-        <td>${maintenanceItem.Descripcion}</td>
-        <td class="text-center">${maintenanceItem.Cantidad}</td>
-        <td>${maintenanceItem.UnidadMedida}</td>
-        <td>${maintenanceItem.Estado}</td>
-        <td class="actions">
-                <button class="btn btn-outline-success btn-sm text-center"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title="Estado: Completado"
-                  onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
-                  ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
-                  <i class="bi bi-check"></i>
-                </button>
-                <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
+          <td>${maintenanceItem.IdMantenimiento}</td>
+          <td>${maintenanceItem.numeroUnidad}</td>
+          <td>${maintenanceItem.TipoUnidad}</td>
+          <td>${formatDate(maintenanceItem.FechaMantenimiento)}</td>
+          <td>${maintenanceItem.TipoMantenimiento}</td>
+          <td>${maintenanceItem.Observacion}</td>
+          <td>${maintenanceItem.Descripcion}</td>
+          <td class="text-center">${maintenanceItem.Cantidad}</td>
+          <td>${maintenanceItem.UnidadMedida}</td>
+          <td>${maintenanceItem.Estado}</td>
+          <td class="actions">
+                  <button class="btn btn-outline-success btn-sm text-center"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Estado: Completado"
+                    onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
+                    ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
+                    <i class="bi bi-check"></i>
+                  </button>
+                  <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
           { foundActivity })},${JSON.stringify(maintenanceItem)})' ><i class="bi bi-pencil"></i></button>
-      `;
+        `;
         fragment.appendChild(row);
       });
 
@@ -137,6 +143,37 @@
     });
   }
 
+  // Función para obtener todos los mantenimientos
+  async function getMaintenance() {
+    try {
+      const Api_Url = "http://localhost:18026/";
+      const token = localStorage.getItem("token");
+
+      // Obtener datos de mantenimiento
+      const mantenimientoResponse = await axios.get(`${Api_Url}api/mantenimiento`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      mantenimientoData = mantenimientoResponse.data.mantenimientos || [];
+
+      // Obtener datos de actividades de mantenimiento
+      const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
+
+      // Obtener todas las actividades
+      const actividadesTodo = await axios.get(`${Api_Url}api/actividad`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      actividadesTodoData = actividadesTodo.data.actividades || [];
+
+      setupFilterEvents();
+      setupDataTable();
+    } catch (error) {
+      handleMaintenanceError(error);
+    }
+  }
+
   // Función para configurar eventos de cambio en filtros
   function setupFilterEvents() {
     // Captura el evento de cambio en el campo de fecha
@@ -157,14 +194,16 @@
 
     const selectedUnit = $('#unidadFiltro').val();
 
-    const filteredMaintenance = mantenimientoData.filter(maintenance => {
-      const formattedDate = formatDate(maintenance.FechaMantenimiento);
-      console.log("Fecha de la base", formattedDate);
-      const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
-      console.log("La fecha hace match?", matchDate);
-      const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
-      return matchDate && matchUnit;
-    });
+    const filteredMaintenance = selectedUnit === 'last20'
+      ? last20Maintenance
+      : mantenimientoData.filter(maintenance => {
+        const formattedDate = formatDate(maintenance.FechaMantenimiento);
+        console.log("Fecha de la base", formattedDate);
+        const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
+        console.log("La fecha hace match?", matchDate);
+        const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
+        return matchDate && matchUnit;
+      });
 
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
   }
@@ -193,22 +232,22 @@
   function ocultarSpinner() {
     document.getElementById("spinnerContainer").style.display = "none";
   }
- 
+
 
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
   $(document).on("click", "#btnCloseTask", async function () {
     actividadesLista = [];
     $("#maintenanceModal").modal("show");
-    actividadesLista = await  getActiv();
-    console.log("funcion btn close",actividadesLista);
+    actividadesLista = await getActiv();
+    console.log("funcion btn close", actividadesLista);
     activitySelect(actividadesLista);
 
-    
+
 
   });
 
- 
+
 
 
   //Mostar Actividades/Mantenimiento
@@ -223,7 +262,7 @@
         },
       });
       const listAct = response;
-      console.log("Lista Actividades",listAct);
+      console.log("Lista Actividades", listAct);
 
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -396,7 +435,7 @@
         document.querySelector("#tipoUnidad").value = obTipoUnidad;
         hideLoaderModalMant();
       });
-      
+
     });
 
   //Obtener nombre de Tipo unidadd
@@ -483,7 +522,7 @@
   // Manejar el envío del formulario
   document
     .getElementById("saveMaintenance")
-    .addEventListener("click", async function () {     
+    .addEventListener("click", async function () {
       showLoaderModalMant()
       const idChofer = document.querySelector("#IdChoferHidden").value.trim();
       const idUnidad = document.querySelector("#unidadSelect").value.trim();
@@ -512,7 +551,7 @@
         showToast('', 'Por favor completa todos los campos obligatorios.');
         showLoaderModalMant();
         return;
-        
+
       }
 
 
@@ -526,7 +565,7 @@
         Observacion: observacion,
         actividades: actividades
       };
-   
+
 
       try {
         const token = localStorage.getItem("token");
@@ -538,7 +577,7 @@
         });
 
         if (response) {
-          if (mantenimiento.TipoMantenimiento === 'Programado'){
+          if (mantenimiento.TipoMantenimiento === 'Programado') {
             await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
           }
           showToast("Exito", "Mantenimiento Creado.");
@@ -553,7 +592,7 @@
           }
           hideLoaderModalMant();
           loadContent("dataTableMaintenance.html", "mainContent");
-          
+
 
         }
 
@@ -575,15 +614,15 @@
   //Editar Mantenimiento
   window.EditarMant = async function (activ, maintenanceItem) {
     showLoaderModalMantEdit();
- 
+
     console.log("Actividades a editar:", activ);
     console.log("foundActivity a editar:", activ.foundActivity);
     console.log("Mantenimiento a editar:", maintenanceItem);
     try {
-     
+
       // Mostrar el modal de mantenimiento
       $("#maintenanceModalEdit").modal("show");
-     
+
 
       // Pasar la lista de actividades correcta a activitySelect
       activitySelect(actividadesTodoData);
@@ -592,7 +631,7 @@
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
         try {
-          
+
           const valorSelectAct = document.querySelector('#actividadEdit').value;
 
           // Obtener el select de unidades
@@ -782,7 +821,8 @@
     try {
       const unidades = await getUnidades(); // Utiliza la función existente para obtener unidades
       const unidadFiltroSelect = document.getElementById("unidadFiltro");
-      unidadFiltroSelect.innerHTML = '<option value="All">Todas las Unidades</option>';
+      unidadFiltroSelect.innerHTML = '<option value="last20">Últimas 20 Unidades</option>';
+      unidadFiltroSelect.innerHTML += '<option value="All">Todas las Unidades</option>';
 
       unidades.forEach((unidad) => {
         const option = document.createElement("option");
@@ -790,6 +830,9 @@
         option.textContent = unidad.numeroUnidad;
         unidadFiltroSelect.appendChild(option);
       });
+
+      // Establecer "Últimas 20 Unidades" como la opción por defecto
+      unidadFiltroSelect.value = "last20";
     } catch (error) {
       console.error("Error al obtener las unidades:", error);
       showToast("Ups!", "Hubo un problema al obtener las unidades");
@@ -947,7 +990,7 @@
         },
       });
       console.log(response.data);
-      
+
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
 
@@ -1098,29 +1141,29 @@
   }
 
   actividadesLista = await getActiv();
- 
+
   function showLoaderModalAct() {
     document.querySelector('#loaderModalAct').style.display = 'flex';
-}
+  }
 
-function hideLoaderModalAct() {
+  function hideLoaderModalAct() {
     document.querySelector('#loaderModalAct').style.display = 'none';
-}
+  }
 
-function showLoaderModalMant() {
-  document.querySelector('#loaderModalMant').style.display = 'flex';
-}
+  function showLoaderModalMant() {
+    document.querySelector('#loaderModalMant').style.display = 'flex';
+  }
 
-function hideLoaderModalMant() {
-  document.querySelector('#loaderModalMant').style.display = 'none';
-}
-function showLoaderModalMantEdit() {
-  document.querySelector('#loaderModalMantEdit').style.display = 'flex';
-}
+  function hideLoaderModalMant() {
+    document.querySelector('#loaderModalMant').style.display = 'none';
+  }
+  function showLoaderModalMantEdit() {
+    document.querySelector('#loaderModalMantEdit').style.display = 'flex';
+  }
 
-function hideLoaderModalMantEdit() {
-  document.querySelector('#loaderModalMantEdit').style.display = 'none';
-}
+  function hideLoaderModalMantEdit() {
+    document.querySelector('#loaderModalMantEdit').style.display = 'none';
+  }
 
 
 
