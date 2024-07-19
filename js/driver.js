@@ -152,16 +152,12 @@ async function getChofer(cedula) {
             document.getElementById('btnGuardar').disabled = true;
             document.getElementById('btnActualizar').disabled = false;
             return true;
-
-
-
         } else {
             setTimeout(() => {
-            showToast('Error', 'No se encuentra ningun chofer registrado con la cédula ingresada.');
-            document.getElementById('btnGuardar').disabled = false;
-            document.getElementById('btnActualizar').disabled = true;
-            }
-            , 0);
+                showToast('Error', 'No se encuentra ningún chofer registrado con la cédula ingresada.');
+                document.getElementById('btnGuardar').disabled = false;
+                document.getElementById('btnActualizar').disabled = true;
+            }, 0);
             return false;
         }
     } catch (error) {
@@ -257,3 +253,14 @@ function limpiarCampos() {
     document.getElementById('apellido2CE2').value = '';
     document.getElementById('contactoEmergencia2').value = '';
 }
+
+
+
+// FUNCION PARA APLICAR MASCARA DE CEDULA EN EL FORMATO 0-0000-0000 SOLO PARA MOSTRAR
+
+document.getElementById('cedula').addEventListener('input', function (event) {
+    let cedula = this.value;
+    cedula = cedula.replace(/\D/g, '');
+    cedula = cedula.replace(/^(\d{1})(\d{4})(\d{4})/, '$1-$2-$3');
+    this.value = cedula;
+});
