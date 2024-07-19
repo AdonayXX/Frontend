@@ -1088,6 +1088,7 @@
     const adelanto = parseInt(unidadEncontrada.adelanto);
     const idEstado = parseInt(unidadEncontrada.idEstado);
     const valorFrecuenciaC = parseInt(unidadEncontrada.valorFrecuenciaC);
+    const usuario = parseInt(unidadEncontrada.usuario);
 
     return {
       idTipoUnidad,
@@ -1105,7 +1106,8 @@
       kilometrajeActual,
       adelanto,
       idEstado,
-      valorFrecuenciaC
+      valorFrecuenciaC,
+      usuario
     };
   }
 
