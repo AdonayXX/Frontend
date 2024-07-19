@@ -26,6 +26,7 @@ async function loadCitas() {
             caseInsensitive: true,
             smart: true
         });
+
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
             let selectedState = $('#seleccionar-estado').val().toLowerCase();
