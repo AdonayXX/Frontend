@@ -202,7 +202,7 @@ async function mostrarUnidadesPorDekra() {
 
             unidadesPorVencer.forEach(unidad => {
                 const unidadElement = document.createElement('div');
-                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-4', 'shadow');
+                unidadElement.classList.add('card', 'border-dark', 'mb-3', 'm-2', 'shadow');
                 unidadElement.style.maxWidth = '18rem';
                 unidadElement.innerHTML = `
                     <div class="headerunidad card-header text-center text-white" style="background-color: #097F4A;">
