@@ -71,31 +71,33 @@
                             onclick="loadContent('tableTrips.html', 'mainContent')"><i class="bi bi-map"
                                 style="font-size: 1.5rem;"></i> Viajes</a>
                         <a id="2" class="items hidden" href="#"
-                            onclick="loadContent('formdriver.html', 'mainContent')"><i class="bi bi-person-plus"
+                            onclick="loadContent('formDriver.html', 'mainContent')"><i class="bi bi-person-plus"
                                 style="font-size: 1.5rem;"></i> Choferes</a>
-                        <a id="4" class="items hidden" href="#" onclick="loadContent('formUnits.html', 'mainContent')"><i
-                                class="bi bi-truck-front" style="font-size: 1.5rem;"></i> Unidades</a>
+                        <a id="4" class="items hidden" href="#"
+                            onclick="loadContent('formUnits.html', 'mainContent')"><i class="bi bi-truck-front"
+                                style="font-size: 1.5rem;"></i> Unidades</a>
                         <a id="1" class="items hidden" href="#"
                             onclick="loadContent('formPatient.html', 'mainContent')"><i class="bi bi-person-add"
                                 style="font-size: 1.5rem;"></i> Pacientes</a>
                         <a id="19" class="items hidden" href="#"
                             onclick="loadContent('formFuel.html', 'mainContent')"><i class="bi bi-fuel-pump"></i>
                             Combustible</a>
-                        <a id="5" class="items hidden" href="#" onclick="loadContent('formUbi.html', 'mainContent')"><i
-                                class="bi bi-geo-alt" style="font-size: 1.5rem;"></i> Ubicaciones</a>
                         <a id="13" class="items hidden" href="#"
                             onclick="loadContent('tableDriverTrips.html', 'mainContent')"><i class="bi bi-pin-map"
                                 style="font-size: 1.5rem;"></i> Viajes-Chofer</a>
                         <a class="items hidden" id="20" href="#"
                             onclick="loadContent('tableDriverVales.html', 'mainContent')"><i class="bi bi-pin-map-fill"
                                 style="font-size: 1.5rem;"></i> Viajes Vales-Chofer</a>
+                        <a id="5" class="items hidden" href="#" onclick="loadContent('formUbi.html', 'mainContent')"><i
+                                class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i>
+                            Asignación-Especialidades</a>
                     </div>
 
                     <hr class="d-none d-sm-block" style="color: white; margin-top: 20px;">
 
                     <div class="col-6 col-sm-6 col-md-s col-lg-12">
-                        <a id="10" class="items hidden" href="#"><i class="bi bi-file-earmark-text"
-                                style="font-size: 1.5rem;"></i> Reportes</a>
+                        <a id="10" class="items hidden" href="#" onclick="loadContent('reports.html', 'mainContent')"><i
+                                class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i> Reportes</a>
                         <a id="12" class="items hidden" href="#"><i class="bi bi-view-stacked"
                                 style="font-size: 1.5rem;"></i> Dashboard</a>
                         <a id="11" class="items hidden" href="#"
@@ -105,7 +107,7 @@
                             onclick="loadContent('AppointmentsMade.html', 'mainContent')">
                             <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Citas</a>
                         <a id="14" class="items hidden" href="#"
-                            onclick="loadContent('dataTable.html', 'mainContent')"><i class="bi bi-journal-medical"
+                            onclick="loadContent('CompletedTrips.html', 'mainContent')"><i class="bi bi-journal-medical"
                                 style="font-size: 1.5rem;"></i> Catálogo-Viajes</a>
                         <a id="18" class="items hidden" href="#"
                             onclick="loadContent('tableDriver.html', 'mainContent')"><i class="bi bi-journal-medical"
@@ -113,14 +115,17 @@
                         <a id="17" class="items hidden" href="#"
                             onclick="loadContent('tableUnits.html', 'mainContent')"><i class="bi bi-journal-medical"
                                 style="font-size: 1.5rem;"></i> Catálogo-Unidades</a>
-                                
+
                         <a id="6" class="items hidden" href="#"
                             onclick="loadContent('dataTablePatient.html', 'mainContent')"><i
                                 class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Pacientes</a>
                         <a id="21" class="items hidden" href="#"
-                             onclick="loadContent('tableFuel.html', 'mainContent')"><i class="bi bi-journal-medical"
+                            onclick="loadContent('tableFuel.html', 'mainContent')"><i class="bi bi-journal-medical"
                                 style="font-size: 1.5rem;"></i> Catalogo-Combustible</a>
-    
+                        <a id="22" class="items hidden" href="#"
+                            onclick="loadContent('especialidades.html', 'mainContent')">
+                            <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i>Catálogo-Especialidades
+                        </a>
                     </div>
                     <hr style="color: white; margin-top: 20px;">
                     <div class="col-12">
@@ -154,6 +159,7 @@
     <div id="modal-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

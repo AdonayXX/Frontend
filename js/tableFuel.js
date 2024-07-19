@@ -21,6 +21,8 @@ async function getFuelRecords() {
             const tableBody = document.getElementById('fuelTableBody');
             tableBody.innerHTML = '';
 
+            registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); // Sort records by date in descending order
+
             registros.forEach(record => {
                 if (record.estado === 'activo') {
                     const row = document.createElement('tr');

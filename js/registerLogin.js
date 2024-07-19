@@ -11,13 +11,17 @@ document.querySelector('#formLogin').addEventListener('submit', function(event){
 async function handleLogin() {
     const userEmail = document.querySelector('#userEmail').value.trim();
     const userPassword = document.getElementById('userPassword').value.trim();
-
     try {
         const token = await loginUser(userEmail, userPassword);
-        saveTokenLS(token);
-        window.location.href = 'index.html'; // Redirigir al usuario
+        if (token){
+            saveTokenLS(token);
+            window.location.href = 'index.html'; 
+        }else{
+            return;
+        }
+      
     } catch (error) {
-        showToast('Error', 'Usuario o Contraseña incorrectos')
+        showToast('Error', 'Inesperado.')
     }
 };
 
@@ -29,7 +33,7 @@ async function loginUser(identificador, Contrasena) {
         });
          return response.data.usuario.token; 
     } catch (error) {
-        showToast('Ups!','Error inesperado.');
+        showToast('Error', 'Usuario o Contraseña incorrectos')
 
     }
 };
@@ -97,16 +101,11 @@ async function saveUser(userData) {
         if (error.response && error.response.status === 400) {
             const errorMessage = error.response.data.error;
             if (errorMessage.includes('Ya existe un usuario con esa identificación')) {
-                showToast('Ups!', 'La identificación del usuario ya existe.');
-            } else if (errorMessage.includes('Ya existe un usuario con ese correo')) {
-                showToast('Ups!', 'El correo del usuario ya existe.');
-            } else {
-                showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
-            }
+                showToast('Ups!', errorMessage);
+            } 
         } else {
             showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
         }
-        showToast('Ups!','Error inesperado.');
     }
 }
 

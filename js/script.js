@@ -104,12 +104,7 @@ function setupAutoLogout(token) {
             const timeUntilExpiration = (expirationTime - currentTime) * 1000;
 
             setTimeout(() => {
-                localStorage.setItem('sessionExpired', 'true');
-
-                alert('Tu sesión ha expirado. Serás redirigido al login.');
-                localStorage.removeItem('token');
-                history.replaceState(null, '', 'login.html');
-                window.location.href = 'login.html';
+                createSessionExpiredModal();
             }, timeUntilExpiration);
         }
     } catch (error) {
@@ -217,5 +212,53 @@ try {
     
 }
 }
+function createSessionExpiredModal() {
+    const modalHTML = `
+    <div class="modal fade" id="sessionExpiredModal" tabindex="-1" aria-labelledby="sessionExpiredModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="a5ModalLabel" style="text-align: center;">Sesión
+                        Expirada</h5>
+                </div>
+                <div class="modal-body">
+                    Tu sesión ha expirado. Serás redirigido en <span id="countdown">5</span> segundos.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="redirectToLogin()">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.querySelector('.main-content').insertAdjacentHTML('beforeend', modalHTML);
+
+    // Mostrar el modal
+    let sessionExpiredModal = new bootstrap.Modal(document.getElementById('sessionExpiredModal'));
+    sessionExpiredModal.show();
+
+    // Iniciar el contador
+    let countdown = 5;
+    const countdownElement = document.getElementById('countdown');
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            redirectToLogin();
+        }
+    }, 1000);
+}
+
+function redirectToLogin() {
+    localStorage.removeItem('token');
+    localStorage.setItem('sessionExpired', 'true');
+    window.location.href = 'login.html';
+    history.replaceState(null, '', 'login.html');
+}
+
+
+
 
 

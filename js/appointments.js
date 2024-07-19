@@ -281,7 +281,13 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             };
 
             try {
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
+                const token = localStorage.getItem('token');
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', 
+                    citaData, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
                 showToast('Cita', 'Cita guardada correctamente.');
                 limpiarCampos();
                 setTimeout(() => {
@@ -303,13 +309,18 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 function getRutas() {
     const selectDestino = document.getElementById('destino');
 
-    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad')
+    const token = localStorage.getItem('token');
+    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad',{
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
             const rutas = response.data;
             rutas.forEach(ruta => {
                 const option = document.createElement('option');
                 option.value = ruta.IdRuta;
-                option.textContent = ruta.DescripcionRuta;
+                option.textContent = ruta.Descripcion;
                 selectDestino.appendChild(option);
             });
         })
@@ -329,7 +340,13 @@ function getEspecialidadesByDestino(IdRuta) {
     defaultOption.textContent = '-- Seleccione una especialidad --';
     selectEspecialidad.appendChild(defaultOption);
 
-    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`)
+    const token = localStorage.getItem('token');
+    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`,{
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+
+    })
         .then(response => {
             const especialidades = response.data;
             especialidades.forEach(especialidad => {

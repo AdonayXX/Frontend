@@ -1,13 +1,31 @@
-<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-    <div style="position: absolute; top: 20px; right: 20px;">
+
+<style>
+    @media (max-width: 576px) {
+    #toast-container {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+    }
+}
+@media (min-width: 577px) {
+    #toast-container {
+        top: 0;
+        right: 20px;
+        left: auto;
+    }
+}
+</style>
+
+</style>
+<div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+    <div id="toast-container" class="position-absolute top-20 right-20">
         <div id="common-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
             <div class="toast-header" style="background-color: #094079;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                 <strong id="common-toast-title" style="color: white;" class="mr-auto"></strong>
-                </button>
             </div>
             <div id="common-toast-body" class="toast-body"></div>
         </div>
     </div>
-    <div id="toast-container"></div>
 </div>

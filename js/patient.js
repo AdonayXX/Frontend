@@ -217,6 +217,7 @@ window.editAccomp = function (button) {
 
 
   document.querySelector("#saveChangesCompanion").addEventListener('click', function () {
+    showLoaderModalComp();
     const companionData = {
       IdPaciente: acompanantes.IdPaciente,
       Nombre: document.getElementById('name').value.trim(),
@@ -224,7 +225,7 @@ window.editAccomp = function (button) {
       Apellido2: document.getElementById('secondlastname').value.trim(),
       Identificacion: document.getElementById('identification').value.trim(),
       Telefono1: document.getElementById('phone1').value.trim(),
-      Telefono2: document.getElementById('phone2').value.trim(),
+      Telefono2: document.getElementById('phone2').value.trim() || 0,
       Parentesco: document.getElementById('parentesco').value.trim()
     };
 
@@ -245,6 +246,7 @@ window.editAccomp = function (button) {
       modalAcomp.hide();
       document.querySelector('#formEditComp').reset();
       showToast('Acompañante', 'Se han guardado los cambios')
+      hideLoaderModalComp();
       setTimeout(function () {
         loadContent('dataTablePatient.html', 'mainContent');
       }, 1000);
@@ -256,6 +258,7 @@ window.editAccomp = function (button) {
         showToast('Ups!', ' Error inesperado.');
 
       }
+      hideLoaderModalComp();
     }
 
 
@@ -284,10 +287,9 @@ window.patientEdit = function (button) {
   const IdPersona = pacientes.IdPersona;
 
   document.querySelector('#formEditPatient').addEventListener('submit', function (event) {
-    event.preventDefault();
-    sendEditPatient(IdPersona);
-
-
+      event.preventDefault();
+      showLoaderModalPatEdit();
+      sendEditPatient(IdPersona);
   });
   async function editPatientPerson(personaData, pacienteData) {
     try {
@@ -319,38 +321,49 @@ window.patientEdit = function (button) {
         showToast('Ups!', ' Error inesperado.');
 
       }
+     
+    }finally{
+      hideLoaderModalPatEdit();
     }
 
   }
   function sendEditPatient(IdPersona) {
+    try {
+      personaData = {
+        Nombre: document.getElementById('nombre').value,
+        Apellido1: document.getElementById('primerApellido').value,
+        Apellido2: document.getElementById('segundoApellido').value,
+        Identificacion: document.getElementById('identificacion').value,
+        Tipo_identificacion: document.getElementById('tipoIdentificacion').value,
+        Genero: document.getElementById('genero').value,
+        Telefono1: document.getElementById('telefono1').value,
+        Telefono2: document.getElementById('telefono2').value || 0,
+        Tipo_seguro:"N/A",
+        Direccion: document.getElementById('direccion').value,
+        Latitud: document.getElementById('latitud').value || 0,
+        Longitud: document.getElementById('longitud').value || 0,
+        Tipo_sangre: document.getElementById('tipoSangre').value
+      };
+  
+      pacienteData = {
+        IdPersona: IdPersona,
+        Criticidad: "N/A",
+        Encamado: document.getElementById('encamado').value,
+        Traslado: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
+        Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
+        LugarSalida: document.querySelector('#lugarSalida').value,
+        Estado: "Activo"
+      };
+  
+      editPatientPerson(personaData, pacienteData);
+  
+      
+    } catch (error) {
+      hideLoaderModalPatEdit();
+      
+    }
 
-    personaData = {
-      Nombre: document.getElementById('nombre').value,
-      Apellido1: document.getElementById('primerApellido').value,
-      Apellido2: document.getElementById('segundoApellido').value,
-      Identificacion: document.getElementById('identificacion').value,
-      Tipo_identificacion: document.getElementById('tipoIdentificacion').value,
-      Genero: document.getElementById('genero').value,
-      Telefono1: document.getElementById('telefono1').value,
-      Telefono2: document.getElementById('telefono2').value || 0,
-      Tipo_seguro:"N/A",
-      Direccion: document.getElementById('direccion').value,
-      Latitud: document.getElementById('latitud').value || 0,
-      Longitud: document.getElementById('longitud').value || 0,
-      Tipo_sangre: document.getElementById('tipoSangre').value
-    };
-
-    pacienteData = {
-      IdPersona: IdPersona,
-      Criticidad: "N/A",
-      Encamado: document.getElementById('encamado').value,
-      Traslado: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
-      Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
-      Estado: "Activo"
-    };
-
-    editPatientPerson(personaData, pacienteData);
-
+  
 
   }
   function llenarcampos(pacientes) {
@@ -367,7 +380,7 @@ window.patientEdit = function (button) {
     document.querySelector('#latitud').value = pacientes.Latitud || '';
     document.querySelector('#longitud').value = pacientes.Longitud || '';
     document.querySelector('#direccion').value = pacientes.Direccion || '';
-
+    document.querySelector('#lugarSalida').value = pacientes.LugarSalida ||'';
    document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
    document.querySelector('#trasladable').checked = pacientes.Traslado || '';
     document.querySelector('#encamado').value = pacientes.Encamado || '';
@@ -455,6 +468,7 @@ window.companionAdd = function (idPatient) {
   document.getElementById('phone2').value = "";
   document.getElementById('parentesco').value = "";
   document.querySelector("#saveCompanient").addEventListener('click', function () {
+    showLoaderModalComp();
 
     addCompanion(idPatient);
 
@@ -478,8 +492,10 @@ function addCompanion(idPacienteCapturado) {
 
   if (!acompananteNombre || !acompananteApellido1 || !acompananteApellido2 || !acompananteIdentificacion ||
     !acompananteTelefono1 || !acompananteParentesco) {
-    alert("Por favor, llene los campos solicitados");
+    showToast('Por favor', 'llene los campos solicitados');
+    hideLoaderModalComp();
     return;
+   
 
 
   }
@@ -520,6 +536,7 @@ async function agregarAcompanante(companionData) {
        const newModalInstance = new bootstrap.Modal(modalElement);
        newModalInstance.hide();
      }
+     hideLoaderModalComp();
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
     }, 1000);
@@ -532,6 +549,8 @@ async function agregarAcompanante(companionData) {
       showToast('Ups!', ' Error inesperado.');
 
     }
+    hideLoaderModalComp();
+   
   }
 }
 document.querySelector('#telefono1').addEventListener('input', function (e) {
@@ -747,4 +766,18 @@ function mostrarSpinner() {
 function ocultarSpinner() {
   document.getElementById('spinnerContainer').style.display = 'none';
 }
+function showLoaderModalPatEdit() {
+  document.querySelector('#loaderModalPatEdit').style.display = 'flex';
+}
 
+function hideLoaderModalPatEdit() {
+  document.querySelector('#loaderModalPatEdit').style.display = 'none';
+}
+
+function showLoaderModalComp() {
+  document.querySelector('#loaderModalComp').style.display = 'flex';
+}
+
+function hideLoaderModalComp() {
+  document.querySelector('#loaderModalComp').style.display = 'none';
+}

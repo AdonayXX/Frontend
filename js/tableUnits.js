@@ -70,6 +70,9 @@ async function getUnidades() {
         const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
         const unidades = response.data.unidades;
 
+        // Sort the unidades array by numeroUnidad in alphabetical order
+        unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
+
         $(document).ready(function () {
             if ($.fn.DataTable.isDataTable('#unitTable')) {
                 $('#unitTable').DataTable().destroy();

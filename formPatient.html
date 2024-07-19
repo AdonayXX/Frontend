@@ -29,7 +29,7 @@
                         <label for="identificacion" class="form-label"><i class="bi bi-card-text"></i>
                             Identificación:</label>
                         <input required type="text" id="identificacion" name="identificacion" class="form-control"
-                            maxlength="20">
+                            maxlength="20" inputmode="numeric">
                     </div>
                     <!-- Genero -->
                     <div class="col-md-4 mb-3">
@@ -67,14 +67,15 @@
                     <!-- Telefono1 -->
                     <div class="col-md-4 mb-3">
                         <label for="telefono1" class="form-label"><i class="bi bi-telephone"></i> Teléfono 1:</label>
-                        <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="8">
+                        <input type="text" id="telefono1" name="telefono1" class="form-control" required maxlength="8"
+                            inputmode="numeric">
                         <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number">
                     </div>
                     <!-- Telefono2 -->
                     <div class="col-md-4 mb-3">
                         <label for="telefono2" class="form-label"><i class="bi bi-telephone"></i> Teléfono 2:</label>
                         <input type="text" id="telefono2" name="telefono2" class="form-control" placeholder="Opcional"
-                            maxlength="8">
+                            maxlength="8" inputmode="numeric">
                         <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number">
                     </div>
                     <!-- <button onclick="printHiddenValues()">Imprimir Valores Ocultos</button> -->
