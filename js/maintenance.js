@@ -37,6 +37,13 @@
       actividadesTodoData = actividadesTodo.data.actividades || [];
       console.log("Todas las actividades:", actividadesTodoData);
 
+      // Destruir la instancia existente de DataTables
+      if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+        $("#tableMaintenance").DataTable().destroy();
+      }
+
+      // Vaciar el cuerpo de la tabla
+      $("#maintenance-body").empty();
       // Llenar la tabla de mantenimientos con los últimos 20
       fillMaintenanceTable(last20Maintenance, actividadesData, actividadesTodoData);
 
@@ -118,15 +125,18 @@
       console.error("Error al llenar la tabla de mantenimientos:", error);
     }
   }
-  console.log("Actividades:", actividadesData);
-  console.log("Mantenimientos", mantenimientoData);
 
-  // Función para configurar DataTables
+
   function setupDataTable() {
+    // Verificar si DataTables ya está inicializado
     if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+      // Destruir la instancia existente
       $("#tableMaintenance").DataTable().destroy();
+      // Vaciar el contenido de la tabla para evitar problemas de re-inicialización
+      $("#tableMaintenance").empty();
     }
 
+    // Inicializar DataTables
     $("#tableMaintenance").DataTable({
       dom:
         "<'row'<'col-md-6'l>" +
@@ -142,6 +152,8 @@
       smart: true,
     });
   }
+
+
 
   // Función para obtener todos los mantenimientos
   async function getMaintenance() {
@@ -168,7 +180,6 @@
       actividadesTodoData = actividadesTodo.data.actividades || [];
 
       setupFilterEvents();
-      setupDataTable();
     } catch (error) {
       handleMaintenanceError(error);
     }
@@ -205,7 +216,15 @@
         return matchDate && matchUnit;
       });
 
+    // Destruir la instancia existente de DataTables
+    if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
+      $("#tableMaintenance").DataTable().destroy();
+    }
+
+    // Vaciar el cuerpo de la tabla
+    $("#maintenance-body").empty();
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
+    setupDataTable();
   }
 
   // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
@@ -549,7 +568,8 @@
       // Verificar si todos los valores necesarios existen y no están vacíos
       if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
         showToast('', 'Por favor completa todos los campos obligatorios.');
-        showLoaderModalMant();
+        console.log(idChofer, idUnidad, fechaMantenimiento, kilometraje, tipoMantenimiento);
+        // showLoaderModalMant();
         return;
 
       }
@@ -1084,8 +1104,14 @@
   async function actualizarUnidad(numeroUnidad, unidadData) {
     console.log('Datos a enviar para actualizar:', numeroUnidad, unidadData);
     try {
+      const token = localStorage.getItem("token"); // Obtén el token desde el almacenamiento local
+
       // Hacer la petición PUT para actualizar la unidad
-      const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData);
+      const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la petición
+        }
+      });
       console.log(response);
 
       // Verificar la respuesta del servidor

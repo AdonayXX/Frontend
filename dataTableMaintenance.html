@@ -10,7 +10,7 @@
     <div id="spinnerContainer">
         <div class="loader"></div>
     </div>
-    
+
 
     <!-- Contenedor -->
     <div class="fade-in">
@@ -25,7 +25,8 @@
                 <span class="input-group-text" id="lupa">
                     <i class="bi bi-search"></i>
                 </span>
-                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar..."  aria-describedby="basic-addon1">
+                <input type="text" class="form-control" id="searchMaintenance" placeholder="Buscar..."
+                    aria-describedby="basic-addon1">
             </div>
         </div>
         <div class="row">
@@ -63,17 +64,17 @@
             <table class="table table-light table-striped table-hover table-bordered text-center" id="tableMaintenance">
                 <thead class="text-center">
                     <tr>
-                        <th class="text-center">#</th>
-                        <th class="text-center">Unidad</th>
-                        <th class="text-center">Tipo de unidad</th>
-                        <th class="text-center">Fecha del mantenimiento</th>
-                        <th class="text-center">Tipo Mantenimiento</th>
-                        <th class="text-center">Observaciones</th>
-                        <th class="text-center">Actividad</th>
-                        <th class="text-center">Cantidad</th>
-                        <th class="text-center">Unidad de medida</th>
-                        <th class="text-center">Estado</th>
-                        <th class="text-center">Acciones</th>
+                        <th>#</th>
+                        <th>Unidad</th>
+                        <th>Tipo Unidad</th>
+                        <th>Fecha Mantenimiento</th>
+                        <th>Tipo Mantenimiento</th>
+                        <th>Observación</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Unidad Medida</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
 
                     </tr>
                 </thead>
@@ -85,6 +86,9 @@
                         <td>Cambio de aceite</td>
                         <td>1</td>
                         <td>Litros</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td class="status-cell">Finalizada</td>
                         <td class="actions">
                             <button class="btn btn-outline-success btn-sm text-center" data-toggle="tooltip"
@@ -136,18 +140,17 @@
                         <div class="loader"></div>
                     </div>
                     <div class="container fade-in" style="max-width: 1100px;">
-                     
-                        <form id="formMaintenance" name="formMaintenanceEdit"
-                            class="bg-light p-4 border rounded-3">
+
+                        <form id="formMaintenance" name="formMaintenanceEdit" class="bg-light p-4 border rounded-3">
                             <div class="form-section">
                                 <div class="row">
                                     <!-- Unidad -->
                                     <div class="col-md-4 mb-3">
                                         <label for="unidad" class="form-label"><i class="bi bi-hash"></i>
                                             Unidad:</label>
-                                            <input type="text"  class="form-control" readonly id="unidadEdit">
-                                            <input type="hidden"  class="form-control" readonly id="unidadEditHidden">
-                                      <!--   <select required id="unidadSelectEdit" name="unidad" class="form-select" >
+                                        <input type="text" class="form-control" readonly id="unidadEdit">
+                                        <input type="hidden" class="form-control" readonly id="unidadEditHidden">
+                                        <!--   <select required id="unidadSelectEdit" name="unidad" class="form-select" >
                                             <option selected disabled value="">Seleccionar</option>
                                         </select> -->
                                     </div>
@@ -208,29 +211,35 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label for="actividadEdit" class="form-label"><i class="bi bi-list"></i> Actividad:</label>
+                                        <label for="actividadEdit" class="form-label"><i class="bi bi-list"></i>
+                                            Actividad:</label>
                                         <select required id="actividadEdit" name="actividadEdit" class="form-select">
-                                          </select>
-                                      </div>
-                                      <div class="col-md-3">
-                                          <label for="unidadMedidaEdit" class="form-label"><i class="bi bi-archive"></i> Unidad:</label>
-                                           <select required id="unidadMedidaEdit" name="unidadMedidaEdit" class="form-select" readonly>    
-                                          </select>
-                                      </div>
-                                      <div class="col-md-2">
-                                          <label for="cantidadEdit" class="form-label"><i class="bi bi-box"></i> Cantidad:</label>
-                                          <input required type="number" id="cantidadEdit" name="cantidadEdit" class="form-control">
-                                      </div>
-                                      <div class="col-md-3">
-                                          <label for="estadoEdit" class="form-label"><i class="bi bi-shield"></i> Estado:</label>
-                                          <select required id="estadoEdit" name="estadoEdit" class="form-select">
-                                              <option selected disabled value="">Seleccionar</option>
-                                              <option value="Completado">Completado</option>
-                                              <option value="Pendiente">Pendiente</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                                  <hr>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="unidadMedidaEdit" class="form-label"><i class="bi bi-archive"></i>
+                                            Unidad:</label>
+                                        <select required id="unidadMedidaEdit" name="unidadMedidaEdit"
+                                            class="form-select" readonly>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="cantidadEdit" class="form-label"><i class="bi bi-box"></i>
+                                            Cantidad:</label>
+                                        <input required type="number" id="cantidadEdit" name="cantidadEdit"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="estadoEdit" class="form-label"><i class="bi bi-shield"></i>
+                                            Estado:</label>
+                                        <select required id="estadoEdit" name="estadoEdit" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <option value="Completado">Completado</option>
+                                            <option value="Pendiente">Pendiente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="row justify-content-end">
                                     <!-- Botón Guardar Mantenimiento -->
                                     <div class="col-md-4 mb-3">
@@ -271,11 +280,11 @@
                             <div class="col-md-4 mb-3">
                                 <label for="unidadMedida" class="form-label"><i class="bi bi-rulers"></i> Unidad de
                                     medida:</label>
-                                    <select required id="unidadMedida" name="unidadMedida" class="form-select">
-                                        <option selected disabled value="">Seleccionar</option>
-                                        <option value="Unidades">Unidades</option>
-                                        <option value="Litros">Litros</option>
-                                    </select>
+                                <select required id="unidadMedida" name="unidadMedida" class="form-select">
+                                    <option selected disabled value="">Seleccionar</option>
+                                    <option value="Unidades">Unidades</option>
+                                    <option value="Litros">Litros</option>
+                                </select>
                             </div>
                             <!-- Botón para guardar nueva tarea -->
                             <div class="col-md-3 mb-3 align-self-md-end">
@@ -285,13 +294,13 @@
                     </form>
                     <hr>
 
-                   
-                
+
+
                     <div class="table-responsive mt-3">
                         <div class="loader-overlay" id="loaderModalAct">
                             <div class="loader"></div>
                         </div>
-                        
+
                         <table class="table table-light table-striped table-hover table-bordered " id="tableActividad">
                             <thead class="text-center">
                                 <tr>
@@ -300,7 +309,7 @@
                                     <th class="text-center">Unidad de medida</th>
                                     <th class="text-center">Acciones</th>
 
-                                    
+
                                 </tr>
                             </thead>
                             <tbody id="activity-body">
@@ -328,8 +337,8 @@
                         </table>
                     </div>
                 </div>
-                 <!-- Tabla de tareas -->
-                 
+                <!-- Tabla de tareas -->
+
             </div>
         </div>
     </div>
@@ -351,7 +360,7 @@
                         <div class="loader"></div>
                     </div>
                     <div class="container fade-in" style="max-width: 1100px;">
-                       
+
                         <form id="formMaintenance" name="formMaintenance" class="bg-light p-4 border rounded-3">
                             <div class="form-section">
                                 <div class="row">
