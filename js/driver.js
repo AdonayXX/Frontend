@@ -295,4 +295,3 @@ function limpiarCampos() {
     document.getElementById('apellido2CE2').value = '';
     document.getElementById('contactoEmergencia2').value = '';
 }
-

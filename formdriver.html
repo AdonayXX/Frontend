@@ -5,21 +5,19 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="cedula" class="form-label"><i class="bi bi-card-text"></i> Identificación</label>
-                    <input  inputmode="numeric" type="text" class="form-control" id="cedula" name="cedula">
-                    <input type="text" class="form-control" id="cedula" name="cedula" maxlength="9">
-
+                    <input type="text" class="form-control" id="cedula" name="cedula" maxlength="20">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" maxlength="25">
+                    <input type="text" class="form-control" id="nombre" name="nombre" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="apellido1" class="form-label"><i class="bi bi-person"></i> Primer Apellido</label>
-                    <input type="text" class="form-control" id="apellido1" name="apellido1" maxlength="25">
+                    <input type="text" class="form-control" id="apellido1" name="apellido1" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                 </div>
             </div>
         </div>
@@ -27,7 +25,7 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="apellido2" class="form-label"><i class="bi bi-person"></i> Segundo Apellido</label>
-                    <input type="text" class="form-control" id="apellido2" name="apellido2" maxlength="25">
+                    <input type="text" class="form-control" id="apellido2" name="apellido2" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                 </div>
             </div>
             <div class="col-md-4">
@@ -92,13 +90,13 @@
                     <label for="1acompananteNombre" class="form-label mt-1 mb-3">Contacto 1:</label>
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="acompananteNombreN1" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25">
+                            <input type="text" id="acompananteNombreN1" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido1CE1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25">
+                            <input type="text" id="apellido1CE1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido2CE1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25">
+                            <input type="text" id="apellido2CE1" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
                             <input type="text" id="contactoEmergencia" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1" maxlength="9" inputmode="numeric">
@@ -112,13 +110,13 @@
                     <label for="1acompananteNombre" class="form-label mt-1 mb-3">Contacto 2:</label>
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="acompananteNombreN2" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25">
+                            <input type="text" id="acompananteNombreN2" name="acompananteNombre1" class="form-control" placeholder="Nombre" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido1CE2" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25">
+                            <input type="text" id="apellido1CE2" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <input type="text" id="apellido2CE2" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25">
+                            <input type="text" id="apellido2CE2" name="acompananteApellido2_1" class="form-control" placeholder="2° Apellido" maxlength="25" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                         </div>
                         <div class="col-md-3 mb-3">
                             <input type="text" id="contactoEmergencia2" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfono 1" maxlength="9" inputmode="numeric">
@@ -134,5 +132,3 @@
     </form>
 </div>
 <div data-script="js/driver.js"></div>
-</body>
-</html>
