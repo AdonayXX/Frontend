@@ -256,7 +256,7 @@ h1 {
 }
 
 .request-y:hover {
-    background-color: #02a834;
+    background-color:rgb(169, 169, 169);
     color: white;
 }
 .excel{
@@ -358,7 +358,7 @@ tr {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80%;
+    height: 85%;
     margin-top: 46px;
 }
 

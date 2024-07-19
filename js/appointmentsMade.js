@@ -9,19 +9,17 @@ async function loadCitas() {
         }
         $('#TableAppointment').DataTable({
             dom: "<'row'<'col-sm-6'l>" +
-                "<'row'<'col-sm-12't>>" +
-                "<'col-sm-6'p>>",
-            ordering: false,
-            searching: true,
-            paging: true,
-            pagingType: 'simple_numbers',
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-            },
-            caseInsensitive: true,
-            smart: true
-        });
-
+            "<'row'<'col-sm-12't>>" +
+            "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+        ordering: false,
+        searching: true,
+        paging: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        },
+        caseInsensitive: true,
+        smart: true
+    });
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
             let selectedState = $('#seleccionar-estado').val().toLowerCase();

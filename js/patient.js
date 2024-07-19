@@ -130,14 +130,14 @@ function fillPatientComp(listPatientComp) {
 
         row.innerHTML = `
           <tr>
-            <td >${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td >${patient.Tipo_identificacion} </td>
             <td class='text-nowrap'> ${patient.Identificacion}</td>
+            <td >${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td>${patient.Genero}</td>
-           <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
             <td class='text-center'>${telefonoCompleto}</td>
-            <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
             <td>${patient.Direccion}</td>
+            <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
+            <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
             <td class='text-center'>
               ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${ patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
             </td>

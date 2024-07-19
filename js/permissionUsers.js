@@ -1,8 +1,8 @@
+
 getUserPermission();
 //Funcion para obtener los roles y formularios
 async function getUserPermission() {
     try {
-        mostrarSpinner();
         const Api_Url = 'http://localhost:18026/';
         const token = localStorage.getItem('token');
 
@@ -46,9 +46,7 @@ async function getUserPermission() {
             });
 
         });
-        setTimeout(function () {
-            ocultarSpinner();
-          }, 500);
+        
 
 
 
@@ -72,6 +70,7 @@ async function getUserPermission() {
         });
 
     });
+    ocultarSpinner();
     } catch (error) {
         console.error('Error al obtener datos de permisos:', error);
         if (error.response && error.response.status === 400) {
@@ -139,9 +138,7 @@ function getRoleDescription(rol) {
 }
 
 
-function ocultarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'none';
-}
+
 
 function llenarSelectPermisos(forms){
     const itemSelect = document.getElementById('item');

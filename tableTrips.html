@@ -17,24 +17,21 @@
     </div>
   </div>
 
-  <div class="row mb-3">
-    <div class="col-md-4">
+  <div class="row mb-3 justify-content-center text-center">
+    <div class="col-md-3">
       <label for="unidades" class="form-label">Unidades</label>
       <select id="unidades" class="form-select">
         <!-- Se cargan las unidades -->
       </select>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label for="fechaInicio" class="form-label">Fecha Inicio</label>
       <input type="date" id="fechaInicio" class="form-control">
     </div>
-    <div class="col-md-4 mt-auto col-sm-12">
-      <button class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+  
+ 
+    <div class="col-md-3">
       <label for="choferes" class="form-label">Chóferes</label>
       <select id="choferes" class="form-select">
         <option selected>Seleccionar Chófer...</option>
@@ -42,6 +39,13 @@
       </select>
     </div>
   </div>
+
+  <div class="row mb-3 justify-content-center">
+    <div class="col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+        <button class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
+    </div>
+</div>
+
 
 
   <div class="d-flex justify-content-end mb-3">
@@ -63,15 +67,15 @@
     <table class="table table-light table-striped table-hover table-bordered" id="tableTrips">
       <thead>
         <tr>
-          <th class="text-center">Seleccionar</th>
-          <th class="text-center">Paciente</th>
-          <th class="text-center">Lugar Salida</th>
-          <th class="text-center">Lugar Destino</th>
-          <th class="text-center">Condición</th>
-          <th class="text-center">Hora Cita</th>
-          <th class="text-center">Fecha Cita</th>
-          <th class="text-center">Camilla</th>
-          <th class="text-center">Acciones</th>
+          <th class="text-center" id="color-th">Seleccionar</th>
+          <th class="text-center" id="color-th">Paciente</th>
+          <th class="text-center" id="color-th">Lugar Salida</th>
+          <th class="text-center" id="color-th">Lugar Destino</th>
+          <th class="text-center" id="color-th">Condición</th>
+          <th class="text-center" id="color-th">Hora Cita</th>
+          <th class="text-center" id="color-th">Fecha Cita</th>
+          <th class="text-center" id="color-th">Camilla</th>
+          <th class="text-center" id="color-th">Acciones</th>
         </tr>
       </thead>
       <tbody id="viajesTableBody">
