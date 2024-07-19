@@ -12,7 +12,6 @@
             event.preventDefault();
             putUnidad();
         } else if (event.submitter.id === 'delete-unit-button') {
-            showToast('Cargando', 'Eliminando registro de unidad...');
             event.preventDefault();
             deleteUnidad();
         }
@@ -75,6 +74,19 @@
         document.getElementById('delete-unit-button').disabled = true
         document.getElementById('capacityBeds').disabled = false;
     }
+
+    function infoUser() {
+        try {
+            const token = localStorage.getItem('token');
+            const decodedToken = jwt_decode(token);
+            return (decodedToken);
+        } catch (error) {
+            showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+        }
+    }
+
+    const infoUsuario = infoUser();
+    const idUsuario = infoUsuario.usuario.IdUsuario;
 
     async function actualizarCapacidad() {
         const unitTypes = await getTiposUnidad();
@@ -423,6 +435,7 @@
             adelanto: advance,
             idEstado: status,
             valorFrecuenciaC: periodicity,
+            usuario: idUsuario
         };
 
         axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
@@ -509,6 +522,7 @@
             adelanto: advance,
             idEstado: status,
             valorFrecuenciaC: periodicity,
+            usuario: idUsuario
         };
 
         axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
@@ -559,9 +573,11 @@
             adelanto: advance,
             idEstado: 5,
             valorFrecuenciaC: periodicity,
+            usuario: idUsuario
         };
 
         document.getElementById('confirmDelete').onclick = function () {
+            showToast('Cargando', 'Eliminando registro de unidad...');
             axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
                 .then(response => {
                     limpiar();

@@ -48,9 +48,18 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
 
 
-
         if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoSangre || !tipoLicencia || !fechaVencimientoLicencia) {
-            showToast('Error', 'Por favor, complete todos los campos requeridos.');
+            const camposFaltantes = [];
+            if (!cedula) camposFaltantes.push('Cédula');
+            if (!nombre) camposFaltantes.push('Nombre');
+            if (!apellido1) camposFaltantes.push('Primer apellido');
+            if (!apellido2) camposFaltantes.push('Segundo apellido');
+            if (!tipoSangre) camposFaltantes.push('Tipo de sangre');
+            if (!tipoLicencia) camposFaltantes.push('Tipo de licencia');
+            if (!fechaVencimientoLicencia) camposFaltantes.push('Fecha de vencimiento de la licencia');
+            
+            const mensaje = `Por favor, complete los siguientes campos requeridos: ${camposFaltantes.join(', ')}.`;
+            showToast('Aviso', mensaje);
             this.disabled = false;
             return;
         }
@@ -72,7 +81,8 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "nombreCE2": nombreCE2,
             "apellido1CE2": apellido1CE2,
             "apellido2CE2": apellido2CE2,
-            "estadoChofer": estadoChofer
+            "estadoChofer": estadoChofer,
+            "usuario": 1
         };
 
         try {
@@ -93,6 +103,31 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
     await guardarChofer();
 });
+
+document.getElementById('contacto').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 4) {
+        value = value.slice(0, 4) + '-' + value.slice(4);
+    }
+    e.target.value = value;
+});
+
+document.getElementById('contactoEmergencia').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 4) {
+        value = value.slice(0, 4) + '-' + value.slice(4);
+    }
+    e.target.value = value;
+});
+
+document.getElementById('contactoEmergencia2').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 4) {
+        value = value.slice(0, 4) + '-' + value.slice(4);
+    }
+    e.target.value = value;
+});
+
 
 // ---------------------------------GET------------------------------------------------ //
 
@@ -215,8 +250,11 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "nombreCE2": nombreCE2,
         "apellido1CE2": apellido1CE2,
         "apellido2CE2": apellido2CE2,
-        "estadoChofer": estadoChofer
+        "estadoChofer": estadoChofer,
+        "usuario": 1
     };
+
+    console.log(updatedDataChofer);
 
     axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
         headers: {
@@ -258,13 +296,3 @@ function limpiarCampos() {
     document.getElementById('contactoEmergencia2').value = '';
 }
 
-
-
-// FUNCION PARA APLICAR MASCARA DE CEDULA EN EL FORMATO 0-0000-0000 SOLO PARA MOSTRAR
-
-// document.getElementById('cedula').addEventListener('input', function (event) {
-//     let cedula = this.value;
-//     cedula = cedula.replace(/\D/g, '');
-//     cedula = cedula.replace(/^(\d{1})(\d{4})(\d{4})/, '$1-$2-$3');
-//     this.value = cedula;
-// });

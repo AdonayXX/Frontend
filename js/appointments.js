@@ -17,6 +17,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             await getAcompanantes(identificacion);
         }
     } else {
+        loadContent('formAppointment.html', 'mainContent');
         limpiarCampos();
     }
 
@@ -60,6 +61,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         } catch (error) {
             console.error('Error fetching patient data:', error);
             showToast('Error', 'Error al obtener los datos del paciente.');
+            loadContent('formAppointment.html', 'mainContent');
             return false;
         }
     }
@@ -107,6 +109,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         } catch (error) {
             console.error('Error fetching companions data:', error);
             showToast('Error', 'Error al obtener los datos de los acompañantes.');
+
             console.log(acompanantes)
         }
     }
@@ -228,19 +231,20 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const horaCitaInput = document.getElementById('horaCita').value;
             const horaCita = `${horaCitaInput}:00`;
             const idUbicacionDestino = document.getElementById('destino').value;
-
+            const idEspecialidad = document.getElementById('especialidad').value;
             const tipoSeguro = document.getElementById('tipoSeguro').value;
 
-            if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro) {
+            if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro || !idEspecialidad) {
                 const camposFaltantes = [];
                 if (!diagnostico) camposFaltantes.push('Diagnóstico');
                 if (!fechaCita) camposFaltantes.push('Fecha de cita');
                 if (!horaCitaInput) camposFaltantes.push('Hora de cita');
-                if (!idUbicacionDestino) camposFaltantes.push('Ubicación de destino');
+                if (!idUbicacionDestino) camposFaltantes.push('Destino');
                 if (!tipoSeguro) camposFaltantes.push('Tipo de seguro');
+                if(!idEspecialidad) camposFaltantes.push('Especialidad');
 
                 const mensaje = `Por favor, complete los siguientes campos requeridos: ${camposFaltantes.join(', ')}.`;
-                showToast('Error', mensaje);
+                showToast('Aviso', mensaje);
                 document.getElementById('btnGuardar').disabled = false;
                 return;
             }
@@ -251,7 +255,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const idAcompanante1 = acompanante1Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante1Nombre)?.IdAcompanante : null;
             const idAcompanante2 = acompanante2Nombre ? acompanantes.find(acompanante => acompanante.Nombre === acompanante2Nombre)?.IdAcompanante : null;
 
-            const idEspecialidad = document.getElementById('especialidad').value;
             const ubicacionOrigen = document.getElementById('traslado').value;
             const camillaCheckbox = document.getElementById('camilla');
             const prioridadCheckbox = document.getElementById('prelacion');
@@ -346,72 +349,7 @@ document.getElementById('destino').addEventListener('change', function () {
     getEspecialidadesByDestino(IdRuta);
 });
 
-
-function applyIdentificationMask(elementId, mask) {
-    let inputElement = document.getElementById(elementId);
-    if (!inputElement) return;
-
-    let content = '';
-
-    inputElement.addEventListener('input', function () {
-        let maskedValue = maskIt(mask, this.value);
-        this.value = maskedValue;
-
-        if (this.value.replace(/\D/g, '').length > 20) {
-            this.value = this.value.substring(0, this.value.length - 1);
-        }
-    });
-
-    inputElement.addEventListener('keydown', function (e) {
-        if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-            return;
-        }
-
-        e.preventDefault();
-
-        if (!mask) {
-            mask = '';
-        }
-
-        if (isNumeric(e.key) && content.length < mask.length) {
-            content += e.key;
-        }
-
-        if (content.replace(/\D/g, '').length > 20) {
-            content = content.substring(0, content.length - 1);
-        }
-
-        if (e.keyCode == 8) {
-            if (content.length > 0) {
-                content = content.substr(0, content.length - 1);
-            }
-        }
-
-        inputElement.value = maskIt(mask, content);
-    });
-}
-
-function maskIt(pattern, value) {
-    let maskedValue = '';
-    let valueIndex = 0;
-
-    for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
-        if (valueIndex >= value.length) {
-            break;
-        }
-
-        if (pattern[patternIndex] === '0') {
-            maskedValue += value[valueIndex];
-            valueIndex++;
-        } else {
-            maskedValue += pattern[patternIndex];
-        }
-    }
-
-    return maskedValue;
-}
-
-document.getElementById('tipoIdentificacion').addEventListener('change', function () {
+document.getElementById('tipoIdentificacion').addEventListener('change', () => {
     applyMaskBasedOnType();
 });
 
@@ -438,6 +376,96 @@ function applyMaskBasedOnType() {
     applyIdentificationMask('identificacion', mask);
 }
 
+function applyIdentificationMask(elementId, mask) {
+    let inputElement = document.getElementById(elementId);
+    if (!inputElement) return;
+
+    inputElement.addEventListener('input', () => {
+        let rawValue = inputElement.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        let maskedValue = maskIt(mask, rawValue);
+        let cursorPosition = getCursorPosition(rawValue.length, mask);
+
+        inputElement.value = maskedValue;
+        setCursorPosition(inputElement, cursorPosition);
+    });
+
+    inputElement.addEventListener('keydown', (e) => {
+        if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Backspace" || e.key === "Delete") {
+            return;
+        }
+
+        if (!isNumeric(e.key)) {
+            e.preventDefault();
+        }
+    });
+}
+
+function maskIt(pattern, value) {
+    let maskedValue = '';
+    let valueIndex = 0;
+
+    for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
+        if (valueIndex >= value.length) {
+            break;
+        }
+
+        if (pattern[patternIndex] === '0') {
+            maskedValue += value[valueIndex];
+            valueIndex++;
+        } else {
+            maskedValue += pattern[patternIndex];
+        }
+    }
+
+    return maskedValue;
+}
+
 function isNumeric(char) {
     return !isNaN(char - parseInt(char));
 }
+
+function getCursorPosition(rawLength, mask) {
+    let cursorPosition = 0;
+    let numDigits = 0;
+
+    for (let i = 0; i < mask.length; i++) {
+        if (mask[i] === '0') {
+            numDigits++;
+        }
+        if (numDigits >= rawLength) {
+            cursorPosition = i + 1;
+            break;
+        }
+    }
+
+    return cursorPosition;
+}
+
+function setCursorPosition(inputElement, position) {
+    if (inputElement.setSelectionRange) {
+        inputElement.focus();
+        inputElement.setSelectionRange(position, position);
+    } else if (inputElement.createTextRange) {
+        let range = inputElement.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', position);
+        range.moveStart('character', position);
+        range.select();
+    }
+}
+
+applyMaskBasedOnType();
+
+function refreshPageIfIdentificationExists() {
+    const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
+    const identificacion = document.getElementById('identificacion').value;
+
+    // Check if the identification exists and the type has changed
+    if (identificacion && tipoIdentificacion !== 'Cedula de Identidad' || identificacion && tipoIdentificacion !== 'Número de Asegurado' || identificacion && tipoIdentificacion !== 'Interno') {
+        document.getElementById('identificacion').value = '';
+        loadContent('formAppointment.html', 'mainContent');
+    }
+}
+
+
+document.getElementById('tipoIdentificacion').addEventListener('change', refreshPageIfIdentificationExists);
