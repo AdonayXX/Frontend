@@ -281,7 +281,13 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             };
 
             try {
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', citaData);
+                const token = localStorage.getItem('token');
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', 
+                    citaData, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
                 showToast('Cita', 'Cita guardada correctamente.');
                 limpiarCampos();
                 setTimeout(() => {
