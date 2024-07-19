@@ -50,7 +50,6 @@
 
       // Configurar DataTables y eventos de cambio
       setupDataTable();
-      setupFilterEvents();
       ocultarSpinner();
       getUnidadesFiltro();
     } catch (error) {
@@ -65,15 +64,18 @@
     try {
       const tableBody = document.querySelector("#maintenance-body");
       tableBody.innerHTML = "";
-
+      console.log("Cantidad de mantenimientos:", maintenance.length);
       if (maintenance.length === 0) {
         const noDataMessage = document.createElement("tr");
-        noDataMessage.innerHTML = `
-          <td colspan="11" class="text-center">No hay datos disponibles</td>
-        `;
+        noDataMessage.innerHTML =
+          `<td colspan="11" class="text-center">No hay datos disponibles</td>`
+          ;
+        console.log("No hay datos disponibles", maintenance.length);
         tableBody.appendChild(noDataMessage);
         return;
       }
+
+
 
       const fragment = document.createDocumentFragment();
 
@@ -82,6 +84,7 @@
         const relatedActivities = activities.filter(
           (activity) => activity.IdMantenimiento === maintenanceItem.IdMantenimiento
         );
+        console.log("Actividades relacionadas:", relatedActivities);
 
         // Encontrar actividades coincidentes con todas las actividades
         let foundActivity = null;
@@ -91,55 +94,53 @@
           );
           return foundActivity !== undefined;
         });
+        console.log("Actividad encontrada:", foundActivity);
 
         // Crear fila HTML
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${maintenanceItem.IdMantenimiento}</td>
-          <td>${maintenanceItem.numeroUnidad}</td>
-          <td>${maintenanceItem.TipoUnidad}</td>
-          <td>${formatDate(maintenanceItem.FechaMantenimiento)}</td>
-          <td>${maintenanceItem.TipoMantenimiento}</td>
-          <td>${maintenanceItem.Observacion}</td>
-          <td>${maintenanceItem.Descripcion}</td>
-          <td class="text-center">${maintenanceItem.Cantidad}</td>
-          <td>${maintenanceItem.UnidadMedida}</td>
-          <td>${maintenanceItem.Estado}</td>
+          <td>${maintenanceItem.IdMantenimiento || ''}</td>
+          <td>${maintenanceItem.numeroUnidad || ''}</td>
+          <td>${maintenanceItem.TipoUnidad || ''}</td>
+          <td>${formatDate(maintenanceItem.FechaMantenimiento) || ''}</td>
+          <td>${maintenanceItem.TipoMantenimiento || ''}</td>
+          <td>${maintenanceItem.Observacion || ''}</td>
+          <td>${maintenanceItem.Descripcion || ''}</td>
+          <td class="text-center">${maintenanceItem.Cantidad || ''}</td>
+          <td>${maintenanceItem.UnidadMedida || ''}</td>
+          <td>${maintenanceItem.Estado || ''}</td>
           <td class="actions">
-                  <button class="btn btn-outline-success btn-sm text-center"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Estado: Completado"
-                    onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
-                    ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
-                    <i class="bi bi-check"></i>
-                  </button>
-                  <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
+              <button class="btn btn-outline-success btn-sm text-center"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Estado: Completado"
+                onclick='cambioEstCop(${JSON.stringify({ foundActivity })})'
+                ${maintenanceItem.Estado === 'Completado' ? 'disabled' : ''}>
+                <i class="bi bi-check"></i>
+              </button>
+              <button class="btn btn-outline-primary btn-sm" id="btnEditarMaint" onclick='EditarMant(${JSON.stringify(
           { foundActivity })},${JSON.stringify(maintenanceItem)})' ><i class="bi bi-pencil"></i></button>
-        `;
+        </td>`
+          ;
         fragment.appendChild(row);
+        console.log("row:", row);
       });
 
       tableBody.appendChild(fragment);
+      console.log("Fragment:", fragment);
+      console.log("TableBody:", tableBody);
     } catch (error) {
       console.error("Error al llenar la tabla de mantenimientos:", error);
     }
   }
 
 
+
   function setupDataTable() {
-    // Verificar si DataTables ya está inicializado
-    if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
-      // Destruir la instancia existente
-      $("#tableMaintenance").DataTable().destroy();
-      // Vaciar el contenido de la tabla para evitar problemas de re-inicialización
-      $("#tableMaintenance").empty();
-    }
 
     // Inicializar DataTables
     $("#tableMaintenance").DataTable({
-      dom:
-        "<'row'<'col-md-6'l>" +
+      dom: "<'row'<'col-md-6'l>" +
         "<'row'<'col-md-12't>>" +
         "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
       ordering: false,
@@ -151,6 +152,7 @@
       caseInsensitive: true,
       smart: true,
     });
+    console.log("DataTable inicializado");
   }
 
 
@@ -198,9 +200,10 @@
     });
   }
 
+  // Llamada a la función de filtrado
   function filterMaintenance() {
     const selectedDate = $('#fechaMantenimientoFiltro').val();
-    const formattedSelectedDate = formatDateSelected(selectedDate); // Función para formatear la fecha seleccionada
+    const formattedSelectedDate = formatDateSelected(selectedDate);
     console.log("Fecha seleccionada", formattedSelectedDate);
 
     const selectedUnit = $('#unidadFiltro').val();
@@ -209,23 +212,28 @@
       ? last20Maintenance
       : mantenimientoData.filter(maintenance => {
         const formattedDate = formatDate(maintenance.FechaMantenimiento);
-        console.log("Fecha de la base", formattedDate);
         const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
-        console.log("La fecha hace match?", matchDate);
         const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
         return matchDate && matchUnit;
       });
 
-    // Destruir la instancia existente de DataTables
+    // Verificar si DataTables ya está inicializado
     if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
-      $("#tableMaintenance").DataTable().destroy();
+      console.log("DataTable ya está inicializado");
+      // Destruir la instancia existente
+      $("#tableMaintenance").DataTable().clear().destroy();
+      console.log("Instancia de DataTable destruida");
     }
-
-    // Vaciar el cuerpo de la tabla
-    $("#maintenance-body").empty();
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
-    setupDataTable();
+
+    // Solo inicializar DataTables si hay datos disponibles
+    console.log("Mantenimientos filtrados:", filteredMaintenance.length);
+    if (filteredMaintenance.length > 0) {
+      console.log("Inicializando DataTables");
+      setupDataTable();
+    }
   }
+
 
   // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
   function formatDateSelected(selectedDate) {
