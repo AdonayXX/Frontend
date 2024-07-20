@@ -158,12 +158,6 @@
         try {
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
             const registros = response.data.registro;
-
-            if (!registros.length) {
-                showToast('Error', 'No hay registros de combustible para esta unidad.');
-                return;
-            }
-
             const fuelLog = registros.filter(log => log.estado === 'activo');
 
             if (fuelLog.length > 0) {
@@ -294,7 +288,7 @@
         }
 
         const horaActual = new Date().toLocaleTimeString('en-US', { hour12: false });
-        if (hora > horaActual) {
+        if (hora > horaActual && fecha === new Date().toISOString().split('T')[0]) {
             showToast('Error', 'La hora del registro de combustible no puede ser posterior a la hora actual.');
             return;
         }
@@ -357,7 +351,7 @@
         }
 
         const horaActual = new Date().toLocaleTimeString('en-US', { hour12: false });
-        if (hora > horaActual) {
+        if (hora > horaActual && fecha === new Date().toISOString().split('T')[0]) {
             showToast('Error', 'La hora del registro de combustible no puede ser posterior a la hora actual.');
             return;
         }
