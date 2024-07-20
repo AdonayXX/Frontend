@@ -260,7 +260,44 @@
     document.getElementById("spinnerContainer").style.display = "none";
   }
 
+  $(document).ready(function () {
+    $('#tipoMantenimiento').on('change', function () {
+      kilometrajeType();
+    });
+  });
 
+  async function kilometrajeType() {
+    const tipoMantenimientoSelect = document.getElementById('tipoMantenimiento');
+    const kilometrajeInput = document.getElementById('kilometraje');
+    const unidadSelect = document.getElementById('unidadSelect').value;
+    console.log('Unidad seleccionada antes del if:', unidadSelect);
+
+    if (tipoMantenimientoSelect.value === 'Correctivo') {
+      kilometrajeInput.disabled = true;
+      console.log('Unidad seleccionada dentro del if:', unidadSelect);
+      const ultimoKilometraje = await obtenerUltimoKilometraje(unidadSelect);
+      console.log('Último kilometraje dentro del if:', ultimoKilometraje);
+      kilometrajeInput.value = ultimoKilometraje;
+    } else {
+      kilometrajeInput.disabled = false;
+    }
+  }
+
+  async function obtenerUltimoKilometraje(unidad) {
+    try {
+      console.log('Id de la Unidad:', unidad);
+      const unidades = await getUnidades();
+      console.log("Unidades obtenidas:", unidades);
+
+      // Convertir el id de la unidad seleccionada a número
+      const unidadSeleccionada = unidades.find(u => u.id == unidad);
+      console.log("Unidad encontrada por el find:", unidadSeleccionada);
+      return unidadSeleccionada ? unidadSeleccionada.ultimoMantenimientoKilometraje : '';
+    } catch (error) {
+      console.error('Error al obtener el último kilometraje:', error);
+      return '';
+    }
+  }
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
   $(document).on("click", "#btnCloseTask", async function () {
