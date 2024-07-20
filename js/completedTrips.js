@@ -70,17 +70,22 @@ async function loadViajes() {
             table.column(5).search(fechaInput).draw();
         });
 
-        $(document).ready(function () {
-
-            $('#seleccionar-unidad').on('change', function () {
-                let selectedUnit = $(this).val();
+        $('#seleccionar-unidad').on('change', function () {
+            let selectedUnit = $(this).val();
+            if (selectedUnit === 'verTodoUnidad') {
+                table.column(1).search('').draw();
+            } else {
                 table.column(1).search(selectedUnit).draw();
-            });
+            }
+        });
 
-            $('#seleccionar-chofer').on('change', function () {
-                let selectedDriver = $(this).val();
+        $('#seleccionar-chofer').on('change', function () {
+            let selectedDriver = $(this).val();
+            if (selectedDriver === 'verTodoChofer') {
+                table.column(2).search('').draw();
+            } else {
                 table.column(2).search(selectedDriver).draw();
-            });
+            }
         });
 
         ocultarSpinner();
