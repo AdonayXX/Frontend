@@ -12,7 +12,6 @@
             event.preventDefault();
             putRegistroCombustible();
         } else if (event.submitter.id === 'btnEliminar') {
-            showToast('Cargando', 'Eliminando registro de combustible...');
             event.preventDefault();
             deleteRegistroCombustible();
         }
@@ -439,6 +438,7 @@
         };
 
         document.getElementById('confirmDelete').onclick = function () {
+            showToast('Cargando', 'Eliminando registro de combustible...');
             axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
                 .then(response => {
                     limpiar();
