@@ -1,9 +1,12 @@
 (async function () {
   getlastMaintenance();
   getMaintenance();
+  getUnidadesFiltro();
+  setupFilterEvents();
 
 
   // Variables globales para almacenar los datos
+  let last20Maintenance = [];
   let mantenimientoData = [];
   let actividadesData = [];
   let actividadesTodoData = [];
@@ -51,7 +54,6 @@
       // Configurar DataTables y eventos de cambio
       setupDataTable();
       ocultarSpinner();
-      getUnidadesFiltro();
     } catch (error) {
       console.error("Error al obtener los mantenimientos:", error);
 
@@ -181,7 +183,6 @@
       });
       actividadesTodoData = actividadesTodo.data.actividades || [];
 
-      setupFilterEvents();
     } catch (error) {
       handleMaintenanceError(error);
     }
@@ -207,15 +208,26 @@
     console.log("Fecha seleccionada", formattedSelectedDate);
 
     const selectedUnit = $('#unidadFiltro').val();
+    console.log("Unidad seleccionada", selectedUnit);
+    console.log("Últimos 20 mantenimientos:", last20Maintenance);
 
-    const filteredMaintenance = selectedUnit === 'last20'
-      ? last20Maintenance
-      : mantenimientoData.filter(maintenance => {
+    let filteredMaintenance = [];
+
+    if (selectedUnit === 'last20') {
+      // Filtrar últimos 20 mantenimientos por fecha
+      filteredMaintenance = last20Maintenance.filter(maintenance => {
+        const formattedDate = formatDate(maintenance.FechaMantenimiento);
+        return formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
+      });
+    } else {
+      // Filtrar todos los mantenimientos por fecha y unidad
+      filteredMaintenance = mantenimientoData.filter(maintenance => {
         const formattedDate = formatDate(maintenance.FechaMantenimiento);
         const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
         const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
         return matchDate && matchUnit;
       });
+    }
 
     // Verificar si DataTables ya está inicializado
     if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
@@ -224,6 +236,8 @@
       $("#tableMaintenance").DataTable().clear().destroy();
       console.log("Instancia de DataTable destruida");
     }
+
+    // Llenar la tabla con los mantenimientos filtrados
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
 
     // Solo inicializar DataTables si hay datos disponibles
@@ -233,6 +247,7 @@
       setupDataTable();
     }
   }
+
 
 
   // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
