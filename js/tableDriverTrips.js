@@ -1,7 +1,7 @@
 "use strict";
 
 (async function () {
-  const token = localStorage.getItem('token');
+
   async function infoUser() {
     try {
       const token = localStorage.getItem('token');
@@ -15,11 +15,7 @@
   async function obtenerUnidadAsignada(identificacion) {
     const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
     try {
-      const response = await axios.get(API_CHOFERES_CON_UNIDADES, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await axios.get(API_CHOFERES_CON_UNIDADES);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
@@ -29,11 +25,7 @@
   async function obtenerIdUnidad(numeroUnidad) {
     const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
     try {
-      const response = await axios.get(API_UNIDADES, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await axios.get(API_UNIDADES);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
@@ -44,11 +36,7 @@
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
     try {
-      const responseViajes = await axios.get(apiURLViajes, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const responseViajes = await axios.get(apiURLViajes);
       const viajes = responseViajes.data.Data?.Data || [];
 
       if (!Array.isArray(viajes)) {
@@ -71,15 +59,9 @@
   }
 
   async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
-    const infoUsuario = await infoUser();
-    const IdUsuario = infoUsuario?.usuario?.IdUsuario;
     const API_INIT_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/start';
     try {
-      await axios.put(API_INIT_TRIP, { idUnidad, fechaInicioViaje: fechaValue, horaInicioViaje: hourInitTrip, IdUsuarioInicioViaje: IdUsuario }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      await axios.put(API_INIT_TRIP, { idUnidad, fechaInicioViaje: fechaValue, horaInicioViaje: hourInitTrip });
       localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue, hourInitTrip }));
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
       mostrarEstadoViaje();
@@ -91,17 +73,13 @@
   async function finishTrip() {
     const kilometrajeFinal = parseInt(document.getElementById('kilometrajeFinal').value);
     const horasExtras = document.getElementById('horasExtras').value;
-    const viaticos = document.getElementById('viaticos').value;
+    const viaticos = document.getElementById('viaticos').value; 
     const hourFinishTrip = obtenerHoraActual();
     const idUnidad = await obtenerIdUnidad(document.getElementById('unidadAsignada').value);
 
     const API_FINISH_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/end';
     try {
-      await axios.put(API_FINISH_TRIP, { idUnidad, horaFinViaje: hourFinishTrip, kilometrajeFinal, horasExtras, viaticos }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      await axios.put(API_FINISH_TRIP, { idUnidad, horaFinViaje: hourFinishTrip, kilometrajeFinal, horasExtras, viaticos });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
       loadContent('tableDriverTrip.html', 'mainContent');
@@ -152,7 +130,7 @@
       const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
       const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-      tiempoTranscurrido.value = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
+      tiempoTranscurrido.innerText = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
     }
 
     actualizarTiempo();
@@ -240,7 +218,7 @@
     const hasTrip = tableBody.children.length > 0;
     btnInitTripDriver.disabled = !hasTrip;
     btnFinalizarViaje.disabled = !hasTrip;
-
+    
   }
   function polling() {
     setInterval(() => {
@@ -249,6 +227,4 @@
   }
   polling();
   await inicializarPagina();
-  console.log(infoUser());
-
 })();
