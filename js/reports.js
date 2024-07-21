@@ -63,6 +63,24 @@ async function modificarPDF() {
             })
             .reduce((sum, registro) => sum + parseFloat(registro.litrosAproximados), 0);
 
+            //diesel
+        const dieselKilometraje = datosRegistros
+            .filter(registro => {
+                const fecha = new Date(registro.fecha);
+                return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
+            })
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            console.log(dieselKilometraje);
+
+            //GASOLINA
+            const gasolinaKilometraje = datosRegistros
+            .filter(registro => {
+                const fecha = new Date(registro.fecha);
+                return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
+            })
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            console.log(gasolinaKilometraje);
+
         const pacientes = datosCitas.filter(paciente => {
                 const fechaCita = new Date(paciente.fechaCita);
                 return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
@@ -201,7 +219,7 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        firstPage.drawText(`Gasolina`, {
+        firstPage.drawText(`${gasolinaKilometraje}`, {
             x: 284,
             y: height - 393,
             size: 12,
@@ -209,7 +227,7 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
         
-        firstPage.drawText(`Diesel`, {
+        firstPage.drawText(`${dieselKilometraje}`, {
             x: 284,
             y: height - 410,
             size: 12,
