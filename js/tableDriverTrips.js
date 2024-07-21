@@ -4,7 +4,6 @@
   const token = localStorage.getItem('token');
   async function infoUser() {
     try {
-      const token = localStorage.getItem('token');
       return jwt_decode(token);
     } catch (error) {
       console.error(error);
