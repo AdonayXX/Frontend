@@ -137,7 +137,13 @@
 
     async function getChoferesSelect() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const choferes = response.data.choferes;
 
             const assignedDriver = document.getElementById('assignedDriver');
@@ -172,7 +178,13 @@
 
     async function getTiposRecursoSelect() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const tiposRecurso = response.data.tiporecurso;
 
             const resourceType = document.getElementById('resourceType');
@@ -198,7 +210,12 @@
 
     async function getTiposUnidadSelect() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const tiposUnidad = response.data.tipounidad;
 
             const unitType = document.getElementById('unitType');
@@ -224,8 +241,15 @@
 
     async function getUnidades() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             return response.data.unidades;
+
         } catch (error) {
             showToast('Error', 'Error al obtener las unidades.');
             return [];
@@ -234,8 +258,15 @@
 
     async function getTiposUnidad() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoUnidad');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoUnidad', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             return response.data.tipounidad;
+
         } catch (error) {
             showToast('Error', 'Error al obtener el tipo de unidad.');
         }
@@ -245,7 +276,13 @@
         const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
 
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const unidad = response.data.unidades;
 
             if (unitNumber !== '') {
@@ -286,7 +323,13 @@
     async function postTipoRecurso() {
         const tipoRecurso = document.getElementById('addResource').value.toUpperCase();
 
-        const recursos = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso');
+        const token = localStorage.getItem('token');
+        const recursos = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const recursoExistente = recursos.data.tiporecurso.find(recurso => recurso.recurso === tipoRecurso);
 
         if (tipoRecurso === '') {
@@ -303,7 +346,11 @@
             recurso: tipoRecurso
         };
 
-        axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData)
+        axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 $('#addResourceModal').modal('hide');
                 document.getElementById('addResource').value = '';
@@ -319,7 +366,13 @@
         const tipoUnidad = document.getElementById('addUnit').value.toUpperCase();
         const capacidad = document.getElementById('addCapacity').value;
 
-        const unidades = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad');
+        const token = localStorage.getItem('token');
+        const unidades = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const unidadExistente = unidades.data.tipounidad.find(unidad => unidad.tipo === tipoUnidad);
 
         if (tipoUnidad === '' || capacidad === '') {
@@ -342,7 +395,11 @@
             capacidad: capacidad
         };
 
-        axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData)
+        axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 $('#addUnitModal').modal('hide');
                 document.getElementById('addUnit').value = '';
@@ -438,7 +495,12 @@
             usuario: idUsuario
         };
 
-        axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData)
+        const token = localStorage.getItem('token');
+        axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 limpiar();
                 showToast('Éxito', 'El registro de la unidad "' + unitNumber + '" se ha realizado exitosamente.');
@@ -525,7 +587,12 @@
             usuario: idUsuario
         };
 
-        axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
+        const token = localStorage.getItem('token');
+        axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 limpiar();
                 showToast('Éxito', 'La unidad "' + unitNumber + '" se ha actualizado exitosamente.');
@@ -578,7 +645,12 @@
 
         document.getElementById('confirmDelete').onclick = function () {
             showToast('Cargando', 'Eliminando registro de unidad...');
-            axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData)
+            const token = localStorage.getItem('token');
+            axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
                     limpiar();
                     showToast('Éxito', 'La unidad "' + unitNumber + '" se ha eliminado exitosamente.');
