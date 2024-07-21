@@ -6,6 +6,13 @@
     <title>Registro de citas</title>
 </head>
 
+<style>
+    /* .masked-input {
+        width: 100%;
+        box-sizing: border-box;
+    } */
+</style>
+
 <body>
 
     <div class="container mt-5 fade-in" style="max-width: 1100px;">
@@ -16,17 +23,17 @@
                 <div class="row mb-3 mt-3">
                     <div class="col-md-4 mt-2">
                         <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de Identificación:</label>
-                        <select id="tipoIdentificacion" class="form-control">
-                            <option value="Cedula de Identidad">Cédula de Identidad</option>
-                            <option value="Número de Asegurado">Número de Asegurado</option>
-                            <option value="Interno">Interno</option>
-                        </select>
-                    </div>
-                    
-                    <div class="col-md-4 mt-2">
-                        <label for="identificacion" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
-                        <input type="text" id="identificacion" name="identificacion" maxlength="20" class="form-control" inputmode="numeric">
-                    </div>
+                <select id="tipoIdentificacion" class="form-control">
+                    <option value="Cedula de Identidad">Cédula de Identidad</option>
+                    <option value="Número de Asegurado">Número de Asegurado</option>
+                    <option value="Interno">Interno</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mt-2">
+                <label for="identificacion" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
+                <input type="text" id="identificacion" name="identificacion" maxlength="20" class="form-control masked-input" inputmode="numeric">
+            </div>
                     
                     <div class="col-md-4 mt-2">
                         <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>

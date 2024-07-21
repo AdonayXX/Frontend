@@ -159,7 +159,7 @@ async function modificarPDF() {
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
-
+        
         firstPage.drawText(`${cantidadFuncionariosTrasladados}`, {
             x: 284,
             y: height - 489, 
@@ -171,6 +171,47 @@ async function modificarPDF() {
         firstPage.drawText(`${cantidadFuncionariosTrasladados + pacientes.length}`, {
             x: 284,
             y: height - 445, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        // Generales 
+        firstPage.drawText(`${pacientes.length}`, {
+            x: 597,
+            y: height - 466,
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${cantidadFuncionariosTrasladados}`, {
+            x: 597,
+            y: height - 489, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${cantidadFuncionariosTrasladados + pacientes.length}`, {
+            x: 597,
+            y: height - 444, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`Gasolina`, {
+            x: 284,
+            y: height - 393,
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+        
+        firstPage.drawText(`Diesel`, {
+            x: 284,
+            y: height - 410,
             size: 12,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
