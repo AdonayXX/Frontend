@@ -223,7 +223,7 @@
   function polling() {
     setInterval(() => {
       haveTrips();
-    }, 1);
+    }, 6.5);
   }
   polling();
   await inicializarPagina();
