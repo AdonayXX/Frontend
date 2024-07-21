@@ -22,14 +22,11 @@
       ]);
       ocultarSpinner();
 
-      console.log("Citas:", citas);
-      console.log("Viajes:", viajes);
-      console.log("Relaciones Viajes-Citas:", relacionesViajesCitas);
+    
       citasCombinadas = combinarCitasYViajes(citas, viajes, relacionesViajesCitas);
-      console.log("Citas combinadas:", citasCombinadas);
       mostrarCitas(citasCombinadas);
     } catch (error) {
-      console.error('Error al obtener las citas:', error);
+      showToast('Error', 'Ocurrió un problema al obtener las citas');
     }
   }
 
@@ -108,8 +105,6 @@
       if (b.idUnidad == unidadFiltro && b.estadoCita === 'Asignada') return 1;
       return 0;
     });
-
-    console.log("Citas filtradas:", citasFiltradas);
     mostrarCitas(citasFiltradas);
   }
 
@@ -229,9 +224,6 @@
         camilla++;
       }
     });
-
-    console.log('Camilla:', camilla);
-    console.log('Total Citas:', totalCitas);
 
     if (camilla > 1) {
       showToast('Error', 'Solo puede seleccionar una cita con camilla');
@@ -376,17 +368,11 @@
       Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
     };
     const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
-    console.log('URL para obtener el id del viaje:', getIdViaje)
 
     const url = 'https://backend-transporteccss.onrender.com/api/viaje';
     const idViaje = await returnIdViaje(getIdViaje);
-    console.log('ID del viaje antes del if:', idViaje);
 
     if (idViaje === "Error") {
-      console.log('Error al obtener el id del viaje:', idViaje);
-      console.log('ID del viaje:', idViaje);
-      console.log('Datos que se enviarán en la solicitud POST:', JSON.stringify(nuevoViaje, null, 2));
-
       try {
         await axios.post(url, nuevoViaje);
         showToast('Éxito', 'Viaje creado exitosamente');
@@ -404,7 +390,6 @@
       }
 
     } else {
-      console.log('ID del viaje:', idViaje);
       const asignarCita = {
         idViaje: idViaje,
         Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
@@ -414,7 +399,7 @@
         showToast('Éxito', 'Citas asignadas al viaje exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
-        console.log('Error al actualizar el viaje:', error.response.data);
+        showToast('Error', 'Error al asignar las citas al viaje');
       }
 
     }
@@ -466,10 +451,8 @@
       const data = respuesta.data || [];
       const viajes = data.IdViajeData.viaje || [];
       const idViaje = viajes.length > 0 ? viajes[0].idViaje : null;
-      console.log('ID del viaje:', idViaje);
       return idViaje;
     } catch (error) {
-      console.error('Error al obtener el id del viaje:', error.response.data);
       return "Error";
     }
   }
@@ -513,7 +496,5 @@
 
   }
   const infoUsuario = infoUser();
-  console.log(infoUsuario);
   const idUsuario = infoUsuario.usuario.IdUsuario;
-  console.log('IdUsuario:', idUsuario);
 })();

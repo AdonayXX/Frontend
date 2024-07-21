@@ -1,9 +1,11 @@
+"use strict";
+
 (async function () {
+
   async function infoUser() {
     try {
       const token = localStorage.getItem('token');
-      const decodedToken = jwt_decode(token);
-      return decodedToken;
+      return jwt_decode(token);
     } catch (error) {
       console.error(error);
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
@@ -14,8 +16,7 @@
     const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
     try {
       const response = await axios.get(API_CHOFERES_CON_UNIDADES);
-      const choferesConUnidades = response.data.choferesConUnidades;
-      return choferesConUnidades.find(chofer => chofer.cedula === identificacion);
+      return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
     }
@@ -25,8 +26,7 @@
     const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
     try {
       const response = await axios.get(API_UNIDADES);
-      const unidades = response.data.unidades;
-      const unidad = unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
+      const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
@@ -45,53 +45,26 @@
 
       if (viajes.length > 0) {
         const infoUsuario = await infoUser();
-      const Nombre = infoUsuario?.usuario?.Nombre;
+        const Nombre = infoUsuario?.usuario?.Nombre;
         showToast('Información', `Hola ${Nombre}, tienes ${viajes.length} viajes asignados para hoy.`);
       }
 
-      const viajesTableBody = document.getElementById('viajesTableBody');
-      viajesTableBody.innerHTML = '';
-      const fragment = document.createDocumentFragment();
-
-      viajes.forEach(data => {
-        const acompanante1 = data.Acompanante1 || 'N/A';
-        const acompanante2 = data.Acompanante2 || 'N/A';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="text-center">${data.NombrePaciente}</td>
-          <td class="text-center">${data.ubicacionOrigen}</td>
-          <td class="text-center">${data.ubicacionDestino}</td>
-          <td class="text-center">${data.horaCita}</td>
-          <td class="text-center">
-            <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
-              data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
-              <i class="bi bi-eye"></i>
-            </button>
-          </td>
-        `;
-        fragment.appendChild(row);
-      });
-
-      viajesTableBody.appendChild(fragment);
-      haveTrips(); 
+      renderizarViajes(viajes);
+      haveTrips();
 
     } catch (error) {
       showToast('Información', 'No hay viajes asignados, vuelve pronto.');
-      haveTrips(); 
+      haveTrips();
     }
   }
 
   async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
-    const API_INIT_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/start`;
+    const API_INIT_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/start';
     try {
-      const response = await axios.put(API_INIT_TRIP, {
-        idUnidad,
-        fechaInicioViaje: fechaValue,
-        horaInicioViaje: hourInitTrip
-      });
+      await axios.put(API_INIT_TRIP, { idUnidad, fechaInicioViaje: fechaValue, horaInicioViaje: hourInitTrip });
       localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue, hourInitTrip }));
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
-      mostrarEstadoViaje(); 
+      mostrarEstadoViaje();
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al iniciar el viaje');
     }
@@ -104,16 +77,9 @@
     const hourFinishTrip = obtenerHoraActual();
     const idUnidad = await obtenerIdUnidad(document.getElementById('unidadAsignada').value);
 
-
-    const API_FINISH_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/end`;
+    const API_FINISH_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/end';
     try {
-      const response = await axios.put(API_FINISH_TRIP, {
-        idUnidad,
-        horaFinViaje: hourFinishTrip,
-        kilometrajeFinal,
-        horasExtras,
-        viaticos
-      });
+      await axios.put(API_FINISH_TRIP, { idUnidad, horaFinViaje: hourFinishTrip, kilometrajeFinal, horasExtras, viaticos });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
       loadContent('tableDriverTrip.html', 'mainContent');
@@ -126,10 +92,7 @@
 
   function obtenerHoraActual() {
     const d = new Date();
-    const h = String(d.getHours()).padStart(2, '0');
-    const m = String(d.getMinutes()).padStart(2, '0');
-    const s = String(d.getSeconds()).padStart(2, '0');
-    return `${h}:${m}:${s}`;
+    return [d.getHours(), d.getMinutes(), d.getSeconds()].map(unit => String(unit).padStart(2, '0')).join(':');
   }
 
   function mostrarEstadoViaje() {
@@ -167,7 +130,7 @@
       const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
       const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-      tiempoTranscurrido.value = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
+      tiempoTranscurrido.innerText = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
     }
 
     actualizarTiempo();
@@ -184,9 +147,10 @@
         showToast('Error', 'Acceso denegado: Solo los chóferes pueden usar este módulo.');
         document.getElementById('btnIniciarViaje').disabled = true;
         document.getElementById('btnFinalizarViaje').disabled = true;
-        document.getElementById('btnInitTripDriver').disabled
+        document.getElementById('finalizarViajeBtn').disabled = true;
         return;
       }
+
       const unidadAsignada = await obtenerUnidadAsignada(Identificacion);
       if (unidadAsignada) {
         document.getElementById('unidadAsignada').value = unidadAsignada.numeroUnidad;
@@ -194,13 +158,8 @@
         const idUnidad = await obtenerIdUnidad(unidadAsignada.numeroUnidad);
         if (idUnidad) {
           const today = new Date();
-          const dd = String(today.getDate()).padStart(2, '0');
-          const mm = String(today.getMonth() + 1).padStart(2, '0');
-          const yyyy = today.getFullYear();
-          const fechaValue = `${yyyy}-${mm}-${dd}`;
+          const fechaValue = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
           document.getElementById('fecha').value = fechaValue;
-
-          const hourInitTrip = obtenerHoraActual();
 
           const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
           if (viajeIniciado && viajeIniciado.idUnidad === idUnidad) {
@@ -211,7 +170,7 @@
           }
 
           document.getElementById('btnIniciarViaje').addEventListener('click', async () => {
-            await updateInitTrip(idUnidad, fechaValue, hourInitTrip);
+            await updateInitTrip(idUnidad, fechaValue, obtenerHoraActual());
             await obtenerViajes(idUnidad, fechaValue);
           });
 
@@ -224,15 +183,42 @@
     }
   }
 
-  function haveTrips() {
-    const table = document.getElementById('tablePatient');
-    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
+  function renderizarViajes(viajes) {
+    const viajesTableBody = document.getElementById('viajesTableBody');
+    viajesTableBody.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
-    if (table.rows.length <= 1) {
-      btnInitTripDriver.disabled = true;
-    } else {
-      btnInitTripDriver.disabled = false;
-    }
+    viajes.forEach(data => {
+      const acompanante1 = data.Acompanante1 || 'N/A';
+      const acompanante2 = data.Acompanante2 || 'N/A';
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="text-center">${data.NombrePaciente}</td>
+        <td class="text-center">${data.ubicacionOrigen}</td>
+        <td class="text-center">${data.ubicacionDestino}</td>
+        <td class="text-center">${data.horaCita}</td>
+        <td class="text-center">
+          <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
+            data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
+            <i class="bi bi-eye"></i>
+          </button>
+        </td>
+      `;
+      fragment.appendChild(row);
+    });
+
+    viajesTableBody.appendChild(fragment);
+  }
+
+  function haveTrips() {
+    const tableBody = document.getElementById('viajesTableBody');
+    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
+    const btnFinalizarViaje = document.getElementById('finalizarViajeBtn');
+
+    const hasTrip = tableBody.children.length > 0;
+    btnInitTripDriver.disabled = !hasTrip;
+    btnFinalizarViaje.disabled = !hasTrip;
+    
   }
 
   await inicializarPagina();
