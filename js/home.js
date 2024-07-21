@@ -196,7 +196,7 @@ async function mostrarUnidadesPorDekra() {
 
         } else {
             const tituloFechasDekra = document.createElement('h5');
-            tituloFechasDekra.textContent = 'Fechas de Dekra';
+            tituloFechasDekra.textContent = 'Fechas de revisión técnica vehicular';
             tituloFechasDekra.classList.add('text-center','mb-4', 'rounded' );
             unidadesPorVencerContainer.appendChild(tituloFechasDekra);
 
