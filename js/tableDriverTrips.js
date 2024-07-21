@@ -220,6 +220,11 @@
     btnFinalizarViaje.disabled = !hasTrip;
     
   }
-
+  function polling() {
+    setInterval(() => {
+      haveTrips();
+    }, 1);
+  }
+  polling();
   await inicializarPagina();
 })();

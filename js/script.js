@@ -1,3 +1,4 @@
+"use strict";   
 document.addEventListener('DOMContentLoaded', function () {
     //Verificar token Descomentar para probar
      const token = localStorage.getItem('token');
