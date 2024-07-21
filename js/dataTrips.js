@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+  const token = localStorage.getItem('token');
+
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
 
   document.getElementById('fechaInicio').addEventListener('change', aplicarFiltros);
@@ -33,7 +35,11 @@
   async function cargarCitas() {
     try {
       const URL_CITAS = 'https://backend-transporteccss.onrender.com/api/viajeCita';
-      const respuesta = await axios.get(URL_CITAS);
+      const respuesta = await axios.get(URL_CITAS, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.citas || [];
     } catch (error) {
       console.error('Error al obtener las citas:', error);
@@ -44,7 +50,11 @@
   async function cargarViajes() {
     try {
       const URL_VIAJES = 'https://backend-transporteccss.onrender.com/api/viaje';
-      const respuesta = await axios.get(URL_VIAJES);
+      const respuesta = await axios.get(URL_VIAJES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.viaje || [];
     } catch (error) {
       console.error('Error al obtener los viajes:', error);
@@ -54,7 +64,11 @@
   async function cargarRelacionesViajesCitas() {
     try {
       const URL_RELACIONES = 'https://backend-transporteccss.onrender.com/api/viaje/relaciones';
-      const respuesta = await axios.get(URL_RELACIONES);
+      const respuesta = await axios.get(URL_RELACIONES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.ViajesCitas.ViajesCitas || [];
 
     } catch (error) {
@@ -203,7 +217,11 @@
     const url = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
 
     try {
-      const response = await axios.delete(url);
+      const response = await axios.delete(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       showToast('Éxito', 'Cita desasociada del viaje exitosamente');
     } catch (error) {
       console.error('Error al desasociar la cita del viaje:', error.response.data);
@@ -241,7 +259,11 @@
   async function cargarUnidades() {
     try {
       const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades/ambulancia';
-      const respuesta = await axios.get(URL_UNIDADES);
+      const respuesta = await axios.get(URL_UNIDADES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const unidades = respuesta.data.unidades;
       const selectBody = document.querySelector('#unidades');
       const choferesSelect = document.querySelector('#choferes');
@@ -374,7 +396,11 @@
 
     if (idViaje === "Error") {
       try {
-        await axios.post(url, nuevoViaje);
+        await axios.post(url, nuevoViaje, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
         showToast('Éxito', 'Viaje creado exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
@@ -395,7 +421,11 @@
         Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
       };
       try {
-        await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita);
+        await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
         showToast('Éxito', 'Citas asignadas al viaje exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
@@ -432,7 +462,11 @@
     };
 
     try {
-      await axios.put(url, datosAusencia);
+      await axios.put(url, datosAusencia, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
@@ -447,7 +481,11 @@
 
   async function returnIdViaje(url) {
     try {
-      const respuesta = await axios.get(url);
+      const respuesta = await axios.get(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const data = respuesta.data || [];
       const viajes = data.IdViajeData.viaje || [];
       const idViaje = viajes.length > 0 ? viajes[0].idViaje : null;
