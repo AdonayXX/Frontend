@@ -43,6 +43,7 @@
 
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
+    console.log(apiURLViajes);
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -104,7 +105,7 @@
       });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
-      loadContent('tableDriverTrip.html', 'mainContent');
+      loadContent('tableDriverTrips.html', 'mainContent');
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al finalizar el viaje');
     }
@@ -216,6 +217,7 @@
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="text-center">${data.NombrePaciente}</td>
+        <td class="text-center">${data.Direccion}</td>
         <td class="text-center">${data.ubicacionOrigen}</td>
         <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">${data.horaCita}</td>
