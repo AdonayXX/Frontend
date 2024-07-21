@@ -240,7 +240,7 @@
 
   async function cargarUnidades() {
     try {
-      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades';
+      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades/ambulancia';
       const respuesta = await axios.get(URL_UNIDADES);
       const unidades = respuesta.data.unidades;
       const selectBody = document.querySelector('#unidades');
@@ -259,7 +259,7 @@
         option.value = unidad.id;
         option.dataset.choferId = unidad.idChofer;
         option.dataset.choferNombre = `${unidad.nombreChofer} ${unidad.apellido1Chofer}`;
-        option.textContent = `Unidad ${unidad.numeroUnidad}`;
+        option.textContent = `Ambulancia ${unidad.numeroUnidad}`;
         selectBody.appendChild(option);
       });
 

@@ -254,7 +254,6 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "usuario": 1
     };
 
-    console.log(updatedDataChofer);
 
     axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
         headers: {
@@ -262,7 +261,6 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         }
     })
     .then(response => {
-        console.log(response.data);
         showToast('Éxito', 'Chofer actualizado exitosamente.');
         setTimeout(() => {
             loadContent('formdriver.html', 'mainContent');
