@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+  const token = localStorage.getItem('token');
+
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
 
   document.getElementById('fechaInicio').addEventListener('change', aplicarFiltros);
@@ -22,21 +24,22 @@
       ]);
       ocultarSpinner();
 
-      console.log("Citas:", citas);
-      console.log("Viajes:", viajes);
-      console.log("Relaciones Viajes-Citas:", relacionesViajesCitas);
+    
       citasCombinadas = combinarCitasYViajes(citas, viajes, relacionesViajesCitas);
-      console.log("Citas combinadas:", citasCombinadas);
       mostrarCitas(citasCombinadas);
     } catch (error) {
-      console.error('Error al obtener las citas:', error);
+      showToast('Error', 'Ocurrió un problema al obtener las citas');
     }
   }
 
   async function cargarCitas() {
     try {
       const URL_CITAS = 'https://backend-transporteccss.onrender.com/api/viajeCita';
-      const respuesta = await axios.get(URL_CITAS);
+      const respuesta = await axios.get(URL_CITAS, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.citas || [];
     } catch (error) {
       console.error('Error al obtener las citas:', error);
@@ -47,7 +50,11 @@
   async function cargarViajes() {
     try {
       const URL_VIAJES = 'https://backend-transporteccss.onrender.com/api/viaje';
-      const respuesta = await axios.get(URL_VIAJES);
+      const respuesta = await axios.get(URL_VIAJES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.viaje || [];
     } catch (error) {
       console.error('Error al obtener los viajes:', error);
@@ -57,7 +64,11 @@
   async function cargarRelacionesViajesCitas() {
     try {
       const URL_RELACIONES = 'https://backend-transporteccss.onrender.com/api/viaje/relaciones';
-      const respuesta = await axios.get(URL_RELACIONES);
+      const respuesta = await axios.get(URL_RELACIONES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return respuesta.data.ViajesCitas.ViajesCitas || [];
 
     } catch (error) {
@@ -108,8 +119,6 @@
       if (b.idUnidad == unidadFiltro && b.estadoCita === 'Asignada') return 1;
       return 0;
     });
-
-    console.log("Citas filtradas:", citasFiltradas);
     mostrarCitas(citasFiltradas);
   }
 
@@ -208,7 +217,11 @@
     const url = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
 
     try {
-      const response = await axios.delete(url);
+      const response = await axios.delete(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       showToast('Éxito', 'Cita desasociada del viaje exitosamente');
     } catch (error) {
       console.error('Error al desasociar la cita del viaje:', error.response.data);
@@ -230,9 +243,6 @@
       }
     });
 
-    console.log('Camilla:', camilla);
-    console.log('Total Citas:', totalCitas);
-
     if (camilla > 1) {
       showToast('Error', 'Solo puede seleccionar una cita con camilla');
       return false;
@@ -248,8 +258,12 @@
 
   async function cargarUnidades() {
     try {
-      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades';
-      const respuesta = await axios.get(URL_UNIDADES);
+      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades/ambulancia';
+      const respuesta = await axios.get(URL_UNIDADES, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const unidades = respuesta.data.unidades;
       const selectBody = document.querySelector('#unidades');
       const choferesSelect = document.querySelector('#choferes');
@@ -267,7 +281,7 @@
         option.value = unidad.id;
         option.dataset.choferId = unidad.idChofer;
         option.dataset.choferNombre = `${unidad.nombreChofer} ${unidad.apellido1Chofer}`;
-        option.textContent = `Unidad ${unidad.numeroUnidad}`;
+        option.textContent = `Ambulancia ${unidad.numeroUnidad}`;
         selectBody.appendChild(option);
       });
 
@@ -376,19 +390,17 @@
       Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
     };
     const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
-    console.log('URL para obtener el id del viaje:', getIdViaje)
 
     const url = 'https://backend-transporteccss.onrender.com/api/viaje';
     const idViaje = await returnIdViaje(getIdViaje);
-    console.log('ID del viaje antes del if:', idViaje);
 
     if (idViaje === "Error") {
-      console.log('Error al obtener el id del viaje:', idViaje);
-      console.log('ID del viaje:', idViaje);
-      console.log('Datos que se enviarán en la solicitud POST:', JSON.stringify(nuevoViaje, null, 2));
-
       try {
-        await axios.post(url, nuevoViaje);
+        await axios.post(url, nuevoViaje, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
         showToast('Éxito', 'Viaje creado exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
@@ -404,17 +416,20 @@
       }
 
     } else {
-      console.log('ID del viaje:', idViaje);
       const asignarCita = {
         idViaje: idViaje,
         Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
       };
       try {
-        await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita);
+        await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
         showToast('Éxito', 'Citas asignadas al viaje exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
-        console.log('Error al actualizar el viaje:', error.response.data);
+        showToast('Error', 'Error al asignar las citas al viaje');
       }
 
     }
@@ -447,7 +462,11 @@
     };
 
     try {
-      await axios.put(url, datosAusencia);
+      await axios.put(url, datosAusencia, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
@@ -462,14 +481,16 @@
 
   async function returnIdViaje(url) {
     try {
-      const respuesta = await axios.get(url);
+      const respuesta = await axios.get(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       const data = respuesta.data || [];
       const viajes = data.IdViajeData.viaje || [];
       const idViaje = viajes.length > 0 ? viajes[0].idViaje : null;
-      console.log('ID del viaje:', idViaje);
       return idViaje;
     } catch (error) {
-      console.error('Error al obtener el id del viaje:', error.response.data);
       return "Error";
     }
   }
@@ -513,7 +534,5 @@
 
   }
   const infoUsuario = infoUser();
-  console.log(infoUsuario);
   const idUsuario = infoUsuario.usuario.IdUsuario;
-  console.log('IdUsuario:', idUsuario);
 })();

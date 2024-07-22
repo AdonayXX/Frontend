@@ -63,6 +63,22 @@ async function modificarPDF() {
             })
             .reduce((sum, registro) => sum + parseFloat(registro.litrosAproximados), 0);
 
+            //diesel
+        const dieselKilometraje = datosRegistros
+            .filter(registro => {
+                const fecha = new Date(registro.fecha);
+                return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
+            })
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+
+            //GASOLINA
+            const gasolinaKilometraje = datosRegistros
+            .filter(registro => {
+                const fecha = new Date(registro.fecha);
+                return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
+            })
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+
         const pacientes = datosCitas.filter(paciente => {
                 const fechaCita = new Date(paciente.fechaCita);
                 return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
@@ -159,7 +175,7 @@ async function modificarPDF() {
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
-
+        
         firstPage.drawText(`${cantidadFuncionariosTrasladados}`, {
             x: 284,
             y: height - 489, 
@@ -171,6 +187,47 @@ async function modificarPDF() {
         firstPage.drawText(`${cantidadFuncionariosTrasladados + pacientes.length}`, {
             x: 284,
             y: height - 445, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        // Generales 
+        firstPage.drawText(`${pacientes.length}`, {
+            x: 597,
+            y: height - 466,
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${cantidadFuncionariosTrasladados}`, {
+            x: 597,
+            y: height - 489, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${cantidadFuncionariosTrasladados + pacientes.length}`, {
+            x: 597,
+            y: height - 444, 
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${gasolinaKilometraje}`, {
+            x: 284,
+            y: height - 393,
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+        
+        firstPage.drawText(`${dieselKilometraje}`, {
+            x: 284,
+            y: height - 410,
             size: 12,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
@@ -199,8 +256,6 @@ async function modificarPDF() {
             return new Blob([bytes], { type });
         }
 
-        console.log('PDF modificado y descargado correctamente.');
     } catch (error) {
-        console.error('Error al modificar el PDF:', error);
     }
 }

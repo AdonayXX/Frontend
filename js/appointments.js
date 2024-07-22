@@ -1,14 +1,13 @@
 
+
+(function () {
+   
+
 getRutas();
 getEspecialidadesByDestino();
-applyMaskBasedOnType();
-
-
 document.getElementById('identificacion').addEventListener('blur', async function (event) {
+    event.preventDefault();
     const identificacion = this.value.trim();
-    let idPaciente = null;
-    let acompanantes = [];
-
 
 
     if (identificacion) {
@@ -17,10 +16,10 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             await getAcompanantes(identificacion);
         }
     } else {
-        loadContent('formAppointment.html', 'mainContent');
-        limpiarCampos();
-    }
+        showToast('Aviso', 'Por favor, ingrese una identificación.');
 
+    }
+});
 
     async function getPacienteCita(identificacion) {
         try {
@@ -41,7 +40,8 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('nombre').value = pacienteEncontrado.Nombre || '';
                 document.getElementById('primerApellido').value = pacienteEncontrado.Apellido1 || '';
                 document.getElementById('segundoApellido').value = pacienteEncontrado.Apellido2 || '';
-                document.getElementById('telefonos').value = pacienteEncontrado.Telefono2 ? `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2}` : pacienteEncontrado.Telefono1 || '';  document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+                document.getElementById('telefonos').value = pacienteEncontrado.Telefono2 ? `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2}` : pacienteEncontrado.Telefono1 || '';  
+                document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
                 document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
 
                 const prioridadCheckbox = document.getElementById('prelacion');
@@ -54,8 +54,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 showToast('Datos del paciente', 'Datos del paciente cargados correctamente.');
                 return true;
             } else {
-                showToast('Error', 'No se encontró ningún paciente con esa identificación.');
-                loadContent('formAppointment.html', 'mainContent');
+                showToast('Aviso', 'No se encontró ningún paciente con esa identificación.');
                 return false;
             }
         } catch (error) {
@@ -71,7 +70,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
 
             const token = localStorage.getItem('token');
-            const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/${identificacion}`;
+            const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/seguro/${identificacion}`;
             const response = await axios.get(API_URL_ACOMPANANTE, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -125,7 +124,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         if (acompanante) {
             nombreField.value = acompanante.Nombre || '';
             apellido1Field.value = acompanante.Apellido1 || '';
-            telefonoField.value = `${acompanante.Telefono1} / ${acompanante.Telefono2}` || '';
+            telefonoField.value = acompanante.Telefono2 ? `${acompanante.Telefono1} / ${acompanante.Telefono2}` : acompanante.Telefono1 || '';  parentescoField.value = acompanante.Parentesco || '';
             parentescoField.value = acompanante.Parentesco || '';
         } else {
             showToast('Acompañantes', 'No se encontró información para el acompañante seleccionado.');
@@ -207,9 +206,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         document.getElementById('especialidad').value = '';
         document.getElementById('destino').value = '';
         document.getElementById('origen').value = '';
-        // document.getElementById('condicion').value = '';
-
-
         limpiarCamposAcompanantes();
     }
 
@@ -277,7 +273,8 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "diagnostico": diagnostico,
                 "fechaCita": fechaCita,
                 "horaCita": horaCita,
-                "transladoCita": salida
+                "transladoCita": salida,
+                "idUsuario": idUsuario
             };
 
             try {
@@ -303,9 +300,21 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
     });
 
+    function infoUser() {
+        try {
+          const token = localStorage.getItem('token');
+          const decodedToken = jwt_decode(token);
+          return (decodedToken);
+        } catch (error) {
+          console.error(error);
+          showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+        }
+    
+      }
+      const infoUsuario = infoUser();
+      const idUsuario = infoUsuario.usuario.IdUsuario;  
 
 
-});
 function getRutas() {
     const selectDestino = document.getElementById('destino');
 
@@ -331,7 +340,7 @@ function getRutas() {
 
 function getEspecialidadesByDestino(IdRuta) {
     const selectEspecialidad = document.getElementById('especialidad');
-    selectEspecialidad.innerHTML = ''; // Limpiar las opciones existentes
+    selectEspecialidad.innerHTML = ''; 
 
     const defaultOption = document.createElement('option');
     defaultOption.disabled = true;
@@ -366,123 +375,50 @@ document.getElementById('destino').addEventListener('change', function () {
     getEspecialidadesByDestino(IdRuta);
 });
 
-document.getElementById('tipoIdentificacion').addEventListener('change', () => {
-    applyMaskBasedOnType();
+
+document.getElementById('identificacion').addEventListener('input', function () {
+    applyMask();
 });
 
-function applyMaskBasedOnType() {
-    let tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
-    let identificacionInput = document.getElementById('identificacion');
-    let mask = '';
 
-    switch (tipoIdentificacion) {
-        case 'Cedula de Identidad':
-            mask = '0-0000-0000';
-            break;
-        case 'Número de Asegurado':
-            mask = '00000000000000000000';
-            break;
-        case 'Interno':
-            mask = '2536-00000000000000000000';
-            break;
-        default:
-            mask = '';
-            break;
-    }
-
-    applyIdentificationMask('identificacion', mask);
-}
-
-function applyIdentificationMask(elementId, mask) {
-    let inputElement = document.getElementById(elementId);
-    if (!inputElement) return;
-
-    inputElement.addEventListener('input', () => {
-        let rawValue = inputElement.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
-        let maskedValue = maskIt(mask, rawValue);
-        let cursorPosition = getCursorPosition(rawValue.length, mask);
-
-        inputElement.value = maskedValue;
-        setCursorPosition(inputElement, cursorPosition);
-    });
-
-    inputElement.addEventListener('keydown', (e) => {
-        if (e.key === "Tab" || e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Backspace" || e.key === "Delete") {
-            return;
-        }
-
-        if (!isNumeric(e.key)) {
-            e.preventDefault();
-        }
-    });
-}
-
-function maskIt(pattern, value) {
-    let maskedValue = '';
-    let valueIndex = 0;
-
-    for (let patternIndex = 0; patternIndex < pattern.length; patternIndex++) {
-        if (valueIndex >= value.length) {
-            break;
-        }
-
-        if (pattern[patternIndex] === '0') {
-            maskedValue += value[valueIndex];
-            valueIndex++;
-        } else {
-            maskedValue += pattern[patternIndex];
-        }
-    }
-
-    return maskedValue;
-}
-
-function isNumeric(char) {
-    return !isNaN(char - parseInt(char));
-}
-
-function getCursorPosition(rawLength, mask) {
-    let cursorPosition = 0;
-    let numDigits = 0;
-
-    for (let i = 0; i < mask.length; i++) {
-        if (mask[i] === '0') {
-            numDigits++;
-        }
-        if (numDigits >= rawLength) {
-            cursorPosition = i + 1;
-            break;
-        }
-    }
-
-    return cursorPosition;
-}
-
-function setCursorPosition(inputElement, position) {
-    if (inputElement.setSelectionRange) {
-        inputElement.focus();
-        inputElement.setSelectionRange(position, position);
-    } else if (inputElement.createTextRange) {
-        let range = inputElement.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', position);
-        range.moveStart('character', position);
-        range.select();
-    }
-}
-
-applyMaskBasedOnType();
-
-function refreshPageIfIdentificationExists() {
+function applyMask() {
     const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
-    const identificacion = document.getElementById('identificacion').value;
+    const identificacion = document.getElementById('identificacion');
+    let value = identificacion.value.replace(/\D/g, ''); 
 
-    // Check if the identification exists and the type has changed
-    if (identificacion && tipoIdentificacion !== 'Cedula de Identidad' || identificacion && tipoIdentificacion !== 'Número de Asegurado' || identificacion && tipoIdentificacion !== 'Interno') {
-        document.getElementById('identificacion').value = '';
-        loadContent('formAppointment.html', 'mainContent');
+    if (tipoIdentificacion === 'Cedula de Identidad') {
+        let formattedValue = '';
+        if (value.length > 0) {
+            formattedValue = value.slice(0, 1); 
+            if (value.length > 1) {
+                formattedValue += '-' + value.slice(1, 5); 
+            }
+            if (value.length > 5) {
+                formattedValue += '-' + value.slice(5, 9); 
+            }
+        }
+        identificacion.value = formattedValue;
+        identificacion.maxLength = 12;
+    } else if (tipoIdentificacion === 'Número de Asegurado') {
+        
+        identificacion.value = value;
+        identificacion.maxLength = 20;
+
+    } else if (tipoIdentificacion === 'Interno') {
+
+        let formattedValue = '';
+        if (value.length > 0) {
+            formattedValue = value.slice(0, 4); 
+            if (value.length > 4) {
+                formattedValue += '-' + value.slice(4, 19); 
+            }
+        }
+        identificacion.value = formattedValue;
+        identificacion.maxLength = 19; 
     }
 }
+        document.getElementById('tipoIdentificacion').addEventListener('change', applyMask);
+        document.getElementById('identificacion').addEventListener('input', applyMask);
+        applyMask();
 
-
-document.getElementById('tipoIdentificacion').addEventListener('change', refreshPageIfIdentificationExists);
+})();

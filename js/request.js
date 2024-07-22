@@ -5,7 +5,7 @@
             const response = await axios.get(`${url}api/vales`);
             const data = response.data;
             const vales = data.vales;
-    
+
             const tableBody = document.querySelector('#tableRequestBody');
             tableBody.innerHTML = '';
 
@@ -34,37 +34,52 @@
     }
 
     function createTableRequest() {
-        $('#tableRequest').DataTable({
-            dom: "<'row'<'col-sm-6'l>" +
-            "<'row'<'col-sm-12't>>" +
-            "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-        ordering: false,
-        searching: true,
-        paging: true,
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
-        },
-        caseInsensitive: true,
-        smart: true
-    });
 
-    $('#searchVale').on('keyup', function () {
-        let inputValue = $(this).val().toLowerCase();
-        $('#tableRequest').DataTable().search(inputValue).draw();
-    });
+        const table = $('#tableRequest').DataTable({
+            dom: "<'row'<'col-sm-6'l>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+            ordering: false,
+            searching: true,
+            paging: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            },
+            caseInsensitive: true,
+            smart: true
+        });
+
+        $('#searchVale').on('keyup', function () {
+            let inputValue = $(this).val().toLowerCase();
+            $('#tableRequest').DataTable().search(inputValue).draw();
+        });
+
+        $('#fechaVale').on('change', function () {
+            let fechaInput = $(this).val();
+            table.column(1).search(fechaInput).draw();
+        });
+
+        $('#seleccionar-estado').on('change', function () {
+            let selectedUnit = $(this).val();
+            if (selectedUnit === 'VerTodo') {
+                table.column(4).search('').draw();
+            } else {
+                table.column(4).search(selectedUnit).draw();
+            }
+        });
     }
 
-    function processStatus(status){
+    function processStatus(status) {
         switch (status) {
             case "Pendiente":
                 return '<span style="color: orange;font-size: 1.5rem;">■ </span>' + status;
-            break;
+                break;
             case "Rechazado":
                 return '<span style="color: red; font-size: 1.5rem;">■ </span>' + status;
-            break
+                break
             case "Aprobado":
                 return '<span style="color: blue;font-size: 1.5rem;">■ </span>' + status;
-            break
+                break
             default:
                 return status;
         }

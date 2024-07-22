@@ -1,3 +1,4 @@
+"use strict";
 function loadContent(page, containerId = 'mainContent') {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", page, true);

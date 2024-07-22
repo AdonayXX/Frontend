@@ -400,3 +400,37 @@ tr {
     align-items: center;
     z-index: 1052;
 }
+
+
+
+
+/* CSS REPORTS */
+
+.card-R {
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-height: 200px;
+
+}
+.card-R:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon {
+    font-size: 3rem;
+    color: #777676;
+    margin-bottom: 15px;
+}
+
+.card-text-R {
+    font-size: 1rem;
+    color: #47494b;
+}
+
+.card-R:hover .card-icon {
+    color: #004085;
+} 
+
+/* FIN DE CSS REPORTS */

@@ -14,7 +14,7 @@
             acompananteCount--;
         }
     });
-})();
+
 
 // ---------------------------------POST------------------------------------------------ //
 
@@ -82,11 +82,19 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "apellido1CE2": apellido1CE2,
             "apellido2CE2": apellido2CE2,
             "estadoChofer": estadoChofer,
-            "usuario": 1
+            "usuario": idUsuario
         };
 
         try {
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData);
+
+            
+            
+            const token = localStorage.getItem('token');
+            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
             if (response.status === 201) {
                 showToast('Éxito', 'Chofer registrado exitosamente.');
@@ -103,6 +111,21 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
     await guardarChofer();
 });
+
+function infoUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      return (decodedToken);
+    } catch (error) {
+      console.error(error);
+      showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+    }
+
+  }
+  const infoUsuario = infoUser();
+  const idUsuario = infoUsuario.usuario.IdUsuario;
+
 
 document.getElementById('contacto').addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
@@ -144,7 +167,17 @@ document.getElementById('cedula').addEventListener('blur', async function (event
 
 async function getChofer(cedula) {
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`);
+
+
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+          
+
         const choferes = response.data.chofer;
 
         const choferEncontrado = choferes[0]; // como la cedula es unica, solo se espera un chofer	
@@ -238,15 +271,15 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "nombre": nombre,
         "apellido1": apellido1,
         "apellido2": apellido2,
-        "contacto": contacto ? parseInt(contacto) : null,
+        "contacto": contacto,
         "tipoSangre": tipoSangre,
         "tipoLicencia": tipoLicencia,
         "vencimientoLicencia": fechaVencimientoLicencia,
-        "contactoEmergencia1": contactoEmergencia1 ? parseInt(contactoEmergencia1) : null,
+        "contactoEmergencia1": contactoEmergencia1,
         "nombreCE1": nombreCE1,
         "apellido1CE1": apellido1CE1,
         "apellido2CE1": apellido2CE1,
-        "contactoEmergencia2": contactoEmergencia2 ? parseInt(contactoEmergencia2) : null,
+        "contactoEmergencia2": contactoEmergencia2,
         "nombreCE2": nombreCE2,
         "apellido1CE2": apellido1CE2,
         "apellido2CE2": apellido2CE2,
@@ -254,15 +287,12 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "usuario": 1
     };
 
-    console.log(updatedDataChofer);
-
+    const token = localStorage.getItem('token');
     axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
         headers: {
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`
         }
-    })
-    .then(response => {
-        console.log(response.data);
+    }).then(response => {
         showToast('Éxito', 'Chofer actualizado exitosamente.');
         setTimeout(() => {
             loadContent('formdriver.html', 'mainContent');
@@ -295,3 +325,4 @@ function limpiarCampos() {
     document.getElementById('apellido2CE2').value = '';
     document.getElementById('contactoEmergencia2').value = '';
 }
+})();

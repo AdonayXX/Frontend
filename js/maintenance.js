@@ -1,9 +1,12 @@
 (async function () {
   getlastMaintenance();
   getMaintenance();
+  getUnidadesFiltro();
+  setupFilterEvents();
 
 
   // Variables globales para almacenar los datos
+  let last20Maintenance = [];
   let mantenimientoData = [];
   let actividadesData = [];
   let actividadesTodoData = [];
@@ -13,7 +16,7 @@
   //Funcion para obtener los ultimos 20 mantenimientos para llenar la tabla
   async function getlastMaintenance() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -51,7 +54,6 @@
       // Configurar DataTables y eventos de cambio
       setupDataTable();
       ocultarSpinner();
-      getUnidadesFiltro();
     } catch (error) {
       console.error("Error al obtener los mantenimientos:", error);
 
@@ -160,7 +162,7 @@
   // Función para obtener todos los mantenimientos
   async function getMaintenance() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -181,7 +183,6 @@
       });
       actividadesTodoData = actividadesTodo.data.actividades || [];
 
-      setupFilterEvents();
     } catch (error) {
       handleMaintenanceError(error);
     }
@@ -207,15 +208,26 @@
     console.log("Fecha seleccionada", formattedSelectedDate);
 
     const selectedUnit = $('#unidadFiltro').val();
+    console.log("Unidad seleccionada", selectedUnit);
+    console.log("Últimos 20 mantenimientos:", last20Maintenance);
 
-    const filteredMaintenance = selectedUnit === 'last20'
-      ? last20Maintenance
-      : mantenimientoData.filter(maintenance => {
+    let filteredMaintenance = [];
+
+    if (selectedUnit === 'last20') {
+      // Filtrar últimos 20 mantenimientos por fecha
+      filteredMaintenance = last20Maintenance.filter(maintenance => {
+        const formattedDate = formatDate(maintenance.FechaMantenimiento);
+        return formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
+      });
+    } else {
+      // Filtrar todos los mantenimientos por fecha y unidad
+      filteredMaintenance = mantenimientoData.filter(maintenance => {
         const formattedDate = formatDate(maintenance.FechaMantenimiento);
         const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
         const matchUnit = selectedUnit && selectedUnit !== 'All' ? maintenance.numeroUnidad === selectedUnit : true;
         return matchDate && matchUnit;
       });
+    }
 
     // Verificar si DataTables ya está inicializado
     if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
@@ -224,6 +236,8 @@
       $("#tableMaintenance").DataTable().clear().destroy();
       console.log("Instancia de DataTable destruida");
     }
+
+    // Llenar la tabla con los mantenimientos filtrados
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
 
     // Solo inicializar DataTables si hay datos disponibles
@@ -233,6 +247,7 @@
       setupDataTable();
     }
   }
+
 
 
   // Función para formatear la fecha seleccionada al formato DD/MM/AAAA
@@ -260,7 +275,44 @@
     document.getElementById("spinnerContainer").style.display = "none";
   }
 
+  $(document).ready(function () {
+    $('#tipoMantenimiento').on('change', function () {
+      kilometrajeType();
+    });
+  });
 
+  async function kilometrajeType() {
+    const tipoMantenimientoSelect = document.getElementById('tipoMantenimiento');
+    const kilometrajeInput = document.getElementById('kilometraje');
+    const unidadSelect = document.getElementById('unidadSelect').value;
+    console.log('Unidad seleccionada antes del if:', unidadSelect);
+
+    if (tipoMantenimientoSelect.value === 'Correctivo') {
+      kilometrajeInput.disabled = true;
+      console.log('Unidad seleccionada dentro del if:', unidadSelect);
+      const ultimoKilometraje = await obtenerUltimoKilometraje(unidadSelect);
+      console.log('Último kilometraje dentro del if:', ultimoKilometraje);
+      kilometrajeInput.value = ultimoKilometraje;
+    } else {
+      kilometrajeInput.disabled = false;
+    }
+  }
+
+  async function obtenerUltimoKilometraje(unidad) {
+    try {
+      console.log('Id de la Unidad:', unidad);
+      const unidades = await getUnidades();
+      console.log("Unidades obtenidas:", unidades);
+
+      // Convertir el id de la unidad seleccionada a número
+      const unidadSeleccionada = unidades.find(u => u.id == unidad);
+      console.log("Unidad encontrada por el find:", unidadSeleccionada);
+      return unidadSeleccionada ? unidadSeleccionada.ultimoMantenimientoKilometraje : '';
+    } catch (error) {
+      console.error('Error al obtener el último kilometraje:', error);
+      return '';
+    }
+  }
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
   $(document).on("click", "#btnCloseTask", async function () {
@@ -281,7 +333,7 @@
   async function getActividades1() {
     try {
       const token = localStorage.getItem("token");
-      const API_URL = "http://localhost:18026/api/actividadMantenimiento";
+      const API_URL = "https://backend-transporteccss.onrender.com/api/actividadMantenimiento";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -314,7 +366,7 @@
 
       console.log(ActividadData);
       const token = localStorage.getItem("token");
-      const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
 
       const response = await axios.put(API_URL, ActividadData, {
         headers: {
@@ -531,7 +583,7 @@
     try {
       const token = localStorage.getItem("token");
       const API_URL =
-        "http://localhost:18026/api/actividad/";
+        "https://backend-transporteccss.onrender.com/api/actividad/";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -597,7 +649,7 @@
 
       try {
         const token = localStorage.getItem("token");
-        const API_URL = "http://localhost:18026/api/mantenimiento";
+        const API_URL = "https://backend-transporteccss.onrender.com/api/mantenimiento";
         const response = await axios.post(API_URL, mantenimiento, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -741,8 +793,8 @@
           console.log(mantenimientoData);
           console.log(actividadMantenimientoData);
 
-          const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
-          const API_URL2 = `http://localhost:18026/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
+          const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+          const API_URL2 = `https://backend-transporteccss.onrender.com/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
           const token = localStorage.getItem('token');
           const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -932,7 +984,7 @@
   }
   async function getActividades() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       const response = await axios.get(`${Api_Url}api/actividad`, {
@@ -1009,7 +1061,7 @@
   //Funcion para agregar una actividad
   async function addActivity(activityData) {
     try {
-      const API_URL = "http://localhost:18026/api/actividad";
+      const API_URL = "https://backend-transporteccss.onrender.com/api/actividad";
       const token = localStorage.getItem("token");
       const response = await axios.post(API_URL, activityData, {
         headers: {
@@ -1038,7 +1090,7 @@
   window.deleteActividad = async function (idActividad) {
     try {
       const token = localStorage.getItem('token');
-      const API_URL = `http://localhost:18026/api/actividad/${idActividad}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/actividad/${idActividad}`;
       const response = await axios.delete(API_URL, {
         headers: {
           Authorization: `Bearer ${token}`
