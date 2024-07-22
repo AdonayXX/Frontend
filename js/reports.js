@@ -258,4 +258,104 @@ async function modificarPDF() {
 
     } catch (error) {
     }
+    document.getElementById("exportar").addEventListener("click", function () {
+        fetch("https://backend-transporteccss.onrender.com/api/vales")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("La solicitud a la API no fue exitosa");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Generar dinámicamente el contenido de la tabla
+            var tableHTML = "<h1>CCSS</h1>";
+            tableHTML += "<h3>Lista de Solicitudes de Vales</h3>";
+            tableHTML += "<table>";
+            tableHTML +=
+              "<thead><tr><th>ID Vale</th><th>Nombre Solicitante</th><th>Nombre Salida</th><th>Nombre Destino</th><th>Fecha Solicitud</th><th>Detalle</th><th>Estado</th></tr></thead>";
+            tableHTML += "<tbody>";
+
+            // Construir filas de la tabla con los datos de la API
+            data.vales.forEach(function (vale) {
+              tableHTML += "<tr>";
+              tableHTML += "<td>" + vale.IdVale + "</td>";
+              tableHTML += "<td>" + vale.NombreSolicitante + "</td>";
+              tableHTML += "<td>" + vale.NombreSalida + "</td>";
+              tableHTML += "<td>" + vale.NombreDestino + "</td>";
+              tableHTML +=
+                "<td>" +
+                new Date(vale.Fecha_Solicitud).toLocaleDateString() +
+                "</td>";
+              tableHTML += "<td>" + vale.Detalle + "</td>";
+              tableHTML += "<td>" + vale.NombreEstado + "</td>";
+              tableHTML += "</tr>";
+            });
+
+            tableHTML += "</tbody></table>";
+
+            // Crear un elemento temporal para convertirlo en PDF
+            var tempDiv = document.createElement("div");
+            tempDiv.innerHTML = tableHTML;
+
+            // Configuración de html2pdf
+            var opt = {
+              margin: 10, // Márgenes en mm
+              filename: "vales.pdf",
+              image: { type: "jpeg", quality: 1.0 },
+              html2canvas: { scale: 3 },
+              jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+            };
+
+            // Función para agregar imagen como logo en el PDF
+            function addLogoToPDF(pdf) {
+    var totalPages = pdf.internal.getNumberOfPages();
+    var logoWidth = 35; // Ancho de la imagen del logo en milímetros
+    var logoMargin = 2; // Margen desde el borde en milímetros
+
+    for (var i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(10);
+        pdf.text(`Página ${i} de ${totalPages}`, pdf.internal.pageSize.getWidth() - 30, pdf.internal.pageSize.getHeight() - 10);
+        
+        // Calcular posición de la imagen
+        var x = pdf.internal.pageSize.getWidth() - logoMargin - logoWidth; // Posición X desde el borde derecho
+        var y = logoMargin; // Posición Y desde el borde superior
+        
+        // Ajustar tamaño de la imagen como logo en la esquina superior derecha
+        pdf.addImage('img/logo_ccss_azul.png', 'PNG', x, y, logoWidth, 0); // Altura automática
+    }
+}
+            // Crear PDF y descargarlo
+            html2pdf()
+              .from(tempDiv)
+              .set(opt)
+              .toPdf()
+              .get("pdf")
+              .then(function (pdf) {
+                addLogoToPDF(pdf);
+              })
+              .save();
+          })
+          .catch((error) =>
+            console.error(
+              "Error al obtener datos desde la API o al generar el PDF:",
+              error
+            )
+          );
+      });
+      document.getElementById('exportar').addEventListener('click', function() {
+        // Obtiene el contenido del div
+        let content = document.getElementById('content').outerHTML;
+    
+        // Crea un blob con el contenido
+        let blob = new Blob([content], { type: 'text/html' });
+    
+        // Crea un enlace para la descarga
+        let a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'pagina.html';
+    
+        // Simula un click en el enlace para iniciar la descarga
+        a.click();
+    });
 }
