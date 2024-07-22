@@ -10,7 +10,13 @@ function ocultarSpinner() {
 
 async function getNombreChofer() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const choferes = response.data.choferes;
         const choferMap = {};
 
@@ -27,7 +33,13 @@ async function getNombreChofer() {
 
 async function getTiposRecurso() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoRecurso');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoRecurso', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const tiposRecurso = response.data.tiporecurso;
         const recursoMap = {};
 
@@ -44,7 +56,13 @@ async function getTiposRecurso() {
 
 async function getEstadosUnidad() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
         const estadosUnidad = response.data.estadosUnidad;
         const estadoMap = {};
 
@@ -67,7 +85,13 @@ async function getUnidades() {
             getNombreChofer()
         ]);
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const unidades = response.data.unidades;
 
         // Sort the unidades array by numeroUnidad in alphabetical order

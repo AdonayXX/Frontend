@@ -2,9 +2,16 @@
 
 (async function () {
   const token = localStorage.getItem('token');
+
+  const btnIniciarViaje = document.getElementById('btnIniciarViaje');
+  const btnFinalizarViaje = document.getElementById('btnFinalizarViaje');
+  const btnInitTripDriver = document.getElementById('btnInitTripDriver');
+  btnIniciarViaje.disabled = true;
+  btnFinalizarViaje.disabled = true;
+  btnInitTripDriver.disabled = true;
+
   async function infoUser() {
     try {
-      const token = localStorage.getItem('token');
       return jwt_decode(token);
     } catch (error) {
       console.error(error);
@@ -120,8 +127,6 @@
 
   function mostrarEstadoViaje() {
     const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
-    const btnIniciarViaje = document.getElementById('btnIniciarViaje');
-    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
     const tiempoTranscurrido = document.getElementById('tiempoTranscurrido');
 
     if (viajeIniciado) {
@@ -153,7 +158,7 @@
       const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
       const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-      tiempoTranscurrido.value = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
+      tiempoTranscurrido.innerText = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
     }
 
     actualizarTiempo();
@@ -168,9 +173,6 @@
 
       if (rol !== 2) {
         showToast('Error', 'Acceso denegado: Solo los chóferes pueden usar este módulo.');
-        document.getElementById('btnIniciarViaje').disabled = true;
-        document.getElementById('btnFinalizarViaje').disabled = true;
-        document.getElementById('finalizarViajeBtn').disabled = true;
         return;
       }
 
@@ -192,7 +194,7 @@
             await obtenerViajes(idUnidad, fechaValue);
           }
 
-          document.getElementById('btnIniciarViaje').addEventListener('click', async () => {
+          btnIniciarViaje.addEventListener('click', async () => {
             await updateInitTrip(idUnidad, fechaValue, obtenerHoraActual());
             await obtenerViajes(idUnidad, fechaValue);
           });
@@ -236,20 +238,10 @@
 
   function haveTrips() {
     const tableBody = document.getElementById('viajesTableBody');
-    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
-    const btnFinalizarViaje = document.getElementById('finalizarViajeBtn');
-
     const hasTrip = tableBody.children.length > 0;
     btnInitTripDriver.disabled = !hasTrip;
     btnFinalizarViaje.disabled = !hasTrip;
-
   }
-  function polling() {
-    setInterval(() => {
-      haveTrips();
-    }, 6.5);
-  }
-  polling();
   await inicializarPagina();
   console.log(infoUser());
 

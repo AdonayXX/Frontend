@@ -141,7 +141,7 @@
   function setupDataTable() {
 
     // Inicializar DataTables
-    $("#tableMaintenance").DataTable({
+    let table= $("#tableMaintenance").DataTable({
       dom: "<'row'<'col-md-6'l>" +
         "<'row'<'col-md-12't>>" +
         "<'row justify-content-between'<'col-md-6'i><'col-md-6'p>>",
@@ -155,6 +155,12 @@
       smart: true,
     });
     console.log("DataTable inicializado");
+     // Maneja el evento keyup del input de búsqueda
+   $('#searchMaintenance').on('keyup', function () {
+    let inputValue = $(this).val().toLowerCase();
+    // Filtra la tabla usando el valor del input
+    table.search(inputValue).draw();
+  });
   }
 
 
@@ -1252,6 +1258,9 @@
   function hideLoaderModalMantEdit() {
     document.querySelector('#loaderModalMantEdit').style.display = 'none';
   }
+  
+
+ 
 
 
 

@@ -216,11 +216,11 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         this.disabled = true;
 
         const guardarCita = async () => {
-            if (!idPaciente) {
-                console.log('Error', 'No se ha obtenido el IdPaciente.');
-                this.disabled = false;
-                return;
-            }
+            // if (!idPaciente) {
+            //     console.log('Error', 'No se ha obtenido el IdPaciente.');
+            //     this.disabled = false;
+            //     return;
+            // }
 
             const diagnostico = document.getElementById('diagnostico').value;
             const fechaCita = document.getElementById('fechaCita').value;
