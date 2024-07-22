@@ -235,7 +235,7 @@ function LlenarRutaSalida(data) {
     }
     document.getElementById('lugarSa2').innerHTML = body;
 }
-//body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
+
 
 function ObtenerRutaDestino() {
     axios.get(`${url}api/rutas`)
@@ -254,6 +254,55 @@ function LlenarRutaDestino(data) {
     }
     document.getElementById('lugarDes2').innerHTML = body;
 }
+
+//Obtener Ebais Perifericos
+
+document.getElementById('lugarSa').addEventListener('change', function () {
+    const selectedId = this.value;
+    ObtenerEbaisPerifericos(selectedId);
+});
+
+document.getElementById('lugarDes').addEventListener('change', function () {
+    const selectedId = this.value;
+    ObtenerEbaisPerifericos(selectedId);
+});
+
+function ObtenerEbaisPerifericos() {
+    axios.get(`${url}api/ebais/perifericos`)
+        .then(response => {
+            // Verifica si la propiedad 'ebaisPerifericos' existe y es un arreglo
+            if (response.data && Array.isArray(response.data.ebaisPerifericos)) {
+                LlenarEbaisPerifericos(response.data.ebaisPerifericos);
+            } else {
+                console.error('La respuesta de la API no contiene un arreglo de ebais:', response.data);
+            }
+        })
+        .catch(error => {
+            console.error('Hubo un problema al obtener los datos:', error);
+        });
+}
+
+function LlenarEbaisPerifericos(data) {
+    const selectSalida = document.getElementById('lugarSa');
+    const selectDestino = document.getElementById('lugarDes');
+
+
+    // Llenar selectores con EBAIS periféricos
+    data.forEach(ebais => {
+        const optionSalida = document.createElement('option');
+        optionSalida.value = ebais.id;
+        optionSalida.text = ebais.nombre;
+        selectSalida.appendChild(optionSalida);
+
+        const optionDestino = document.createElement('option');
+        optionDestino.value = ebais.id;
+        optionDestino.text = ebais.nombre;
+        selectDestino.appendChild(optionDestino);
+    });
+}
+
+
+
 
 //------------------------------------------------------------------------------------------
 //Valida que los campos se deban llenar
@@ -290,34 +339,37 @@ function GuardarDatos() {
     let Acompanante4 = document.getElementById('acompananteNombre4').value;
     let Acompanante5 = document.getElementById('acompananteNombre5').value;
     const IdUnidadProgramatica = document.getElementById('Up').value;
-    const SalidaId = document.getElementById('lugarSa').value;
     const ServicioID = document.getElementById('service').value;
     const MotivoID = document.getElementById('motivo').value;
-    const DestinoId = document.getElementById('lugarDes').value;
     const Detalle = document.getElementById('detalle').value;
     const NombreSolicitante = document.getElementById('nameSoli').value;
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
     const Chofer = document.getElementById('chofer').checked ? 1 : 0;
+    let SalidaId = document.getElementById('lugarSa2').value;
+    let DestinoId = document.getElementById('lugarDes2').value;
+    let SalidaEbaisId = document.getElementById('lugarSa').value;
+    let DestinoEbaisId = document.getElementById('lugarDes').value;
 
-    function adjustToNullIfEmpty(value) {
-        if (typeof value === 'string' && value.trim() === '') {
-            value = null;
-        }
-        return value;
-    }
+
 
     Acompanante1 = adjustToNullIfEmpty(Acompanante1);
     Acompanante2 = adjustToNullIfEmpty(Acompanante2);
     Acompanante3 = adjustToNullIfEmpty(Acompanante3);
     Acompanante4 = adjustToNullIfEmpty(Acompanante4);
     Acompanante5 = adjustToNullIfEmpty(Acompanante5);
+    SalidaId = adjustToNullIfEmpty(SalidaId);
+    DestinoId = adjustToNullIfEmpty(DestinoId);
+    SalidaEbaisId = adjustToNullIfEmpty(SalidaEbaisId);
+    DestinoEbaisId = adjustToNullIfEmpty(DestinoEbaisId);
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
         SalidaId: SalidaId,
         DestinoId: DestinoId,
+        SalidaEbaisId: SalidaEbaisId,
+        DestinoEbaisId: DestinoEbaisId,
         MotivoId: MotivoID,
         ServicioId: ServicioID,
         Fecha_Solicitud: Fecha_Solicitud,
@@ -336,17 +388,17 @@ function GuardarDatos() {
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
-
         })
         .catch(error => {
             if (error.response) {
                 console.error('Hubo un problema al guardar los datos:', error.response.data);
+                console.error('Detalles del error:', error.response.status, error.response.headers);
             } else {
                 console.error('Error desconocido:', error);
             }
         });
-
 }
+
 //Limpia los campos del modal 
 document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';
