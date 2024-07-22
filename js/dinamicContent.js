@@ -1,32 +1,33 @@
 "use strict";
-function loadContent(page, containerId = 'mainContent') {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", page, true);
-    xhr.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            if (this.status === 200) {
-                var container = document.getElementById(containerId);
-                if (container) {
-                    container.innerHTML = this.responseText;
 
-                    var scriptSrcs = container.querySelectorAll('[data-script]');
-                    scriptSrcs.forEach(function(scriptSrc) {
-                        var script = document.createElement('script');
-                        script.src = scriptSrc.getAttribute('data-script');
-                        script.async = true;  
-                        script.defer = true;
-                        document.head.appendChild(script);
-                    });
-                } else {
-                    console.error(`Container with id ${containerId} not found`);
-                }
-            } else {
-                console.error(`Failed to load content from ${page}: ${this.status} ${this.statusText}`);
-            }
+async function loadContent(page, containerId = 'mainContent') {
+    try {
+        const response = await fetch(page);
+        if (!response.ok) {
+            throw new Error(`Failed to load content from ${page}: ${response.status} ${response.statusText}`);
         }
-    };
-    xhr.onerror = function() {
-        console.error(`Network error while attempting to load ${page}`);
-    };
-    xhr.send();
+
+        const content = await response.text();
+
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = content;
+
+            const scriptSrcs = container.querySelectorAll('[data-script]');
+            scriptSrcs.forEach(scriptSrc => {
+                const script = document.createElement('script');
+                script.src = scriptSrc.getAttribute('data-script');
+                script.async = true; 
+                script.defer = true; 
+                script.onerror = function() {
+                    console.error(`Failed to load script: ${script.src}`);
+                };
+                document.head.appendChild(script);
+            });
+        } else {
+            console.error(`Container with id ${containerId} not found`);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
