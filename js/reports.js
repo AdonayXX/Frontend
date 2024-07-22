@@ -70,7 +70,6 @@ async function modificarPDF() {
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
             })
             .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
-            console.log(dieselKilometraje);
 
             //GASOLINA
             const gasolinaKilometraje = datosRegistros
@@ -79,7 +78,6 @@ async function modificarPDF() {
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
             })
             .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
-            console.log(gasolinaKilometraje);
 
         const pacientes = datosCitas.filter(paciente => {
                 const fechaCita = new Date(paciente.fechaCita);
@@ -258,8 +256,6 @@ async function modificarPDF() {
             return new Blob([bytes], { type });
         }
 
-        console.log('PDF modificado y descargado correctamente.');
     } catch (error) {
-        console.error('Error al modificar el PDF:', error);
     }
 }
