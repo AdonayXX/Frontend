@@ -21,6 +21,7 @@ async function loadEspecialidades() {
             ordering: false,
             searching: true,
             paging: true,
+            lengthMenu: [5, 10, 25, 50],
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
             },

@@ -2,9 +2,12 @@
 
 (function () {
   const token = localStorage.getItem('token');
+  if (!token) {
+    // Redirigir al usuario a la página de inicio de sesión
+    window.location.href = 'login.html';
+  }
 
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
-
   document.getElementById('fechaInicio').addEventListener('change', aplicarFiltros);
   document.getElementById('unidades').addEventListener('change', function () {
     actualizarChofer();
@@ -15,6 +18,17 @@
   let citasSeleccionadasGlobal = new Set();
   let citasConfirmadas = new Set();
 
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+      }
+      return Promise.reject(error);
+    }
+  );
+
   async function obtenerCitas() {
     try {
       const [citas, viajes, relacionesViajesCitas] = await Promise.all([
@@ -24,7 +38,6 @@
       ]);
       ocultarSpinner();
 
-    
       citasCombinadas = combinarCitasYViajes(citas, viajes, relacionesViajesCitas);
       mostrarCitas(citasCombinadas);
     } catch (error) {
@@ -36,28 +49,25 @@
     try {
       const URL_CITAS = 'https://backend-transporteccss.onrender.com/api/viajeCita';
       const respuesta = await axios.get(URL_CITAS, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       return respuesta.data.citas || [];
     } catch (error) {
       console.error('Error al obtener las citas:', error);
+      showToast('Error', 'Ocurrió un problema al obtener las citas');
     }
-
   }
 
   async function cargarViajes() {
     try {
       const URL_VIAJES = 'https://backend-transporteccss.onrender.com/api/viaje';
       const respuesta = await axios.get(URL_VIAJES, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       return respuesta.data.viaje || [];
     } catch (error) {
       console.error('Error al obtener los viajes:', error);
+      showToast('Error', 'Ocurrió un problema al obtener los viajes');
     }
   }
 
@@ -65,16 +75,13 @@
     try {
       const URL_RELACIONES = 'https://backend-transporteccss.onrender.com/api/viaje/relaciones';
       const respuesta = await axios.get(URL_RELACIONES, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       return respuesta.data.ViajesCitas.ViajesCitas || [];
-
     } catch (error) {
       console.error('Error al obtener las relaciones entre viajes y citas:', error);
+      showToast('Error', 'Ocurrió un problema al obtener las relaciones entre viajes y citas');
     }
-
   }
 
   function combinarCitasYViajes(citas, viajes, relaciones) {
@@ -82,6 +89,7 @@
     citas.forEach(cita => {
       mapaCitas.set(cita.idCita, cita);
     });
+
     if (relaciones !== undefined) {
       relaciones.forEach(relacion => {
         if (mapaCitas.has(relacion.idCita)) {
@@ -119,6 +127,7 @@
       if (b.idUnidad == unidadFiltro && b.estadoCita === 'Asignada') return 1;
       return 0;
     });
+
     mostrarCitas(citasFiltradas);
   }
 
@@ -137,20 +146,20 @@
       citas.forEach(cita => {
         const formattedFechaCita = formatISODate(cita.fechaCita);
         rows += `
-        <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
-          <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
-          <td class="text-center">${cita.Paciente}</td>
-          <td class="text-center">${cita.ubicacionOrigen}</td>
-          <td class="text-center">${cita.idUbicacionDestino}</td>
-          <td class="text-center">${cita.condicionCita}</td>
-          <td class="text-center">${cita.horaCita}</td>
-          <td class="text-center">${formattedFechaCita}</td>
-          <td class="text-center">${cita.camilla}</td>
-          <td class="text-center">
-            <button class="btn btn-warning ausenteBtn" data-bs-toggle="modal" data-bs-target="#ausenteModal" data-idcita="${cita.idCita}">Ausente</button>
-          </td>
-        </tr>
-      `;
+              <tr data-paciente="${cita.idPaciente}" data-nombrepaciente="${cita.Paciente}" data-idcita="${cita.idCita}" data-ubicaciondestino="${cita.idUbicacionDestino}" data-condicion="${cita.condicionCita}" data-fechacita="${formattedFechaCita}" data-horacita="${cita.horaCita}" data-traslado="${cita.Traslado}" data-camilla="${cita.camilla}" data-lugarsalida="${cita.ubicacionOrigen}" data-estado="${cita.estadoCita}" data-idviaje="${cita.idViaje || ''}">
+                <td><input type="checkbox" class="cita-checkbox" value="${cita.idCita}" ${cita.estadoCita === 'Asignada' ? 'checked' : ''} ${cita.estadoCita === 'En curso' || cita.estadoCita === 'Finalizada' || cita.estadoCita === "Cancelada" ? 'checked disabled' : ''}></td>
+                <td class="text-center">${cita.Paciente}</td>
+                <td class="text-center">${cita.ubicacionOrigen}</td>
+                <td class="text-center">${cita.idUbicacionDestino}</td>
+                <td class="text-center">${cita.condicionCita}</td>
+                <td class="text-center">${cita.horaCita}</td>
+                <td class="text-center">${formattedFechaCita}</td>
+                <td class="text-center">${cita.camilla}</td>
+                <td class="text-center">
+                  <button class="btn btn-warning ausenteBtn" data-bs-toggle="modal" data-bs-target="#ausenteModal" data-idcita="${cita.idCita}">Ausente</button>
+                </td>
+              </tr>
+            `;
       });
       tableBody.innerHTML = rows;
 
@@ -181,54 +190,54 @@
 
   function addCheckboxEventListeners() {
     document.querySelectorAll('.cita-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', async function () {
-        const isValid = checkcamilla();
-        if (!isValid) {
-          this.checked = !this.checked;
-          return;
-        }
-
-        const row = this.closest('tr');
-        const idCita = this.value;
-        const idViaje = row.dataset.idviaje;
-
-        if (this.checked) {
-          citasSeleccionadasGlobal.add(idCita);
-        } else {
-          citasSeleccionadasGlobal.delete(idCita);
-          if (idViaje) {
-            try {
-              await desasociarCitaDelViaje(idCita);
-              row.dataset.idviaje = '';
-              this.disabled = false;
-              obtenerCitas(); 
-            } catch (error) {
-              console.error('Error al desasociar la cita del viaje:', error);
-              showToast('Error', 'No se pudo desasociar la cita del viaje');
-              this.checked = true;
-            }
-          }
-        }
-      });
+      checkbox.removeEventListener('change', handleCheckboxChange);
+      checkbox.addEventListener('change', handleCheckboxChange);
     });
+  }
+
+  async function handleCheckboxChange() {
+    const isValid = checkcamilla();
+    if (!isValid) {
+      this.checked = !this.checked;
+      return;
+    }
+
+    const row = this.closest('tr');
+    const idCita = this.value;
+    const idViaje = row.dataset.idviaje;
+
+    if (this.checked) {
+      citasSeleccionadasGlobal.add(idCita);
+    } else {
+      citasSeleccionadasGlobal.delete(idCita);
+      if (idViaje) {
+        try {
+          await desasociarCitaDelViaje(idCita);
+          row.dataset.idviaje = '';
+          this.disabled = false;
+          obtenerCitas();
+        } catch (error) {
+          console.error('Error al desasociar la cita del viaje:', error);
+          showToast('Error', 'No se pudo desasociar la cita del viaje');
+          this.checked = true;
+        }
+      }
+    }
   }
 
   async function desasociarCitaDelViaje(idCita) {
     const url = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
 
     try {
-      const response = await axios.delete(url, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+      await axios.delete(url, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       showToast('Éxito', 'Cita desasociada del viaje exitosamente');
     } catch (error) {
       console.error('Error al desasociar la cita del viaje:', error.response.data);
       throw error;
     }
   }
-
 
   function checkcamilla() {
     const checkboxes = document.querySelectorAll('.cita-checkbox:checked:not(:disabled)');
@@ -260,10 +269,8 @@
     try {
       const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades/ambulancia';
       const respuesta = await axios.get(URL_UNIDADES, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       const unidades = respuesta.data.unidades;
       const selectBody = document.querySelector('#unidades');
       const choferesSelect = document.querySelector('#choferes');
@@ -317,19 +324,23 @@
 
   function obtenerCitasSeleccionadas() {
     return Array.from(citasSeleccionadasGlobal).map(idCita => {
-      const row = document.querySelector(`.cita-checkbox[value="${idCita}"]`).closest('tr');
-      return {
-        idCita: idCita,
-        idPaciente: row.dataset.paciente,
-        nombrePaciente: row.dataset.nombrepaciente,
-        idUbicacionDestino: row.dataset.ubicaciondestino,
-        condicion: row.dataset.condicion,
-        fechaCita: row.dataset.fechacita,
-        horaCita: row.dataset.horacita,
-        camilla: row.dataset.camilla,
-        lugarSalida: row.dataset.lugarsalida
-      };
-    });
+      const checkbox = document.querySelector(`.cita-checkbox[value="${idCita}"]`);
+      if (checkbox) {
+        const row = checkbox.closest('tr');
+        return {
+          idCita: idCita,
+          idPaciente: row.dataset.paciente,
+          nombrePaciente: row.dataset.nombrepaciente,
+          idUbicacionDestino: row.dataset.ubicaciondestino,
+          condicion: row.dataset.condicion,
+          fechaCita: row.dataset.fechacita,
+          horaCita: row.dataset.horacita,
+          camilla: row.dataset.camilla,
+          lugarSalida: row.dataset.lugarsalida
+        };
+      }
+      return null;
+    }).filter(cita => cita !== null);
   }
 
   async function crearViajes() {
@@ -351,6 +362,7 @@
     }
 
     const unidadSeleccionadaTexto = idUnidadElement.options[idUnidadElement.selectedIndex].textContent;
+    document.getElementById('unidadSeleccionadaModal').textContent = unidadSeleccionadaTexto;
 
     const citasSeleccionadasList = document.getElementById('citasSeleccionadasList');
     citasSeleccionadasList.innerHTML = '';
@@ -360,10 +372,6 @@
       citasSeleccionadasList.appendChild(listItem);
     });
 
-    const unidadTextoElement = document.createElement('p');
-    unidadTextoElement.textContent = `Unidad seleccionada: ${unidadSeleccionadaTexto}`;
-    citasSeleccionadasList.appendChild(unidadTextoElement);
-
     const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     confirmModal.show();
   }
@@ -371,7 +379,6 @@
   document.getElementById('confirmarViajesBtn').addEventListener('click', crearViajes);
 
   async function enviarViajesConfirmados() {
-
     const citasSeleccionadas = obtenerCitasSeleccionadas();
     const idUnidadElement = document.getElementById('unidades');
     const fechaInicioElement = document.getElementById('fechaInicio');
@@ -389,32 +396,21 @@
       idUsuario: idUsuario,
       Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
     };
-    const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
 
-    const url = 'https://backend-transporteccss.onrender.com/api/viaje';
+    const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
     const idViaje = await returnIdViaje(getIdViaje);
 
     if (idViaje === "Error") {
       try {
-        await axios.post(url, nuevoViaje, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
+        await axios.post('https://backend-transporteccss.onrender.com/api/viaje', nuevoViaje, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         showToast('Éxito', 'Viaje creado exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
-        if (error.response) {
-          showToast('Error', 'Error al crear el viaje');
-          console.error('Código de estado:', error.response.status);
-          console.error('Headers:', error.response.headers);
-        } else if (error.request) {
-          console.error('No se recibió respuesta del servidor:', error.request);
-        } else {
-          console.error('Error al configurar la solicitud:', error.message);
-        }
+        showToast('Error', 'Error al crear el viaje');
+        console.error(error);
       }
-
     } else {
       const asignarCita = {
         idViaje: idViaje,
@@ -422,24 +418,18 @@
       };
       try {
         await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         showToast('Éxito', 'Citas asignadas al viaje exitosamente');
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
         showToast('Error', 'Error al asignar las citas al viaje');
+        console.error(error);
       }
-
     }
 
     resetFilters();
     obtenerCitas();
-    ocultarSpinner();
-    setTimeout(function () {
-      loadContent('tableTrips.html', 'mainContent');
-    }, 1000);
   }
 
   document.getElementById('confirmarViajesBtnModal').addEventListener('click', enviarViajesConfirmados);
@@ -463,10 +453,8 @@
 
     try {
       await axios.put(url, datosAusencia, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
@@ -482,10 +470,8 @@
   async function returnIdViaje(url) {
     try {
       const respuesta = await axios.get(url, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       const data = respuesta.data || [];
       const viajes = data.IdViajeData.viaje || [];
       const idViaje = viajes.length > 0 ? viajes[0].idViaje : null;
@@ -516,23 +502,21 @@
     });
   }
 
-  // Ocultar el spinner
   function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
-}
+  }
 
   function infoUser() {
     try {
       const token = localStorage.getItem('token');
       const decodedToken = jwt_decode(token);
-      return (decodedToken);
+      return decodedToken;
     } catch (error) {
       console.error(error);
-      showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
-
+      showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
     }
-
   }
+
   const infoUsuario = infoUser();
   const idUsuario = infoUsuario.usuario.IdUsuario;
 })();

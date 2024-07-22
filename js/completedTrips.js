@@ -1,6 +1,13 @@
 async function loadChoferes() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+        const token = localStorage.getItem('token');
+
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+
+        });
         const choferes = response.data.choferes;
         const select = document.getElementById('seleccionar-chofer');
 
@@ -17,7 +24,13 @@ async function loadChoferes() {
 
 async function loadUnidades() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+        const token = localStorage.getItem('token');
+
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const unidades = response.data.unidades;
         const select = document.getElementById('seleccionar-unidad');
 

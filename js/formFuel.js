@@ -65,7 +65,13 @@
 
     async function autorizacionDuplicado(numeroAutorizacion, idRegistro = null) {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const registros = response.data.registros;
 
             const duplicado = registros.some(registro => registro.numeroAutorizacion === numeroAutorizacion && registro.id !== idRegistro);
@@ -79,7 +85,13 @@
 
     async function facturaDuplicado(numeroFactura, idRegistro = null) {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const registros = response.data.registros;
 
             const duplicado = registros.some(registro => registro.numeroFactura === numeroFactura && registro.id !== idRegistro);
@@ -93,7 +105,13 @@
 
     async function getUnidades() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const unidades = response.data.unidades.filter(unidad => unidad.idEstado !== 5);
 
             const unit = document.getElementById('unidad');
@@ -122,7 +140,13 @@
 
     async function getChoferes() {
         try {
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const choferes = response.data.choferes;
 
             const assignedDriver = document.getElementById('chofer');
@@ -156,7 +180,13 @@
 
     async function getIdRegistroCombustible(unidad) {
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const registros = response.data.registro;
             const fuelLog = registros.filter(log => log.estado === 'activo');
 
@@ -188,7 +218,13 @@
         const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
 
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/registrocombustible/${unidad}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             const registros = response.data.registro;
 
             if (registros.length === 0) {
@@ -309,7 +345,12 @@
             estado: "activo"
         };
 
-        axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData)
+        const token = localStorage.getItem('token');
+        axios.post('https://backend-transporteccss.onrender.com/api/registroCombustible', fuelLogData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 limpiar();
                 showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha realizado exitosamente.`);
@@ -372,7 +413,12 @@
             estado: "activo"
         };
 
-        axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
+        const token = localStorage.getItem('token');
+        axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 limpiar();
                 showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha actualizado exitosamente.`);
@@ -433,7 +479,12 @@
 
         document.getElementById('confirmDelete').onclick = function () {
             showToast('Cargando', 'Eliminando registro de combustible...');
-            axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData)
+            const token = localStorage.getItem('token');
+            axios.put(`https://backend-transporteccss.onrender.com/api/registroCombustible/${idRegistro}`, fuelLogData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
                     limpiar();
                     showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);

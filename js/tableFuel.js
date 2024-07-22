@@ -8,9 +8,15 @@ function ocultarSpinner() {
     document.getElementById('spinnerContainer').style.display = 'none';
 }
 
-async function getFuelRecords() {
+async function getRegistrosCombustble() {
     try {
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible');
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
         const registros = response.data.registros;
 
         $(document).ready(function () {
@@ -69,4 +75,4 @@ async function getFuelRecords() {
     }
 }
 
-getFuelRecords();
+getRegistrosCombustble();
