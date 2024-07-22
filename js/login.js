@@ -1,8 +1,9 @@
 //funciones dinamicas
 
 // Función para mostrar los campos según el motivo seleccionado
+var motivoSeleccionado;
 function mostrarCampos() {
-    var motivoSeleccionado = document.getElementById('motivo').value;
+     motivoSeleccionado = document.getElementById('motivo').value;
     var contenedorSelectSalida = document.getElementById('contenedorSelectSalida');
     var contenedorSelectDestino = document.getElementById('contenedorSelectDestino');
     var contenedorEscribirSalida = document.getElementById('contenedorEscribirSalida');
@@ -179,9 +180,10 @@ function llenarMotivos(data) {
 
 //Obtener Lugar de Salida
 function ObtenerSalida() {
-    axios.get(`${url}api/ebais`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            LlenarSalida(response.data.ebais);
+          
+            LlenarSalida(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -192,16 +194,16 @@ function ObtenerSalida() {
 function LlenarSalida(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     data.forEach(ebai => {
-        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
     document.getElementById('lugarSa').innerHTML = body;
 }
 
 // Obtener EBAIS para lugar de destino
 function ObtenerDestino() {
-    axios.get(`${url}api/ebais`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            LlenarDestino(response.data.ebais);
+            LlenarDestino(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -212,7 +214,7 @@ function ObtenerDestino() {
 function LlenarDestino(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     data.forEach(ebai => {
-        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
     document.getElementById('lugarDes').innerHTML = body;
 }
@@ -254,54 +256,6 @@ function LlenarRutaDestino(data) {
     }
     document.getElementById('lugarDes2').innerHTML = body;
 }
-
-//Obtener Ebais Perifericos
-
-document.getElementById('lugarSa').addEventListener('change', function () {
-    const selectedId = this.value;
-    ObtenerEbaisPerifericos(selectedId);
-});
-
-document.getElementById('lugarDes').addEventListener('change', function () {
-    const selectedId = this.value;
-    ObtenerEbaisPerifericos(selectedId);
-});
-
-function ObtenerEbaisPerifericos() {
-    axios.get(`${url}api/ebais/perifericos`)
-        .then(response => {
-            // Verifica si la propiedad 'ebaisPerifericos' existe y es un arreglo
-            if (response.data && Array.isArray(response.data.ebaisPerifericos)) {
-                LlenarEbaisPerifericos(response.data.ebaisPerifericos);
-            } else {
-                console.error('La respuesta de la API no contiene un arreglo de ebais:', response.data);
-            }
-        })
-        .catch(error => {
-            console.error('Hubo un problema al obtener los datos:', error);
-        });
-}
-
-function LlenarEbaisPerifericos(data) {
-    const selectSalida = document.getElementById('lugarSa');
-    const selectDestino = document.getElementById('lugarDes');
-
-
-    // Llenar selectores con EBAIS periféricos
-    data.forEach(ebais => {
-        const optionSalida = document.createElement('option');
-        optionSalida.value = ebais.id;
-        optionSalida.text = ebais.nombre;
-        selectSalida.appendChild(optionSalida);
-
-        const optionDestino = document.createElement('option');
-        optionDestino.value = ebais.id;
-        optionDestino.text = ebais.nombre;
-        selectDestino.appendChild(optionDestino);
-    });
-}
-
-
 
 
 //------------------------------------------------------------------------------------------
@@ -352,17 +306,44 @@ function GuardarDatos() {
     let SalidaEbaisId = document.getElementById('lugarSa').value;
     let DestinoEbaisId = document.getElementById('lugarDes').value;
 
-
-
     Acompanante1 = adjustToNullIfEmpty(Acompanante1);
     Acompanante2 = adjustToNullIfEmpty(Acompanante2);
     Acompanante3 = adjustToNullIfEmpty(Acompanante3);
     Acompanante4 = adjustToNullIfEmpty(Acompanante4);
     Acompanante5 = adjustToNullIfEmpty(Acompanante5);
-    SalidaId = adjustToNullIfEmpty(SalidaId);
-    DestinoId = adjustToNullIfEmpty(DestinoId);
-    SalidaEbaisId = adjustToNullIfEmpty(SalidaEbaisId);
-    DestinoEbaisId = adjustToNullIfEmpty(DestinoEbaisId);
+    // SalidaId = adjustToNullIfEmpty2(SalidaId);
+    // DestinoId = adjustToNullIfEmpty2(DestinoId);
+    // SalidaEbaisId = adjustToNullIfEmpty2(SalidaEbaisId);
+    // DestinoEbaisId = adjustToNullIfEmpty2(DestinoEbaisId);
+
+   
+
+    function adjustToNullIfEmpty(value) {
+        if (typeof value === 'string' && value.trim() === '') {
+            value = null;
+        }
+        return value;
+    }
+
+  
+    // if (SalidaEbaisId) {
+    //     SalidaId = null;
+    // } else if (SalidaId) {
+    //     SalidaEbaisId = null;
+    // }
+    // if (DestinoEbaisId) {
+    //     DestinoId = null;
+    // } else if (DestinoId) {
+    //     DestinoEbaisId = null;
+    // }
+
+    if(motivoSeleccionado==='3'){
+        SalidaId=null;
+        DestinoId=null;
+    }else{
+        SalidaEbaisId=null;
+        DestinoEbaisId=null;
+    }
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
@@ -398,6 +379,7 @@ function GuardarDatos() {
             }
         });
 }
+
 
 //Limpia los campos del modal 
 document.getElementById('btn-limpiar').addEventListener('click', function () {

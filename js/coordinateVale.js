@@ -22,6 +22,14 @@
 
             vales.forEach(vale => {
                 if (id === vale.IdVale) {
+                    var salida,destino;
+                    if(vale.NombreSalida==null){
+                        salida=vale.NombreSalidaEbais;
+                        destino =vale.NombreDestinoEbais
+                    }else{
+                        salida=vale.NombreSalida;
+                        destino=vale.NombreDestino;
+                    }
                     const fechaSolicitud = new Date(vale.Fecha_Solicitud);
                     const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
                     document.getElementById('input-id').value = id;
@@ -32,8 +40,8 @@
                     document.getElementById('input-horaSalida').value = vale.Hora_Salida;
                     document.getElementById('input-fechaReq').value = fechaFormateada;
                     document.getElementById('txa-detalle').value = vale.Detalle;
-                    document.getElementById('input-salida').value = vale.NombreSalida;
-                    document.getElementById('input-destino').value = vale.NombreDestino;
+                    document.getElementById('input-salida').value =salida;
+                    document.getElementById('input-destino').value = destino;
                     if (vale.EstadoId === 3 || vale.EstadoId === 5) {
                         blockBtn()
                         const selectPlaca = document.getElementById('select-placa');
