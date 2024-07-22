@@ -31,13 +31,13 @@
 
             vales.forEach(vale => {
                 if (id === vale.IdVale) {
-                    var salida,destino;
-                    if(vale.NombreSalida==null){
-                        salida=vale.NombreSalidaEbais;
-                        destino =vale.NombreDestinoEbais
-                    }else{
-                        salida=vale.NombreSalida;
-                        destino=vale.NombreDestino;
+                    var salida, destino;
+                    if (vale.NombreSalida == null) {
+                        salida = vale.NombreSalidaEbais;
+                        destino = vale.NombreDestinoEbais
+                    } else {
+                        salida = vale.NombreSalida;
+                        destino = vale.NombreDestino;
                     }
                     const fechaSolicitud = new Date(vale.Fecha_Solicitud);
                     const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
@@ -49,7 +49,7 @@
                     document.getElementById('input-horaSalida').value = vale.Hora_Salida;
                     document.getElementById('input-fechaReq').value = fechaFormateada;
                     document.getElementById('txa-detalle').value = vale.Detalle;
-                    document.getElementById('input-salida').value =salida;
+                    document.getElementById('input-salida').value = salida;
                     document.getElementById('input-destino').value = destino;
                     if (vale.EstadoId === 3 || vale.EstadoId === 5) {
                         blockBtn()
@@ -60,7 +60,7 @@
                         selectChofer.disabled = true;
                         selectEncargado.disabled = true;
                         showToast('Vale Rechazado', 'No se pueden modificar datos.');
-                    }else{
+                    } else {
                         if (vale.EstadoId == 2) {
                             blockBtn();
                         }
@@ -161,14 +161,14 @@
         const año = hoy.getFullYear();
         const mes = String(hoy.getMonth() + 1).padStart(2, '0');
         const día = String(hoy.getDate()).padStart(2, '0');
-    
+
         return `${año}-${mes}-${día}`;
     }
     const obtenerHoraActual = () => {
         const hoy = new Date();
         const horas = String(hoy.getHours()).padStart(2, '0');
         const minutos = String(hoy.getMinutes()).padStart(2, '0');
-    
+
         return `${horas}:${minutos}`;
     }
 
@@ -203,7 +203,7 @@
     }
 
     btnAdd.addEventListener('click', function () {
-        if(addCoordinate()){
+        if (addCoordinate()) {
             const selectPlaca = document.getElementById('select-placa');
             const selectChofer = document.getElementById('select-chofer');
             const selectEncargado = document.getElementById('select-encargado');
@@ -268,7 +268,7 @@
                 showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
                 blockBtn();
             }
-    
+
         } catch (error) {
             console.error('Error al actualizar el campo:', error);
             throw error;

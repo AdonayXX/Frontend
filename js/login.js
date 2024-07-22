@@ -3,7 +3,7 @@
 // Función para mostrar los campos según el motivo seleccionado
 var motivoSeleccionado;
 function mostrarCampos() {
-     motivoSeleccionado = document.getElementById('motivo').value;
+    motivoSeleccionado = document.getElementById('motivo').value;
     var contenedorSelectSalida = document.getElementById('contenedorSelectSalida');
     var contenedorSelectDestino = document.getElementById('contenedorSelectDestino');
     var contenedorEscribirSalida = document.getElementById('contenedorEscribirSalida');
@@ -182,7 +182,7 @@ function llenarMotivos(data) {
 function ObtenerSalida() {
     axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-          
+
             LlenarSalida(response.data.ebaisPerifericos);
         })
         .catch(error => {
@@ -316,7 +316,7 @@ function GuardarDatos() {
     // SalidaEbaisId = adjustToNullIfEmpty2(SalidaEbaisId);
     // DestinoEbaisId = adjustToNullIfEmpty2(DestinoEbaisId);
 
-   
+
 
     function adjustToNullIfEmpty(value) {
         if (typeof value === 'string' && value.trim() === '') {
@@ -325,7 +325,7 @@ function GuardarDatos() {
         return value;
     }
 
-  
+
     // if (SalidaEbaisId) {
     //     SalidaId = null;
     // } else if (SalidaId) {
@@ -337,12 +337,12 @@ function GuardarDatos() {
     //     DestinoEbaisId = null;
     // }
 
-    if(motivoSeleccionado==='3'){
-        SalidaId=null;
-        DestinoId=null;
-    }else{
-        SalidaEbaisId=null;
-        DestinoEbaisId=null;
+    if (motivoSeleccionado === '3') {
+        SalidaId = null;
+        DestinoId = null;
+    } else {
+        SalidaEbaisId = null;
+        DestinoEbaisId = null;
     }
 
     const datos = {
