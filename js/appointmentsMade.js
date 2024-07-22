@@ -194,7 +194,7 @@ async function updateCita(idCita) {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
+        await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
 
             headers: {
                 'Authorization': `Bearer ${token}`

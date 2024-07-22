@@ -128,7 +128,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="identification" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
                                 <input type="text" id="identification" name="identification" class="form-control" maxlength="20"
-                                    required>
+                                    required inputmode="numeric">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="name" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
@@ -148,12 +148,12 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="phone1" class="form-label"><i class="bi bi-telephone"></i> Telefono 1:</label>
-                                <input type="number" id="phone1" name="phone1" class="form-control" required>
+                                <input type="number" id="phone1" name="phone1" class="form-control" inputmode="numeric" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="phone2" class="form-label"><i class="bi bi-telephone"></i> Telefono 2:</label>
                                 <input type="number" id="phone2" name="phone2" class="form-control"
-                                    placeholder="(Opcional)" required>
+                                    placeholder="(Opcional)" inputmode="numeric" required>
                             </div>
 
 
@@ -312,7 +312,7 @@
                                             Teléfono 1:</label>
                                         <input type="text" id="telefono1" name="telefono1" class="form-control" required
                                             maxlength="8" inputmode="numeric">
-                                        <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number">
+                                        <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number" inputmode="numeric">
                                     </div>
                                     <!-- Telefono2 -->
                                     <div class="col-md-4 mb-3">
@@ -320,7 +320,7 @@
                                             Teléfono 2:</label>
                                         <input type="text" id="telefono2" name="telefono2" class="form-control"
                                             placeholder="Opcional" maxlength="8" inputmode="numeric">
-                                        <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number">
+                                        <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number" inputmode="numeric">
                                     </div>
                                     <!-- <button onclick="printHiddenValues()">Imprimir Valores Ocultos</button> -->
 
@@ -400,14 +400,14 @@
                                         <label for="latitud" class="form-label"><i class="bi bi-house"></i>
                                             Latitud:</label>
                                         <input type="number" step="any" id="latitud" name="latitud" class="form-control"
-                                            placeholder="Opcional" maxlength="25">
+                                            placeholder="Opcional" maxlength="25" inputmode="numeric">
                                     </div>
                                     <!-- Longitud -->
                                     <div class="col-md-4 mb-3">
                                         <label for="longitud" class="form-label"><i class="bi bi-house"></i>
                                             Longitud:</label>
                                         <input type="number" step="any" id="longitud" name="longitud"
-                                            class="form-control" placeholder="Opcional" maxlength="25">
+                                            class="form-control" placeholder="Opcional" maxlength="25" inputmode="numeric">
                                     </div>
                                 </div>
                             </div>

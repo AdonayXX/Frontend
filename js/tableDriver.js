@@ -38,8 +38,13 @@ getChoferes();
 
 async function getChoferes() {
     try {
-        const API_URL = 'https://backend-transporteccss.onrender.com/api/chofer';
-        const response = await axios.get(API_URL);
+
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer',{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const choferes = response.data.choferes;
 
         $(document).ready(function () {
