@@ -16,7 +16,7 @@
   //Funcion para obtener los ultimos 20 mantenimientos para llenar la tabla
   async function getlastMaintenance() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -162,7 +162,7 @@
   // Función para obtener todos los mantenimientos
   async function getMaintenance() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -333,7 +333,7 @@
   async function getActividades1() {
     try {
       const token = localStorage.getItem("token");
-      const API_URL = "http://localhost:18026/api/actividadMantenimiento";
+      const API_URL = "https://backend-transporteccss.onrender.com/api/actividadMantenimiento";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -366,7 +366,7 @@
 
       console.log(ActividadData);
       const token = localStorage.getItem("token");
-      const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
 
       const response = await axios.put(API_URL, ActividadData, {
         headers: {
@@ -583,7 +583,7 @@
     try {
       const token = localStorage.getItem("token");
       const API_URL =
-        "http://localhost:18026/api/actividad/";
+        "https://backend-transporteccss.onrender.com/api/actividad/";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -649,7 +649,7 @@
 
       try {
         const token = localStorage.getItem("token");
-        const API_URL = "http://localhost:18026/api/mantenimiento";
+        const API_URL = "https://backend-transporteccss.onrender.com/api/mantenimiento";
         const response = await axios.post(API_URL, mantenimiento, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -793,8 +793,8 @@
           console.log(mantenimientoData);
           console.log(actividadMantenimientoData);
 
-          const API_URL = `http://localhost:18026/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
-          const API_URL2 = `http://localhost:18026/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
+          const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+          const API_URL2 = `https://backend-transporteccss.onrender.com/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
           const token = localStorage.getItem('token');
           const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -984,7 +984,7 @@
   }
   async function getActividades() {
     try {
-      const Api_Url = "http://localhost:18026/";
+      const Api_Url = "https://backend-transporteccss.onrender.com/";
       const token = localStorage.getItem("token");
 
       const response = await axios.get(`${Api_Url}api/actividad`, {
@@ -1061,7 +1061,7 @@
   //Funcion para agregar una actividad
   async function addActivity(activityData) {
     try {
-      const API_URL = "http://localhost:18026/api/actividad";
+      const API_URL = "https://backend-transporteccss.onrender.com/api/actividad";
       const token = localStorage.getItem("token");
       const response = await axios.post(API_URL, activityData, {
         headers: {
@@ -1090,7 +1090,7 @@
   window.deleteActividad = async function (idActividad) {
     try {
       const token = localStorage.getItem('token');
-      const API_URL = `http://localhost:18026/api/actividad/${idActividad}`;
+      const API_URL = `https://backend-transporteccss.onrender.com/api/actividad/${idActividad}`;
       const response = await axios.delete(API_URL, {
         headers: {
           Authorization: `Bearer ${token}`

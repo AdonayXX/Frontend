@@ -1,35 +1,4 @@
-function openAccomp(acompanante1, acompanante2) {
-  console.log('Acompañante 1:', acompanante1);
-  console.log('Acompañante 2:', acompanante2);
-  const acompTableBody = document.getElementById('acompTableBody');
-  const messageNoComp = document.getElementById('messageNoComp');
-
-  acompTableBody.innerHTML = '';
-
-  if (acompanante1 === 'N/A' && acompanante2 === 'N/A') {
-    messageNoComp.style.display = 'block';
-  } else {
-    messageNoComp.style.display = 'none';
-
-    if (acompanante1 !== 'N/A') {
-      const row1 = document.createElement('tr');
-      row1.innerHTML = `<td>${acompanante1}</td>`;
-      acompTableBody.appendChild(row1);
-    }
-
-    if (acompanante2 !== 'N/A') {
-      const row2 = document.createElement('tr');
-      row2.innerHTML = `<td>${acompanante2}</td>`;
-      acompTableBody.appendChild(row2);
-    }
-  }
-}
-// si no se ha iniciado el viaje mantener el botón de finalizar deshabilitado
-// si se inicia el viaje deshabilitar el botón de inciar viaje y cambiarle el texto a el botón a: "Viaje en tránsito."
-// darle a entender al chófer que el viaje se encuentra en curso.
-
 (async function () {
-
   async function infoUser() {
     try {
       const token = localStorage.getItem('token');
@@ -48,7 +17,7 @@ function openAccomp(acompanante1, acompanante2) {
       const choferesConUnidades = response.data.choferesConUnidades;
       return choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
-      console.error('Error al obtener la unidad asignada:', error);
+      showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
     }
   }
 
@@ -60,7 +29,7 @@ function openAccomp(acompanante1, acompanante2) {
       const unidad = unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
-      console.error('Error al obtener el id de la unidad:', error);
+      showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
     }
   }
 
@@ -69,22 +38,20 @@ function openAccomp(acompanante1, acompanante2) {
     try {
       const responseViajes = await axios.get(apiURLViajes);
       const viajes = responseViajes.data.Data?.Data || [];
-      console.log('Viajes:', viajes);
 
       if (!Array.isArray(viajes)) {
         throw new Error('La respuesta no contiene un array de viajes');
       }
 
       if (viajes.length > 0) {
-        showToast('Información', 'Hay viajes asignados');
-      } else {
-        showToast('Información', 'No hay viajes asignados, vuelve pronto');
+        const infoUsuario = await infoUser();
+      const Nombre = infoUsuario?.usuario?.Nombre;
+        showToast('Información', `Hola ${Nombre}, tienes ${viajes.length} viajes asignados para hoy.`);
       }
 
       const viajesTableBody = document.getElementById('viajesTableBody');
       viajesTableBody.innerHTML = '';
       const fragment = document.createDocumentFragment();
-
 
       viajes.forEach(data => {
         const acompanante1 = data.Acompanante1 || 'N/A';
@@ -106,28 +73,27 @@ function openAccomp(acompanante1, acompanante2) {
       });
 
       viajesTableBody.appendChild(fragment);
+      haveTrips(); 
+
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      showToast('Información', 'No hay viajes asignados, vuelve pronto.');
+      haveTrips(); 
     }
   }
 
   async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
-    console.log("idUnidad en updateInitTrip:", idUnidad);
-    console.log("fechaValue en updateInitTrip:", fechaValue);
-    console.log("hora en updateInitTrip:", hourInitTrip);
     const API_INIT_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/start`;
     try {
-      const response= await axios.put(API_INIT_TRIP, {
+      const response = await axios.put(API_INIT_TRIP, {
         idUnidad,
         fechaInicioViaje: fechaValue,
         horaInicioViaje: hourInitTrip
       });
-      localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue }));
+      localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue, hourInitTrip }));
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
-      console.log("Response", response);
+      mostrarEstadoViaje(); 
     } catch (error) {
-      // respuesta del servidor backend
-      console.log("Response del backend", response);
+      showToast('Error', 'Ocurrió un problema al iniciar el viaje');
     }
   }
 
@@ -138,7 +104,6 @@ function openAccomp(acompanante1, acompanante2) {
     const hourFinishTrip = obtenerHoraActual();
     const idUnidad = await obtenerIdUnidad(document.getElementById('unidadAsignada').value);
 
-    console.log("Datos a enviar en finishTrip:", idUnidad, hourFinishTrip, kilometrajeFinal, horasExtras, viaticos);
 
     const API_FINISH_TRIP = `https://backend-transporteccss.onrender.com/api/viajeChofer/end`;
     try {
@@ -151,7 +116,7 @@ function openAccomp(acompanante1, acompanante2) {
       });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
-      console.log('Respuesta del servidor:', response);
+      loadContent('tableDriverTrip.html', 'mainContent');
     } catch (error) {
       showToast('Error', 'Ocurrió un problema al finalizar el viaje');
     }
@@ -167,21 +132,67 @@ function openAccomp(acompanante1, acompanante2) {
     return `${h}:${m}:${s}`;
   }
 
+  function mostrarEstadoViaje() {
+    const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
+    const btnIniciarViaje = document.getElementById('btnIniciarViaje');
+    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
+    const tiempoTranscurrido = document.getElementById('tiempoTranscurrido');
+
+    if (viajeIniciado) {
+      btnIniciarViaje.disabled = true;
+      btnInitTripDriver.disabled = true;
+      btnInitTripDriver.innerText = 'Viaje en tránsito';
+      mostrarTiempoTranscurrido(viajeIniciado.hourInitTrip);
+    } else {
+      btnIniciarViaje.disabled = false;
+      btnInitTripDriver.disabled = false;
+      btnInitTripDriver.innerText = 'Iniciar Viaje';
+      clearInterval(tiempoTranscurrido.interval);
+      tiempoTranscurrido.innerText = '';
+    }
+  }
+
+  function mostrarTiempoTranscurrido(horaInicio) {
+    const tiempoTranscurrido = document.getElementById('tiempoTranscurrido');
+    clearInterval(tiempoTranscurrido.interval);
+
+    function actualizarTiempo() {
+      const ahora = new Date();
+      const [h, m, s] = horaInicio.split(':').map(Number);
+      const inicio = new Date(ahora);
+      inicio.setHours(h, m, s, 0);
+      const diferencia = ahora - inicio;
+
+      const horas = Math.floor(diferencia / (1000 * 60 * 60));
+      const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+      tiempoTranscurrido.value = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
+    }
+
+    actualizarTiempo();
+    tiempoTranscurrido.interval = setInterval(actualizarTiempo, 1000);
+  }
+
   async function inicializarPagina() {
     try {
       const infoUsuario = await infoUser();
       const Identificacion = infoUsuario?.usuario?.Identificacion;
-      console.log('IdUsuario:', Identificacion);
+      const rol = infoUsuario?.usuario?.Rol;
 
+      if (rol !== 2) {
+        showToast('Error', 'Acceso denegado: Solo los chóferes pueden usar este módulo.');
+        document.getElementById('btnIniciarViaje').disabled = true;
+        document.getElementById('btnFinalizarViaje').disabled = true;
+        document.getElementById('btnInitTripDriver').disabled
+        return;
+      }
       const unidadAsignada = await obtenerUnidadAsignada(Identificacion);
       if (unidadAsignada) {
-        console.log('Unidad Asignada:', unidadAsignada.numeroUnidad);
         document.getElementById('unidadAsignada').value = unidadAsignada.numeroUnidad;
 
         const idUnidad = await obtenerIdUnidad(unidadAsignada.numeroUnidad);
         if (idUnidad) {
-          console.log('IdUnidad:', idUnidad);
-
           const today = new Date();
           const dd = String(today.getDate()).padStart(2, '0');
           const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -190,11 +201,11 @@ function openAccomp(acompanante1, acompanante2) {
           document.getElementById('fecha').value = fechaValue;
 
           const hourInitTrip = obtenerHoraActual();
-          console.log('Hora de inicio de viaje:', hourInitTrip);
 
           const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
           if (viajeIniciado && viajeIniciado.idUnidad === idUnidad) {
             await obtenerViajes(idUnidad, viajeIniciado.fechaValue);
+            mostrarEstadoViaje();
           } else {
             await obtenerViajes(idUnidad, fechaValue);
           }
@@ -204,23 +215,25 @@ function openAccomp(acompanante1, acompanante2) {
             await obtenerViajes(idUnidad, fechaValue);
           });
 
-          document.getElementById('destino').addEventListener('change', async (event) => {
-            const descripcionDestino = event.target.value;
-            await obtenerViajes(idUnidad, fechaValue, descripcionDestino);
-          });
-
         } else {
-          console.log('No se encontró la unidad asignada para el chófer logueado');
+          showToast('Error', 'No se encontró la unidad asignada para el chófer logueado');
         }
       }
     } catch (error) {
-      console.error('Error en la inicialización de la página:', error);
+      showToast('Error', 'Ocurrió un problema al cargar la página');
     }
   }
 
- 
+  function haveTrips() {
+    const table = document.getElementById('tablePatient');
+    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
 
-
+    if (table.rows.length <= 1) {
+      btnInitTripDriver.disabled = true;
+    } else {
+      btnInitTripDriver.disabled = false;
+    }
+  }
 
   await inicializarPagina();
 })();

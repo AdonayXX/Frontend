@@ -26,6 +26,7 @@ async function loadCitas() {
             caseInsensitive: true,
             smart: true
         });
+
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
             let selectedState = $('#seleccionar-estado').val().toLowerCase();
@@ -64,11 +65,9 @@ loadCitas();
 
 function renderTable(citas) {
     citas.sort((a, b) => {
-        // Convertir fechas y horas a objetos Date para comparar
         const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
         const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
 
-        // Ordenar de la más reciente a la más antigua
         return fechaHoraB - fechaHoraA;
     });
 
