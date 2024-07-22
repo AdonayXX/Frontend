@@ -1,12 +1,13 @@
 
+
+(function () {
+   
+
 getRutas();
 getEspecialidadesByDestino();
-
 document.getElementById('identificacion').addEventListener('blur', async function (event) {
+    event.preventDefault();
     const identificacion = this.value.trim();
-    let idPaciente = null;
-    let acompanantes = [];
-
 
 
     if (identificacion) {
@@ -15,9 +16,10 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             await getAcompanantes(identificacion);
         }
     } else {
-        loadContent('formAppointment.html', 'mainContent');
-    }
+        showToast('Aviso', 'Por favor, ingrese una identificación.');
 
+    }
+});
 
     async function getPacienteCita(identificacion) {
         try {
@@ -53,7 +55,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 return true;
             } else {
                 showToast('Aviso', 'No se encontró ningún paciente con esa identificación.');
-                // loadContent('formAppointment.html', 'mainContent');
                 return false;
             }
         } catch (error) {
@@ -69,8 +70,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
 
             const token = localStorage.getItem('token');
-            //https://backend-transporteccss.onrender.com
-            const API_URL_ACOMPANANTE = `http://localhost:18026/api/paciente/acompanantes/seguro/${identificacion}`;
+            const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/seguro/${identificacion}`;
             const response = await axios.get(API_URL_ACOMPANANTE, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -206,9 +206,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         document.getElementById('especialidad').value = '';
         document.getElementById('destino').value = '';
         document.getElementById('origen').value = '';
-        // document.getElementById('condicion').value = '';
-
-
         limpiarCamposAcompanantes();
     }
 
@@ -277,7 +274,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "fechaCita": fechaCita,
                 "horaCita": horaCita,
                 "transladoCita": salida,
-                "idUsuario": 1
+                "idUsuario": idUsuario
             };
 
             try {
@@ -303,9 +300,21 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
     });
 
+    function infoUser() {
+        try {
+          const token = localStorage.getItem('token');
+          const decodedToken = jwt_decode(token);
+          return (decodedToken);
+        } catch (error) {
+          console.error(error);
+          showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+        }
+    
+      }
+      const infoUsuario = infoUser();
+      const idUsuario = infoUsuario.usuario.IdUsuario;  
 
 
-});
 function getRutas() {
     const selectDestino = document.getElementById('destino');
 
@@ -331,7 +340,7 @@ function getRutas() {
 
 function getEspecialidadesByDestino(IdRuta) {
     const selectEspecialidad = document.getElementById('especialidad');
-    selectEspecialidad.innerHTML = ''; // Limpiar las opciones existentes
+    selectEspecialidad.innerHTML = ''; 
 
     const defaultOption = document.createElement('option');
     defaultOption.disabled = true;
@@ -375,7 +384,7 @@ document.getElementById('identificacion').addEventListener('input', function () 
 function applyMask() {
     const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
     const identificacion = document.getElementById('identificacion');
-    let value = identificacion.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+    let value = identificacion.value.replace(/\D/g, ''); 
 
     if (tipoIdentificacion === 'Cedula de Identidad') {
         let formattedValue = '';
@@ -408,22 +417,8 @@ function applyMask() {
         identificacion.maxLength = 19; 
     }
 }
-
         document.getElementById('tipoIdentificacion').addEventListener('change', applyMask);
         document.getElementById('identificacion').addEventListener('input', applyMask);
-        
         applyMask();
 
-
-
-function refreshPageIfIdentificationExists() {
-    const tipoIdentificacion = document.getElementById('tipoIdentificacion').value;
-    const identificacion = document.getElementById('identificacion').value;
-    if (identificacion && tipoIdentificacion !== 'Cedula de Identidad' || identificacion && tipoIdentificacion !== 'Número de Asegurado' || identificacion && tipoIdentificacion !== 'Interno') {
-        document.getElementById('identificacion').value = '';
-        loadContent('formAppointment.html', 'mainContent');
-    }
-}
-
-
-document.getElementById('tipoIdentificacion').addEventListener('change', refreshPageIfIdentificationExists);
+})();

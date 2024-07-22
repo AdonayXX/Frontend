@@ -82,7 +82,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "apellido1CE2": apellido1CE2,
             "apellido2CE2": apellido2CE2,
             "estadoChofer": estadoChofer,
-            "usuario": 1
+            "usuario": idUsuario
         };
 
         try {
@@ -90,6 +90,8 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
             if (response.status === 201) {
                 showToast('Éxito', 'Chofer registrado exitosamente.');
+                
+  console.log(choferData);
                 setTimeout(() => {
                     loadContent('formdriver.html', 'mainContent');
                 }, 2000);
@@ -103,6 +105,21 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
     await guardarChofer();
 });
+
+function infoUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      return (decodedToken);
+    } catch (error) {
+      console.error(error);
+      showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+    }
+
+  }
+  const infoUsuario = infoUser();
+  const idUsuario = infoUsuario.usuario.IdUsuario;
+
 
 document.getElementById('contacto').addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
