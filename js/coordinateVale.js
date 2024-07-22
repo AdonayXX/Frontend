@@ -1,5 +1,6 @@
 
 (function () {
+    const token = localStorage.getItem('token');
     const idVale = sessionStorage.getItem('selectedIdVale');
     var url = 'https://backend-transporteccss.onrender.com/';
     const btnAdd = document.getElementById('btn-agregarSoli');
@@ -15,9 +16,17 @@
 
     async function readVale(id) {
         try {
-            const response = await axios.get(`${url}api/vales`);
+            const response = await axios.get(`${url}api/vales`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const vales = response.data.vales;
-            const response2 = await axios.get(`${url}api/revicionVale`);
+            const response2 = await axios.get(`${url}api/revicionVale`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const coordinate = response2.data.revicionVales;
 
             vales.forEach(vale => {
@@ -74,7 +83,23 @@
             console.error('Error fetching vale data:', error);
         }
     }
-
+    /*
+    //Funcion para mandar el usuario
+    function infoUser() {
+        try {
+          const token = localStorage.getItem('token');
+          const decodedToken = jwt_decode(token);
+          return (decodedToken);
+        } catch (error) {
+          console.error(error);
+          showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
+    
+        }
+    
+      }
+      const infoUsuario = infoUser();
+      const idUsuario = infoUsuario.usuario.IdUsuario;
+*/
     function selects() {
         const select1 = document.getElementById('placa');
         const select1Asu = document.getElementById('placa-asu');
@@ -152,7 +177,11 @@
             };
             console.log(coordinate);
             try {
-                await axios.post(`${url}api/revicionVale`, coordinate);
+                await axios.post(`${url}api/revicionVale`, coordinate, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 return true;
             } catch (error) {
                 console.error('Error al guardar datos', error);
@@ -183,7 +212,11 @@
 
     async function readChofer() {
         try {
-            const response = await axios.get(`${url}api/chofer`);
+            const response = await axios.get(`${url}api/chofer`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const choferes = response.data.choferes;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             choferes.forEach(chofer => {
@@ -198,7 +231,11 @@
 
     async function readUnidad() {
         try {
-            const response = await axios.get(`${url}api/unidades`);
+            const response = await axios.get(`${url}api/unidades`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const unidades = response.data.unidades;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             unidades.forEach(unidad => {
