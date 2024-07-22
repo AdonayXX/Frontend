@@ -246,7 +246,7 @@
   function polling() {
     setInterval(() => {
       haveTrips();
-    }, 6.5);
+    }, 6000);
   }
   polling();
   await inicializarPagina();
