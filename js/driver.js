@@ -14,7 +14,7 @@
             acompananteCount--;
         }
     });
-})();
+
 
 // ---------------------------------POST------------------------------------------------ //
 
@@ -86,12 +86,18 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         };
 
         try {
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData);
+
+            
+            
+            const token = localStorage.getItem('token');
+            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
             if (response.status === 201) {
                 showToast('Éxito', 'Chofer registrado exitosamente.');
-                
-  console.log(choferData);
                 setTimeout(() => {
                     loadContent('formdriver.html', 'mainContent');
                 }, 2000);
@@ -161,7 +167,17 @@ document.getElementById('cedula').addEventListener('blur', async function (event
 
 async function getChofer(cedula) {
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`);
+
+
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+          
+
         const choferes = response.data.chofer;
 
         const choferEncontrado = choferes[0]; // como la cedula es unica, solo se espera un chofer	
@@ -271,13 +287,12 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "usuario": 1
     };
 
-
+    const token = localStorage.getItem('token');
     axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
         headers: {
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`
         }
-    })
-    .then(response => {
+    }).then(response => {
         showToast('Éxito', 'Chofer actualizado exitosamente.');
         setTimeout(() => {
             loadContent('formdriver.html', 'mainContent');
@@ -310,3 +325,4 @@ function limpiarCampos() {
     document.getElementById('apellido2CE2').value = '';
     document.getElementById('contactoEmergencia2').value = '';
 }
+})();
