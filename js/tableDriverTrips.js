@@ -2,19 +2,18 @@
 
 (async function () {
   const token = localStorage.getItem('token');
+  if (!token) {
+    console.error("Token no encontrado en localStorage");
+    return;
+  }
 
-  const btnIniciarViaje = document.getElementById('btnIniciarViaje');
-  const btnFinalizarViaje = document.getElementById('btnFinalizarViaje');
-  const btnInitTripDriver = document.getElementById('btnInitTripDriver');
-  btnIniciarViaje.disabled = true;
-  btnFinalizarViaje.disabled = true;
-  btnInitTripDriver.disabled = true;
 
   async function infoUser() {
     try {
-      return jwt_decode(token);
+      const userInfo = jwt_decode(token);
+      return userInfo;
     } catch (error) {
-      console.error(error);
+      console.error("Error al decodificar el token:", error);
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
     }
   }
@@ -29,6 +28,7 @@
       });
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
+      console.error("Error al obtener la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
     }
   }
@@ -44,13 +44,13 @@
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
+      console.error("Error al obtener el id de la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
     }
   }
 
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
-    console.log(apiURLViajes);
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -73,6 +73,7 @@
       haveTrips();
 
     } catch (error) {
+      console.error("Error al obtener los viajes:", error);
       showToast('Información', 'No hay viajes asignados, vuelve pronto.');
       haveTrips();
     }
@@ -82,16 +83,34 @@
     const infoUsuario = await infoUser();
     const IdUsuario = infoUsuario?.usuario?.IdUsuario;
     const API_INIT_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/start';
+
+    const hourInitTripFormatted = hourInitTrip.split(':').slice(0, 2).join(':') + ":00";
+
+
+    const requestBody = {
+      idUnidad: idUnidad,
+      fechaInicioViaje: fechaValue,
+      horaInicioViaje: hourInitTripFormatted,
+      IdUsuarioInicioViaje: IdUsuario
+    };
+
+
     try {
-      await axios.put(API_INIT_TRIP, { idUnidad, fechaInicioViaje: fechaValue, horaInicioViaje: hourInitTrip, IdUsuarioInicioViaje: IdUsuario }, {
+      const response = await axios.put(API_INIT_TRIP, requestBody, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
-      localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue, hourInitTrip }));
+      localStorage.setItem('viajeIniciado', JSON.stringify({ idUnidad, fechaValue, hourInitTrip: hourInitTripFormatted }));
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
       mostrarEstadoViaje();
     } catch (error) {
+      console.error("Error al iniciar el viaje:", error);
+      if (error.response) {
+        console.error("Datos de error de la respuesta:", error.response.data);
+        console.error("Estado de error de la respuesta:", error.response.status);
+      }
       showToast('Error', 'Ocurrió un problema al iniciar el viaje');
     }
   }
@@ -105,15 +124,28 @@
 
     const API_FINISH_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/end';
     try {
-      await axios.put(API_FINISH_TRIP, { idUnidad, horaFinViaje: hourFinishTrip, kilometrajeFinal, horasExtras, viaticos }, {
+      const response = await axios.put(API_FINISH_TRIP, {
+        idUnidad,
+        horaFinViaje: hourFinishTrip,
+        kilometrajeFinal,
+        horasExtras,
+        viaticos
+      }, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
       loadContent('tableDriverTrips.html', 'mainContent');
+      mostrarEstadoViaje(); 
     } catch (error) {
+      console.error("Error al finalizar el viaje:", error);
+      if (error.response) {
+        console.error("Datos de error de la respuesta:", error.response.data);
+        console.error("Estado de error de la respuesta:", error.response.status);
+      }
       showToast('Error', 'Ocurrió un problema al finalizar el viaje');
     }
   }
@@ -122,11 +154,13 @@
 
   function obtenerHoraActual() {
     const d = new Date();
-    return [d.getHours(), d.getMinutes(), d.getSeconds()].map(unit => String(unit).padStart(2, '0')).join(':');
+    return [d.getHours(), d.getMinutes()].map(unit => String(unit).padStart(2, '0')).join(':') + ":00";
   }
 
   function mostrarEstadoViaje() {
     const viajeIniciado = JSON.parse(localStorage.getItem('viajeIniciado'));
+    const btnIniciarViaje = document.getElementById('btnIniciarViaje');
+    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
     const tiempoTranscurrido = document.getElementById('tiempoTranscurrido');
 
     if (viajeIniciado) {
@@ -158,7 +192,7 @@
       const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
       const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-      tiempoTranscurrido.innerText = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
+      tiempoTranscurrido.value = `Tiempo transcurrido: ${horas}h ${minutos}m ${segundos}s`;
     }
 
     actualizarTiempo();
@@ -173,6 +207,9 @@
 
       if (rol !== 2) {
         showToast('Error', 'Acceso denegado: Solo los chóferes pueden usar este módulo.');
+        document.getElementById('btnIniciarViaje').disabled = true;
+        document.getElementById('btnFinalizarViaje').disabled = true;
+        document.getElementById('finalizarViajeBtn').disabled = true;
         return;
       }
 
@@ -194,7 +231,7 @@
             await obtenerViajes(idUnidad, fechaValue);
           }
 
-          btnIniciarViaje.addEventListener('click', async () => {
+          document.getElementById('btnIniciarViaje').addEventListener('click', async () => {
             await updateInitTrip(idUnidad, fechaValue, obtenerHoraActual());
             await obtenerViajes(idUnidad, fechaValue);
           });
@@ -204,6 +241,7 @@
         }
       }
     } catch (error) {
+      console.error("Error al inicializar la página:", error);
       showToast('Error', 'Ocurrió un problema al cargar la página');
     }
   }
@@ -221,8 +259,8 @@
         <td class="text-center">${data.NombrePaciente}</td>
         <td class="text-center">${data.Direccion}</td>
         <td class="text-center">${data.ubicacionOrigen}</td>
-        <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">${data.horaCita}</td>
+        <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">
           <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
             data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
@@ -238,11 +276,21 @@
 
   function haveTrips() {
     const tableBody = document.getElementById('viajesTableBody');
+    const btnInitTripDriver = document.getElementById('btnInitTripDriver');
+    const btnFinalizarViaje = document.getElementById('finalizarViajeBtn');
+
     const hasTrip = tableBody.children.length > 0;
     btnInitTripDriver.disabled = !hasTrip;
     btnFinalizarViaje.disabled = !hasTrip;
+    btnIniciarViaje.disabled = !hasTrip;
   }
-  await inicializarPagina();
-  console.log(infoUser());
 
+  function polling() {
+    setInterval(() => {
+      haveTrips();
+    }, 2000);
+  }
+
+  polling();
+  await inicializarPagina();
 })();
