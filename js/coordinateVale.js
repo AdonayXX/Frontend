@@ -48,6 +48,9 @@
                             blockBtn();
                         }
                     }
+                    if (vale.Chofer == 0 || null) {
+                        selects();
+                    }
                     acompanantes(vale);
                 }
             });
@@ -66,9 +69,25 @@
                     btnAdd.disabled = true;
                 }
             });
+
         } catch (error) {
             console.error('Error fetching vale data:', error);
         }
+    }
+
+    function selects() {
+        const select1 = document.getElementById('placa');
+        const select1Asu = document.getElementById('placa-asu');
+        select1.style.display = 'none';
+        select1Asu.style.display = 'block';
+        const select2 = document.getElementById('chofer');
+        const select2Asu = document.getElementById('chofer-asu');
+        select2.style.display = 'none';
+        select2Asu.style.display = 'block';
+        const selectPlaca = document.getElementById('select-placa');
+        const selectChofer = document.getElementById('select-chofer');
+        selectPlaca.disabled = true;
+        selectChofer.disabled = true;
     }
 
     function acompanantes(vale) {
