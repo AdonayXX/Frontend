@@ -141,7 +141,7 @@ async function getUserData() {
       });
     });
 
-   
+
     ocultarSpinner();
 
   } catch (error) {
@@ -263,8 +263,11 @@ window.sendUserData = function (button) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
         console.error('Error específico:', errorMessage);
-        console.error(error);
-        alert(errorMessage);
+        if (errorMessage === 'Error al actualizar el usuario: No puedes asignar un rol a un usuario Inactivo') {
+          showToast('Ups!', 'No puedes asignar un rol a un usuario Inactivo');
+        } else {
+          alert(errorMessage);
+        }
       } else {
         console.error('Ha ocurrido un problema:', error);
         alert("Ocurrió un problema");
@@ -289,7 +292,7 @@ window.sendUserData = function (button) {
     } else {
       rolSelect.value = user.Rol;
     }
-    
+
     document.getElementById('userState').value = user.Estado;
   }
 }
