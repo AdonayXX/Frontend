@@ -112,15 +112,22 @@
 
     document.getElementById('advance').addEventListener('input', function () {
         let value = this.value.replace('%', '');
-        this.value = value + '%';
+    
+        value = value.replace(/[^0-9]/g, '');
+    
+        if (value !== '') {
+            this.value = value + '%';
+        } else {
+            this.value = '';
+        }
     });
-
+    
     document.getElementById('advance').addEventListener('focus', function () {
         let value = this.value.replace('%', '');
         this.value = value + '%';
         this.setSelectionRange(0, value.length);
     });
-
+    
     document.getElementById('advance').addEventListener('blur', function () {
         let value = this.value.replace('%', '');
         if (value === '') {
@@ -129,7 +136,7 @@
             this.value = value + '%';
         }
     });
-
+    
     function getValorAdelanto() {
         const advanceInput = document.getElementById('advance').value;
         return parseInt(advanceInput.replace('%', ''), 10);
