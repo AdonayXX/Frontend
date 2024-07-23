@@ -4,6 +4,7 @@
     const idVale = sessionStorage.getItem('selectedIdVale');
     var url = 'https://backend-transporteccss.onrender.com/';
     const btnAdd = document.getElementById('btn-agregarSoli');
+    let isCero = 1;
 
     if (idVale) {
         readVale(idVale);
@@ -28,7 +29,7 @@
                 }
             });
             const coordinate = response2.data.revicionVales;
-
+            let valeObject = null;
             vales.forEach(vale => {
                 if (id === vale.IdVale) {
                     var salida, destino;
@@ -69,6 +70,7 @@
                         selects();
                     }
                     acompanantes(vale);
+                    valeObject = vale;
                 }
             });
 
@@ -86,41 +88,25 @@
                     btnAdd.disabled = true;
                 }
             });
+            if (valeObject.Chofer == 0 || null) {
+                selects();
+            }
 
         } catch (error) {
             console.error('Error fetching vale data:', error);
         }
     }
-    /*
-    //Funcion para mandar el usuario
-    function infoUser() {
-        try {
-          const token = localStorage.getItem('token');
-          const decodedToken = jwt_decode(token);
-          return (decodedToken);
-        } catch (error) {
-          console.error(error);
-          showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
-    
-        }
-    
-      }
-      const infoUsuario = infoUser();
-      const idUsuario = infoUsuario.usuario.IdUsuario;
-*/
+
     function selects() {
-        const select1 = document.getElementById('placa');
-        const select1Asu = document.getElementById('placa-asu');
-        select1.style.display = 'none';
-        select1Asu.style.display = 'block';
-        const select2 = document.getElementById('chofer');
-        const select2Asu = document.getElementById('chofer-asu');
-        select2.style.display = 'none';
-        select2Asu.style.display = 'block';
-        const selectPlaca = document.getElementById('select-placa');
-        const selectChofer = document.getElementById('select-chofer');
-        selectPlaca.disabled = true;
-        selectChofer.disabled = true;
+        const selectElement = document.getElementById('select-chofer');
+        const newOption = document.createElement('option');
+        newOption.id = '0';
+        newOption.value = '0';
+        newOption.textContent = 'Chofer ASU';
+        selectElement.appendChild(newOption);
+        selectElement.value = '0';
+        selectElement.disabled = true;
+        isCero = 0;
     }
 
     function acompanantes(vale) {
@@ -183,21 +169,20 @@
                 HoraRevision: obtenerHoraActual(),
                 Observaciones: "Agregando datos"
             };
-            console.log(coordinate);
-            try {
-                await axios.post(`${url}api/revicionVale`, coordinate, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                return true;
-            } catch (error) {
-                console.error('Error al guardar datos', error);
-                showToast('Error', 'Error al guardar la la revición.');
-                return false;
+            if (isCero == 0) {
+                console.log("siseñor");
+                coordinate.IdChofer = 25;
             }
+            console.log(coordinate);
+            const response = await axios.post(`${url}api/revicionVale`, coordinate, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return true;
         } catch (error) {
-            console.error('Error fetching vale data:', error);
+            console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
+            showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
     }
@@ -292,5 +277,23 @@
         btnCancel.disabled = true;
         btnAdd.disabled = true;
     }
+
+    /*
+//Funcion para mandar el usuario
+function infoUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      return (decodedToken);
+    } catch (error) {
+      console.error(error);
+      showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
+ 
+    }
+ 
+  }
+  const infoUsuario = infoUser();
+  const idUsuario = infoUsuario.usuario.IdUsuario;
+*/
 })();
 
