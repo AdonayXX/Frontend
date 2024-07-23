@@ -24,21 +24,21 @@
         headers: { Authorization: `Bearer ${token}` },
       });
       last20Maintenance = mantenimientoResponse.data.mantenimientos || [];
-      console.log("Ultimos 20 mantenimientos:", last20Maintenance);
+
 
       // Obtener datos de actividades de mantenimiento
       const actividadesResponse = await axios.get(`${Api_Url}api/actividadMantenimiento`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const actividadesData = actividadesResponse.data.actividadesMantenimiento || [];
-      console.log("Actividades de mantenimiento:", actividadesData);
+
 
       // Obtener todas las actividades
       const actividadesTodo = await axios.get(`${Api_Url}api/actividad`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       actividadesTodoData = actividadesTodo.data.actividades || [];
-      console.log("Todas las actividades:", actividadesTodoData);
+    
 
       // Destruir la instancia existente de DataTables
       if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
@@ -55,24 +55,24 @@
       setupDataTable();
       ocultarSpinner();
     } catch (error) {
-      console.error("Error al obtener los mantenimientos:", error);
+      showToast('Error','Inesperado')
 
     }
   }
 
   // Función para llenar la tabla de mantenimientos
   function fillMaintenanceTable(maintenance, activities, allActivities) {
-    console.log("Mantenimientos:", maintenance);
+    
     try {
       const tableBody = document.querySelector("#maintenance-body");
       tableBody.innerHTML = "";
-      console.log("Cantidad de mantenimientos:", maintenance.length);
+
       if (maintenance.length === 0) {
         const noDataMessage = document.createElement("tr");
         noDataMessage.innerHTML =
           `<td colspan="11" class="text-center">No hay datos disponibles</td>`
           ;
-        console.log("No hay datos disponibles", maintenance.length);
+
         tableBody.appendChild(noDataMessage);
         return;
       }
@@ -86,7 +86,7 @@
         const relatedActivities = activities.filter(
           (activity) => activity.IdMantenimiento === maintenanceItem.IdMantenimiento
         );
-        console.log("Actividades relacionadas:", relatedActivities);
+
 
         // Encontrar actividades coincidentes con todas las actividades
         let foundActivity = null;
@@ -96,7 +96,7 @@
           );
           return foundActivity !== undefined;
         });
-        console.log("Actividad encontrada:", foundActivity);
+  
 
         // Crear fila HTML
         const row = document.createElement("tr");
@@ -125,14 +125,13 @@
         </td>`
           ;
         fragment.appendChild(row);
-        console.log("row:", row);
+        
       });
 
       tableBody.appendChild(fragment);
-      console.log("Fragment:", fragment);
-      console.log("TableBody:", tableBody);
+
     } catch (error) {
-      console.error("Error al llenar la tabla de mantenimientos:", error);
+      showToast('Error','Inesperado')
     }
   }
 
@@ -154,7 +153,6 @@
       caseInsensitive: true,
       smart: true,
     });
-    console.log("DataTable inicializado");
      // Maneja el evento keyup del input de búsqueda
    $('#searchMaintenance').on('keyup', function () {
     let inputValue = $(this).val().toLowerCase();
@@ -211,11 +209,10 @@
   function filterMaintenance() {
     const selectedDate = $('#fechaMantenimientoFiltro').val();
     const formattedSelectedDate = formatDateSelected(selectedDate);
-    console.log("Fecha seleccionada", formattedSelectedDate);
+   
 
     const selectedUnit = $('#unidadFiltro').val();
-    console.log("Unidad seleccionada", selectedUnit);
-    console.log("Últimos 20 mantenimientos:", last20Maintenance);
+
 
     let filteredMaintenance = [];
 
@@ -237,19 +234,19 @@
 
     // Verificar si DataTables ya está inicializado
     if ($.fn.DataTable.isDataTable("#tableMaintenance")) {
-      console.log("DataTable ya está inicializado");
+
       // Destruir la instancia existente
       $("#tableMaintenance").DataTable().clear().destroy();
-      console.log("Instancia de DataTable destruida");
+
     }
 
     // Llenar la tabla con los mantenimientos filtrados
     fillMaintenanceTable(filteredMaintenance, actividadesData, actividadesTodoData);
 
     // Solo inicializar DataTables si hay datos disponibles
-    console.log("Mantenimientos filtrados:", filteredMaintenance.length);
+
     if (filteredMaintenance.length > 0) {
-      console.log("Inicializando DataTables");
+   
       setupDataTable();
     }
   }
@@ -291,13 +288,13 @@
     const tipoMantenimientoSelect = document.getElementById('tipoMantenimiento');
     const kilometrajeInput = document.getElementById('kilometraje');
     const unidadSelect = document.getElementById('unidadSelect').value;
-    console.log('Unidad seleccionada antes del if:', unidadSelect);
+  
 
     if (tipoMantenimientoSelect.value === 'Correctivo') {
       kilometrajeInput.disabled = true;
-      console.log('Unidad seleccionada dentro del if:', unidadSelect);
+
       const ultimoKilometraje = await obtenerUltimoKilometraje(unidadSelect);
-      console.log('Último kilometraje dentro del if:', ultimoKilometraje);
+ 
       kilometrajeInput.value = ultimoKilometraje;
     } else {
       kilometrajeInput.disabled = false;
@@ -306,16 +303,17 @@
 
   async function obtenerUltimoKilometraje(unidad) {
     try {
-      console.log('Id de la Unidad:', unidad);
+    
       const unidades = await getUnidades();
-      console.log("Unidades obtenidas:", unidades);
+     
 
       // Convertir el id de la unidad seleccionada a número
       const unidadSeleccionada = unidades.find(u => u.id == unidad);
-      console.log("Unidad encontrada por el find:", unidadSeleccionada);
+  
       return unidadSeleccionada ? unidadSeleccionada.ultimoMantenimientoKilometraje : '';
     } catch (error) {
-      console.error('Error al obtener el último kilometraje:', error);
+      showToast('Error','Inesperado.')
+
       return '';
     }
   }
@@ -325,7 +323,7 @@
     actividadesLista = [];
     $("#maintenanceModal").modal("show");
     actividadesLista = await getActiv();
-    console.log("funcion btn close", actividadesLista);
+ 
     activitySelect(actividadesLista);
 
 
@@ -347,12 +345,12 @@
         },
       });
       const listAct = response;
-      console.log("Lista Actividades", listAct);
+
 
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error("Error específico:", errorMessage);
+       
         showToast("Ups!", errorMessage);
       } else {
         showToast("Error", "Hubo un problema al obtener los manteniminetos");
@@ -361,7 +359,7 @@
   }
   // Estado Completado
   window.cambioEstCop = async function (activ) {
-    console.log(activ.foundActivity);
+    
     try {
       ActividadData = {
         IdMantenimiento: parseInt(activ.foundActivity.IdMantenimiento),
@@ -370,7 +368,6 @@
         Estado: "Completado",
       };
 
-      console.log(ActividadData);
       const token = localStorage.getItem("token");
       const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
 
@@ -379,13 +376,13 @@
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+   
       showToast("Exito", "Estado actulizado correctamente.");
       setTimeout(() => {
         loadContent("dataTableMaintenance.html", "mainContent");
       }, 500);
     } catch (error) {
-      console.error(error);
+      
       showToast("Error", "No se logro cambiar el estado");
     }
   }
@@ -398,7 +395,7 @@
     .getElementById("addActividadBtn")
     .addEventListener("click", async function () {
       addFields(actividadesLista);
-      console.log("Entro");
+     
     });
 
   async function addFields(actividadesLista) {
@@ -482,7 +479,7 @@
     .addEventListener("click", async () => {
       const uniLlenado = await getUnidades();
 
-      console.log(uniLlenado);
+    
       const unidadSelect = document.querySelector("#unidadSelect");
 
       // Llenar el select con las opciones de unidad
@@ -498,7 +495,7 @@
       // Añadir el event listener para cambio de selección
       unidadSelect.addEventListener("change", async () => {
         showLoaderModalMant();
-        console.log(uniLlenado);
+      
         document.querySelector("#tipoUnidad").value = '';
         document.querySelector("#chofer").value = '';
 
@@ -525,7 +522,7 @@
 
   //Obtener nombre de Tipo unidadd
   async function getTipoRecursoNombre(idtipoUnidad) {
-    console.log(idtipoUnidad);
+   
     try {
       const token = localStorage.getItem("token");
       const API_URL =
@@ -536,7 +533,7 @@
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+   
       const tiposUnidad = response.data.tipounidad;
       const tiposUnidadFiltrada = tiposUnidad.find(
         (tipounidad) => tipounidad.idTipoUnidad === idtipoUnidad
@@ -579,7 +576,7 @@
 
       return response.data.unidades; // Asumiendo que las unidades están en response.data
     } catch (error) {
-      console.error(error);
+      showToast('Error','Inesperado.')
       return []; // Retornar un arreglo vacío en caso de error
     }
   }
@@ -599,7 +596,8 @@
 
       return response.data.actividades; // Asumiendo que las unidades están en response.data
     } catch (error) {
-      console.error(error);
+      showToast('Error','Inesperado.')
+      
       return []; // Retornar un arreglo vacío en caso de error
     }
   }
@@ -634,7 +632,6 @@
       // Verificar si todos los valores necesarios existen y no están vacíos
       if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
         showToast('', 'Por favor completa todos los campos obligatorios.');
-        console.log(idChofer, idUnidad, fechaMantenimiento, kilometraje, tipoMantenimiento);
         // showLoaderModalMant();
         return;
 
@@ -686,11 +683,11 @@
       } catch (error) {
         if (error.response && error.response.status === 400) {
           const errorMessage = error.response.data.error;
-          console.error(error);
+         
           showToast("Ups!", errorMessage);
         } else {
           showToast("Error", "Hubo un problema al enviar los datos.");
-          console.error(error);
+        
         }
         hideLoaderModalMant();
         // Manejar el error aquí
@@ -700,10 +697,6 @@
   //Editar Mantenimiento
   window.EditarMant = async function (activ, maintenanceItem) {
     showLoaderModalMantEdit();
-
-    console.log("Actividades a editar:", activ);
-    console.log("foundActivity a editar:", activ.foundActivity);
-    console.log("Mantenimiento a editar:", maintenanceItem);
     try {
 
       // Mostrar el modal de mantenimiento
@@ -712,7 +705,7 @@
 
       // Pasar la lista de actividades correcta a activitySelect
       activitySelect(actividadesTodoData);
-      console.log("Actividad enviada a la funcion activity Select", actividadesTodoData);
+      
 
 
       document.querySelector('#actividadEdit').addEventListener('change', async () => {
@@ -736,7 +729,8 @@
           });
 
         } catch (error) {
-          console.error("Error al llenar el select de unidades:", error);
+          showToast('Error','Inesperado.')
+         
         }
       });
 
@@ -761,7 +755,7 @@
       let unidadFiltrada = uniLlenado.find(
         (unidad) => unidad.id === parseInt(maintenanceItem.IdUnidad)
       );
-      console.log("Unidad:", unidadFiltrada)
+      
       // Obtener nombre completo del chofer
       let idChofer = parseInt(unidadFiltrada.choferDesignado);
       let idtipoUnidad = parseInt(unidadFiltrada.idTipoUnidad);
@@ -796,8 +790,7 @@
             Estado: document.querySelector('#estadoEdit').value
           };
 
-          console.log(mantenimientoData);
-          console.log(actividadMantenimientoData);
+     
 
           const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
           const API_URL2 = `https://backend-transporteccss.onrender.com/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
@@ -810,7 +803,6 @@
             axios.put(API_URL2, mantenimientoData, { headers })
           ]);
 
-          console.log(response1, response2);
 
           showToast('Éxito!', 'Mantenimiento actualizado correctamente.');
           $("#maintenanceModalEdit").modal("hide");
@@ -826,11 +818,9 @@
       function handleError(error) {
         if (error.response && error.response.status === 400) {
           const errorMessage = error.response.data.error;
-          console.error('Error específico:', errorMessage);
-          alert(errorMessage);
+          showToast('Error',errorMessage)
         } else {
-          console.error('Ha ocurrido un problema:', error);
-          alert("Ocurrió un problema");
+          showToast('Error','Inesperado')
           hideLoaderModalMantEdit();
         }
       }
@@ -839,7 +829,6 @@
 
 
     } catch (error) {
-      console.error(error);
       showToast('Error', 'Al cargar los datos de mantenimiento.');
       hideLoaderModalMantEdit()
     }
@@ -851,10 +840,10 @@
   function activitySelect(actividades) {
     // Verificar si actividades es un array
     if (!Array.isArray(actividades)) {
-      console.error("actividades no es un array:", actividades);
+     
       return;
     }
-    console.log("Array de actividades:", actividades);
+
     // Obtener el select de actividades
     const selectActividad = document.getElementById("actividadEdit");
 
@@ -920,7 +909,7 @@
       // Establecer "Últimas 20 Unidades" como la opción por defecto
       unidadFiltroSelect.value = "last20";
     } catch (error) {
-      console.error("Error al obtener las unidades:", error);
+  
       showToast("Ups!", "Hubo un problema al obtener las unidades");
     }
   }
@@ -929,7 +918,7 @@
   function handleMaintenanceError(error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error("Error específico:", errorMessage);
+
       showToast("Ups!", errorMessage);
     } else {
       showToast("Error", "Hubo un problema al obtener los mantenimientos");
@@ -949,7 +938,7 @@
   function handleMaintenanceError(error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error("Error específico:", errorMessage);
+     
       showToast("Ups!", errorMessage);
     } else {
       showToast("Error", "Hubo un problema al obtener los mantenimientos");
@@ -1000,14 +989,14 @@
       });
 
       const actividades = response.data.actividades || [];
-      console.log("Actividades obtenidas:", actividades);
+
 
       return actividades;
 
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error("Error específico:", errorMessage);
+       
         showToast("Ups!", errorMessage);
       } else {
         showToast("Error", "Hubo un problema al obtener las actividades");
@@ -1040,7 +1029,7 @@
 
       tableBody.appendChild(fragment);
     } catch (error) {
-      console.error("There has been a problem:", error);
+      showToast('Error','Inesperado.')
     }
   }
 
@@ -1061,7 +1050,7 @@
       };
       addActivity(activityData);
     } else {
-      alert("Por favor, complete todos los campos.");
+      showToast('Por favor','complete todos los campos.')
     }
   }
   //Funcion para agregar una actividad
@@ -1075,7 +1064,7 @@
           'Content-Type': 'application/json'
         },
       });
-      console.log(response.data);
+    
 
       showToast("Actividad agregada", "La actividad se ha agregado correctamente");
 
@@ -1088,8 +1077,8 @@
       showLoaderModalAct();
       optimazadoactividades();
     } catch (error) {
-      console.error('Ha ocurrido un problema:', error);
-      alert("Ocurrió un problema al agregar la actividad");
+     
+      showToast('Error','Inesperado.')
     }
   }
 
@@ -1102,7 +1091,6 @@
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response.data);
       showToast('Éxito', 'Actividad eliminada exitosamente');
       // Recargar la lista de actividades
       showLoaderModalAct();
@@ -1110,10 +1098,8 @@
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error('Error específico:', errorMessage);
         showToast('Ups!', 'Ocurrio un problema al eliminar la actividad.');
       } else {
-        console.error('There has been a problem deleting the y:', error);
         showToast('Ups!', 'Error al eliminar la actividad.');
       }
     }
@@ -1170,7 +1156,6 @@
   }
 
   async function actualizarUnidad(numeroUnidad, unidadData) {
-    console.log('Datos a enviar para actualizar:', numeroUnidad, unidadData);
     try {
       const token = localStorage.getItem("token"); // Obtén el token desde el almacenamiento local
 
@@ -1180,19 +1165,14 @@
           Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la petición
         }
       });
-      console.log(response);
+    
 
       // Verificar la respuesta del servidor
-      if (response.status === 200) {
-        showToast('Éxito', 'Unidad actualizada correctamente.');
-      } else {
-        // Manejar errores en la respuesta del servidor
-        console.error('Error en la respuesta del servidor:', response.data);
+      if (response.status !== 200) {
         showToast('Error', 'Error al actualizar la unidad.');
-      }
+      } 
     } catch (error) {
       // Manejar errores generales
-      console.error('Error al actualizar la unidad:', error);
       showToast('Error', 'Error al actualizar la unidad.');
     }
   }
@@ -1205,19 +1185,18 @@
       // Encontrar la unidad correspondiente por ID
       const unidadEncontrada = unidadesLista.find(a => a.id === Idunidad);
       if (!unidadEncontrada) {
-        throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);
+        throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);sh
       }
 
       // Preparar los datos de la unidad a actualizar
       const unidadData = prepararDatosUnidad(unidadEncontrada, fechaMantenimiento, kilometrajeActualMantenimiento);
 
-      console.log('Datos a enviar para actualizar:', unidadData);
+    
 
       // Hacer la solicitud PUT para actualizar la unidad
       await actualizarUnidad(unidadData.numeroUnidad, unidadData);
     } catch (error) {
       // Manejar errores generales
-      console.error('Error al actualizar la unidad:', error);
       showToast('Error', 'Error al actualizar la unidad.');
     }
   }

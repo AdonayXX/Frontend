@@ -48,7 +48,7 @@ async function saveUser(userData) {
     } else {
       showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
     }
-    console.error(error);
+ 
   }
 }
 
@@ -98,7 +98,6 @@ async function deleteUser(userId) {
     getUserData();
   } catch (error) {
     showToast('Ups!', 'Ocurrió un problema durante la eliminación del usuario.');
-    console.error(error);
   }
 }
 
@@ -112,7 +111,6 @@ async function getUserData() {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response.data);
     const usuarios = response.data.usuarios;
 
 
@@ -145,12 +143,10 @@ async function getUserData() {
     ocultarSpinner();
 
   } catch (error) {
-    console.error('Error al obtener datos del usuario:', error);
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
       showToast('Error', errorMessage);
     } else {
-      console.error('Ha ocurrido un problema:', error);
       showToast('Error', 'Ocurrio un problema al cargar los datos.')
     }
   }
@@ -197,10 +193,7 @@ function fillTableUsuarios(usuarios) {
 
 
   } catch (error) {
-
-    console.error('There has been a problem:', error);
-
-
+    showToast('Error','Inesperado.')
   }
 
 };
@@ -240,7 +233,6 @@ window.sendUserData = function (button) {
       Estado: document.getElementById('userState').value.trim()
     };
     editUserData(userData, userIdentification);
-    console.log(userData);
   }
 
   async function editUserData(userData, userIdentification) {
@@ -252,7 +244,6 @@ window.sendUserData = function (button) {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response);
       modal.hide();
       showToast('Éxito!', 'Usuario actualizado correctamente');
       hideLoaderModalUser();
@@ -262,15 +253,13 @@ window.sendUserData = function (button) {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        console.error('Error específico:', errorMessage);
         if (errorMessage === 'Error al actualizar el usuario: No puedes asignar un rol a un usuario Inactivo') {
           showToast('Ups!', 'No puedes asignar un rol a un usuario Inactivo');
         } else {
-          alert(errorMessage);
+          showToast('Ups!', errorMessage);
         }
       } else {
-        console.error('Ha ocurrido un problema:', error);
-        alert("Ocurrió un problema");
+        showToast('Error','Inesperado.')
       }
       hideLoaderModalUser();
     }
