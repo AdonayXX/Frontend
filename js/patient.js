@@ -349,7 +349,7 @@ window.patientEdit = function (button) {
         IdPersona: IdPersona,
         Criticidad: "N/A",
         Encamado: document.getElementById('encamado').value,
-        Traslado: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
+        Traslado: JSON.stringify(document.getElementById('trasladable').checked ? true : false),
         Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
         LugarSalida: document.querySelector('#lugarSalida').value,
         Estado: "Activo"
