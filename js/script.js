@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     loadToastTemplate();
     loadModalTemplate();
-    //Cargar desde el incio el home.html
-
-    loadContent('home.html', 'mainContent');
+  
 
 
 });
@@ -126,9 +124,7 @@ function logout() {
 function tokenrol(token) {
     try {
         const decodedToken = jwt_decode(token);
-        return (decodedToken.usuario); // Muestra todo el contenido del token decodificado
-        // Si solo quieres el payload:
-        // console.log(decodedToken.payload);
+        return (decodedToken.usuario); 
     } catch (error) {
         console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
@@ -170,6 +166,7 @@ function obtenerFormulariosPorRol(roles, rolBuscado) {
         .filter(role => role.Rol === rolBuscado)
         .map(role => role.Formulario);
     
+    
     const allItems = document.querySelectorAll('.items');
     if (formularios.length > 0) {
         allItems.forEach(item => {
@@ -185,6 +182,11 @@ function obtenerFormulariosPorRol(roles, rolBuscado) {
             }
         });
 
+    }
+    const home= document.querySelector('#homeClick');
+    if(rolBuscado === 1 || rolBuscado === 3 || rolBuscado === 4)
+     { loadContent('home.html', 'mainContent');
+        home.classList.remove('hidden');  
     }
 
 }

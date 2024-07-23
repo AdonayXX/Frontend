@@ -47,6 +47,12 @@ async function modificarPDF() {
             return sum + count;
         }, 0);
 
+        //mostrar la fecha y hora de creacion del pdf
+        const fechaCreacion = new Date();
+        const fechaCreacionString = fechaCreacion.toLocaleDateString();
+        const horaCreacionString = fechaCreacion.toLocaleTimeString();
+
+
 
         // Filtrar los registros según el rango de fechas y tipo de combustible
         const gasolinaLitros = datosRegistros
@@ -132,8 +138,8 @@ async function modificarPDF() {
         });
 
         // YA COLOCADA CORRECTAMENTE
-        firstPage.drawText(`${adjustedFromDate.toLocaleDateString()} - ${adjustedToDate.toLocaleDateString()}`, {
-            x: 357,
+        firstPage.drawText(` De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
+            x: 329,
             y: 445,
             size: 12,
             font: helveticaFont,
@@ -232,6 +238,14 @@ async function modificarPDF() {
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
+        firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
+            x: 584,
+            y: height - 540,
+            size: 12,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
 
         // Generar el PDF modificado
         // Descargar solo la primera página del PDF modificado
