@@ -1,6 +1,12 @@
 function openAccomp(cedula) {
+    const token = localStorage.getItem('token');
     const API_URL = `https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`;
-    axios.get(API_URL)
+    axios.get(API_URL,{
+        headers: {
+             'Authorization': `Bearer ${token}`
+        }
+
+    })
         .then(response => {
             const chofer = response.data.chofer[0]; 
 
@@ -88,10 +94,8 @@ function fillChoferTable(choferes) {
     choferes.forEach(chofer => {
         const row = `
             <tr>
-                <td>${chofer.nombre}</td>
+                <td>${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}</td>
                 <td>${chofer.cedula}</td>
-                <td>${chofer.apellido1}</td>
-                <td>${chofer.apellido2}</td>
                 <td>${chofer.contacto}</td>
                 <td>${chofer.tipoSangre}</td>
                 <td>${chofer.tipoLicencia}</td>
