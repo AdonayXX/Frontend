@@ -57,7 +57,7 @@ async function loadCitas() {
         ocultarSpinner();
 
     } catch (error) {
-        console.error('Error al obtener las citas:', error);
+        showToast("Error", "Error al obtener las citas.")
     }
 }
 
@@ -132,8 +132,7 @@ function getAcompanantes(cita) {
 
         tableBody.appendChild(row);
     } catch (error) {
-        console.error('Error al obtener los acompañantes:', error);
-        showToast(error, 'Error al obtener los acompañantes.');
+        showToast("Error", 'Error al obtener los acompañantes.');
     }
 }
 
@@ -171,9 +170,9 @@ function getRutas() {
                 selectDestino.appendChild(option);
             });
         })
-        .catch(error => {
-            console.error('Error fetching destinos:', error);
-        });
+        .catch(
+            showToast("Error", "Error al obtener los destinos.")
+        );
 }
 
 getRutas();
@@ -207,9 +206,7 @@ async function updateCita(idCita) {
         }, 1400);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
-
         $('#editarModal').modal('hide');
-        console.error('Error al actualizar la cita:', error);
         showToast("Error", "Error al actualizar la cita.");
     }
 }

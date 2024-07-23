@@ -21,7 +21,7 @@ async function loadDestinations() {
         ocultarSpinner()
 
     } catch (error) {
-        console.error('Error al obtener los destinos:', error);
+        showToast("Error", "Error al obtener los destinos.")
 
     }
 }
@@ -142,7 +142,7 @@ async function loadEspecialidades() {
                 });
 
             } catch (error) {
-                console.error('Error al hacer la solicitud:', error);
+                showToast("Error", "Error al obtener las especialidades del destino.")
             }
         };
 
@@ -190,7 +190,6 @@ async function loadEspecialidades() {
                 }, 1400);
 
             } catch (error) {
-                console.error('Error al asignar especialidades:', error);
                 showToast('Error', 'No se pudo asignar las especialidades.');
             }
         };
@@ -200,7 +199,7 @@ async function loadEspecialidades() {
         ocultarSpinner();
 
     } catch (error) {
-        console.error('Error al obtener las especialidades:', error);
+        showToast("Error", "Error al obtener las especialidades.")
     }
 }
 
@@ -245,11 +244,9 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             modalInstance.hide();
         } else {
 
-            console.error('La ubicación ya existe');
             showToast('Error', 'La ubicación ya existe.');
         }
     } catch (error) {
-        console.error('Error al agregar la ubicación:', error);
         showToast('Error', 'Error al agregar la ubicación.');
     }
 });
@@ -356,7 +353,7 @@ async function loadDestinations2() {
         });
 
     } catch (error) {
-        console.error('Error al obtener los destinos:', error);
+        showToast("Error", "Error al obtener los destinos.")
     }
 }
 
@@ -416,8 +413,6 @@ async function deleteDestination(idRuta) {
 
 
     } catch (error) {
-        console.error('Error al eliminar la ubicación:', error);
-
         showToast('Error', 'No se pudo eliminar la ubicación.');
         $('#confirmarEliminarModal').modal('hide');
 
@@ -453,8 +448,7 @@ async function deleteEspecialidad(idEspecialidad, idRuta) {
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
     } catch (error) {
-        console.error('Error al eliminar la especialidad o su relación:', error);
-        showToast('Error', 'No se pudo eliminar la especialidad o su relación.');
+        showToast('Error', 'No se pudo eliminar la especialidad asignada al destino seleccionado.');
 
         $('#confirmarEliminarModal2').modal('hide');
     }
