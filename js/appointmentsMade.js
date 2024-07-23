@@ -170,9 +170,7 @@ function getRutas() {
                 selectDestino.appendChild(option);
             });
         })
-        .catch(
-            showToast("Error", "Error al obtener los destinos.")
-        );
+        .catch();
 }
 
 getRutas();
