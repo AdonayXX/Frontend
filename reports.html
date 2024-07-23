@@ -1,38 +1,10 @@
-<style>
-/* Estilos para la tabla */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
 
-th,
-td {
-    border: 1px solid #ddd;
-    color: #000;
-    padding: 8px;
-    text-align: left;
-    word-wrap: break-word;
-    /* Para que el texto se ajuste al ancho de la celda */
-    max-width: 200px;
-    /* Ancho máximo de la celda para evitar que el texto se extienda demasiado */
-}
-
-th {
-    background-color: #004d84;
-    color: #fff;
-}
-</style>
-<div id="content">
-    <!-- Contenido se agregará dinámicamente aquí -->
-    <p>Este es un contenido de prueba para el PDF.</p>
-  </div>
 <div class="container mt-5 fade-in" style="max-width: 1100px;">
     <h1 class="text-center mb-4">Módulo de Reporterías</h1>
     <div class="row justify-content-center">
         <div class="row bg-light p-4 border rounded-3">
             <div class="col-xl-4 mb-4 col-md-6">
-                <div class="card-R text-center">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
                         <i class="bi bi-map card-icon"></i>
                         <p class="card-text-R">Genera reportes detallados de los viajes realizados.</p>
@@ -42,9 +14,27 @@ th {
                 </div>
             </div>
             <div class="col-xl-4 mb-4 col-md-6">
-                <div class="card-R text-center">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
-                        <i class="bi bi-truck-front card-icon"></i>
+                        <i class="bi bi-calendar-event card-icon"></i>
+                        <p class="card-text-R">Genera reportes detallados de las citas realizadas.</p>
+                        <a href="reporte_choferes.html" class="btn btn-primary">Reporte de Citas</a>
+                    </div>
+                </div>
+            </div>
+             <div class="col-xl-4 mb-4 col-md-6 ">
+                <div class="card-R text-center bg-white rounded-3">
+                    <div class="card-body">
+                        <i class="bi bi-file-earmark-text card-icon"></i>
+                        <p class="card-text-R">Genera reportes detallados de manera general.</p>
+                        <a href="#generalModal" class="btn btn-primary" data-bs-toggle="modal">Reporte General</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 mb-4 col-md-6">
+                <div class="card-R text-center bg-white rounded-3">
+                    <div class="card-body">
+                        <i class="bi bi-person card-icon"></i>
                         <p class="card-text-R">Genera reportes detallados de los choferes.</p>
                         <a href="" data-bs-toggle="modal" data-bs-target="#generalModal" class="btn btn-primary">Reporte
                             de Choferes</a>
@@ -53,7 +43,7 @@ th {
                 </div>
             </div>
             <div class="col-xl-4 mb-4 col-md-6">
-                <div class="card-R text-center">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
                         <i class="bi bi-truck-front card-icon"></i>
                         <p class="card-text-R">Genera reportes detallados de las unidades.</p>
@@ -64,7 +54,7 @@ th {
                 </div>
             </div>
             <div class="col-xl-4 mb-4 col-md-6">
-                <div class="card-R text-center">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
                         <i class="bi bi-person card-icon"></i>
                         <p class="card-text-R">Genera reportes detallados de los pacientes.</p>
@@ -73,29 +63,17 @@ th {
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 mb-4 col-md-6">
-                <div class="card-R text-center">
+         
+            <div class="col-xl-4 mb-4 col-md-6 ">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
-                        <i class="bi bi-calendar-event card-icon"></i>
-                        <p class="card-text-R">Genera reportes detallados de las citas realizadas.</p>
-                        <a href="" data-bs-toggle="modal" data-bs-target="#generalModal" class="btn btn-primary">Reporte
-                            de Citas</a>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-4 mb-4 col-md-6 ">
-                <div class="card-R text-center">
-                    <div class="card-body">
-                        <i class="bi bi-file-earmark-text card-icon"></i>
-                        <p class="card-text-R">Genera reportes detallados de manera general.</p>
-                        <br class="d-sm-none">
-                        <a href="#generalModal" class="btn btn-primary" data-bs-toggle="modal">Reporte General</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 mb-4 col-md-6 m-auto">
-                <div class="card-R text-center">
+           
+            <div class="col-xl-4 mb-4 col-md-6">
+                <div class="card-R text-center bg-white rounded-3">
                     <div class="card-body">
                         <i class="bi bi-fuel-pump card-icon"></i>
                         <p class="card-text-R">Genera reportes detallados de los combustibles realizados.</p>
@@ -172,5 +150,42 @@ th {
 
 <div data-script="js/reports.js"></div>
 
+
+<!-- //MODAL DE VALES -->
+<!-- 
+<div class="modal fade" id="valesModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center; margin-left: 4px;">Reportes de Vales</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3" style="text-align: center;">
+                    <div class="mt-3 fade-in">
+                        <div class="row mt-3">
+                            <div class="col d-flex justify-content-end">
+                                <button class="btn btn-secondary me-2 pdf" onclick="downloadPDF()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
+                                    <img src="img/icons8-pdf.svg" alt="PDF Icon">
+                                </button>
+                                <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
+                                    <img src="img/icons8-excel.svg" alt="Excel Icon">
+                                </button>
+                            </div>
+                        </div>
+
+                   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+    <!-- FIN DE MODAL DE VALES -->
 
 

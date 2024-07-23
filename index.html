@@ -26,7 +26,7 @@
             <a class="navbar-brand" href="#" onclick="toggleSidebar()">
                 <i class="bi bi-list" style="font-size: 2rem; color: white;"></i>
             </a>
-            <a class="navbar-brand" href="#" onclick="loadContent('home.html', 'mainContent')" data-toggle="tooltip"
+            <a class=" hidden navbar-brand" id="homeClick" href="#" onclick="loadContent('home.html', 'mainContent')" data-toggle="tooltip"
                 data-placement="top" title="Inicio" style="color: white;">
                 <i class="bi bi-house-door" style="font-size: 2rem;"></i>
             </a>
@@ -122,10 +122,10 @@
                                 class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Pacientes</a>
                         <a id="21" class="items hidden" href="#"
                             onclick="loadContent('tableFuel.html', 'mainContent')"><i class="bi bi-journal-medical"
-                                style="font-size: 1.5rem;"></i> Catalogo-Combustible</a>
+                                style="font-size: 1.5rem;"></i> Catálogo-Combustible</a>
                         <a id="22" class="items hidden" href="#"
                             onclick="loadContent('especialidades.html', 'mainContent')">
-                            <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i>Catálogo-Especialidades
+                            <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Especialidades
                         </a>
                     </div>
                     <hr style="color: white; margin-top: 20px;">
@@ -165,13 +165,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="js/dinamicContent.js"></script>
     <script src="js/script.js"></script>
     <script src="js/sidebar.js"></script>
     <script src="js/index.js"></script>
-    <script>
-
-    </script>
 </body>
 
 </html>

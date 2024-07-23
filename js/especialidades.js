@@ -37,7 +37,7 @@ async function loadEspecialidades() {
         ocultarSpinner()
 
     } catch (error) {
-        console.error('Error al obtener las especialidades:', error);
+        showToast("Error", "Error al obtener las especialidades.")
     }
 }
 
@@ -68,7 +68,7 @@ async function deleteEspecialidad(idEspecialidad) {
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`, {
+        await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -82,7 +82,6 @@ async function deleteEspecialidad(idEspecialidad) {
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
     } catch (error) {
-        console.error('Error al eliminar la especialidad:', error);
         showToast('Error', 'No se pudo eliminar la especialidad.');
         $('#confirmarEliminarModal2').modal('hide');
     }
@@ -174,7 +173,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
         modalInstance.hide();
 
     } catch (error) {
-        console.error('Error al agregar la especialidad:', error.response ? error.response.data : error.message);
+        showToast("Error", "Error al agregar la especialidad.")
     }
 });
 

@@ -47,6 +47,12 @@
 //             return sum + count;
 //         }, 0);
 
+        //mostrar la fecha y hora de creacion del pdf
+        const fechaCreacion = new Date();
+        const fechaCreacionString = fechaCreacion.toLocaleDateString();
+        const horaCreacionString = fechaCreacion.toLocaleTimeString();
+
+
 
 //         // Filtrar los registros según el rango de fechas y tipo de combustible
 //         const gasolinaLitros = datosRegistros
@@ -130,16 +136,6 @@
 //             font: helveticaFont,
 //             color: PDFLib.rgb(0, 0, 0),
 //         });
-
-//         // YA COLOCADA CORRECTAMENTE
-//         firstPage.drawText(`${adjustedFromDate.toLocaleDateString()} - ${adjustedToDate.toLocaleDateString()}`, {
-//             x: 357,
-//             y: 445,
-//             size: 12,
-//             font: helveticaFont,
-//             color: PDFLib.rgb(0, 0, 0),
-//         });
-
 //         // YA COLOCADA CORRECTAMENTE
 //         firstPage.drawText(`${valesFiltrados.length}`, {
 //             x: 284,
@@ -225,14 +221,6 @@
 //             color: PDFLib.rgb(0, 0, 0),
 //         });
         
-//         firstPage.drawText(`${dieselKilometraje}`, {
-//             x: 284,
-//             y: height - 410,
-//             size: 12,
-//             font: helveticaFont,
-//             color: PDFLib.rgb(0, 0, 0),
-//         });
-
 //         // Generar el PDF modificado
 //         // Descargar solo la primera página del PDF modificado
 //         const pdfBytes = await pdfDoc.save();
@@ -324,38 +312,8 @@ for (var i = 1; i <= totalPages; i++) {
     
     // Ajustar tamaño de la imagen como logo en la esquina superior derecha
     pdf.addImage('img/logo_ccss_azul.png', 'PNG', x, y, logoWidth, 0); // Altura automática
-}
-}
-        // Crear PDF y descargarlo
-        html2pdf()
-          .from(tempDiv)
-          .set(opt)
-          .toPdf()
-          .get("pdf")
-          .then(function (pdf) {
-            addLogoToPDF(pdf);
-          })
-          .save();
-      })
-      .catch((error) =>
-        console.error(
-          "Error al obtener datos desde la API o al generar el PDF:",
-          error
-        )
-      );
-  });
-  document.getElementById('exportar').addEventListener('click', function() {
-    // Obtiene el contenido del div
-    let content = document.getElementById('content').outerHTML;
-
-    // Crea un blob con el contenido
-    let blob = new Blob([content], { type: 'text/html' });
-
-    // Crea un enlace para la descarga
-    let a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'pagina.html';
-
-    // Simula un click en el enlace para iniciar la descarga
-    a.click();
-});
+      }
+    }
+  }
+      )}
+)
