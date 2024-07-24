@@ -22,7 +22,6 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(response.data.choferesConUnidades);
             return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
         } catch (error) {
             console.error("Error al obtener la unidad asignada:", error);
