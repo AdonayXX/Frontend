@@ -36,7 +36,7 @@
         const unidadYChofer = await obtenerUnidadAsignada(identificacion);
 
         if (unidadYChofer) {
-            document.getElementById('chofer').value = unidadYChofer.nombre;
+            document.getElementById('chofer').value = `${unidadYChofer.nombre} ${unidadYChofer.apellido1}`;
             document.getElementById('unidad').value = unidadYChofer.numeroUnidad;
         }
     }
