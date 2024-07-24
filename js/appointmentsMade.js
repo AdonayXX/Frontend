@@ -118,7 +118,6 @@ function getAcompanantes(cita) {
             cita.camilla,
             cita.diagnostico,
             cita.especialidad,
-            cita.condicionCita,
             cita.prioridad,
             cita.nombreCompletoAcompanante1 || 'No posee.',
             cita.nombreCompletoAcompanante2 || 'No posee.'

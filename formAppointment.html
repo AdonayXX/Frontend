@@ -57,6 +57,14 @@
                 </div>
                 
                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
+                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250"></textarea>
+                    </div>
                     <div class="col-md-4 mb-3">
                         <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>
                         <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
@@ -72,16 +80,6 @@
                         </select>
                     </div>
                    
-
-                    <div class="col-md-2 mb-3">
-                        <label for="condicion" class="form-label"><i class="bi bi-exclamation-circle"></i> Condición:</label>
-                        <select id="condicion" name="condicion" class="form-select">
-                            <option value="Verde">Verde</option>
-                            <option value="Amarillo">Amarillo</option>
-                            <option value="Rojo">Rojo</option>
-
-                        </select>
-                    </div>
                     <div class="col-md-2 mb-3">
                         <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label>
                         <div class="form-check form-switch">
@@ -97,17 +95,6 @@
                         </div>
                     </div>
                     
-
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
-                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250"></textarea>
-                    </div>
                 </div>
             </div>
 
