@@ -72,12 +72,10 @@ async function getUserPermission() {
     });
     ocultarSpinner();
     } catch (error) {
-        console.error('Error al obtener datos de permisos:', error);
         if (error.response && error.response.status === 400) {
           const errorMessage = error.response.data.error;
           showToast('Error',errorMessage);
         }  else {
-          console.error('Ha ocurrido un problema:', error);
           showToast('Error','Ocurrio un problema al cargar los datos.')
         } 
     }   
@@ -113,7 +111,7 @@ function fillPermissionsTable(roles, forms) {
         tableBody.appendChild(fragment);
 
     } catch (error) {
-        console.error('Error al llenar la tabla de permisos:', error);
+      showToast('Error','Inesperado')
     }
 }
 
@@ -187,13 +185,11 @@ async function addNewPermission(DataRolPermission) {
         modalInstance.hide();
         }
   });
-        console.log(response);
         showToast('Éxito',' Permiso asignado correctamente.');
         getUserPermission();
       
       document.querySelector('#formAddPermission').reset();
     }catch(error){
-        console.error(error);
         showToast('Error','No se logro asignar el permiso')
 
     }
@@ -244,7 +240,6 @@ async function DeletePermiso(Idrol){
             
         
           } catch (error) {
-            console.error('There has been a problem deleting the patient:', error);
             showToast('Ups!','Error al eliminar el permiso.')
           }
 

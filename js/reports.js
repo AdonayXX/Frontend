@@ -273,3 +273,200 @@ async function modificarPDF() {
     } catch (error) {
     }
 }
+
+//VALES
+
+// function exportarViajes() {
+//  const token = localStorage.getItem('token');
+//     fetch("https://backend-transporteccss.onrender.com/api/viaje", {
+//         headers: {
+//             Authorization: `Bearer ${token}`
+//         }
+//     })
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error("La solicitud a la API no fue exitosa");
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//       if (!data || !data.viaje || !Array.isArray(data.viaje)) {
+//         throw new Error("Los datos recibidos de la API no son válidos");
+//       }
+
+//       // Generar dinámicamente el contenido de la tabla solo para los viajes
+//       var tableHTML = "<h3>Caja Costarricense Seguro Social</h3>";
+//       tableHTML += "<h3>Área de Salud Upala</h3>";
+//       tableHTML += "<h3>Servicio Validación de Derechos - Transportes</h3>";
+//       tableHTML += "<h3>Lista de Viajes Efectuados</h3>";
+//       tableHTML += "<table>";
+//       tableHTML += "<thead><tr><th>ID Viaje</th><th>Unidad</th><th>Chofer</th><th>Ocupación</th><th>Estado</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Destino</th><th>Citas Asociadas</th></tr></thead>";
+//       tableHTML += "<tbody>";
+
+//       // Construir filas de la tabla con los datos de los viajes
+//       data.viaje.forEach(function (viaje) {
+//         tableHTML += "<tr>";
+//         tableHTML += "<td>" + viaje.idViaje + "</td>";
+//         tableHTML += "<td>" + viaje.idUnidad + "</td>";
+//         tableHTML += "<td>" + viaje.idChofer + "</td>";
+//         tableHTML += "<td>" + viaje.Ocupacion + "</td>";
+//         tableHTML += "<td>" + viaje.EstadoViaje + "</td>";
+//         tableHTML += "<td>" + new Date(viaje.fechaInicioViaje).toLocaleDateString() + "</td>";
+//         tableHTML += "<td>" + new Date(viaje.Fecha_Fin).toLocaleDateString() + "</td>";
+//         tableHTML += "<td>" + viaje.Destino + "</td>";
+//         tableHTML += "<td>" + viaje.Citas_Asociadas + "</td>";
+//         tableHTML += "</tr>";
+//       });
+
+//       tableHTML += "</tbody></table>";
+
+//       // Crear un elemento temporal para convertirlo en PDF
+//       var tempDiv = document.createElement("div");
+//       tempDiv.innerHTML = tableHTML;
+
+//       // Configuración de html2pdf
+//       var opt = {
+//         margin: 10, // Márgenes en mm
+//         filename: "viajes.pdf",
+//         image: { type: "jpeg", quality: 1.0 },
+//         html2canvas: { scale: 3 },
+//         jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
+//       };
+
+//       // Función para agregar imagen como logo en el PDF
+//       function addLogoToPDF(pdf) {
+//         var totalPages = pdf.internal.getNumberOfPages();
+//         var logoWidth = 25; // Ancho de la imagen del logo en milímetros
+//         var logoMarginX = 10; // Margen desde el borde izquierdo en milímetros
+//         var logoMarginY = 5; // Margen desde el borde superior en milímetros
+
+//         for (var i = 1; i <= totalPages; i++) {
+//           pdf.setPage(i);
+//           pdf.setFontSize(10);
+//           pdf.text(`Página ${i} de ${totalPages}`, pdf.internal.pageSize.getWidth() - 50, pdf.internal.pageSize.getHeight() - 10); // Texto en la parte inferior derecha
+
+//           // Calcular posición de la imagen
+//           var x = logoMarginX; // Posición X desde el borde izquierdo
+//           var y = logoMarginY; // Posición Y desde el borde superior
+
+//           // Ajustar tamaño de la imagen como logo en la esquina superior izquierda
+//           pdf.addImage('img/logo_ccss_azul.png', 'PNG', x, y, logoWidth, 0); // Altura automática
+//         }
+//       }
+
+//       // Crear PDF y descargarlo
+//       html2pdf()
+//         .from(tempDiv)
+//         .set(opt)
+//         .toPdf()
+//         .get("pdf")
+//         .then(function (pdf) {
+//           addLogoToPDF(pdf);
+//           pdf.save();
+//         });
+//     })
+//     .catch((error) =>
+//       console.error("Error al obtener datos desde la API o al generar el PDF:", error)
+//     );
+// }
+
+
+// function exportarCitas() {
+//     const token = localStorage.getItem('token');
+//     fetch("https://backend-transporteccss.onrender.com/api/cita", {
+//         headers: {
+//             Authorization: `Bearer ${token}`
+//         }
+//     })
+//     .then((response) => {
+//         if (!response.ok) {
+//             throw new Error("La solicitud a la API no fue exitosa");
+//         }
+//         return response.json();
+//     })
+//     .then((data) => {
+//         if (!data || !Array.isArray(data)) {
+//             throw new Error("Los datos recibidos de la API no son válidos");
+//         }
+
+//         // Generar dinámicamente el contenido de la tabla solo para las citas
+//         var tableHTML = "<h3>Caja Costarricense Seguro Social</h3>";
+//         tableHTML += "<h3>Área de Salud Upala</h3>";
+//         tableHTML += "<h3>Servicio Validación de Derechos - Transportes</h3>";
+//         tableHTML += "<h3>Lista de Citas Efectuadas</h3>";
+//         tableHTML += "<table>";
+//         tableHTML += "<thead><tr><th>ID Cita</th><th>Nombre Paciente</th><th>Acompañante 1</th><th>Acompañante 2</th><th>Ubicación Origen</th><th>Ubicación Destino</th><th>Especialidad</th><th>Condición</th><th>Tipo Seguro</th><th>Diagnóstico</th><th>Estado</th><th>Traslado</th><th>Fecha</th><th>Hora</th><th>Ausente</th></tr></thead>";
+//         tableHTML += "<tbody>";
+
+//         // Construir filas de la tabla con los datos de las citas
+//         data.forEach(function (cita) {
+//             tableHTML += "<tr>";
+//             tableHTML += "<td>" + cita.idCita + "</td>";
+//             tableHTML += "<td>" + cita.nombreCompletoPaciente + "</td>";
+//             tableHTML += "<td>" + (cita.nombreCompletoAcompanante1 || 'N/A') + "</td>";
+//             tableHTML += "<td>" + (cita.nombreCompletoAcompanante2 || 'N/A') + "</td>";
+//             tableHTML += "<td>" + cita.ubicacionOrigen + "</td>";
+//             tableHTML += "<td>" + cita.ubicacionDestino + "</td>";
+//             tableHTML += "<td>" + cita.especialidad + "</td>";
+//             tableHTML += "<td>" + cita.condicionCita + "</td>";
+//             tableHTML += "<td>" + cita.tipoSeguro + "</td>";
+//             tableHTML += "<td>" + cita.diagnostico + "</td>";
+//             tableHTML += "<td>" + cita.estadoCita + "</td>";
+//             tableHTML += "<td>" + cita.transladoCita + "</td>";
+//             tableHTML += "<td>" + new Date(cita.fechaCita).toLocaleDateString() + "</td>";
+//             tableHTML += "<td>" + cita.horaCita + "</td>";
+//             tableHTML += "<td>" + (cita.ausente || 'N/A') + "</td>";
+//             tableHTML += "</tr>";
+//         });
+
+//         tableHTML += "</tbody></table>";
+
+//         // Crear un elemento temporal para convertirlo en PDF
+//         var tempDiv = document.createElement("div");
+//         tempDiv.innerHTML = tableHTML;
+
+//         // Configuración de html2pdf
+//         var opt = {
+//             margin: 10, // Márgenes en mm
+//             filename: "citas.pdf",
+//             image: { type: "jpeg", quality: 1.0 },
+//             html2canvas: { scale: 3 },
+//             jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
+//         };
+
+//         // Función para agregar imagen como logo en el PDF
+//         function addLogoToPDF(pdf) {
+//             var totalPages = pdf.internal.getNumberOfPages();
+//             var logoWidth = 25; // Ancho de la imagen del logo en milímetros
+//             var logoMarginX = 10; // Margen desde el borde izquierdo en milímetros
+//             var logoMarginY = 5; // Margen desde el borde superior en milímetros
+
+//             for (var i = 1; i <= totalPages; i++) {
+//                 pdf.setPage(i);
+//                 pdf.setFontSize(10);
+//                 pdf.text(`Página ${i} de ${totalPages}`, pdf.internal.pageSize.getWidth() - 50, pdf.internal.pageSize.getHeight() - 10); // Texto en la parte inferior derecha
+
+//                 // Calcular posición de la imagen
+//                 var x = logoMarginX; // Posición X desde el borde izquierdo
+//                 var y = logoMarginY; // Posición Y desde el borde superior
+
+//                 // Ajustar tamaño de la imagen como logo en la esquina superior izquierda
+//                 pdf.addImage('img/logo_ccss_azul.png', 'PNG', x, y, logoWidth, 0); // Altura automática
+//             }
+//         }
+
+//         // Crear PDF y descargarlo
+//         html2pdf()
+//             .from(tempDiv)
+//             .set(opt)
+//             .toPdf()
+//             .get("pdf")
+//             .then(function (pdf) {
+//                 addLogoToPDF(pdf);
+//                 pdf.save();
+//             });
+//     })
+//     .catch((error) =>
+//         console.error("Error al obtener datos desde la API o al generar el PDF:", error)
+//     );
+// }

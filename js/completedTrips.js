@@ -18,7 +18,8 @@ async function loadChoferes() {
             select.appendChild(option);
         });
     } catch (error) {
-        console.error('Error al obtener los choferes:', error);
+        showToast("Error", "Error al obtener los choferes.")
+
     }
 }
 
@@ -41,7 +42,7 @@ async function loadUnidades() {
             select.appendChild(option);
         });
     } catch (error) {
-        console.error('Error al obtener las unidades:', error);
+        showToast("Error", "Error al obtener las unidades.")
     }
 }
 
@@ -104,7 +105,7 @@ async function loadViajes() {
         ocultarSpinner();
 
     } catch (error) {
-        console.error('Error al obtener las citas:', error);
+        showToast("Error", "Error al cargar los viajes finalizados.")
     }
 }
 
@@ -155,8 +156,7 @@ function getACitas(cita) {
 
         tableBody.appendChild(row);
     } catch (error) {
-        console.error('Error al obtener los acompañantes:', error);
-        showToast(error, 'Error al obtener los acompañantes.');
+        showToast("Error", 'Error al obtener los acompañantes.');
     }
 }
 

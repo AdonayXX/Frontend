@@ -154,7 +154,7 @@ document.querySelector('#acompananteTelefono2_2').addEventListener('input', func
 //4 Capturar Datos para Paciente
 function addDataPatient(IdPersonaCreada) {
   const prioridad = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
-  const traslado = JSON.stringify(document.getElementById('prioridad').checked ? true : false);
+  const traslado = JSON.stringify(document.getElementById('trasladable').checked ? true : false);
   const lugarSalida = document.querySelector('#lugarSalida').value;
   const encamado = document.querySelector('#encamado').value;
   const pacienteData = {

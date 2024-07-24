@@ -1,8 +1,10 @@
 
 (function () {
+    const token = localStorage.getItem('token');
     const idVale = sessionStorage.getItem('selectedIdVale');
     var url = 'https://backend-transporteccss.onrender.com/';
     const btnAdd = document.getElementById('btn-agregarSoli');
+    let isCero = 1;
 
     if (idVale) {
         readVale(idVale);
@@ -15,13 +17,29 @@
 
     async function readVale(id) {
         try {
-            const response = await axios.get(`${url}api/vales`);
+            const response = await axios.get(`${url}api/vales`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const vales = response.data.vales;
-            const response2 = await axios.get(`${url}api/revicionVale`);
+            const response2 = await axios.get(`${url}api/revicionVale`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const coordinate = response2.data.revicionVales;
-
+            let valeObject = null;
             vales.forEach(vale => {
                 if (id === vale.IdVale) {
+                    var salida, destino;
+                    if (vale.NombreSalida == null) {
+                        salida = vale.NombreSalidaEbais;
+                        destino = vale.NombreDestinoEbais
+                    } else {
+                        salida = vale.NombreSalida;
+                        destino = vale.NombreDestino;
+                    }
                     const fechaSolicitud = new Date(vale.Fecha_Solicitud);
                     const fechaFormateada = fechaSolicitud.toISOString().split('T')[0];
                     document.getElementById('input-id').value = id;
@@ -32,8 +50,8 @@
                     document.getElementById('input-horaSalida').value = vale.Hora_Salida;
                     document.getElementById('input-fechaReq').value = fechaFormateada;
                     document.getElementById('txa-detalle').value = vale.Detalle;
-                    document.getElementById('input-salida').value = vale.NombreSalida;
-                    document.getElementById('input-destino').value = vale.NombreDestino;
+                    document.getElementById('input-salida').value = salida;
+                    document.getElementById('input-destino').value = destino;
                     if (vale.EstadoId === 3 || vale.EstadoId === 5) {
                         blockBtn()
                         const selectPlaca = document.getElementById('select-placa');
@@ -43,12 +61,16 @@
                         selectChofer.disabled = true;
                         selectEncargado.disabled = true;
                         showToast('Vale Rechazado', 'No se pueden modificar datos.');
-                    }else{
+                    } else {
                         if (vale.EstadoId == 2) {
                             blockBtn();
                         }
                     }
+                    if (vale.Chofer == 0 || null) {
+                        selects();
+                    }
                     acompanantes(vale);
+                    valeObject = vale;
                 }
             });
 
@@ -66,9 +88,25 @@
                     btnAdd.disabled = true;
                 }
             });
+            if (valeObject.Chofer == 0 || null) {
+                selects();
+            }
+
         } catch (error) {
             console.error('Error fetching vale data:', error);
         }
+    }
+
+    function selects() {
+        const selectElement = document.getElementById('select-chofer');
+        const newOption = document.createElement('option');
+        newOption.id = '0';
+        newOption.value = '0';
+        newOption.textContent = 'Chofer ASU';
+        selectElement.appendChild(newOption);
+        selectElement.value = '0';
+        selectElement.disabled = true;
+        isCero = 0;
     }
 
     function acompanantes(vale) {
@@ -109,14 +147,14 @@
         const año = hoy.getFullYear();
         const mes = String(hoy.getMonth() + 1).padStart(2, '0');
         const día = String(hoy.getDate()).padStart(2, '0');
-    
+
         return `${año}-${mes}-${día}`;
     }
     const obtenerHoraActual = () => {
         const hoy = new Date();
         const horas = String(hoy.getHours()).padStart(2, '0');
         const minutos = String(hoy.getMinutes()).padStart(2, '0');
-    
+
         return `${horas}:${minutos}`;
     }
 
@@ -131,23 +169,26 @@
                 HoraRevision: obtenerHoraActual(),
                 Observaciones: "Agregando datos"
             };
-            console.log(coordinate);
-            try {
-                await axios.post(`${url}api/revicionVale`, coordinate);
-                return true;
-            } catch (error) {
-                console.error('Error al guardar datos', error);
-                showToast('Error', 'Error al guardar la la revición.');
-                return false;
+            if (isCero == 0) {
+                console.log("siseñor");
+                coordinate.IdChofer = 25;
             }
+            console.log(coordinate);
+            const response = await axios.post(`${url}api/revicionVale`, coordinate, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return true;
         } catch (error) {
-            console.error('Error fetching vale data:', error);
+            console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
+            showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
     }
 
     btnAdd.addEventListener('click', function () {
-        if(addCoordinate()){
+        if (addCoordinate()) {
             const selectPlaca = document.getElementById('select-placa');
             const selectChofer = document.getElementById('select-chofer');
             const selectEncargado = document.getElementById('select-encargado');
@@ -164,7 +205,11 @@
 
     async function readChofer() {
         try {
-            const response = await axios.get(`${url}api/chofer`);
+            const response = await axios.get(`${url}api/chofer`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const choferes = response.data.choferes;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             choferes.forEach(chofer => {
@@ -179,7 +224,11 @@
 
     async function readUnidad() {
         try {
-            const response = await axios.get(`${url}api/unidades`);
+            const response = await axios.get(`${url}api/unidades`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const unidades = response.data.unidades;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             unidades.forEach(unidad => {
@@ -204,7 +253,7 @@
                 showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
                 blockBtn();
             }
-    
+
         } catch (error) {
             console.error('Error al actualizar el campo:', error);
             throw error;
@@ -228,5 +277,23 @@
         btnCancel.disabled = true;
         btnAdd.disabled = true;
     }
+
+    /*
+//Funcion para mandar el usuario
+function infoUser() {
+    try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      return (decodedToken);
+    } catch (error) {
+      console.error(error);
+      showToast('Error', 'Ocurrio un problema al obtener loss datos del usuario')
+ 
+    }
+ 
+  }
+  const infoUsuario = infoUser();
+  const idUsuario = infoUsuario.usuario.IdUsuario;
+*/
 })();
 

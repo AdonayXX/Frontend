@@ -1,8 +1,9 @@
 //funciones dinamicas
 
 // Función para mostrar los campos según el motivo seleccionado
+var motivoSeleccionado;
 function mostrarCampos() {
-    var motivoSeleccionado = document.getElementById('motivo').value;
+    motivoSeleccionado = document.getElementById('motivo').value;
     var contenedorSelectSalida = document.getElementById('contenedorSelectSalida');
     var contenedorSelectDestino = document.getElementById('contenedorSelectDestino');
     var contenedorEscribirSalida = document.getElementById('contenedorEscribirSalida');
@@ -179,9 +180,10 @@ function llenarMotivos(data) {
 
 //Obtener Lugar de Salida
 function ObtenerSalida() {
-    axios.get(`${url}api/ebais`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            LlenarSalida(response.data.ebais);
+
+            LlenarSalida(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -192,16 +194,16 @@ function ObtenerSalida() {
 function LlenarSalida(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     data.forEach(ebai => {
-        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
     document.getElementById('lugarSa').innerHTML = body;
 }
 
 // Obtener EBAIS para lugar de destino
 function ObtenerDestino() {
-    axios.get(`${url}api/ebais`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            LlenarDestino(response.data.ebais);
+            LlenarDestino(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -212,7 +214,7 @@ function ObtenerDestino() {
 function LlenarDestino(data) {
     let body = '<option selected disabled value="">Seleccione una opción</option>';
     data.forEach(ebai => {
-        body += `<option value="${ebai.id}">${ebai.nombre}</option>`;
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
     document.getElementById('lugarDes').innerHTML = body;
 }
@@ -235,7 +237,7 @@ function LlenarRutaSalida(data) {
     }
     document.getElementById('lugarSa2').innerHTML = body;
 }
-//body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
+
 
 function ObtenerRutaDestino() {
     axios.get(`${url}api/rutas`)
@@ -254,6 +256,7 @@ function LlenarRutaDestino(data) {
     }
     document.getElementById('lugarDes2').innerHTML = body;
 }
+
 
 //------------------------------------------------------------------------------------------
 //Valida que los campos se deban llenar
@@ -290,16 +293,30 @@ function GuardarDatos() {
     let Acompanante4 = document.getElementById('acompananteNombre4').value;
     let Acompanante5 = document.getElementById('acompananteNombre5').value;
     const IdUnidadProgramatica = document.getElementById('Up').value;
-    const SalidaId = document.getElementById('lugarSa').value;
     const ServicioID = document.getElementById('service').value;
     const MotivoID = document.getElementById('motivo').value;
-    const DestinoId = document.getElementById('lugarDes').value;
     const Detalle = document.getElementById('detalle').value;
     const NombreSolicitante = document.getElementById('nameSoli').value;
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
     const Chofer = document.getElementById('chofer').checked ? 1 : 0;
+    let SalidaId = document.getElementById('lugarSa2').value;
+    let DestinoId = document.getElementById('lugarDes2').value;
+    let SalidaEbaisId = document.getElementById('lugarSa').value;
+    let DestinoEbaisId = document.getElementById('lugarDes').value;
+
+    Acompanante1 = adjustToNullIfEmpty(Acompanante1);
+    Acompanante2 = adjustToNullIfEmpty(Acompanante2);
+    Acompanante3 = adjustToNullIfEmpty(Acompanante3);
+    Acompanante4 = adjustToNullIfEmpty(Acompanante4);
+    Acompanante5 = adjustToNullIfEmpty(Acompanante5);
+    // SalidaId = adjustToNullIfEmpty2(SalidaId);
+    // DestinoId = adjustToNullIfEmpty2(DestinoId);
+    // SalidaEbaisId = adjustToNullIfEmpty2(SalidaEbaisId);
+    // DestinoEbaisId = adjustToNullIfEmpty2(DestinoEbaisId);
+
+
 
     function adjustToNullIfEmpty(value) {
         if (typeof value === 'string' && value.trim() === '') {
@@ -308,16 +325,32 @@ function GuardarDatos() {
         return value;
     }
 
-    Acompanante1 = adjustToNullIfEmpty(Acompanante1);
-    Acompanante2 = adjustToNullIfEmpty(Acompanante2);
-    Acompanante3 = adjustToNullIfEmpty(Acompanante3);
-    Acompanante4 = adjustToNullIfEmpty(Acompanante4);
-    Acompanante5 = adjustToNullIfEmpty(Acompanante5);
+
+    // if (SalidaEbaisId) {
+    //     SalidaId = null;
+    // } else if (SalidaId) {
+    //     SalidaEbaisId = null;
+    // }
+    // if (DestinoEbaisId) {
+    //     DestinoId = null;
+    // } else if (DestinoId) {
+    //     DestinoEbaisId = null;
+    // }
+
+    if (motivoSeleccionado === '3') {
+        SalidaId = null;
+        DestinoId = null;
+    } else {
+        SalidaEbaisId = null;
+        DestinoEbaisId = null;
+    }
 
     const datos = {
         NombreSolicitante: NombreSolicitante,
         SalidaId: SalidaId,
         DestinoId: DestinoId,
+        SalidaEbaisId: SalidaEbaisId,
+        DestinoEbaisId: DestinoEbaisId,
         MotivoId: MotivoID,
         ServicioId: ServicioID,
         Fecha_Solicitud: Fecha_Solicitud,
@@ -336,17 +369,18 @@ function GuardarDatos() {
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
-
         })
         .catch(error => {
             if (error.response) {
                 console.error('Hubo un problema al guardar los datos:', error.response.data);
+                console.error('Detalles del error:', error.response.status, error.response.headers);
             } else {
                 console.error('Error desconocido:', error);
             }
         });
-
 }
+
+
 //Limpia los campos del modal 
 document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';

@@ -38,7 +38,7 @@ async function mostrarProximosViajes() {
             const fechaViaje = new Date(viaje.fechaInicioViaje);
             const fechaViajeUTC = new Date(Date.UTC(fechaViaje.getUTCFullYear(), fechaViaje.getUTCMonth(), fechaViaje.getUTCDate(), 0, 0, 0));
             const fechaViajeStr = fechaViajeUTC.toISOString().split('T')[0];
-            return fechaViajeStr === hoyUTCStr && viaje.EstadoViaje === "Iniciado";
+            return fechaViajeStr === hoyUTCStr && viaje.EstadoViaje === "En curso";
         });
 
         const proximosViajesContainer = document.getElementById('proximosViajesContainer');
