@@ -135,13 +135,6 @@ function getAcompanantes(cita) {
     }
 }
 
-
-document.querySelector('#searchAppointment').addEventListener('input', function (e) {
-    if (this.value.length > 15) {
-        this.value = this.value.slice(0, 15);
-    }
-});
-
 function editarCita(cita) {
     document.querySelector('#editarIdCita').value = cita.idCita;
     document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
@@ -154,7 +147,6 @@ function editarCita(cita) {
         updateCita(cita.idCita);
     });
 }
-
 
 function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
@@ -173,7 +165,6 @@ function getRutas() {
 }
 
 getRutas();
-
 
 async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;

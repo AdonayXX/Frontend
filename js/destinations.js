@@ -380,7 +380,7 @@ function createDeleteModal(idDestino) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarUbicacion" onclick='deleteDestination(${JSON.stringify(idDestino)})'>Eliminar</button>
+                        <button type="button"  class="btn btn-danger" id="eliminarUbicacion" onclick='deleteDestination(${JSON.stringify(idDestino)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -476,7 +476,7 @@ function createDeleteModal2(idEspecialidad, idRuta) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)}, ${JSON.stringify(idRuta)})'>Eliminar</button>
+                        <button type="button" class="btn btn-danger" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)}, ${JSON.stringify(idRuta)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
