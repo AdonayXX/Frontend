@@ -116,7 +116,7 @@ async function getUnidades() {
                         <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
                         <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
                         <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
-                        <td class="text-center">${new Date(unidad.fechaDekra).toLocaleDateString() || 'N/A'}</td>
+                        <td class="text-center">${new Date(unidad.fechaDekra).toISOString().split('T')[0] || 'N/A'}</td>
                         <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
                     `;
 
