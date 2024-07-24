@@ -306,12 +306,12 @@
     try {
     
       const unidades = await getUnidades();
-     
+
 
       // Convertir el id de la unidad seleccionada a número
       const unidadSeleccionada = unidades.find(u => u.id == unidad);
-  
-      return unidadSeleccionada ? unidadSeleccionada.ultimoMantenimientoKilometraje : '';
+
+      return unidadSeleccionada ? unidadSeleccionada.kilometrajeActual : '';
     } catch (error) {
       showToast('Error','Inesperado.')
 

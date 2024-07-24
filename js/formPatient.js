@@ -496,7 +496,7 @@ document.getElementById('tipoIdentificacion').addEventListener('change', functio
 
 // Inicializar la máscara según el tipo de identificación seleccionado
 applyMaskBasedOnType();
-applyIdentificationMask('identificacion', ''); 
+applyIdentificationMask('identificacion', '');
 
 
 function toSentenceCase(str) {
@@ -567,3 +567,64 @@ function formatNombre(nombre) {
 
 // Agregar el evento blur al input de identificación
 document.getElementById('identificacion').addEventListener('blur', consultarCedulaOnBlur);
+
+// Función para cargar los datos JSON y llenar los select
+function cargarDatos() {
+  fetch('data/provincias_cantones_distritos_costa_rica.json')
+      .then(response => response.json())
+      .then(data => {
+          const provinciaSelect = document.getElementById('provincia');
+          const cantonSelect = document.getElementById('canton');
+          const distritoSelect = document.getElementById('distrito');
+
+          // Cargar provincias
+          Object.keys(data.provincias).forEach(provinciaKey => {
+              const provincia = data.provincias[provinciaKey];
+              const option = document.createElement('option');
+              option.value = provinciaKey;
+              option.textContent = provincia.nombre;
+              provinciaSelect.appendChild(option);
+          });
+
+          // Evento para cargar cantones al seleccionar una provincia
+          provinciaSelect.addEventListener('change', () => {
+              // Limpiar select de cantones y distritos
+              cantonSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const provincia = data.provincias[provinciaSeleccionada];
+
+              Object.keys(provincia.cantones).forEach(cantonKey => {
+                  const canton = provincia.cantones[cantonKey];
+                  const option = document.createElement('option');
+                  option.value = cantonKey;
+                  option.textContent = canton.nombre;
+                  cantonSelect.appendChild(option);
+              });
+          });
+
+          // Evento para cargar distritos al seleccionar un cantón
+          cantonSelect.addEventListener('change', () => {
+              // Limpiar select de distritos
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const cantonSeleccionado = cantonSelect.value;
+              const provincia = data.provincias[provinciaSeleccionada];
+              const canton = provincia.cantones[cantonSeleccionado];
+
+              Object.keys(canton.distritos).forEach(distritoKey => {
+                  const distrito = canton.distritos[distritoKey];
+                  const option = document.createElement('option');
+                  option.value = distritoKey;
+                  option.textContent = distrito;
+                  distritoSelect.appendChild(option);
+              });
+          });
+      })
+      .catch(error => console.error('Error al cargar el JSON:', error));
+}
+
+// Llamar a la función cargarDatos inmediatamente
+cargarDatos();
