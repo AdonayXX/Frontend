@@ -106,10 +106,11 @@
           <td>${maintenanceItem.TipoUnidad || ''}</td>
           <td>${formatDate(maintenanceItem.FechaMantenimiento) || ''}</td>
           <td>${maintenanceItem.TipoMantenimiento || ''}</td>
-          <td>${maintenanceItem.Observacion || ''}</td>
+          <td class='text-center'><button class="btn btn-outline-primary btn-sm"  onclick='SeeObervation(${JSON.stringify(maintenanceItem.Observacion)})'><i class="bi bi-eye"></i></button>
+</td>
           <td>${maintenanceItem.Descripcion || ''}</td>
           <td class="text-center">${maintenanceItem.Cantidad || ''}</td>
-          <td>${maintenanceItem.UnidadMedida || ''}</td>
+          <td class='text-center'>${maintenanceItem.Kilometraje|| ''}</td>
           <td>${maintenanceItem.Estado || ''}</td>
           <td class="actions">
               <button class="btn btn-outline-success btn-sm text-center"
@@ -1236,6 +1237,15 @@
 
   function hideLoaderModalMantEdit() {
     document.querySelector('#loaderModalMantEdit').style.display = 'none';
+  }
+
+  window.SeeObervation= function(observacion){
+
+    document.querySelector("#bodyObservation").textContent = observacion;
+            let myModal = new bootstrap.Modal(document.getElementById('modalobservaciones'));
+            myModal.show();
+    
+    
   }
   
 
