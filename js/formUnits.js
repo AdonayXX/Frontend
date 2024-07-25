@@ -89,21 +89,6 @@
         getUnit();
     }
 
-    function handleAdvanceInput() {
-        this.value = this.value.replace(/[^0-9]/g, '').concat('%');
-    }
-
-    function handleAdvanceFocus() {
-        const value = this.value.replace('%', '');
-        this.value = value + '%';
-        this.setSelectionRange(0, value.length);
-    }
-
-    function handleAdvanceBlur() {
-        const value = this.value.replace('%', '');
-        this.value = value ? value + '%' : '';
-    }
-
     function clearForm() {
         elements.unitsForm.reset();
         elements.unitType.selectedIndex = 0;
@@ -118,6 +103,62 @@
         document.getElementById('submit-unit-button').disabled = false;
         document.getElementById('delete-unit-button').disabled = true;
         elements.capacityBeds.disabled = false;
+    }
+
+    function populateSelect(selectElement, items, defaultOptionText, textCallback, valueCallback, filterCallback) {
+        selectElement.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.textContent = defaultOptionText;
+        defaultOption.value = '';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        selectElement.appendChild(defaultOption);
+
+        items.filter(filterCallback || (() => true)).forEach(item => {
+            const option = document.createElement('option');
+            option.textContent = textCallback(item);
+            option.value = valueCallback(item);
+            selectElement.appendChild(option);
+        });
+    }
+
+    function getUnitDataFromForm() {
+        return {
+            numeroUnidad: elements.unitNumber.value.toUpperCase(),
+            idTipoUnidad: parseInt(elements.unitType.value, 10),
+            idTipoRecurso: parseInt(elements.resourceType.value, 10),
+            choferDesignado: parseInt(elements.assignedDriver.value, 10),
+            kilometrajeInicial: parseInt(elements.initialMileage.value, 10),
+            kilometrajeActual: parseInt(elements.currentMileage.value, 10),
+            capacidadSillas: parseInt(elements.capacityChairs.value, 10),
+            capacidadCamas: parseInt(elements.capacityBeds.value, 10),
+            capacidadTotal: parseInt(elements.totalCapacity.value, 10),
+            fechaDekra: new Date(elements.dekraDate.value).toISOString().split('T')[0],
+            idEstado: elements.status.value,
+            tipoFrecuenciaCambio: null,
+            ultimoMantenimientoFecha: null,
+            ultimoMantenimientoKilometraje: elements.maintenanceMileage.value,
+            valorFrecuenciaC: elements.periodicity.value,
+            adelanto: getAdvanceValue(),
+            usuario: idUsuario
+        };
+    }
+
+    function populateForm(unidad) {
+        elements.unitNumber.value = unidad.numeroUnidad;
+        elements.unitType.value = unidad.idTipoUnidad;
+        elements.resourceType.value = unidad.idTipoRecurso;
+        elements.assignedDriver.value = unidad.choferDesignado;
+        elements.initialMileage.value = unidad.kilometrajeInicial;
+        elements.currentMileage.value = unidad.kilometrajeActual;
+        elements.capacityChairs.value = unidad.capacidadSillas;
+        elements.capacityBeds.value = unidad.capacidadCamas;
+        elements.totalCapacity.value = unidad.capacidadTotal;
+        elements.dekraDate.value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+        elements.status.value = unidad.idEstado;
+        elements.maintenanceMileage.value = unidad.ultimoMantenimientoKilometraje;
+        elements.periodicity.value = unidad.valorFrecuenciaC;
+        elements.advance.value = unidad.adelanto ? unidad.adelanto + '%' : '';
     }
 
     async function updateCapacity() {
@@ -146,7 +187,7 @@
                 }
             });
 
-            const choferes = response.data.choferes;
+            const choferes = response.data.choferes ;
             choferes.sort((a, b) => {
                 const nameA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toUpperCase();
                 const nameB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toUpperCase();
@@ -241,7 +282,7 @@
 
             const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === unitNumber);
             if (unidad && unidad.idEstado !== 5) {
-                populateFormWithUnitData(unidad);
+                populateForm(unidad);
                 elements.unitNumber.disabled = true;
                 elements.unitType.disabled = true;
                 elements.resourceType.disabled = true;
@@ -260,44 +301,8 @@
 
     async function postUnit() {
         const data = getUnitDataFromForm();
-        const unidades = await getUnits();
-        const unidadYChofer = unidades.find(unidad => unidad.choferDesignado === data.choferDesignado);
-        const selectedChofer = elements.assignedDriver.options[elements.assignedDriver.selectedIndex].text;
-        const unitTypes = await getUnitType();
-        const selectedOption = elements.unitType.options[elements.unitType.selectedIndex].text;
-        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
 
-        if (unidadYChofer && unidadYChofer.numeroUnidad !== data.numeroUnidad) {
-            showToast('Error', `El chofer "${selectedChofer}" ya está asignado a otra unidad.`);
-            return;
-        }
-
-        if (data.kilometrajeActual < data.kilometrajeInicial) {
-            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
-            return;
-        }
-
-        if (selectedUnitType && data.capacidadTotal > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad "${selectedOption}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
-            return;
-        }
-
-        if (data.ultimoMantenimientoKilometraje !== null && data.ultimoMantenimientoKilometraje > data.kilometrajeActual) {
-            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
-            return;
-        }
-
-        if (data.adelanto < 20) {
-            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
-            return;
-        }
-
-        if (new Date(data.fechaDekra) < today) {
-            showToast('Error', 'La fecha DEKRA puede ser anterior a la fecha de hoy.');
-            return;
-        }
+        if (await validateForm(data)) return;
 
         try {
             const token = localStorage.getItem('token');
@@ -317,44 +322,8 @@
     async function putUnit() {
         const data = getUnitDataFromForm();
         const unitNumber = elements.unitNumber.value.toUpperCase();
-        const unidades = await getUnits();
-        const unidadYChofer = unidades.find(unidad => unidad.choferDesignado === data.choferDesignado);
-        const selectedChofer = elements.assignedDriver.options[elements.assignedDriver.selectedIndex].text;
-        const unitTypes = await getUnitType();
-        const selectedOption = elements.unitType.options[elements.unitType.selectedIndex].text;
-        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
 
-        if (unidadYChofer && unidadYChofer.numeroUnidad !== data.numeroUnidad) {
-            showToast('Error', `El chofer "${selectedChofer}" ya está asignado a otra unidad.`);
-            return;
-        }
-
-        if (data.kilometrajeActual < data.kilometrajeInicial) {
-            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
-            return;
-        }
-
-        if (selectedUnitType && data.capacidadTotal > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad "${selectedOption}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
-            return;
-        }
-
-        if (data.ultimoMantenimientoKilometraje !== null && data.ultimoMantenimientoKilometraje > data.kilometrajeActual) {
-            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
-            return;
-        }
-
-        if (data.adelanto < 20) {
-            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
-            return;
-        }
-
-        if (new Date(data.fechaDekra) < today) {
-            showToast('Error', 'La fecha DEKRA puede ser anterior a la fecha de hoy.');
-            return;
-        }
+        if (await validateForm(data)) return;
 
         try {
             const token = localStorage.getItem('token');
@@ -483,7 +452,7 @@
         }
 
         if (data.capacidad < 1) {
-            showToast('Error', 'La capacidad de la unidad debe ser mayor a 0.');
+            showToast('Error', 'La capacidad de la unidad debe ser mayor que 0.');
             return;
         }
 
@@ -505,60 +474,47 @@
         }
     }
 
-    function populateSelect(selectElement, items, defaultOptionText, textCallback, valueCallback, filterCallback) {
-        selectElement.innerHTML = '';
-        const defaultOption = document.createElement('option');
-        defaultOption.textContent = defaultOptionText;
-        defaultOption.value = '';
-        defaultOption.selected = true;
-        defaultOption.disabled = true;
-        selectElement.appendChild(defaultOption);
+    async function validateForm(data) {
+        const unidades = await getUnits();
+        const unidadYChofer = unidades.find(unidad => unidad.choferDesignado === data.choferDesignado);
+        const selectedChofer = elements.assignedDriver.options[elements.assignedDriver.selectedIndex].text;
+        const unitTypes = await getUnitType();
+        const selectedOption = elements.unitType.options[elements.unitType.selectedIndex].text;
+        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        items.filter(filterCallback || (() => true)).forEach(item => {
-            const option = document.createElement('option');
-            option.textContent = textCallback(item);
-            option.value = valueCallback(item);
-            selectElement.appendChild(option);
-        });
-    }
+        if (unidadYChofer && unidadYChofer.numeroUnidad !== data.numeroUnidad) {
+            showToast('Error', `El chofer "${selectedChofer}" ya está asignado a otra unidad.`);
+            return true;
+        }
 
-    function getUnitDataFromForm() {
-        return {
-            numeroUnidad: elements.unitNumber.value.toUpperCase(),
-            idTipoUnidad: parseInt(elements.unitType.value, 10),
-            idTipoRecurso: parseInt(elements.resourceType.value, 10),
-            choferDesignado: parseInt(elements.assignedDriver.value, 10),
-            kilometrajeInicial: parseInt(elements.initialMileage.value, 10),
-            kilometrajeActual: parseInt(elements.currentMileage.value, 10),
-            capacidadSillas: parseInt(elements.capacityChairs.value, 10),
-            capacidadCamas: parseInt(elements.capacityBeds.value, 10),
-            capacidadTotal: parseInt(elements.totalCapacity.value, 10),
-            fechaDekra: new Date(elements.dekraDate.value).toISOString().split('T')[0],
-            idEstado: elements.status.value,
-            tipoFrecuenciaCambio: null,
-            ultimoMantenimientoFecha: null,
-            ultimoMantenimientoKilometraje: elements.maintenanceMileage.value,
-            valorFrecuenciaC: elements.periodicity.value,
-            adelanto: getAdvanceValue(),
-            usuario: idUsuario
-        };
-    }
+        if (data.kilometrajeActual < data.kilometrajeInicial) {
+            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
+            return true;
+        }
 
-    function populateFormWithUnitData(unidad) {
-        elements.unitNumber.value = unidad.numeroUnidad;
-        elements.unitType.value = unidad.idTipoUnidad;
-        elements.resourceType.value = unidad.idTipoRecurso;
-        elements.assignedDriver.value = unidad.choferDesignado;
-        elements.initialMileage.value = unidad.kilometrajeInicial;
-        elements.currentMileage.value = unidad.kilometrajeActual;
-        elements.capacityChairs.value = unidad.capacidadSillas;
-        elements.capacityBeds.value = unidad.capacidadCamas;
-        elements.totalCapacity.value = unidad.capacidadTotal;
-        elements.dekraDate.value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-        elements.status.value = unidad.idEstado;
-        elements.maintenanceMileage.value = unidad.ultimoMantenimientoKilometraje;
-        elements.periodicity.value = unidad.valorFrecuenciaC;
-        elements.advance.value = unidad.adelanto ? unidad.adelanto + '%' : '';
+        if (selectedUnitType && data.capacidadTotal > selectedUnitType.capacidad) {
+            showToast('Error', `La capacidad total de una unidad de tipo "${selectedOption}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
+            return true;
+        }
+
+        if (data.ultimoMantenimientoKilometraje !== null && data.ultimoMantenimientoKilometraje > data.kilometrajeActual) {
+            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
+            return true;
+        }
+
+        if (data.adelanto < 20) {
+            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
+            return true;
+        }
+
+        if (new Date(data.fechaDekra) < today) {
+            showToast('Error', 'La fecha de DEKRA no puede ser anterior a la fecha de hoy.');
+            return true;
+        }
+
+        return false;
     }
 
     getDrivers();

@@ -94,7 +94,6 @@ async function getUnidades() {
 
         const unidades = response.data.unidades;
 
-        // Sort the unidades array by numeroUnidad in alphabetical order
         unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
 
         $(document).ready(function () {
@@ -111,13 +110,13 @@ async function getUnidades() {
 
                     row.innerHTML = `
                         <td class="text-center">${unidad.numeroUnidad || 'N/A'}</td>
-                        <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
                         <td class="text-center">${(recursoMap[unidad.idTipoRecurso] || 'N/A').toUpperCase()}</td>
+                        <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
                         <td class="text-center">${unidad.kilometrajeInicial || 'N/A'}</td>
                         <td class="text-center">${unidad.kilometrajeActual || 'N/A'}</td>
-                        <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
+                        <td class="text-center">${unidad.capacidadTotal || 'N/A'}</td>
                         <td class="text-center">${new Date(unidad.fechaDekra).toISOString().split('T')[0] || 'N/A'}</td>
-                        <td class="text-center">${choferMap[unidad.choferDesignado] || 'N/A'}</td>
+                        <td class="text-center">${(estadoMap[unidad.idEstado] || 'N/A').toUpperCase()}</td>
                     `;
 
                     tableBody.appendChild(row);
