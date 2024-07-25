@@ -38,22 +38,17 @@ async function loadCitas() {
             $('#TableAppointment').DataTable().column(2).search(fechaInput).draw();
         });
 
-        $(document).ready(function () {
-            $('#seleccionar-estado').val('Iniciada').trigger('change');
+        $('#seleccionar-estado').on('change', function () {
+            let selectedState = $(this).val().toLowerCase();
+            $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
 
-            $('#seleccionar-estado').on('change', function () {
-                let selectedState = $(this).val().toLowerCase();
-                $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
+            let tituloCitas = document.getElementById('tituloCitas');
+            tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
 
-                let tituloCitas = document.getElementById('tituloCitas');
-                tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
-
-                let inputValue = $('#searchAppointment').val().toLowerCase();
-                $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
-            });
+            let inputValue = $('#searchAppointment').val().toLowerCase();
+            $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
         });
 
-        $('#TableAppointment').DataTable().search('iniciada').draw();
         ocultarSpinner();
 
     } catch (error) {

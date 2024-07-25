@@ -78,7 +78,7 @@ async function deleteEspecialidad(idEspecialidad) {
 
         setTimeout(function () {
             loadContent('especialidades.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
     } catch (error) {
@@ -162,7 +162,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
         $('#AgregarEspeModal').modal('hide');
         setTimeout(function () {
             loadContent('especialidades.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast('¡Éxito!', 'Especialidad agregada correctamente.');
 
         document.getElementById('AgregarEspe').value = '';

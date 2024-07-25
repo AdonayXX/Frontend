@@ -232,7 +232,7 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             $('#AgregarUbiModal').modal('hide');
             setTimeout(function () {
                 loadContent('formUbi.html', 'mainContent');
-            }, 1000);
+            }, 1400);
 
             showToast('¡Éxitos!', 'Ubicación agregada correctamente.');
 
@@ -408,9 +408,7 @@ async function deleteDestination(idRuta) {
         $('#AgregarUbiModal').modal('hide');
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
-        }, 1000);
-
-
+        }, 1400);
 
     } catch (error) {
         showToast('Error', 'No se pudo eliminar la ubicación.');
@@ -443,7 +441,7 @@ async function deleteEspecialidad(idEspecialidad, idRuta) {
 
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
-        }, 1000);
+        }, 1400);
 
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
