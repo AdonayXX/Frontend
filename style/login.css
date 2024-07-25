@@ -151,3 +151,20 @@ body {
 .btn-primary:hover {
     background-color: #072d57;
 }
+.input-container {
+    position: relative;
+}
+.toggle-password {
+    position: absolute;
+    right: 5%;
+    color: #504f4f;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.23rem;
+}
+   /* Ocultar el ojo del navegador */
+   input[type="password"]::-ms-reveal,
+   input[type="password"]::-ms-clear {
+       display: none;
+   }

@@ -231,6 +231,15 @@ function formatNombre(nombre) {
 
 // Agregar el evento blur al input de identificación
 document.querySelector('#userIdentification').addEventListener('blur', consultarCedulaOnBlur);
+//Ver contraseña
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordField = document.getElementById('userPassword');
+    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordField.setAttribute('type', type);
+    this.classList.toggle('bi-eye-slash');
+    this.classList.toggle('bi-eye');
+});
+
 
 
 // function handleClick(passwordId, buttonId) {
