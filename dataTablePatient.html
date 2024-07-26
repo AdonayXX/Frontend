@@ -30,10 +30,6 @@
             </div>
         </div>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Imprimir">
-                <img src="img/icons8-print.svg" alt="Print Icon">
-            </button>
             <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
                 data-bs-placement="top" title="Exportar a PDF">
                 <img src="img/icons8-pdf.svg" alt="PDF Icon">
@@ -44,11 +40,11 @@
             </button>
         </div>
         <div class="table-responsive-xxl mt-3">
-                <table class="table table-light table-striped table-hover table-bordered" id="tablePatient"
+            <table class="table table-light table-striped table-hover table-bordered" id="tablePatient"
                 style="margin-left: 20px; margin-block: 10px;">
-                <thead >
+                <thead>
                     <tr>
-                        
+
                         <th class="text-center" id="color-th">Tipo Identificación</th>
                         <th class="text-center" id="color-th">Identificación</th>
                         <th class="text-center" id="color-th">Nombre Completo</th>
@@ -126,32 +122,38 @@
                     <form action="" id="formEditComp" class="bg-light p-4 border rounded-3">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="identification" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
-                                <input type="text" id="identification" name="identification" class="form-control" maxlength="20"
-                                    required inputmode="numeric">
+                                <label for="identification" class="form-label"><i class="bi bi-card-list"></i>
+                                    Identificación:</label>
+                                <input type="text" id="identification" name="identification" class="form-control"
+                                    maxlength="20" required inputmode="numeric">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="name" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
-                                <input type="text" id="name" name="Nombre" class="form-control" required maxlength="25"> 
+                                <input type="text" id="name" name="Nombre" class="form-control" required maxlength="25">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="firstlastname" class="form-label"><i class="bi bi-person-badge"></i> Primer Apellido:</label>
-                                <input type="text" id="firstlastname" name="firstlastname" class="form-control " maxlength="25"
-                                    required>
+                                <label for="firstlastname" class="form-label"><i class="bi bi-person-badge"></i> Primer
+                                    Apellido:</label>
+                                <input type="text" id="firstlastname" name="firstlastname" class="form-control "
+                                    maxlength="25" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="secondlastname" class="form-label"><i class="bi bi-person-badge"></i> Segundo Apellido:</label>
-                                <input type="text" id="secondlastname" name="secondlastname" class="form-control" maxlength="25"
+                                <label for="secondlastname" class="form-label"><i class="bi bi-person-badge"></i>
+                                    Segundo Apellido:</label>
+                                <input type="text" id="secondlastname" name="secondlastname" class="form-control"
+                                    maxlength="25" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="phone1" class="form-label"><i class="bi bi-telephone"></i> Telefono
+                                    1:</label>
+                                <input type="number" id="phone1" name="phone1" class="form-control" inputmode="numeric"
                                     required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="phone1" class="form-label"><i class="bi bi-telephone"></i> Telefono 1:</label>
-                                <input type="number" id="phone1" name="phone1" class="form-control" inputmode="numeric" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="phone2" class="form-label"><i class="bi bi-telephone"></i> Telefono 2:</label>
+                                <label for="phone2" class="form-label"><i class="bi bi-telephone"></i> Telefono
+                                    2:</label>
                                 <input type="number" id="phone2" name="phone2" class="form-control"
                                     placeholder="(Opcional)" inputmode="numeric" required>
                             </div>
@@ -160,7 +162,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="parentesco" class="form-label"><i class="bi bi-people"></i> Parentesco:</label>
+                                <label for="parentesco" class="form-label"><i class="bi bi-people"></i>
+                                    Parentesco:</label>
                                 <select id="parentesco" name="acompananteParentesco1" class="form-select" required>
                                     <option selected disabled value="">Seleccionar...</option>
                                     <option value="Hijo/a">Hijo/a</option>
@@ -312,7 +315,8 @@
                                             Teléfono 1:</label>
                                         <input type="text" id="telefono1" name="telefono1" class="form-control" required
                                             maxlength="8" inputmode="numeric">
-                                        <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number" inputmode="numeric">
+                                        <input type="hidden" id="telefono1Hidden" name="telefono1Hidden" type="number"
+                                            inputmode="numeric">
                                     </div>
                                     <!-- Telefono2 -->
                                     <div class="col-md-4 mb-3">
@@ -320,7 +324,8 @@
                                             Teléfono 2:</label>
                                         <input type="text" id="telefono2" name="telefono2" class="form-control"
                                             placeholder="Opcional" maxlength="8" inputmode="numeric">
-                                        <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number" inputmode="numeric">
+                                        <input type="hidden" id="telefono2Hidden" name="telefono2Hidden" type="number"
+                                            inputmode="numeric">
                                     </div>
                                     <!-- <button onclick="printHiddenValues()">Imprimir Valores Ocultos</button> -->
 
@@ -385,11 +390,50 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Campos de direccion -->
                                 <div class="row">
+                                    <!-- Provincia -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="provincia" class="form-label"><i class="bi bi-compass"></i>
+                                            Provincia: </label>
+                                        <select required id="provincia" name="provincia" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <!-- Aqui se cargan las provincias -->
+                                        </select>
+                                    </div>
+
+                                    <!-- canton -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="canton" class="form-label"><i class="bi bi-geo"></i> Cantón:
+                                        </label>
+                                        <select required name="canton" id="canton" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <!-- Aqui se cargan los cantones -->
+                                        </select>
+                                    </div>
+
+                                    <!-- distrito -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="distrito" class="form-label"><i class="bi bi-map"></i> Distrito:
+                                        </label>
+                                        <select required name="distrito" id="distrito" class="form-select">
+                                            <option selected disabled value="">Seleccionar</option>
+                                            <!-- Aqui se cargan los distritos -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- barrio -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="barrio" class="form-label"><i class="bi bi-building"></i> Barrio:
+                                        </label>
+                                        <textarea required type="text" id="barrio" name="barrio" class="form-control"
+                                            maxlength="35"></textarea>
+                                    </div>
                                     <!-- Direccion -->
-                                    <div class="mb-3">
-                                        <label for="direccion" class="form-label"><i class="bi bi-house"></i>
-                                            Dirección:</label>
+                                    <div class="col-md-8 mb-3">
+                                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Otras
+                                            señas: </label>
                                         <textarea required id="direccion" name="direccion" class="form-control"
                                             maxlength="200"></textarea>
                                     </div>
@@ -407,7 +451,8 @@
                                         <label for="longitud" class="form-label"><i class="bi bi-house"></i>
                                             Longitud:</label>
                                         <input type="number" step="any" id="longitud" name="longitud"
-                                            class="form-control" placeholder="Opcional" maxlength="25" inputmode="numeric">
+                                            class="form-control" placeholder="Opcional" maxlength="25"
+                                            inputmode="numeric">
                                     </div>
                                 </div>
                             </div>

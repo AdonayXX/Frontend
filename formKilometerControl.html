@@ -1,0 +1,80 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Kilometros</title>
+</head>
+
+<body>
+    <div class="container mt-5 fade-in" style="max-width: 1100px;">
+        <h1 class="mb-4 text-center">Control Diario por kilometros</h1>
+        <form id="1" name="fomPatient" class="bg-light p-4 border rounded-3">
+            <div class="form-section">
+             
+                <div class="row">
+                    <!-- Fecha-->
+                    <div class="col-md-4 mb-3">
+                        <label for="dateControlKm" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
+                        <input type="date" id="dateControlKm" name="dateControlKm" class="form-control date-input">
+                    </div>
+                   
+                    <!--Chofer -->
+                    <div class="col-md-4 mb-3">
+                        <label for="driverControlKm" class="form-label"><i class="bi bi-person"></i> Chofer</label>
+                        <select required id="driverControlKm" name="driverControlKm" class="form-select">
+                            <option value="Chofer1">Chofer1</option>
+                            <option value="Chofer2">Chofer2</option>
+                            <option value="Chofer3">Chofer3</option>
+                        </select>
+                    </div>
+                       <!--Unidad -->
+                    <div class="col-md-4 mb-3">
+                        <label for="choferControlKm" class="form-label"><i class="bi bi-truck"></i> Unidad:</label>
+                        <select required id="choferControlKm" name="choferControlKm" class="form-select">
+                            <option value="Unidad1">Unidad1</option>
+                            <option value="Unidad2">Unidad2</option>
+                            <option value="Unidad3">Unidad3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- KM Salida -->
+                    <div class="col-md-4 mb-3">
+                        <label for="KmS" class="form-label"><i class="bi bi-speedometer"></i> Kilometros Salida:</label>
+                        <input required type="number" id="KmS" name="KmS" class="form-control">
+                    </div>
+                    <!-- KM Entrada-->
+                    <div class="col-md-4 mb-3">
+                        <label for="KmE" class="form-label"><i class="bi bi-speedometer2"></i> Kilometros Entrada:</label>
+                        <input required type="number" id="KmE" name="KmE" class="form-control">
+                    </div>
+                     <!-- KM Calculo-->
+                    <div class="col-md-4 mb-3">
+                        <label for="KmC" class="form-label"><i class="bi bi-calculator"></i> Kilometros Recorridos:</label>
+                        <input required type="number" id="KmC" name="KmC" class="form-control" placeholder="Calculo automatico">
+                    </div>
+                </div>
+                <div class="row">
+                      <!-- Lugar Visitado-->
+                      <div class="col-md-4 mb-3">
+                        <label for="LugarVisitado" class="form-label"><i class="bi bi-map"></i> Lugar Visitado:</label>
+                        <input required type="text" id="LugarVisitado" name="LugarVisitado" class="form-control" maxlength="30">
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button id="saveFormControlKm" type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Guardar">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <div data-script=""></div>
+
+</body>
+
+</html>
