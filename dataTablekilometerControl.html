@@ -13,7 +13,22 @@
             <span class="input-group-text" id="lupa">
                 <i class="bi bi-search"></i>
             </span>
-            <input type="text" class="form-control" id="searchUsers" placeholder="Buscar...">
+            <input type="text" class="form-control" id="searchATAP" placeholder="Buscar...">
+        </div>
+    </div>
+    <div class="row justify-content-between align-items-center">
+        <!-- Unidad -->
+        <div class="col-md-4 mb-3">
+            <label for="unidadFiltro" class="form-label">Unidad:</label>
+            <select required id="unidadFiltro" name="unidadFiltro" class="form-select">
+                <option selected disabled value="">Seleccionar</option>
+            </select>
+        </div>
+        <!-- Fecha Mantenimiento -->
+        <div class="col-md-4 mb-3">
+            <label for="fechaMantenimientoFiltro" class="form-label">Fecha de mantenimiento:</label>
+            <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro"
+                class="form-control date-input">
         </div>
     </div>
     <div class="d-flex justify-content-end mb-3">
@@ -27,7 +42,7 @@
         </button>
     </div>
     <div class="table-responsive-xxl mt-3">
-            <table class="table table-light table-striped table-hover table-bordered" id="tableControlKm"
+        <table class="table table-light table-striped table-hover table-bordered" id="tableControlKm"
             style="margin-left: 20px; margin-block: 10px;">
             <thead class="text-center">
                 <tr>
@@ -37,13 +52,15 @@
                     <th class="text-center" id="color-th">Kilometraje Salida</th>
                     <th class="text-center" id="color-th">Kilometraje Entrada</th>
                     <th class="text-center" id="color-th">Kilometraje Recorrido</th>
-                  
+                    <th class="text-center" id="color-th">Acciones</th>
+
                 </tr>
             </thead>
-            <tbody id="users-body" class="text-start">
-               
+            <tbody id="atap-body" class="text-start">
+
             </tbody>
 
         </table>
     </div>
+    <div data-script="js/dataTableKilometerControl.js"></div>
 </div>

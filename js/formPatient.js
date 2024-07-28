@@ -27,8 +27,9 @@ function addPersona() {
     const latitud = parseFloat(document.querySelector('#latitud').value.trim()) || 0;
     const longitud = parseFloat(document.querySelector('#longitud').value.trim()) || 0;
     const tipoSangre = document.querySelector('#tipoSangre').value.trim();
+  
     if (!nombre || !primerApellido || !segundoApellido || !identificacion || !tipoIdentificacion || !genero ||
-      !telefono1 || !direccion || !tipoSangre) {
+      !telefono1 || !direccion || !tipoSangre || !provincia || !canton || !distrito || !barrio ) {
       showToast('', 'Por favor, rellena todos los campos solicitados.');
       return;
     }
@@ -42,10 +43,10 @@ function addPersona() {
       "Telefono1": telefono1,
       "Telefono2": telefono2,
       "Tipo_seguro": "N/A",
-      "Direccion": direccion,
       "Latitud": latitud,
       "Longitud": longitud,
-      "Tipo_sangre": tipoSangre
+      "Tipo_sangre": tipoSangre,
+      "Direccion": direccion
     }
     //Funcion para agregar persona
     addPerson(personaData);
@@ -96,6 +97,7 @@ async function addPerson(personaData) {
 //3 Agregar Persona
 async function addPeople(personaData) {
   try {
+    console.log(personaData)
     const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, personaData, {
@@ -157,15 +159,28 @@ function addDataPatient(IdPersonaCreada) {
   const traslado = JSON.stringify(document.getElementById('trasladable').checked ? true : false);
   const lugarSalida = document.querySelector('#lugarSalida').value;
   const encamado = document.querySelector('#encamado').value;
+  const provincia = document.querySelector('#provincia').value.trim();
+  const canton = document.querySelector('#canton').value.trim();
+  const distrito= document.querySelector('#distrito').value.trim();
+  const barrio = document.querySelector('#barrio').value.trim();
+  const direccion = document.querySelector('#direccion').value.trim();
+
+
   const pacienteData = {
     "IdPersona": IdPersonaCreada,
     "Criticidad": "N/A",
     "Encamado": encamado,
-    "Traslado": traslado,
+    "VbDM": traslado,
     "Prioridad": prioridad,
     "Estado": "Activo",
     "LugarSalida": lugarSalida,
+    "Provincia": provincia,
+    "Canton": canton,
+    "Distrito": distrito,
+    "Barrio": barrio,
+    "OtrasSenas": direccion
   }
+  console.log(pacienteData)
 
   addPatient(pacienteData);
 
@@ -182,6 +197,7 @@ async function addPatient(pacienteData) {
         'Authorization': `Bearer ${token}`
       }
     });
+    console.log(response)
     const idPaciente = (response.data.paciente.insertId);
     addCompanion(idPaciente);
     showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
@@ -567,7 +583,6 @@ function formatNombre(nombre) {
 
 // Agregar el evento blur al input de identificación
 document.getElementById('identificacion').addEventListener('blur', consultarCedulaOnBlur);
-
 // Función para cargar los datos JSON y llenar los select
 function cargarDatos() {
   fetch('data/provincias_cantones_distritos_costa_rica.json')
@@ -581,7 +596,7 @@ function cargarDatos() {
           Object.keys(data.provincias).forEach(provinciaKey => {
               const provincia = data.provincias[provinciaKey];
               const option = document.createElement('option');
-              option.value = provinciaKey;
+              option.value = provincia.nombre; // Usar el nombre como valor
               option.textContent = provincia.nombre;
               provinciaSelect.appendChild(option);
           });
@@ -591,37 +606,47 @@ function cargarDatos() {
               // Limpiar select de cantones y distritos
               cantonSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
               distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              cantonSelect.disabled = false;
+              distritoSelect.disabled = true;
 
               const provinciaSeleccionada = provinciaSelect.value;
-              const provincia = data.provincias[provinciaSeleccionada];
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
 
-              Object.keys(provincia.cantones).forEach(cantonKey => {
-                  const canton = provincia.cantones[cantonKey];
-                  const option = document.createElement('option');
-                  option.value = cantonKey;
-                  option.textContent = canton.nombre;
-                  cantonSelect.appendChild(option);
-              });
+              if (provincia) {
+                  Object.keys(provincia.cantones).forEach(cantonKey => {
+                      const canton = provincia.cantones[cantonKey];
+                      const option = document.createElement('option');
+                      option.value = canton.nombre; // Usar el nombre como valor
+                      option.textContent = canton.nombre;
+                      cantonSelect.appendChild(option);
+                  });
+              }
+              console.log(provinciaSeleccionada)
           });
 
           // Evento para cargar distritos al seleccionar un cantón
           cantonSelect.addEventListener('change', () => {
               // Limpiar select de distritos
               distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.disabled = false;
 
               const provinciaSeleccionada = provinciaSelect.value;
               const cantonSeleccionado = cantonSelect.value;
-              const provincia = data.provincias[provinciaSeleccionada];
-              const canton = provincia.cantones[cantonSeleccionado];
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
+              const canton = provincia ? Object.values(provincia.cantones).find(c => c.nombre === cantonSeleccionado) : null;
 
-              Object.keys(canton.distritos).forEach(distritoKey => {
-                  const distrito = canton.distritos[distritoKey];
-                  const option = document.createElement('option');
-                  option.value = distritoKey;
-                  option.textContent = distrito;
-                  distritoSelect.appendChild(option);
-              });
+              if (canton) {
+                  Object.keys(canton.distritos).forEach(distritoKey => {
+                      const distrito = canton.distritos[distritoKey];
+                      const option = document.createElement('option');
+                      option.value = distrito; // Usar el nombre como valor
+                      option.textContent = distrito;
+                      distritoSelect.appendChild(option);
+                  });
+              }
+              console.log(cantonSeleccionado)
           });
+       
       })
       .catch(error => console.error('Error al cargar el JSON:', error));
 }
