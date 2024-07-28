@@ -27,7 +27,7 @@ async function getRegistrosCombustble() {
             const tableBody = document.getElementById('fuelTableBody');
             tableBody.innerHTML = '';
 
-            registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); // Sort records by date in descending order
+            registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             registros.forEach(record => {
                 if (record.estado === 'activo') {
@@ -39,7 +39,7 @@ async function getRegistrosCombustble() {
                     <td class="text-center">${record.numeroFactura || 'N/A'}</td>
                     <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
                     <td class="text-center">${record.kilometraje || 'N/A'}</td>
-                    <td class="text-center">${new Date(record.fecha).toLocaleDateString() || 'N/A'}</td>
+                    <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
                     <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
                     <td class="text-center">${record.montoColones || 'N/A'}</td>
                 `;
