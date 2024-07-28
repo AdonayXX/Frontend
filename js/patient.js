@@ -135,7 +135,17 @@ function fillPatientComp(listPatientComp) {
             <td >${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td>${patient.Genero}</td>
             <td class='text-center'>${telefonoCompleto}</td>
-            <td>${patient.Direccion}</td>
+         <td class="text-center">
+    <button class="btn btn-outline-primary btn-sm" onclick='viewDirection(
+        ${JSON.stringify(patient.Provincia)},
+        ${JSON.stringify(patient.Canton)},
+        ${JSON.stringify(patient.Distrito)},
+        ${JSON.stringify(patient.Barrio)},
+        ${JSON.stringify(patient.OtrasSenas)}
+    )'>
+        <i class="bi bi-eye"></i>
+    </button>
+</td>
             <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
             <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
             <td class='text-center'>
@@ -265,10 +275,76 @@ window.editAccomp = function (button) {
   }
 
 }
+// Función para cargar los datos JSON y llenar los select
+function cargarDatos() {
+  fetch('data/provincias_cantones_distritos_costa_rica.json')
+      .then(response => response.json())
+      .then(data => {
+          const provinciaSelect = document.getElementById('provincia');
+          const cantonSelect = document.getElementById('canton');
+          const distritoSelect = document.getElementById('distrito');
 
+          // Cargar provincias
+          Object.keys(data.provincias).forEach(provinciaKey => {
+              const provincia = data.provincias[provinciaKey];
+              const option = document.createElement('option');
+              option.value = provincia.nombre; // Usar el nombre como valor
+              option.textContent = provincia.nombre;
+              provinciaSelect.appendChild(option);
+          });
 
+          // Evento para cargar cantones al seleccionar una provincia
+          provinciaSelect.addEventListener('change', () => {
+              // Limpiar select de cantones y distritos
+              cantonSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              cantonSelect.disabled = false;
+              distritoSelect.disabled = true;
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
+
+              if (provincia) {
+                  Object.keys(provincia.cantones).forEach(cantonKey => {
+                      const canton = provincia.cantones[cantonKey];
+                      const option = document.createElement('option');
+                      option.value = canton.nombre; // Usar el nombre como valor
+                      option.textContent = canton.nombre;
+                      cantonSelect.appendChild(option);
+                  });
+              }
+             
+          });
+
+          // Evento para cargar distritos al seleccionar un cantón
+          cantonSelect.addEventListener('change', () => {
+              // Limpiar select de distritos
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.disabled = false;
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const cantonSeleccionado = cantonSelect.value;
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
+              const canton = provincia ? Object.values(provincia.cantones).find(c => c.nombre === cantonSeleccionado) : null;
+
+              if (canton) {
+                  Object.keys(canton.distritos).forEach(distritoKey => {
+                      const distrito = canton.distritos[distritoKey];
+                      const option = document.createElement('option');
+                      option.value = distrito; // Usar el nombre como valor
+                      option.textContent = distrito;
+                      distritoSelect.appendChild(option);
+                  });
+              }
+             
+          });
+       
+      })
+      .catch(error => showToast('Error', 'Al cargar la Información'));
+}
 
 window.patientEdit = function (button) {
+
   let pacientes = JSON.parse(button.getAttribute('data-pacientes'));
 
   let modal = new bootstrap.Modal(document.getElementById('editPatient'), {
@@ -349,10 +425,16 @@ window.patientEdit = function (button) {
         IdPersona: IdPersona,
         Criticidad: "N/A",
         Encamado: document.getElementById('encamado').value,
-        Traslado: JSON.stringify(document.getElementById('trasladable').checked ? true : false),
+        VbDM: JSON.stringify(document.getElementById('trasladable').checked ? true : false),
         Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
         LugarSalida: document.querySelector('#lugarSalida').value,
-        Estado: "Activo"
+        Estado: "Activo",
+        Provincia: document.querySelector('#provincia').value,
+        Canton:document.querySelector('#canton').value,
+        Distrito:document.querySelector('#distrito').value,
+        Barrio:document.querySelector('#barrio').value,
+        OtrasSenas:document.querySelector('#direccion').value,
+
       };
 
       editPatientPerson(personaData, pacienteData);
@@ -367,6 +449,7 @@ window.patientEdit = function (button) {
 
   }
   function llenarcampos(pacientes) {
+   
 
     document.querySelector('#primerApellido').value = pacientes.Apellido1 || '';
     document.querySelector('#nombre').value = pacientes.Nombre || '';
@@ -384,6 +467,23 @@ window.patientEdit = function (button) {
     document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
     document.querySelector('#trasladable').checked = pacientes.Traslado || '';
     document.querySelector('#encamado').value = pacientes.Encamado || '';
+      // Simular la selección de una provincia y cargar cantones
+      const provinciaSelect = document.querySelector('#provincia');
+      const provinciaParaSeleccionar = pacientes.Provincia || ''; // Nombre de la provincia que deseas seleccionar
+      provinciaSelect.value = provinciaParaSeleccionar;
+      const event1 = new Event('change');
+      provinciaSelect.dispatchEvent(event1);
+
+      const cantonselect = document.querySelector('#canton');
+      const cantonParaSeleccionar = pacientes.Canton ||'';
+      cantonselect.value = cantonParaSeleccionar;
+      const event2 = new Event('change');
+      cantonselect.dispatchEvent(event2);
+  
+    document.querySelector('#distrito').value = pacientes.Distrito||'';
+    document.querySelector('#barrio').value = pacientes.Barrio||'';
+
+    
 
   }
 
@@ -755,6 +855,19 @@ async function deleteComp(IdAcompanante) {
   }
 
 }
+window.viewDirection = function(provincia, canton, distrito, barrio, otrasSenas) {
+  const direccionCompleta = `
+    <p><strong>Provincia:</strong> ${provincia || ''}</p>
+    <p><strong>Cantón:</strong> ${canton || ''}</p>
+    <p><strong>Distrito:</strong> ${distrito || ''}</p>
+    <p><strong>Barrio:</strong> ${barrio || ''}</p>
+    <p><strong>Otras Señas:</strong> ${otrasSenas || ''}</p>
+  `;
+  document.querySelector("#bodyDireccion").innerHTML = direccionCompleta;
+  
+  let myModal = new bootstrap.Modal(document.getElementById('modalDireccion'));
+  myModal.show();
+}
 
 //Spiner
 // Mostrar el spinner
@@ -782,63 +895,8 @@ function hideLoaderModalComp() {
   document.querySelector('#loaderModalComp').style.display = 'none';
 }
 
-// Función para cargar los datos JSON y llenar los select
-function cargarDatos() {
-  fetch('data/provincias_cantones_distritos_costa_rica.json')
-    .then(response => response.json())
-    .then(data => {
-      const provinciaSelect = document.getElementById('provincia');
-      const cantonSelect = document.getElementById('canton');
-      const distritoSelect = document.getElementById('distrito');
 
-      // Cargar provincias
-      Object.keys(data.provincias).forEach(provinciaKey => {
-        const provincia = data.provincias[provinciaKey];
-        const option = document.createElement('option');
-        option.value = provinciaKey;
-        option.textContent = provincia.nombre;
-        provinciaSelect.appendChild(option);
-      });
+   // Llamar a la función cargarDatos inmediatamente
+ cargarDatos();
 
-      // Evento para cargar cantones al seleccionar una provincia
-      provinciaSelect.addEventListener('change', () => {
-        // Limpiar select de cantones y distritos
-        cantonSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
-        distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
 
-        const provinciaSeleccionada = provinciaSelect.value;
-        const provincia = data.provincias[provinciaSeleccionada];
-
-        Object.keys(provincia.cantones).forEach(cantonKey => {
-          const canton = provincia.cantones[cantonKey];
-          const option = document.createElement('option');
-          option.value = cantonKey;
-          option.textContent = canton.nombre;
-          cantonSelect.appendChild(option);
-        });
-      });
-
-      // Evento para cargar distritos al seleccionar un cantón
-      cantonSelect.addEventListener('change', () => {
-        // Limpiar select de distritos
-        distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
-
-        const provinciaSeleccionada = provinciaSelect.value;
-        const cantonSeleccionado = cantonSelect.value;
-        const provincia = data.provincias[provinciaSeleccionada];
-        const canton = provincia.cantones[cantonSeleccionado];
-
-        Object.keys(canton.distritos).forEach(distritoKey => {
-          const distrito = canton.distritos[distritoKey];
-          const option = document.createElement('option');
-          option.value = distritoKey;
-          option.textContent = distrito;
-          distritoSelect.appendChild(option);
-        });
-      });
-    })
-    .catch(error => console.error('Error al cargar el JSON:', error));
-}
-
-// Llamar a la función cargarDatos inmediatamente
-cargarDatos();
