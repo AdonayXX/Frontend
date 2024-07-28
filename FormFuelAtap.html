@@ -1,21 +1,16 @@
 <div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
-    <h1 class="mb-4 text-center">Registro de Combustible</h1>
+    <h1 class="mb-4 text-center">Registro de Combustible1</h1>
     <form id="fuelForm" class="bg-light p-4 border rounded-3">
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label for="unitSelect"><i class="bi bi-truck"></i> Unidad</label>
-                <select class="form-select" id="unitSelect" required>
-                    <option selected disabled>Seleccionar unidad</option>
-                    <!-- Aquí se cargan las unidades -->
-                </select>
+                <input type="text" class="form-control" id="unitSelect" readonly required>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="driverSelect"><i class="bi bi-person"></i> Chofer</label>
-                <select class="form-select" id="driverSelect" required>
-                    <option selected disabled>Seleccionar chofer</option>
-                    <!-- Aquí se cargan los choferes -->
-                </select>
+                <input type="text" class="form-control" id="driverSelect"  readonly required>
             </div>
+            
             <div class="col-md-4 mb-3">
                 <label for="invoiceNumber"><i class="bi bi-receipt"></i> Número de Facturación/Cupón</label>
                 <input type="text" class="form-control" id="invoiceNumber" maxlength="20" required>
