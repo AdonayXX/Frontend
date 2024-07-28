@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(async function () {
 
     document.getElementById('fuelForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'btnGuardar') {
@@ -17,18 +17,6 @@
         }
     });
 
-    document.getElementById('unidad').addEventListener('change', function () {
-        const unidadSelect = document.getElementById('unidad').textContent;
-
-        if (unidadSelect !== 'Seleccionar la unidad') {
-            document.getElementById('btnBuscar').disabled = false;
-        }
-
-        document.getElementById('btnActualizar').disabled = true;
-        document.getElementById('btnEliminar').disabled = true;
-        document.getElementById('btnGuardar').disabled = false;
-    });
-
     document.getElementById('btnBuscar').addEventListener('click', function (event) {
         event.preventDefault();
         getRegistroCombustible();
@@ -40,14 +28,21 @@
     });
 
     function limpiar() {
+        const unidadInput = document.getElementById('unidad');
+        const choferInput = document.getElementById('chofer');
+
+        const unidadValue = unidadInput.value;
+        const choferValue = choferInput.value;
+
         document.getElementById('fuelForm').reset();
-        document.getElementById('chofer').selectedIndex = 0;
-        document.getElementById('unidad').selectedIndex = 0;
+
+        unidadInput.value = unidadValue;
+        choferInput.value = choferValue;
+
         document.getElementById('btnLimpiar').style.display = 'none';
         document.getElementById('btnActualizar').disabled = true;
         document.getElementById('btnEliminar').disabled = true;
         document.getElementById('btnGuardar').disabled = false;
-        document.getElementById('btnBuscar').disabled = true;
     }
 
     function infoUser() {
@@ -63,6 +58,34 @@
     const infoUsuario = infoUser();
     const idUsuario = infoUsuario.usuario.IdUsuario;
 
+    async function obtenerUnidadAsignada(identificacion) {
+        const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(API_CHOFERES_CON_UNIDADES, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
+        } catch (error) {
+            showToast('Error', 'Error al obtener la unidad asignada.');
+        }
+    }
+
+    async function setUnidadYChofer() {
+        const infoUsuario = await infoUser();
+        const identificacion = infoUsuario.usuario.Identificacion;
+        const unidadYChofer = await obtenerUnidadAsignada(identificacion);
+
+        if (unidadYChofer) {
+            document.getElementById('chofer').value = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
+            document.getElementById('unidad').value = unidadYChofer.numeroUnidad;
+        }
+    }
+
+    setUnidadYChofer();
+
     async function autorizacionDuplicado(numeroAutorizacion, idRegistro = null) {
         try {
             const token = localStorage.getItem('token');
@@ -73,7 +96,6 @@
             });
 
             const registros = response.data.registros;
-
             const duplicado = registros.some(registro => registro.numeroAutorizacion === numeroAutorizacion && registro.id !== idRegistro);
 
             return duplicado;
@@ -91,90 +113,13 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
-
             const registros = response.data.registros;
-
             const duplicado = registros.some(registro => registro.numeroFactura === numeroFactura && registro.id !== idRegistro);
-
+            
             return duplicado;
         } catch (error) {
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
-        }
-    }
-
-    async function getUnidades() {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            const unidades = response.data.unidades.filter(unidad => unidad.idEstado !== 5);
-
-            const unit = document.getElementById('unidad');
-            unit.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar unidad';
-            defaultOption.selected = true;
-            defaultOption.disabled = true;
-            unit.appendChild(defaultOption);
-
-            unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
-
-            unidades.forEach(unidad => {
-                const option = document.createElement('option');
-                option.value = unidad.id;
-                option.textContent = unidad.numeroUnidad;
-                unit.appendChild(option);
-            });
-
-        } catch (error) {
-            showToast('Error', 'Error al obtener las unidades.');
-        }
-    }
-
-    async function getChoferes() {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            const choferes = response.data.choferes;
-
-            const assignedDriver = document.getElementById('chofer');
-            assignedDriver.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar chofer';
-            defaultOption.selected = true;
-            defaultOption.disabled = true;
-            assignedDriver.appendChild(defaultOption);
-
-            choferes.sort((a, b) => {
-                const nombreA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toLowerCase();
-                const nombreB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toLowerCase();
-                return nombreA.localeCompare(nombreB);
-            });
-
-            choferes.forEach(chofer => {
-                if (chofer.estadoChofer === 'Activo') {
-                    const option = document.createElement('option');
-                    option.value = chofer.idChofer;
-                    option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
-                    assignedDriver.appendChild(option);
-                }
-            });
-        } catch (error) {
-            showToast('Error', 'Error al obtener los choferes.');
         }
     }
 
@@ -214,8 +159,7 @@
     }
 
     async function getRegistroCombustible() {
-        const unidadSelect = document.getElementById('unidad');
-        const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
+        const unidad = document.getElementById('unidad').value;
 
         try {
             const token = localStorage.getItem('token');
@@ -248,23 +192,7 @@
                 });
 
                 const latestLog = fuelLog[0];
-
-                const choferSelect = document.getElementById('chofer');
                 const tipoCombustibleSelect = document.getElementById('tipoCombustible');
-
-                for (let i = 0; i < choferSelect.options.length; i++) {
-                    if (choferSelect.options[i].text === latestLog.chofer) {
-                        choferSelect.selectedIndex = i;
-                        break;
-                    }
-                }
-
-                for (let i = 0; i < unidadSelect.options.length; i++) {
-                    if (unidadSelect.options[i].text === latestLog.numeroUnidad) {
-                        unidadSelect.selectedIndex = i;
-                        break;
-                    }
-                }
 
                 for (let i = 0; i < tipoCombustibleSelect.options.length; i++) {
                     if (tipoCombustibleSelect.options[i].text === latestLog.tipoCombustible) {
@@ -293,10 +221,11 @@
         }
     }
 
+
+
     async function postRegistroCombustible() {
-        const chofer = document.getElementById('chofer');
-        const unidadSelect = document.getElementById('unidad');
-        const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
+        const unidad = document.getElementById('unidad').value;
+        const chofer = document.getElementById('chofer').value;
         const litros = document.getElementById('litros').value;
         const kilometraje = document.getElementById('kilometraje').value;
         const monto = document.getElementById('monto').value;
@@ -317,7 +246,6 @@
             showToast('Error', `Ya existe un registro de combustible con el número de autorización ${numeroAutorizacion}.`);
             return;
         }
-
         if (fecha > new Date().toISOString().split('T')[0]) {
             showToast('Error', 'La fecha del registro de combustible no puede ser posterior a la fecha de hoy.');
             return;
@@ -337,7 +265,7 @@
             fecha: fecha,
             hora: hora,
             lugar: lugar,
-            chofer: chofer.options[chofer.selectedIndex].text,
+            chofer: chofer,
             usuario: idUsuario,
             tipoCombustible: tipoCombustible,
             numeroFactura: numeroFactura,
@@ -351,20 +279,18 @@
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => {
+            .then(() => {
                 limpiar();
                 showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha realizado exitosamente.`);
             })
-            .catch(error => {
-                console.error('Error al crear el registro de combustible:', error);
+            .catch(() => {
                 showToast('Error', 'Error al guardar el registro de combustible.');
             });
     }
 
     async function putRegistroCombustible() {
-        const unidadSelect = document.getElementById('unidad');
-        const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
-        const chofer = document.getElementById('chofer');
+        const unidad = document.getElementById('unidad').value;
+        const chofer = document.getElementById('chofer').value;
         const litros = document.getElementById('litros').value;
         const kilometraje = document.getElementById('kilometraje').value;
         const monto = document.getElementById('monto').value;
@@ -405,7 +331,7 @@
             fecha: fecha,
             hora: hora,
             lugar: lugar,
-            chofer: chofer.options[chofer.selectedIndex].text,
+            chofer: chofer,
             usuario: idUsuario,
             tipoCombustible: tipoCombustible,
             numeroFactura: numeroFactura,
@@ -419,7 +345,7 @@
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => {
+            .then(() => {
                 limpiar();
                 showToast('Éxito', `El registro de combustible de la unidad "${unidad}" se ha actualizado exitosamente.`);
             })
@@ -430,9 +356,8 @@
     }
 
     async function deleteRegistroCombustible() {
-        const unidadSelect = document.getElementById('unidad');
-        const unidad = unidadSelect.options[unidadSelect.selectedIndex].text;
-        const chofer = document.getElementById('chofer');
+        const unidad = document.getElementById('unidad').value;
+        const chofer = document.getElementById('chofer').value;
         const litros = document.getElementById('litros').value;
         const kilometraje = document.getElementById('kilometraje').value;
         const monto = document.getElementById('monto').value;
@@ -469,7 +394,7 @@
             fecha: fecha,
             hora: hora,
             lugar: lugar,
-            chofer: chofer.options[chofer.selectedIndex].text,
+            chofer: chofer,
             usuario: idUsuario,
             tipoCombustible: tipoCombustible,
             numeroFactura: numeroFactura,
@@ -485,19 +410,16 @@
                     'Authorization': `Bearer ${token}`
                 }
             })
-                .then(response => {
+                .then(() => {
                     limpiar();
                     showToast('Éxito', `El registro de combustible de la unidad ${unidad} se ha eliminado exitosamente.`);
                 })
-                .catch(error => {
+                .catch(() => {
                     showToast('Error', 'Error al eliminar el registro de combustible.');
                 });
 
-            deleteModal.hide();
+            deleteModal.hide()
         }
     }
-
-    getChoferes();
-    getUnidades();
 
 })();

@@ -9,34 +9,34 @@
 <body>
     <div class="container mt-5 fade-in" style="max-width: 1100px;">
         <h1 class="mb-4 text-center">Control Diario por kilometros</h1>
-        <form id="1" name="fomKilometerControl" class="bg-light p-4 border rounded-3">
+        <form id="formKilometerControl"class="bg-light p-4 border rounded-3" method="post">
             <div class="form-section">
              
                 <div class="row">
                     <!-- Fecha-->
                     <div class="col-md-4 mb-3">
-                        <label for="dateControlKm" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
-                        <input type="date" id="dateControlKm" name="dateControlKm" class="form-control date-input">
+                        <label for="dateControlKm" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha:</label>
+                        <input type="date" id="dateControlKm" name="dateControlKm" class="form-control date-input" required>
                     </div>
                    
-                    <!--Chofer -->
+              
+                      <!--Unidad -->
+                   
+                    <div class="col-md-4 mb-3">
+                        <label for="choferControlKm" class="form-label"><i class="bi bi-truck"></i> Unidad:</label>
+                        <select required id="choferControlKm" name="choferControlKm" class="form-select" >
+                            
+                        </select>
+                    </div>
+                    <input type="hidden" id="placaUnidad">
+                          <!--Chofer -->
                     <div class="col-md-4 mb-3">
                         <label for="driverControlKm" class="form-label"><i class="bi bi-person"></i> Chofer</label>
                         <select required id="driverControlKm" name="driverControlKm" class="form-select">
-                            <option value="Chofer1">Chofer1</option>
-                            <option value="Chofer2">Chofer2</option>
-                            <option value="Chofer3">Chofer3</option>
+                           
                         </select>
                     </div>
-                       <!--Unidad -->
-                    <div class="col-md-4 mb-3">
-                        <label for="choferControlKm" class="form-label"><i class="bi bi-truck"></i> Unidad:</label>
-                        <select required id="choferControlKm" name="choferControlKm" class="form-select">
-                            <option value="Unidad1">Unidad1</option>
-                            <option value="Unidad2">Unidad2</option>
-                            <option value="Unidad3">Unidad3</option>
-                        </select>
-                    </div>
+                     
                 </div>
                 <div class="row">
                     <!-- KM Salida -->
@@ -52,19 +52,35 @@
                      <!-- KM Calculo-->
                     <div class="col-md-4 mb-3">
                         <label for="KmC" class="form-label"><i class="bi bi-calculator"></i> Kilometros Recorridos:</label>
-                        <input required type="number" id="KmC" name="KmC" class="form-control" placeholder="Calculo automatico">
+                        <input required type="number" id="KmC" name="KmC" class="form-control" placeholder="Calculo automatico" readonly>
                     </div>
                 </div>
                 <div class="row">
-                      <!-- Lugar Visitado-->
-                      <div class="col-md-4 mb-3">
-                        <label for="LugarVisitado" class="form-label"><i class="bi bi-map"></i> Lugar Visitado:</label>
-                        <input required type="text" id="LugarVisitado" name="LugarVisitado" class="form-control" maxlength="30">
+                  <!-- Lugar Visitado -->
+                    <div class="col-md-4 mb-3">
+                        <label for="LugarVisitadoSelect" class="form-label"><i class="bi bi-map"></i> Lugar Visitado:</label>
+                        <select id="LugarVisitadoSelect" name="LugarVisitadoSelect" class="form-control">
+                            <option value="" disabled selected>Seleccione un lugar</option>
+                            <option value="Upala1">Upala1</option>
+                            <option value="Upala2">Upala2</option>
+                            <option value="Upala3">Upala3</option>
+                            <option value="Bijagua">Bijagua</option>
+                            <option value="Canalete">Canalete</option>
+                            <option value="Moreno Cañas">Moreno Cañas</option>
+                            <option value="San Jose">San Jose</option>
+                            <option value="Villanueva">Villanueva</option>
+                            <option value="Paraiso">Paraiso</option>
+                            <option value="Aguas Claras">Aguas Claras</option>
+                            <option value="Colonia Puntarenas">Colonia Puntarenas</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="San Jorge">San Jorge</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <input type="text" id="LugarVisitadoInput" name="LugarVisitadoInput" class="form-control mt-2" placeholder="Lugar Visitado" style="display:none;" maxlength="30">
                     </div>
-                </div>
             </div>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <button id="saveFormControlKm" type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                <button id="saveFormControlKm" type="submit" class="btn btn-success" data-bs-toggle="tooltip"
                     data-bs-placement="top" title="Guardar">
                     <i class="bi bi-save"></i> Guardar
                 </button>

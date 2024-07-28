@@ -38,22 +38,17 @@ async function loadCitas() {
             $('#TableAppointment').DataTable().column(2).search(fechaInput).draw();
         });
 
-        $(document).ready(function () {
-            $('#seleccionar-estado').val('Iniciada').trigger('change');
+        $('#seleccionar-estado').on('change', function () {
+            let selectedState = $(this).val().toLowerCase();
+            $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
 
-            $('#seleccionar-estado').on('change', function () {
-                let selectedState = $(this).val().toLowerCase();
-                $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
+            let tituloCitas = document.getElementById('tituloCitas');
+            tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
 
-                let tituloCitas = document.getElementById('tituloCitas');
-                tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
-
-                let inputValue = $('#searchAppointment').val().toLowerCase();
-                $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
-            });
+            let inputValue = $('#searchAppointment').val().toLowerCase();
+            $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
         });
 
-        $('#TableAppointment').DataTable().search('iniciada').draw();
         ocultarSpinner();
 
     } catch (error) {
@@ -118,7 +113,6 @@ function getAcompanantes(cita) {
             cita.camilla,
             cita.diagnostico,
             cita.especialidad,
-            cita.condicionCita,
             cita.prioridad,
             cita.nombreCompletoAcompanante1 || 'No posee.',
             cita.nombreCompletoAcompanante2 || 'No posee.'
@@ -136,13 +130,6 @@ function getAcompanantes(cita) {
     }
 }
 
-
-document.querySelector('#searchAppointment').addEventListener('input', function (e) {
-    if (this.value.length > 15) {
-        this.value = this.value.slice(0, 15);
-    }
-});
-
 function editarCita(cita) {
     document.querySelector('#editarIdCita').value = cita.idCita;
     document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
@@ -155,7 +142,6 @@ function editarCita(cita) {
         updateCita(cita.idCita);
     });
 }
-
 
 function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
@@ -174,7 +160,6 @@ function getRutas() {
 }
 
 getRutas();
-
 
 async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;

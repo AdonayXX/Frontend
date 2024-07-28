@@ -130,19 +130,19 @@
                     </div>
                     <!-- Es trasladable -->
                     <div class="col-md-2 mb-3">
-                        <label class="form-label"><i class="bi bi-truck"></i> Trasladable:</label><br>
+                        <label class="form-label"><i class="bi bi-truck"></i>VbDM:</label><br>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="trasladable">
-                            <label class="form-check-label" for="trasladable">No</label>
+                            <label class="form-check-label" for="trasladable">Si</label>
                         </div>
                     </div>
                 </div>
-
                 <!-- Campos de direccion -->
                 <div class="row">
                     <!-- Provincia -->
                     <div class="col-md-4 mb-3">
-                        <label for="provincia" class="form-label"><i class="bi bi-compass"></i> Provincia: </label>
+                        <label for="provincia" class="form-label"><i class="bi bi-compass"></i>
+                            Provincia: </label>
                         <select required id="provincia" name="provincia" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
                             <!-- Aqui se cargan las provincias -->
@@ -151,7 +151,8 @@
 
                     <!-- canton -->
                     <div class="col-md-4 mb-3">
-                        <label for="canton" class="form-label"><i class="bi bi-geo"></i> Cantón: </label>
+                        <label for="canton" class="form-label"><i class="bi bi-geo"></i> Cantón:
+                        </label>
                         <select required name="canton" id="canton" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
                             <!-- Aqui se cargan los cantones -->
@@ -160,23 +161,26 @@
 
                     <!-- distrito -->
                     <div class="col-md-4 mb-3">
-                        <label for="distrito" class="form-label"><i class="bi bi-map"></i> Distrito: </label>
+                        <label for="distrito" class="form-label"><i class="bi bi-map"></i> Distrito:
+                        </label>
                         <select required name="distrito" id="distrito" class="form-select">
                             <option selected disabled value="">Seleccionar</option>
                             <!-- Aqui se cargan los distritos -->
                         </select>
                     </div>
                 </div>
+
+               
                 <div class="row">
                     <!-- barrio -->
                      <div class="col-md-4 mb-3">
                         <label for="barrio" class="form-label"><i class="bi bi-building"></i> Barrio: </label>
-                        <textarea required type="text" id="barrio" name="barrio" class="form-control" maxlength="35"></textarea>
+                        <input type="text" id="barrio" name="barrio" class="form-control" maxlength="35"></input>
                      </div>
                     <!-- Direccion -->
                     <div class="col-md-8 mb-3">
                         <label for="direccion" class="form-label"><i class="bi bi-house"></i> Otras señas: </label>
-                        <textarea required id="direccion" name="direccion" class="form-control"
+                        <textarea required id="direccion" name="direccion" class="form-control" rows="1"
                             maxlength="200"></textarea>
                     </div>
                 </div>

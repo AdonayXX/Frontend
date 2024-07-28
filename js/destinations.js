@@ -232,7 +232,7 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             $('#AgregarUbiModal').modal('hide');
             setTimeout(function () {
                 loadContent('formUbi.html', 'mainContent');
-            }, 1000);
+            }, 1400);
 
             showToast('¡Éxitos!', 'Ubicación agregada correctamente.');
 
@@ -380,7 +380,7 @@ function createDeleteModal(idDestino) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarUbicacion" onclick='deleteDestination(${JSON.stringify(idDestino)})'>Eliminar</button>
+                        <button type="button"  class="btn btn-danger" id="eliminarUbicacion" onclick='deleteDestination(${JSON.stringify(idDestino)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -408,9 +408,7 @@ async function deleteDestination(idRuta) {
         $('#AgregarUbiModal').modal('hide');
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
-        }, 1000);
-
-
+        }, 1400);
 
     } catch (error) {
         showToast('Error', 'No se pudo eliminar la ubicación.');
@@ -443,7 +441,7 @@ async function deleteEspecialidad(idEspecialidad, idRuta) {
 
         setTimeout(function () {
             loadContent('formUbi.html', 'mainContent');
-        }, 1000);
+        }, 1400);
 
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
@@ -476,7 +474,7 @@ function createDeleteModal2(idEspecialidad, idRuta) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)}, ${JSON.stringify(idRuta)})'>Eliminar</button>
+                        <button type="button" class="btn btn-danger" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)}, ${JSON.stringify(idRuta)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
