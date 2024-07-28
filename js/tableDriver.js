@@ -1,6 +1,12 @@
 function openAccomp(cedula) {
+    const token = localStorage.getItem('token');
     const API_URL = `https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`;
-    axios.get(API_URL)
+    axios.get(API_URL,{
+        headers: {
+             'Authorization': `Bearer ${token}`
+        }
+
+    })
         .then(response => {
             const chofer = response.data.chofer[0]; 
 
@@ -10,17 +16,14 @@ function openAccomp(cedula) {
             } else {
                 tableBody.innerHTML = `
                     <tr>
-                        <td>${chofer.nombreCE1}</td>
-                        <td>${chofer.apellido1CE1}</td>
-                        <td>${chofer.apellido2CE1}</td>
+                        <td>${chofer.nombreCE1} ${chofer.apellido1CE1} ${chofer.apellido2CE1}</td>
                         <td>${chofer.contactoEmergencia1}</td>
                     </tr>
+                   ${chofer.nombreCE2 !== null ? `
                     <tr>
-                        <td>${chofer.nombreCE2 !== null ? chofer.nombreCE2 : ''}</td>
-                        <td>${chofer.apellido1CE2 !== null ? chofer.apellido1CE2 : ''}</td>
-                        <td>${chofer.apellido2CE2 !== null ? chofer.apellido2CE2 : ''}</td>
-                        <td>${chofer.contactoEmergencia2 !== null ? chofer.contactoEmergencia2 : ''}</td>
-                    </tr>
+                        <td>${chofer.nombreCE2} ${chofer.apellido1CE2} ${chofer.apellido2CE2}</td>
+                        <td>${chofer.contactoEmergencia2}</td>
+                    </tr>` : ''}
                 `;
             }
 
@@ -86,24 +89,22 @@ function fillChoferTable(choferes) {
     tableBody.innerHTML = '';
 
     choferes.forEach(chofer => {
-        const row = `
-            <tr>
-                <td>${chofer.nombre}</td>
-                <td>${chofer.cedula}</td>
-                <td>${chofer.apellido1}</td>
-                <td>${chofer.apellido2}</td>
-                <td>${chofer.contacto}</td>
-                <td>${chofer.tipoSangre}</td>
-                <td>${chofer.tipoLicencia}</td>
-                <td class="text-center">${new Date(chofer.vencimientoLicencia).toISOString().split('T')[0]}</td>
-                <td>${chofer.estadoChofer}</td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm" onclick="openAccomp('${chofer.cedula}')">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </td>
-            </tr>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}</td>
+            <td>${chofer.cedula}</td>
+            <td>${chofer.contacto}</td>
+            <td>${chofer.tipoSangre}</td>
+            <td>${chofer.tipoLicencia}</td>
+            <td class="text-center">${new Date(chofer.vencimientoLicencia).toISOString().split('T')[0]}</td>
+            <td>${chofer.estadoChofer}</td>
+            <td>
+                <button class="btn btn-outline-primary btn-sm" onclick="openAccomp('${chofer.cedula}')">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </td>
         `;
+        tableBody.appendChild(row);
         tableBody.innerHTML += row;
     });
 }

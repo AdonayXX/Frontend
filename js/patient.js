@@ -11,9 +11,9 @@ async function getPatientComp() {
 
     const response = await axios.get(API_URL, {
       headers: {
-          'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
       }
-  });
+    });
     const listPatientComp = response.data.pacientes;
 
     $(document).ready(function () {
@@ -49,7 +49,7 @@ async function getPatientComp() {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
       showToast('Ups!', errorMessage);
-    }else{
+    } else {
       showToast('Error', 'Inesperado.');
 
     }
@@ -135,11 +135,21 @@ function fillPatientComp(listPatientComp) {
             <td >${patient.Nombre} ${patient.Apellido1} ${patient.Apellido2}</td>
             <td>${patient.Genero}</td>
             <td class='text-center'>${telefonoCompleto}</td>
-            <td>${patient.Direccion}</td>
+         <td class="text-center">
+    <button class="btn btn-outline-primary btn-sm" onclick='viewDirection(
+        ${JSON.stringify(patient.Provincia)},
+        ${JSON.stringify(patient.Canton)},
+        ${JSON.stringify(patient.Distrito)},
+        ${JSON.stringify(patient.Barrio)},
+        ${JSON.stringify(patient.OtrasSenas)}
+    )'>
+        <i class="bi bi-eye"></i>
+    </button>
+</td>
             <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
             <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
             <td class='text-center'>
-              ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${ patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
+              ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
             </td>
             <td class='text-center'>
               <button class="btn btn-outline-primary btn-sm" data-acompanantes='${JSON.stringify(patient.acompanantes)}' onclick='openAccomp(this)'><i class="bi bi-eye"></i></button>
@@ -210,7 +220,7 @@ window.editAccomp = function (button) {
   document.getElementById('secondlastname').value = acompanantes.Apellido2;
   document.getElementById('identification').value = acompanantes.Identificacion;
   document.getElementById('phone1').value = acompanantes.Telefono1;
-  document.getElementById('phone2').value = acompanantes.Telefono2|| '';
+  document.getElementById('phone2').value = acompanantes.Telefono2 || '';
   document.getElementById('parentesco').value = acompanantes.Parentesco;
 
   const IdAcompanante = acompanantes.IdAcompanante;
@@ -238,11 +248,11 @@ window.editAccomp = function (button) {
     try {
       const token = localStorage.getItem('token');
       const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
-      const response = await axios.put(API_URL, companionData , {
+      const response = await axios.put(API_URL, companionData, {
         headers: {
-            'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
-    });
+      });
       modalAcomp.hide();
       document.querySelector('#formEditComp').reset();
       showToast('Acompañante', 'Se han guardado los cambios')
@@ -265,10 +275,76 @@ window.editAccomp = function (button) {
   }
 
 }
+// Función para cargar los datos JSON y llenar los select
+function cargarDatos() {
+  fetch('data/provincias_cantones_distritos_costa_rica.json')
+      .then(response => response.json())
+      .then(data => {
+          const provinciaSelect = document.getElementById('provincia');
+          const cantonSelect = document.getElementById('canton');
+          const distritoSelect = document.getElementById('distrito');
 
+          // Cargar provincias
+          Object.keys(data.provincias).forEach(provinciaKey => {
+              const provincia = data.provincias[provinciaKey];
+              const option = document.createElement('option');
+              option.value = provincia.nombre; // Usar el nombre como valor
+              option.textContent = provincia.nombre;
+              provinciaSelect.appendChild(option);
+          });
 
+          // Evento para cargar cantones al seleccionar una provincia
+          provinciaSelect.addEventListener('change', () => {
+              // Limpiar select de cantones y distritos
+              cantonSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              cantonSelect.disabled = false;
+              distritoSelect.disabled = true;
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
+
+              if (provincia) {
+                  Object.keys(provincia.cantones).forEach(cantonKey => {
+                      const canton = provincia.cantones[cantonKey];
+                      const option = document.createElement('option');
+                      option.value = canton.nombre; // Usar el nombre como valor
+                      option.textContent = canton.nombre;
+                      cantonSelect.appendChild(option);
+                  });
+              }
+             
+          });
+
+          // Evento para cargar distritos al seleccionar un cantón
+          cantonSelect.addEventListener('change', () => {
+              // Limpiar select de distritos
+              distritoSelect.innerHTML = '<option selected disabled value="">Seleccionar</option>';
+              distritoSelect.disabled = false;
+
+              const provinciaSeleccionada = provinciaSelect.value;
+              const cantonSeleccionado = cantonSelect.value;
+              const provincia = Object.values(data.provincias).find(p => p.nombre === provinciaSeleccionada);
+              const canton = provincia ? Object.values(provincia.cantones).find(c => c.nombre === cantonSeleccionado) : null;
+
+              if (canton) {
+                  Object.keys(canton.distritos).forEach(distritoKey => {
+                      const distrito = canton.distritos[distritoKey];
+                      const option = document.createElement('option');
+                      option.value = distrito; // Usar el nombre como valor
+                      option.textContent = distrito;
+                      distritoSelect.appendChild(option);
+                  });
+              }
+             
+          });
+       
+      })
+      .catch(error => showToast('Error', 'Al cargar la Información'));
+}
 
 window.patientEdit = function (button) {
+
   let pacientes = JSON.parse(button.getAttribute('data-pacientes'));
 
   let modal = new bootstrap.Modal(document.getElementById('editPatient'), {
@@ -287,25 +363,25 @@ window.patientEdit = function (button) {
   const IdPersona = pacientes.IdPersona;
 
   document.querySelector('#formEditPatient').addEventListener('submit', function (event) {
-      event.preventDefault();
-      showLoaderModalPatEdit();
-      sendEditPatient(IdPersona);
+    event.preventDefault();
+    showLoaderModalPatEdit();
+    sendEditPatient(IdPersona);
   });
   async function editPatientPerson(personaData, pacienteData) {
     try {
       const token = localStorage.getItem('token');
       const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
-      const responsePersona = await axios.put(API_URL_PERSONA, personaData , {
+      const responsePersona = await axios.put(API_URL_PERSONA, personaData, {
         headers: {
-            'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
-    });
+      });
       const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
-      const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData , {
+      const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData, {
         headers: {
-            'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
-    });
+      });
 
 
       modal.hide();
@@ -321,8 +397,8 @@ window.patientEdit = function (button) {
         showToast('Ups!', ' Error inesperado.');
 
       }
-     
-    }finally{
+
+    } finally {
       hideLoaderModalPatEdit();
     }
 
@@ -338,35 +414,42 @@ window.patientEdit = function (button) {
         Genero: document.getElementById('genero').value,
         Telefono1: document.getElementById('telefono1').value,
         Telefono2: document.getElementById('telefono2').value || 0,
-        Tipo_seguro:"N/A",
+        Tipo_seguro: "N/A",
         Direccion: document.getElementById('direccion').value,
         Latitud: document.getElementById('latitud').value || 0,
         Longitud: document.getElementById('longitud').value || 0,
         Tipo_sangre: document.getElementById('tipoSangre').value
       };
-  
+
       pacienteData = {
         IdPersona: IdPersona,
         Criticidad: "N/A",
         Encamado: document.getElementById('encamado').value,
-        Traslado: JSON.stringify(document.getElementById('trasladable').checked ? true : false),
+        VbDM: JSON.stringify(document.getElementById('trasladable').checked ? true : false),
         Prioridad: JSON.stringify(document.getElementById('prioridad').checked ? true : false),
         LugarSalida: document.querySelector('#lugarSalida').value,
-        Estado: "Activo"
+        Estado: "Activo",
+        Provincia: document.querySelector('#provincia').value,
+        Canton:document.querySelector('#canton').value,
+        Distrito:document.querySelector('#distrito').value,
+        Barrio:document.querySelector('#barrio').value,
+        OtrasSenas:document.querySelector('#direccion').value,
+
       };
-  
+
       editPatientPerson(personaData, pacienteData);
-  
-      
+
+
     } catch (error) {
       hideLoaderModalPatEdit();
-      
+
     }
 
-  
+
 
   }
   function llenarcampos(pacientes) {
+   
 
     document.querySelector('#primerApellido').value = pacientes.Apellido1 || '';
     document.querySelector('#nombre').value = pacientes.Nombre || '';
@@ -380,10 +463,27 @@ window.patientEdit = function (button) {
     document.querySelector('#latitud').value = pacientes.Latitud || '';
     document.querySelector('#longitud').value = pacientes.Longitud || '';
     document.querySelector('#direccion').value = pacientes.Direccion || '';
-    document.querySelector('#lugarSalida').value = pacientes.LugarSalida ||'';
-   document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
-   document.querySelector('#trasladable').checked = pacientes.Traslado || '';
+    document.querySelector('#lugarSalida').value = pacientes.LugarSalida || '';
+    document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
+    document.querySelector('#trasladable').checked = pacientes.Traslado || '';
     document.querySelector('#encamado').value = pacientes.Encamado || '';
+      // Simular la selección de una provincia y cargar cantones
+      const provinciaSelect = document.querySelector('#provincia');
+      const provinciaParaSeleccionar = pacientes.Provincia || ''; // Nombre de la provincia que deseas seleccionar
+      provinciaSelect.value = provinciaParaSeleccionar;
+      const event1 = new Event('change');
+      provinciaSelect.dispatchEvent(event1);
+
+      const cantonselect = document.querySelector('#canton');
+      const cantonParaSeleccionar = pacientes.Canton ||'';
+      cantonselect.value = cantonParaSeleccionar;
+      const event2 = new Event('change');
+      cantonselect.dispatchEvent(event2);
+  
+    document.querySelector('#distrito').value = pacientes.Distrito||'';
+    document.querySelector('#barrio').value = pacientes.Barrio||'';
+
+    
 
   }
 
@@ -433,12 +533,12 @@ window.patientDelete = function (idPatient, nombreCompleto, identificacion) {
 async function deletePatient(patientId) {
   try {
     const token = localStorage.getItem('token');
-   const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
-    const response = await axios.delete(API_URL , {
+    const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
+    const response = await axios.delete(API_URL, {
       headers: {
-          'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
       }
-  });
+    });
     showToast('Exito', 'Paciente eliminado exitosamente.')
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
@@ -495,7 +595,7 @@ function addCompanion(idPacienteCapturado) {
     showToast('Por favor', 'llene los campos solicitados');
     hideLoaderModalComp();
     return;
-   
+
 
 
   }
@@ -517,26 +617,26 @@ function addCompanion(idPacienteCapturado) {
 async function agregarAcompanante(companionData) {
   try {
 
-   const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
 
-   const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, companionData, {
       headers: {
-          'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`
       }
-  });
+    });
 
     showToast('Acompañante Registrado', 'El registro se ha realizado exitosamente.');
-     // Cerrar el modal correctamente usando Bootstrap
-     const modalElement = document.querySelector('#addAccomp');
-     const modalInstance = bootstrap.Modal.getInstance(modalElement);
-     if (modalInstance) {
-       modalInstance.hide();
-     } else {
-       const newModalInstance = new bootstrap.Modal(modalElement);
-       newModalInstance.hide();
-     }
-     hideLoaderModalComp();
+    // Cerrar el modal correctamente usando Bootstrap
+    const modalElement = document.querySelector('#addAccomp');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if (modalInstance) {
+      modalInstance.hide();
+    } else {
+      const newModalInstance = new bootstrap.Modal(modalElement);
+      newModalInstance.hide();
+    }
+    hideLoaderModalComp();
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
     }, 1000);
@@ -550,7 +650,7 @@ async function agregarAcompanante(companionData) {
 
     }
     hideLoaderModalComp();
-   
+
   }
 }
 document.querySelector('#telefono1').addEventListener('input', function (e) {
@@ -718,17 +818,17 @@ async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
   confirmBtn.onclick = function () {
 
     deleteComp(IdAcompanante);
-      // Cerrar el modal correctamente usando Bootstrap
-      const modalElement = document.querySelector('#showAccomp');
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      } else {
-        const newModalInstance = new bootstrap.Modal(modalElement);
-        newModalInstance.hide();
-      }
-      modal.hide();
-  
+    // Cerrar el modal correctamente usando Bootstrap
+    const modalElement = document.querySelector('#showAccomp');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if (modalInstance) {
+      modalInstance.hide();
+    } else {
+      const newModalInstance = new bootstrap.Modal(modalElement);
+      newModalInstance.hide();
+    }
+    modal.hide();
+
 
   }
 }
@@ -736,13 +836,13 @@ async function deleteComp(IdAcompanante) {
   try {
     const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
     const token = localStorage.getItem('token');
-   const response = await axios.delete(API_URL , {
-    headers: {
+    const response = await axios.delete(API_URL, {
+      headers: {
         'Authorization': `Bearer ${token}`
-    }
-});
+      }
+    });
     showToast('Exito', 'Acompañante eliminado exitosamente.');
-  
+
 
     setTimeout(function () {
       loadContent('dataTablePatient.html', 'mainContent');
@@ -754,6 +854,19 @@ async function deleteComp(IdAcompanante) {
     showToast('Ups!', 'Error al eliminar el acompañante.')
   }
 
+}
+window.viewDirection = function(provincia, canton, distrito, barrio, otrasSenas) {
+  const direccionCompleta = `
+    <p><strong>Provincia:</strong> ${provincia || ''}</p>
+    <p><strong>Cantón:</strong> ${canton || ''}</p>
+    <p><strong>Distrito:</strong> ${distrito || ''}</p>
+    <p><strong>Barrio:</strong> ${barrio || ''}</p>
+    <p><strong>Otras Señas:</strong> ${otrasSenas || ''}</p>
+  `;
+  document.querySelector("#bodyDireccion").innerHTML = direccionCompleta;
+  
+  let myModal = new bootstrap.Modal(document.getElementById('modalDireccion'));
+  myModal.show();
 }
 
 //Spiner
@@ -781,3 +894,9 @@ function showLoaderModalComp() {
 function hideLoaderModalComp() {
   document.querySelector('#loaderModalComp').style.display = 'none';
 }
+
+
+   // Llamar a la función cargarDatos inmediatamente
+ cargarDatos();
+
+

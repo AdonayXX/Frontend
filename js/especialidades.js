@@ -78,7 +78,7 @@ async function deleteEspecialidad(idEspecialidad) {
 
         setTimeout(function () {
             loadContent('especialidades.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
 
     } catch (error) {
@@ -108,7 +108,7 @@ function createDeleteModal2(idEspecialidad) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)})'>Eliminar</button>
+                        <button type="button"  class="btn btn-danger" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)})'>Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
         $('#AgregarEspeModal').modal('hide');
         setTimeout(function () {
             loadContent('especialidades.html', 'mainContent');
-        }, 1000);
+        }, 1400);
         showToast('¡Éxito!', 'Especialidad agregada correctamente.');
 
         document.getElementById('AgregarEspe').value = '';

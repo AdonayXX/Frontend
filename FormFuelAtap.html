@@ -1,0 +1,78 @@
+<div class="container mt-5 m-auto fade-in" style="max-width: 1100px;">
+    <h1 class="mb-4 text-center">Registro de Combustible1</h1>
+    <form id="fuelForm" class="bg-light p-4 border rounded-3">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="unitSelect"><i class="bi bi-truck"></i> Unidad</label>
+                <input type="text" class="form-control" id="unitSelect" readonly required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="driverSelect"><i class="bi bi-person"></i> Chofer</label>
+                <input type="text" class="form-control" id="driverSelect"  readonly required>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+                <label for="invoiceNumber"><i class="bi bi-receipt"></i> Número de Facturación/Cupón</label>
+                <input type="text" class="form-control" id="invoiceNumber" maxlength="20" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="authorizationNumber"><i class="bi bi-card-checklist"></i> Número de Autorización</label>
+                <input type="text" class="form-control" id="authorizationNumber" maxlength="20" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="fuelType"><i class="bi bi-fuel-pump"></i> Tipo de Combustible</label>
+                <select class="form-select" id="fuelType" required>
+                    <option selected disabled>Seleccionar tipo de combustible</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Gasolina">Gasolina</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="approxLiters"><i class="bi bi-droplet-half"></i> Litros Aproximados</label>
+                <input type="number" class="form-control" id="approxLiters" min="0" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="totalAmount"><i class="bi bi-currency-dollar"></i> Monto Total</label>
+                <input type="number" class="form-control" id="totalAmount" min="0" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
+                <input type="number" class="form-control" id="currentMileage" min="0" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="location"><i class="bi bi-geo-alt"></i> Lugar</label>
+                <input type="text" class="form-control" id="location" maxlength="50" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="date"><i class="bi bi-calendar"></i> Fecha</label>
+                <input type="date" class="form-control" id="date" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="time"><i class="bi bi-clock"></i> Hora</label>
+                <input type="time" class="form-control" id="time" required>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+            <div class="col-md-12 mb-3">
+                <button type="submit" id="submit-fuel-button" class="btn btn-primary text-white"
+                    style="background-color: #094079; border-color: #094079; margin: 5px;"
+                    onmouseover="this.style.backgroundColor='#073c64';"
+                    onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-save"></i>
+                    Guardar</button>
+                <button type="submit" id="update-fuel-button" class="btn btn-primary text-white"
+                    style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';"
+                    onmouseout="this.style.backgroundColor='#094079';" disabled><i class="bi bi-arrow-clockwise"></i>
+                    Actualizar</button>
+                <button id="delete-fuel-button" class="btn btn-danger text-white" style="margin: 5px;" disabled><i
+                        class="bi bi-trash"></i> Eliminar</button>
+            </div>
+            <div class="col-md-12 mb-3 text-end">
+                <button type="button" id="clean-button" class="btn btn-danger" style="display: none;"><i
+                        class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div data-script="js/formFuelAtap.js"></div>
