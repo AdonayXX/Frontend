@@ -131,58 +131,101 @@
         });
     }
 
-    //Funcion para editar atap
-    window.editAtap = async function (atapItem) {
-        // Mostrar el modal de mantenimiento
+    // Función principal para editar ATAP
+    window.editAtap = function (atapItem) {
+        showEditModal(atapItem);
+        addKilometrajeBlurEvents(atapItem);
+
+        document.querySelector('#saveAtapEdit').addEventListener('click', function () {
+            saveAtapChanges(atapItem);
+        });
+    };
+
+    // Función para mostrar el modal y rellenar los campos
+    function showEditModal(atapItem) {
         $("#atapModalEdit").modal("show");
 
-        // Rellenar los campos del modal con los datos del mantenimiento
         document.querySelector('#IdUnidadEdit').value = atapItem.numeroUnidad;
         document.querySelector('#IdChoferEdit').value = atapItem.NombreChofer;
         document.querySelector('#KilometrosSalidaEdit').value = atapItem.KilometrosSalida;
         document.querySelector('#KilometrosEntradaEdit').value = atapItem.KilometrosEntrada;
+        document.querySelector('#KilometrosRecorridosEdit').value = atapItem.KilometrosRecorridos;
         document.querySelector('#FechaMantenimientoEdit').value = atapItem.FechaMantenimiento.substring(0, 10);
-        document.querySelector('#LugarVisitadoEdit').value = atapItem.LugarVisitado;
+        document.querySelector('#LugarVisitadoSelect').value = atapItem.LugarVisitado;
+    }
 
-        // Evento click para guardar cambios
-        document.querySelector('#saveAtapEdit').addEventListener('click', async function () {
-            try {
-                // Mostrar loader
-                showLoaderModalAtapEdit();
+    // Función para agregar eventos de validación de kilometraje
+    function addKilometrajeBlurEvents(atapItem) {
+        document.querySelector('#KilometrosEntradaEdit').addEventListener('blur', function () {
+            const kmSValue = parseInt(document.querySelector('#KilometrosSalidaEdit').value);
+            const kmEValue = parseInt(this.value);
 
-                // Obtener los datos del formulario
-                const atapData = {
-                    IdChofer: parseInt(atapItem.IdChofer),
-                    IdUnidad: parseInt(atapItem.IdUnidad),
-                    FechaMantenimiento: document.querySelector("#FechaMantenimientoEdit").value.trim(),
-                    KilometrosSalida: parseInt(document.querySelector("#KilometrosSalidaEdit").value.trim()),
-                    KilometrosEntrada: parseInt(document.querySelector("#KilometrosEntradaEdit").value.trim()),
-                    LugarVisitado: document.querySelector("#LugarVisitadoEdit").value.trim(),
-                };
+            if (isNaN(kmEValue) || kmEValue < kmSValue) {
+                this.value = atapItem.KilometrosEntrada;
+                document.querySelector('#KilometrosRecorridosEdit').value = atapItem.KilometrosRecorridos;
+                showToast('Kilometraje Entrada', 'No puede ser menor al Kilometraje Salida.');
+            } else {
+                document.querySelector('#KilometrosRecorridosEdit').value = kmEValue - kmSValue;
+            }
+        });
 
-                // URL de la API
-                const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${atapItem.IdMantenimientoATAP}`;
-                const token = localStorage.getItem('token');
-                const headers = { 'Authorization': `Bearer ${token}` };
+        document.querySelector('#KilometrosSalidaEdit').addEventListener('blur', function () {
+            const kmSValue = parseInt(this.value);
+            const kmEValue = parseInt(document.querySelector('#KilometrosEntradaEdit').value);
 
-                // Realizar la solicitud PUT a la API
-                const response = await axios.put(API_URL, atapData, { headers });
-
-                // Manejo de respuesta exitosa
-                showToast('Éxito!', 'Mantenimiento actualizado correctamente.');
-                $("#atapModalEdit").modal("hide");
-
-                // Recargar datos de la tabla después de actualizar
-                loadContent('dataTableKilometerControl.html', 'mainContent');
-            } catch (error) {
-                // Manejo de errores
-                showToast('Error', 'Ocurrió un error al actualizar el mantenimiento.');
-            } finally {
-                // Ocultar loader
-                hideLoaderModalAtapEdit();
+            if (isNaN(kmSValue) || kmSValue > kmEValue) {
+                this.value = atapItem.KilometrosSalida;
+                document.querySelector('#KilometrosRecorridosEdit').value = atapItem.KilometrosRecorridos;
+                showToast('Kilometraje Salida', 'No puede ser mayor al Kilometraje Entrada.');
+            } else {
+                document.querySelector('#KilometrosRecorridosEdit').value = kmEValue - kmSValue;
             }
         });
     }
+
+    // Función para guardar cambios
+    async function saveAtapChanges(atapItem) {
+        try {
+            showLoaderModalAtapEdit();
+
+            const atapData = {
+                IdChofer: parseInt(atapItem.IdChofer),
+                IdUnidad: parseInt(atapItem.IdUnidad),
+                FechaMantenimiento: document.querySelector("#FechaMantenimientoEdit").value.trim(),
+                KilometrosSalida: parseInt(document.querySelector("#KilometrosSalidaEdit").value.trim()),
+                KilometrosEntrada: parseInt(document.querySelector("#KilometrosEntradaEdit").value.trim()),
+                LugarVisitado: document.querySelector("#LugarVisitadoSelect").value.trim()
+            };
+
+            if (isNaN(atapData.IdChofer) || isNaN(atapData.IdUnidad) || !atapData.FechaMantenimiento ||
+                isNaN(atapData.KilometrosEntrada) || isNaN(atapData.KilometrosSalida) || !atapData.LugarVisitado) {
+                showToast("Ups!", "Por favor llene todos los campos");
+                hideLoaderModalAtapEdit();
+                return;
+            }
+
+            if (atapData.KilometrosEntrada < atapData.KilometrosSalida) {
+                showToast("Error", "Los kilómetros de entrada no pueden ser menores que los kilómetros de salida");
+                hideLoaderModalAtapEdit();
+                return;
+            }
+
+            const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${atapItem.IdMantenimientoATAP}`;
+            const token = localStorage.getItem('token');
+            const headers = { 'Authorization': `Bearer ${token}` };
+
+            const response = await axios.put(API_URL, atapData, { headers });
+
+            showToast('Éxito!', 'Mantenimiento actualizado correctamente.');
+            $("#atapModalEdit").modal("hide");
+            loadContent('dataTableKilometerControl.html', 'mainContent');
+        } catch (error) {
+            showToast('Error', 'Ocurrió un error al actualizar el mantenimiento.');
+        } finally {
+            hideLoaderModalAtapEdit();
+        }
+    }
+
 
     // Función para eliminar un mantenimiento ATAP
     window.deleteAtap = async function (idMantenimiento) {
@@ -206,8 +249,6 @@
             }
         }
     }
-
-
 
     /////FUNCIONALIDADES
 
@@ -293,19 +334,6 @@
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
-    }
-
-
-
-    //Función para formatear la fecha seleccionada al formato DD/MM/AAAA
-    function formatDateSelected(selectedDate) {
-        if (!selectedDate) return null;
-
-        const parts = selectedDate.split('-');
-        if (parts.length !== 3) return null;
-
-        const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-        return formattedDate;
     }
 
     //Función para formatear la fecha

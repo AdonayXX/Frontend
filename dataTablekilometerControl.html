@@ -83,14 +83,21 @@
                     <form id="formAtapEdit" name="formAtapEdit" class="bg-light p-4 border rounded-3">
                         <div class="form-section">
                             <div class="row">
+                                <!-- Fecha de mantenimiento -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="FechaMantenimientoEdit" class="form-label"><i
+                                            class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
+                                    <input type="date" class="form-control date-input" id="FechaMantenimientoEdit"
+                                        name="FechaMantenimiento">
+                                </div>
                                 <!-- Unidad -->
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="IdUnidadEdit" class="form-label"><i class="bi bi-hash"></i>
                                         Unidad:</label>
                                     <input type="text" class="form-control" id="IdUnidadEdit" name="IdUnidad" readonly>
                                 </div>
                                 <!-- Chofer -->
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="IdChoferEdit" class="form-label"><i class="bi bi-person"></i>
                                         Chofer:</label>
                                     <input type="text" class="form-control" id="IdChoferEdit" name="IdChofer" readonly>
@@ -98,33 +105,53 @@
                             </div>
                             <div class="row">
                                 <!-- Kilometraje de Salida -->
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="KilometrosSalidaEdit" class="form-label"><i
                                             class="bi bi-speedometer"></i> Kilometros Salida:</label>
                                     <input type="number" class="form-control" id="KilometrosSalidaEdit"
                                         name="KilometrosSalida">
                                 </div>
                                 <!-- Kilometraje de Entrada -->
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="KilometrosEntradaEdit" class="form-label"><i
                                             class="bi bi-speedometer2"></i> Kilometros Entrada:</label>
                                     <input type="number" class="form-control" id="KilometrosEntradaEdit"
                                         name="KilometrosEntrada">
                                 </div>
+                                <!-- Kilometraje Recorrido -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="KilometrosRecorridosEdit" class="form-label"><i
+                                            class="bi bi-calculator"></i> Kilometros Recorridos:</label>
+                                    <input type="number" class="form-control" id="KilometrosRecorridosEdit"
+                                        name="KilometrosRecorridos" readonly>
+                                </div>
                             </div>
                             <div class="row">
-                                <!-- Fecha de mantenimiento -->
-                                <div class="col-md-6 mb-3">
-                                    <label for="FechaMantenimientoEdit" class="form-label"><i
-                                            class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
-                                    <input type="date" class="form-control date-input" id="FechaMantenimientoEdit"
-                                        name="FechaMantenimiento">
-                                </div>
+
                                 <!-- Lugar Visitado -->
-                                <div class="col-md-6 mb-3">
-                                    <label for="LugarVisitadoEdit" class="form-label"><i class="bi bi-map"></i> Lugar
+                                <div class="col-md-4 mb-3">
+                                    <label for="LugarVisitadoSelect" class="form-label"><i class="bi bi-map"></i> Lugar
                                         Visitado:</label>
-                                    <input type="text" class="form-control" id="LugarVisitadoEdit" name="LugarVisitado">
+                                    <select id="LugarVisitadoSelect" name="LugarVisitadoSelect" class="form-control">
+                                        <option value="" disabled selected>Seleccione un lugar</option>
+                                        <option value="Upala1">Upala1</option>
+                                        <option value="Upala2">Upala2</option>
+                                        <option value="Upala3">Upala3</option>
+                                        <option value="Bijagua">Bijagua</option>
+                                        <option value="Canalete">Canalete</option>
+                                        <option value="Moreno Cañas">Moreno Cañas</option>
+                                        <option value="San Jose">San Jose</option>
+                                        <option value="Villanueva">Villanueva</option>
+                                        <option value="Paraiso">Paraiso</option>
+                                        <option value="Aguas Claras">Aguas Claras</option>
+                                        <option value="Colonia Puntarenas">Colonia Puntarenas</option>
+                                        <option value="Mexico">Mexico</option>
+                                        <option value="San Jorge">San Jorge</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <input type="text" id="LugarVisitadoInput" name="LugarVisitadoInput"
+                                        class="form-control mt-2" placeholder="Lugar Visitado" style="display:none;"
+                                        maxlength="30">
                                 </div>
                             </div>
                             <div class="row justify-content-end">
