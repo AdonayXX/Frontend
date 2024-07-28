@@ -203,6 +203,7 @@ function getRoleDescription(rol) {
     case 2: return 'Chofer';
     case 3: return 'Consulta';
     case 4: return 'Coordinador';
+    case 5: return 'Atap';
     default: return 'Desconocido';
   }
 
@@ -253,11 +254,7 @@ window.sendUserData = function (button) {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
-        if (errorMessage === 'Error al actualizar el usuario: No puedes asignar un rol a un usuario Inactivo') {
-          showToast('Ups!', 'No puedes asignar un rol a un usuario Inactivo');
-        } else {
           showToast('Ups!', errorMessage);
-        }
       } else {
         showToast('Error','Inesperado.')
       }
