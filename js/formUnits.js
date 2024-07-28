@@ -2,147 +2,183 @@
 
 (function () {
 
-    document.getElementById('unitsForm').addEventListener('submit', function (event) {
-        if (event.submitter.id === 'submit-unit-button') {
-            showToast('Cargando', 'Guardando registro de unidad...');
-            event.preventDefault();
-            postUnidad();
-        } else if (event.submitter.id === 'update-unit-button') {
-            showToast('Cargando', 'Actualizando registro de unidad...');
-            event.preventDefault();
-            putUnidad();
-        } else if (event.submitter.id === 'delete-unit-button') {
-            event.preventDefault();
-            deleteUnidad();
-        }
-    });
-
-    document.getElementById('btnResourceType').addEventListener('click', function (event) {
-        event.preventDefault();
-        postTipoRecurso();
-    });
-
-    document.getElementById('cerrarResourceType1').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.getElementById('addResource').value = '';
-    });
-
-    document.getElementById('cerrarResourceType2').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.getElementById('addResource').value = '';
-    });
-
-    document.getElementById('btnUnitType').addEventListener('click', function (event) {
-        event.preventDefault();
-        postTipoUnidad();
-    });
-
-    document.getElementById('cerrarUnitType1').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.getElementById('addUnit').value = '';
-        document.getElementById('addCapacity').value = '';
-    });
-
-    document.getElementById('cerrarUnitType2').addEventListener('click', function (event) {
-        event.preventDefault();
-        document.getElementById('addUnit').value = '';
-        document.getElementById('addCapacity').value = '';
-    });
-
-    document.getElementById('clean-button').addEventListener('click', function (event) {
-        event.preventDefault();
-        limpiar();
-    });
-
-    document.getElementById('unitNumber').addEventListener('blur', function (event) {
-        event.preventDefault();
-        getUnidad();
-    });
-
-    function limpiar() {
-        document.getElementById('unitsForm').reset();
-        document.getElementById('unitType').selectedIndex = 0;
-        document.getElementById('resourceType').selectedIndex = 0;
-        document.getElementById('assignedDriver').selectedIndex = 0;
-        document.getElementById('unitNumber').disabled = false;
-        document.getElementById('unitType').disabled = false;
-        document.getElementById('resourceType').disabled = false;
-        document.getElementById('initialMileage').disabled = false;
-        document.getElementById('clean-button').style.display = 'none';
-        document.getElementById('update-unit-button').disabled = true;
-        document.getElementById('submit-unit-button').disabled = false;
-        document.getElementById('delete-unit-button').disabled = true
-        document.getElementById('capacityBeds').disabled = false;
-    }
-
-    function infoUser() {
-        try {
-            const token = localStorage.getItem('token');
-            const decodedToken = jwt_decode(token);
-            return (decodedToken);
-        } catch (error) {
-            showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
-        }
-    }
-
     const infoUsuario = infoUser();
     const idUsuario = infoUsuario.usuario.IdUsuario;
 
-    async function actualizarCapacidad() {
-        const unitTypes = await getTiposUnidad();
-        const unitTypeSelect = document.getElementById('unitType');
-        const selectedOption = unitTypeSelect.options[unitTypeSelect.selectedIndex].text;
-        const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10) || 0;
-        const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10) || 0;
+    const elements = {
+        unitsForm: document.getElementById('unitsForm'),
+        btnResourceType: document.getElementById('btnResourceType'),
+        cerrarResourceType1: document.getElementById('cerrarResourceType1'),
+        cerrarResourceType2: document.getElementById('cerrarResourceType2'),
+        btnUnitType: document.getElementById('btnUnitType'),
+        cerrarUnitType1: document.getElementById('cerrarUnitType1'),
+        cerrarUnitType2: document.getElementById('cerrarUnitType2'),
+        cleanButton: document.getElementById('clean-button'),
+        unitNumber: document.getElementById('unitNumber'),
+        unitType: document.getElementById('unitType'),
+        capacityChairs: document.getElementById('capacityChairs'),
+        capacityBeds: document.getElementById('capacityBeds'),
+        advance: document.getElementById('advance'),
+        assignedDriver: document.getElementById('assignedDriver'),
+        resourceType: document.getElementById('resourceType'),
+        addResource: document.getElementById('addResource'),
+        addUnit: document.getElementById('addUnit'),
+        addCapacity: document.getElementById('addCapacity'),
+        status: document.getElementById('status'),
+        dekraDate: document.getElementById('dekraDate'),
+        maintenanceMileage: document.getElementById('maintenanceMileage'),
+        periodicity: document.getElementById('periodicity'),
+        initialMileage: document.getElementById('initialMileage'),
+        currentMileage: document.getElementById('currentMileage'),
+        totalCapacity: document.getElementById('totalCapacity')
+    };
 
-        let totalCapacity = 0;
+    elements.unitsForm.addEventListener('submit', handleFormSubmit);
+    elements.btnResourceType.addEventListener('click', handleResourceType);
+    elements.btnUnitType.addEventListener('click', handleUnitType);
+    elements.cleanButton.addEventListener('click', handleCleanButton);
+    elements.unitNumber.addEventListener('blur', handleUnitNumberBlur);
+    elements.unitType.addEventListener('change', updateCapacity);
+    elements.capacityChairs.addEventListener('input', updateCapacity);
+    elements.capacityBeds.addEventListener('input', updateCapacity);
 
-        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
-
-        if (selectedUnitType) {
-            totalCapacity = capacityChairs + (capacityBeds * 2);
-        }
-
-        document.getElementById('totalCapacity').value = totalCapacity;
-    }
-
-    document.getElementById('unitType').addEventListener('change', actualizarCapacidad);
-    document.getElementById('capacityChairs').addEventListener('input', actualizarCapacidad);
-    document.getElementById('capacityBeds').addEventListener('input', actualizarCapacidad);
-
-    document.getElementById('advance').addEventListener('input', function () {
-        let value = this.value.replace('%', '');
-    
-        value = value.replace(/[^0-9]/g, '');
-    
-        if (value !== '') {
-            this.value = value + '%';
-        } else {
-            this.value = '';
-        }
+    elements.advance.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '').concat('%');
     });
-    
-    document.getElementById('advance').addEventListener('focus', function () {
-        let value = this.value.replace('%', '');
+
+    elements.advance.addEventListener('focus', function () {
+        const value = this.value.replace('%', '');
         this.value = value + '%';
         this.setSelectionRange(0, value.length);
     });
-    
-    document.getElementById('advance').addEventListener('blur', function () {
-        let value = this.value.replace('%', '');
-        if (value === '') {
-            this.value = '';
-        } else {
-            this.value = value + '%';
-        }
+
+    elements.advance.addEventListener('blur', function () {
+        const value = this.value.replace('%', '');
+        this.value = value ? value + '%' : '';
     });
-    
-    function getValorAdelanto() {
-        const advanceInput = document.getElementById('advance').value;
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const { id } = event.submitter;
+        if (id === 'submit-unit-button') {
+            postUnit();
+        } else if (id === 'update-unit-button') {
+            putUnit();
+        } else if (id === 'delete-unit-button') {
+            deleteUnit();
+        }
+    }
+
+    function handleResourceType(event) {
+        event.preventDefault();
+        postResourceType();
+    }
+
+    function handleUnitType(event) {
+        event.preventDefault();
+        postUnitType();
+    }
+
+    function handleCleanButton(event) {
+        event.preventDefault();
+        clearForm();
+    }
+
+    function handleUnitNumberBlur(event) {
+        event.preventDefault();
+        getUnit();
+    }
+
+    function clearForm() {
+        elements.unitsForm.reset();
+        elements.unitType.selectedIndex = 0;
+        elements.resourceType.selectedIndex = 0;
+        elements.assignedDriver.selectedIndex = 0;
+        elements.unitNumber.disabled = false;
+        elements.unitType.disabled = false;
+        elements.resourceType.disabled = false;
+        elements.initialMileage.disabled = false;
+        elements.cleanButton.style.display = 'none';
+        document.getElementById('update-unit-button').disabled = true;
+        document.getElementById('submit-unit-button').disabled = false;
+        document.getElementById('delete-unit-button').disabled = true;
+        elements.capacityBeds.disabled = false;
+    }
+
+    function populateSelect(selectElement, items, defaultOptionText, textCallback, valueCallback, filterCallback) {
+        selectElement.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.textContent = defaultOptionText;
+        defaultOption.value = '';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        selectElement.appendChild(defaultOption);
+
+        items.filter(filterCallback || (() => true)).forEach(item => {
+            const option = document.createElement('option');
+            option.textContent = textCallback(item);
+            option.value = valueCallback(item);
+            selectElement.appendChild(option);
+        });
+    }
+
+    function getUnitDataFromForm() {
+        return {
+            numeroUnidad: elements.unitNumber.value.toUpperCase(),
+            idTipoUnidad: parseInt(elements.unitType.value, 10),
+            idTipoRecurso: parseInt(elements.resourceType.value, 10),
+            choferDesignado: parseInt(elements.assignedDriver.value, 10),
+            kilometrajeInicial: parseInt(elements.initialMileage.value, 10),
+            kilometrajeActual: parseInt(elements.currentMileage.value, 10),
+            capacidadSillas: parseInt(elements.capacityChairs.value, 10),
+            capacidadCamas: parseInt(elements.capacityBeds.value, 10),
+            capacidadTotal: parseInt(elements.totalCapacity.value, 10),
+            fechaDekra: new Date(elements.dekraDate.value).toISOString().split('T')[0],
+            idEstado: elements.status.value,
+            tipoFrecuenciaCambio: null,
+            ultimoMantenimientoFecha: null,
+            ultimoMantenimientoKilometraje: elements.maintenanceMileage.value,
+            valorFrecuenciaC: elements.periodicity.value,
+            adelanto: getAdvanceValue(),
+            usuario: idUsuario
+        };
+    }
+
+    function populateForm(unidad) {
+        elements.unitNumber.value = unidad.numeroUnidad;
+        elements.unitType.value = unidad.idTipoUnidad;
+        elements.resourceType.value = unidad.idTipoRecurso;
+        elements.assignedDriver.value = unidad.choferDesignado;
+        elements.initialMileage.value = unidad.kilometrajeInicial;
+        elements.currentMileage.value = unidad.kilometrajeActual;
+        elements.capacityChairs.value = unidad.capacidadSillas;
+        elements.capacityBeds.value = unidad.capacidadCamas;
+        elements.totalCapacity.value = unidad.capacidadTotal;
+        elements.dekraDate.value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
+        elements.status.value = unidad.idEstado;
+        elements.maintenanceMileage.value = unidad.ultimoMantenimientoKilometraje;
+        elements.periodicity.value = unidad.valorFrecuenciaC;
+        elements.advance.value = unidad.adelanto ? unidad.adelanto + '%' : '';
+    }
+
+    async function updateCapacity() {
+        const unitTypes = await getUnitType();
+        const selectedOption = elements.unitType.options[elements.unitType.selectedIndex].text;
+        const capacityChairs = parseInt(elements.capacityChairs.value, 10) || 0;
+        const capacityBeds = parseInt(elements.capacityBeds.value, 10) || 0;
+
+        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
+        const totalCapacity = selectedUnitType ? capacityChairs + (capacityBeds * 2) : 0;
+
+        elements.totalCapacity.value = totalCapacity;
+    }
+
+    function getAdvanceValue() {
+        const advanceInput = elements.advance.value;
         return parseInt(advanceInput.replace('%', ''), 10);
     }
 
-    async function getChoferesSelect() {
+    async function getDrivers() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
@@ -151,39 +187,25 @@
                 }
             });
 
-            const choferes = response.data.choferes;
-
-            const assignedDriver = document.getElementById('assignedDriver');
-            assignedDriver.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar chofer';
-            defaultOption.selected = true;
-            defaultOption.disabled = true;
-            assignedDriver.appendChild(defaultOption);
-
+            const choferes = response.data.choferes ;
             choferes.sort((a, b) => {
-                const nombreA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toLowerCase();
-                const nombreB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toLowerCase();
-                return nombreA.localeCompare(nombreB);
-            });
-
-            choferes.forEach(chofer => {
-                if (chofer.estadoChofer === "Activo") {
-                    const option = document.createElement('option');
-                    option.value = chofer.idChofer;
-                    option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
-                    assignedDriver.appendChild(option);
+                const nameA = `${a.nombre} ${a.apellido1} ${a.apellido2}`.toUpperCase();
+                const nameB = `${b.nombre} ${b.apellido1} ${b.apellido2}`.toUpperCase();
+                if (nameA < nameB) {
+                    return -1;
                 }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
             });
-
+            populateSelect(elements.assignedDriver, choferes, 'Seleccionar chofer', chofer => `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`, chofer => chofer.idChofer, chofer => chofer.estadoChofer === "Activo");
         } catch (error) {
             showToast('Error', 'Error al obtener los choferes.');
         }
     }
 
-    async function getTiposRecursoSelect() {
+    async function getResourceTypeSelect() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
@@ -193,29 +215,13 @@
             });
 
             const tiposRecurso = response.data.tiporecurso;
-
-            const resourceType = document.getElementById('resourceType');
-            resourceType.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar tipo de recurso';
-            defaultOption.selected = true;
-            defaultOption.disabled = true;
-            resourceType.appendChild(defaultOption);
-
-            tiposRecurso.forEach(recurso => {
-                const option = document.createElement('option');
-                option.value = recurso.idTipoRecurso;
-                option.textContent = recurso.recurso;
-                resourceType.appendChild(option);
-            });
+            populateSelect(elements.resourceType, tiposRecurso, 'Seleccionar tipo de recurso', recurso => recurso.recurso, recurso => recurso.idTipoRecurso);
         } catch (error) {
             showToast('Error', 'Error al obtener los tipos de recurso.');
         }
     }
 
-    async function getTiposUnidadSelect() {
+    async function getUnitTypeSelect() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
@@ -223,30 +229,15 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
+
             const tiposUnidad = response.data.tipounidad;
-
-            const unitType = document.getElementById('unitType');
-            unitType.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccionar tipo de unidad';
-            defaultOption.selected = true;
-            defaultOption.disabled = true;
-            unitType.appendChild(defaultOption);
-
-            tiposUnidad.forEach(unidad => {
-                const option = document.createElement('option');
-                option.value = unidad.idTipoUnidad;
-                option.textContent = unidad.tipo;
-                unitType.appendChild(option);
-            });
+            populateSelect(elements.unitType, tiposUnidad, 'Seleccionar tipo de unidad', unidad => unidad.tipo, unidad => unidad.idTipoUnidad);
         } catch (error) {
             showToast('Error', 'Error al obtener los tipos de unidad.');
         }
     }
 
-    async function getUnidades() {
+    async function getUnits() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
@@ -256,14 +247,13 @@
             });
 
             return response.data.unidades;
-
         } catch (error) {
             showToast('Error', 'Error al obtener las unidades.');
             return [];
         }
     }
 
-    async function getTiposUnidad() {
+    async function getUnitType() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoUnidad', {
@@ -273,14 +263,14 @@
             });
 
             return response.data.tipounidad;
-
         } catch (error) {
             showToast('Error', 'Error al obtener el tipo de unidad.');
         }
     }
 
-    async function getUnidad() {
-        const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
+    async function getUnit() {
+        const unitNumber = elements.unitNumber.value.toUpperCase();
+        if (!unitNumber) return;
 
         try {
             const token = localStorage.getItem('token');
@@ -290,339 +280,69 @@
                 }
             });
 
-            const unidad = response.data.unidades;
-
-            if (unitNumber !== '') {
-                unidad.forEach(unidad => {
-                    if (unidad.idEstado !== 5) {
-                        document.getElementById('unitNumber').value = unidad.numeroUnidad;
-                        document.getElementById('unitType').value = unidad.idTipoUnidad;
-                        document.getElementById('resourceType').value = unidad.idTipoRecurso;
-                        document.getElementById('initialMileage').value = unidad.kilometrajeInicial;
-                        document.getElementById('currentMileage').value = unidad.kilometrajeActual;
-                        document.getElementById('status').value = unidad.idEstado;
-                        document.getElementById('dekraDate').value = new Date(unidad.fechaDekra).toISOString().split('T')[0];
-                        document.getElementById('maintenanceMileage').value = unidad.ultimoMantenimientoKilometraje;
-                        document.getElementById('assignedDriver').value = unidad.choferDesignado;
-                        document.getElementById('capacityChairs').value = unidad.capacidadSillas;
-                        document.getElementById('capacityBeds').value = unidad.capacidadCamas;
-                        document.getElementById('totalCapacity').value = unidad.capacidadTotal;
-                        document.getElementById('periodicity').value = unidad.valorFrecuenciaC;
-                        document.getElementById('advance').value = unidad.adelanto + '%';
-
-                        document.getElementById('unitNumber').disabled = true;
-                        document.getElementById('unitType').disabled = true;
-                        document.getElementById('resourceType').disabled = true;
-                        document.getElementById('initialMileage').disabled = true;
-                        document.getElementById('clean-button').style.display = 'inline-block';
-                        document.getElementById('update-unit-button').disabled = false;
-                        document.getElementById('delete-unit-button').disabled = false;
-                        document.getElementById('submit-unit-button').disabled = true;
-                    }
-                });
+            const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === unitNumber);
+            if (unidad && unidad.idEstado !== 5) {
+                populateForm(unidad);
+                elements.unitNumber.disabled = true;
+                elements.unitType.disabled = true;
+                elements.resourceType.disabled = true;
+                elements.initialMileage.disabled = true;
+                elements.cleanButton.style.display = 'inline-block';
+                document.getElementById('update-unit-button').disabled = false;
+                document.getElementById('submit-unit-button').disabled = true;
+                document.getElementById('delete-unit-button').disabled = false;
+                elements.capacityBeds.disabled = false;
             }
-
         } catch (error) {
-            showToast('Error', 'Error al obtener la unidad.');
+            clearForm();
+            showToast('Error', 'Error al obtener los datos de la unidad.');
         }
     }
 
-    async function postTipoRecurso() {
-        const tipoRecurso = document.getElementById('addResource').value.toUpperCase();
+    async function postUnit() {
+        const data = getUnitDataFromForm();
 
-        const token = localStorage.getItem('token');
-        const recursos = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        if (await validateForm(data)) return;
 
-        const recursoExistente = recursos.data.tiporecurso.find(recurso => recurso.recurso === tipoRecurso);
-
-        if (tipoRecurso === '') {
-            showToast('Error', 'El campo no puede estar vacío.');
-            return;
-        }
-
-        if (recursoExistente) {
-            showToast('Error', `El tipo de recurso "${tipoRecurso}" ya se encuentra registrado.`);
-            return;
-        }
-
-        const recursoData = {
-            recurso: tipoRecurso
-        };
-
-        axios.post('https://backend-transporteccss.onrender.com/api/tipoRecurso', recursoData, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                $('#addResourceModal').modal('hide');
-                document.getElementById('addResource').value = '';
-                showToast('Registro exitoso', 'El registro del tipo de recurso "' + tipoRecurso + '" se ha realizado exitosamente.');
-                getTiposRecursoSelect();
-            })
-            .catch(error => {
-                showToast('Error', 'Error al crear el tipo de recurso.');
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('https://backend-transporteccss.onrender.com/api/unidades', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
+
+            showToast('Éxito', `La unidad "${data.numeroUnidad}" ha sido registrada exitosamente.`);
+            clearForm();
+        } catch (error) {
+            showToast('Error', 'Error al registrar la unidad.');
+        }
     }
 
-    async function postTipoUnidad() {
-        const tipoUnidad = document.getElementById('addUnit').value.toUpperCase();
-        const capacidad = document.getElementById('addCapacity').value;
+    async function putUnit() {
+        const data = getUnitDataFromForm();
+        const unitNumber = elements.unitNumber.value.toUpperCase();
 
-        const token = localStorage.getItem('token');
-        const unidades = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        if (await validateForm(data)) return;
 
-        const unidadExistente = unidades.data.tipounidad.find(unidad => unidad.tipo === tipoUnidad);
-
-        if (tipoUnidad === '' || capacidad === '') {
-            showToast('Error', 'Los campos no pueden estar vacíos.');
-            return;
-        }
-
-        if (unidadExistente) {
-            showToast('Error', `El tipo de unidad "${tipoUnidad}" ya se encuentra registrado.`);
-            return;
-        }
-
-        if (capacidad <= 0) {
-            showToast('Error', 'La capacidad de la unidad no puede ser menor ó igual a 0.');
-            return;
-        }
-
-        const unidadData = {
-            tipo: tipoUnidad,
-            capacidad: capacidad
-        };
-
-        axios.post('https://backend-transporteccss.onrender.com/api/tipoUnidad', unidadData, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                $('#addUnitModal').modal('hide');
-                document.getElementById('addUnit').value = '';
-                document.getElementById('addCapacity').value = '';
-                showToast('Éxito', 'El registro del tipo de unidad "' + tipoUnidad + '" se ha realizado exitosamente.');
-                getTiposUnidadSelect();
-            })
-            .catch(error => {
-                showToast('Error', 'Error al crear el tipo de unidad.');
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
+
+            showToast('Éxito', `La unidad "${unitNumber}" ha sido actualizada exsitosamente.`);
+            clearForm();
+        } catch (error) {
+            showToast('Error', 'Error al actualizar la unidad.');
+        }
     }
 
-    async function postUnidad() {
-        const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
-        const unitType = parseInt(document.getElementById('unitType').value, 10);
-        const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-        const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-        const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-        const status = parseInt(document.getElementById('status').value, 10);
-        const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-        const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-        const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-        const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
-        const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-        const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
-        const periodicity = parseInt(document.getElementById('periodicity').value, 10);
-        const advance = getValorAdelanto();
-
-        if (currentMileage < initialMileage) {
-            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
-            return;
-        }
-
-        if (maintenanceMileage !== null && maintenanceMileage > currentMileage) {
-            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
-            return;
-        }
-
-        if (advance < 20) {
-            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
-            return;
-        }
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (new Date(dekraDate) < today) {
-            showToast('Error', 'La fecha DEKRA puede ser anterior a la fecha de hoy.');
-            return;
-        }
-
-        const unitTypes = await getTiposUnidad();
-        const unitTypeSelect = document.getElementById('unitType');
-        const selectedOption = unitTypeSelect.options[unitTypeSelect.selectedIndex].text;
-        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
-
-        if (selectedUnitType && totalCapacity > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad "${selectedUnitType.tipo}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
-            return;
-        }
-
-        const unidades = await getUnidades();
-        const assignedDriverUnits = unidades.find(unidad => unidad.choferDesignado === driver);
-        const unitAlreadyExists = unidades.find(unidad => unidad.numeroUnidad === unitNumber);
-
-        if (assignedDriverUnits) {
-            showToast('Error', `El chofer seleccionado ya está asignado a otra unidad.`);
-            return;
-        }
-
-        if (unitAlreadyExists) {
-            showToast('Error', `La unidad "${unitNumber}" ya se encuentra registrada.`);
-            return;
-        }
-
-        const unidadData = {
-            idTipoUnidad: unitType,
-            idTipoRecurso: resourceType,
-            tipoFrecuenciaCambio: null,
-            ultimoMantenimientoFecha: null,
-            ultimoMantenimientoKilometraje: maintenanceMileage,
-            numeroUnidad: unitNumber,
-            choferDesignado: driver,
-            fechaDekra: dekraDate,
-            capacidadTotal: totalCapacity,
-            capacidadCamas: capacityBeds,
-            capacidadSillas: capacityChairs,
-            kilometrajeInicial: initialMileage,
-            kilometrajeActual: currentMileage,
-            adelanto: advance,
-            idEstado: status,
-            valorFrecuenciaC: periodicity,
-            usuario: idUsuario
-        };
-
-        const token = localStorage.getItem('token');
-        axios.post('https://backend-transporteccss.onrender.com/api/unidades', unidadData, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                limpiar();
-                showToast('Éxito', 'El registro de la unidad "' + unitNumber + '" se ha realizado exitosamente.');
-            })
-            .catch(error => {
-                showToast('Error', 'Error al crear la unidad.');
-            });
-    }
-
-    async function putUnidad() {
-        const unitTypes = await getTiposUnidad();
-        const unitTypeSelect = document.getElementById('unitType');
-        const selectedOption = unitTypeSelect.options[unitTypeSelect.selectedIndex].text;
-        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
-        const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
-        const unitType = parseInt(document.getElementById('unitType').value, 10);
-        const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-        const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-        const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-        const status = parseInt(document.getElementById('status').value, 10);
-        const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-        const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-        const driverName = document.getElementById('assignedDriver').options[document.getElementById('assignedDriver').selectedIndex].text;
-        const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-        const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
-        const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-        const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
-        const periodicity = parseInt(document.getElementById('periodicity').value, 10);
-        const advance = getValorAdelanto();
-
-        if (currentMileage < initialMileage) {
-            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
-            return;
-        }
-
-        if (maintenanceMileage !== null && maintenanceMileage > currentMileage) {
-            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
-            return;
-        }
-
-        if (advance < 20) {
-            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
-            return;
-        }
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (new Date(dekraDate) < today) {
-            showToast('Error', 'La fecha DEKRA puede ser anterior a la fecha de hoy.');
-            return;
-        }
-
-        if (selectedUnitType && totalCapacity > selectedUnitType.capacidad) {
-            showToast('Error', `La capacidad total de la unidad "${selectedUnitType.tipo}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
-            return;
-        }
-
-        const unidades = await getUnidades();
-        const assignedDriverUnits = unidades.find(unidad => unidad.choferDesignado === driver);
-
-        if (assignedDriverUnits && assignedDriverUnits.numeroUnidad !== unitNumber) {
-            showToast('Error', `El chofer ${driverName} ya está asignado a otra unidad.`);
-            return;
-        }
-
-        const unidadData = {
-            idTipoUnidad: unitType,
-            idTipoRecurso: resourceType,
-            tipoFrecuenciaCambio: null,
-            ultimoMantenimientoFecha: null,
-            ultimoMantenimientoKilometraje: maintenanceMileage,
-            numeroUnidad: unitNumber,
-            choferDesignado: driver,
-            fechaDekra: dekraDate,
-            capacidadTotal: totalCapacity,
-            capacidadCamas: capacityBeds,
-            capacidadSillas: capacityChairs,
-            kilometrajeInicial: initialMileage,
-            kilometrajeActual: currentMileage,
-            adelanto: advance,
-            idEstado: status,
-            valorFrecuenciaC: periodicity,
-            usuario: idUsuario
-        };
-
-        const token = localStorage.getItem('token');
-        axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                limpiar();
-                showToast('Éxito', 'La unidad "' + unitNumber + '" se ha actualizado exitosamente.');
-            })
-            .catch(error => {
-                showToast('Error', 'Error al actualizar la unidad.');
-            });
-    }
-
-    async function deleteUnidad() {
-        const unitNumber = document.getElementById('unitNumber').value.toUpperCase();
-        const unitType = parseInt(document.getElementById('unitType').value, 10);
-        const resourceType = parseInt(document.getElementById('resourceType').value, 10);
-        const initialMileage = parseInt(document.getElementById('initialMileage').value, 10);
-        const currentMileage = parseInt(document.getElementById('currentMileage').value, 10);
-        const dekraDate = new Date(document.getElementById('dekraDate').value).toISOString().split('T')[0];
-        const driver = parseInt(document.getElementById('assignedDriver').value, 10);
-        const capacityChairs = parseInt(document.getElementById('capacityChairs').value, 10);
-        const capacityBeds = parseInt(document.getElementById('capacityBeds').value, 10);
-        const totalCapacity = parseInt(document.getElementById('totalCapacity').value, 10);
-        const maintenanceMileage = parseInt(document.getElementById('maintenanceMileage').value, 10) || null;
-        const periodicity = parseInt(document.getElementById('periodicity').value, 10);
-        const advance = getValorAdelanto();
+    async function deleteUnit() {
+        const data = getUnitDataFromForm();
+        const unitNumber = elements.unitNumber.value.toUpperCase();
 
         const confirmationMessage = document.getElementById('deleteConfirmationMessage');
         confirmationMessage.innerText = `¿Está seguro que desea eliminar la unidad "${unitNumber}"?`;
@@ -630,50 +350,175 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteUnitModal'));
         deleteModal.show();
 
-        const unidadData = {
-            idTipoUnidad: unitType,
-            idTipoRecurso: resourceType,
-            tipoFrecuenciaCambio: null,
-            ultimoMantenimientoFecha: null,
-            ultimoMantenimientoKilometraje: maintenanceMileage,
-            numeroUnidad: unitNumber,
-            choferDesignado: driver,
-            fechaDekra: dekraDate,
-            capacidadTotal: totalCapacity,
-            capacidadCamas: capacityBeds,
-            capacidadSillas: capacityChairs,
-            kilometrajeInicial: initialMileage,
-            kilometrajeActual: currentMileage,
-            adelanto: advance,
-            idEstado: 5,
-            valorFrecuenciaC: periodicity,
-            usuario: idUsuario
-        };
+        document.getElementById('confirmDelete').onclick = async function () {
+            try {
+                const token = localStorage.getItem('token');
+                data.idEstado = 5;
+                await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, data, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-        document.getElementById('confirmDelete').onclick = function () {
-            showToast('Cargando', 'Eliminando registro de unidad...');
+                showToast('Éxito', `La unidad "${unitNumber}" ha sido eliminada exitosamente.`);
+                clearForm();
+                deleteModal.hide();
+            } catch (error) {
+                showToast('Error', 'Error al eliminar la unidad.');
+            }
+        }
+    }
+
+    async function checkResourceType(tipoRecurso) {
+        try {
             const token = localStorage.getItem('token');
-            axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, unidadData, {
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            })
-                .then(response => {
-                    limpiar();
-                    showToast('Éxito', 'La unidad "' + unitNumber + '" se ha eliminado exitosamente.');
-                })
-                .catch(error => {
-                    showToast('Error', 'Error al eliminar la unidad.');
-                });
+            });
 
-            deleteModal.hide();
-        };
+            const tiposRecurso = response.data.tiporecurso;
+            return tiposRecurso.some(recurso => recurso.recurso === tipoRecurso);
+        } catch (error) {
+            showToast('Error', 'Error al verificar el tipo de recurso.');
+            return false;
+        }
     }
 
-    getTiposUnidad();
-    getTiposRecursoSelect();
-    getTiposUnidadSelect();
-    getChoferesSelect();
-    getChoferesSelect();
+    async function postResourceType() {
+        const data = { recurso: elements.addResource.value.toUpperCase() };
+        const recursoExistente = await checkResourceType(data.recurso);
+
+        if (data.recurso === '') {
+            showToast('Error', 'El campo no puede estar vacío.');
+            return;
+        }
+
+        if (recursoExistente) {
+            showToast('Error', `El tipo de recurso "${data.recurso}" ya se encuentra registrado.`);
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('https://backend-transporteccss.onrender.com/api/tiporecurso', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            showToast('Éxito', `El tipo de recurso "${data.recurso}" ha sido registrado exitosamente.`);
+            getResourceTypeSelect();
+            $('#addResourceModal').modal('hide');
+            elements.addResource.value = '';
+        } catch (error) {
+            showToast('Error', 'Error al registrar el tipo de recurso.');
+        }
+    }
+
+    async function checkUnitType(tipoUnidad) {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const tiposUnidad = response.data.tipounidad;
+            return tiposUnidad.some(unidad => unidad.tipo === tipoUnidad);
+        } catch (error) {
+            showToast('Error', 'Error al verificar el tipo de unidad.');
+            return false;
+        }
+    }
+
+    async function postUnitType() {
+        const data = {
+            tipo: elements.addUnit.value.toUpperCase(),
+            capacidad: elements.addCapacity.value
+        };
+        const unidadExistente = await checkUnitType(data.tipo);
+        
+        if (data.tipo === '' || data.capacidad === '') {
+            showToast('Error', 'Los campos no pueden estar vacíos.');
+            return;
+        }
+
+        if (unidadExistente) {
+            showToast('Error', `El tipo de unidad "${data.tipo}" ya se encuentra registrado.`);
+            return;
+        }
+
+        if (data.capacidad < 1) {
+            showToast('Error', 'La capacidad de la unidad debe ser mayor que 0.');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('https://backend-transporteccss.onrender.com/api/tipounidad', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            showToast('Éxito', `El tipo de unidad "${data.tipo}" ha sido registrado exitosamente.`);
+            getUnitTypeSelect();
+            $('#addUnitModal').modal('hide');
+            elements.addUnit.value = '';
+            elements.addCapacity.value = '';
+        } catch (error) {
+            showToast('Error', 'Error al registrar el tipo de unidad.');
+        }
+    }
+
+    async function validateForm(data) {
+        const unidades = await getUnits();
+        const unidadYChofer = unidades.find(unidad => unidad.choferDesignado === data.choferDesignado);
+        const selectedChofer = elements.assignedDriver.options[elements.assignedDriver.selectedIndex].text;
+        const unitTypes = await getUnitType();
+        const selectedOption = elements.unitType.options[elements.unitType.selectedIndex].text;
+        const selectedUnitType = unitTypes.find(unit => unit.tipo === selectedOption);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (unidadYChofer && unidadYChofer.numeroUnidad !== data.numeroUnidad) {
+            showToast('Error', `El chofer "${selectedChofer}" ya está asignado a otra unidad.`);
+            return true;
+        }
+
+        if (data.kilometrajeActual < data.kilometrajeInicial) {
+            showToast('Error', 'El kilometraje actual no puede ser inferior al kilometraje inicial.');
+            return true;
+        }
+
+        if (selectedUnitType && data.capacidadTotal > selectedUnitType.capacidad) {
+            showToast('Error', `La capacidad total de una unidad de tipo "${selectedOption}" no puede ser mayor que ${selectedUnitType.capacidad}.`);
+            return true;
+        }
+
+        if (data.ultimoMantenimientoKilometraje !== null && data.ultimoMantenimientoKilometraje > data.kilometrajeActual) {
+            showToast('Error', 'El último kilometraje de mantenimiento no puede ser superior al kilometraje actual.');
+            return true;
+        }
+
+        if (data.adelanto < 20) {
+            showToast('Error', 'El adelanto del mantenimiento no puede ser inferior al 20%.');
+            return true;
+        }
+
+        if (new Date(data.fechaDekra) < today) {
+            showToast('Error', 'La fecha de DEKRA no puede ser anterior a la fecha de hoy.');
+            return true;
+        }
+
+        return false;
+    }
+
+    getDrivers();
+    getResourceTypeSelect();
+    getUnitTypeSelect();
 
 })();
