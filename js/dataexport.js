@@ -55,7 +55,7 @@ async function exportToExcel(tableId, page) {
         alignment: { horizontal: 'left', vertical: 'middle' }
     };
 
-    // Añadir una imagen (logo) a la derecha
+    // Añadir una imagen (logo) a la izquierda
     const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
     const logoResponse = await fetch(logoUrl);
     const logoBuffer = await logoResponse.arrayBuffer();
