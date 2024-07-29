@@ -1,6 +1,6 @@
 async function modificarPDF() {
     try {
-        const pdfUrl = 'reporte.pdf'; 
+        const pdfUrl = 'reporte.pdf';
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -81,20 +81,20 @@ async function modificarPDF() {
             return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
         });
 
-        
+
         const fromDateInput = document.getElementById('from');
         const [year, month, day] = fromDateInput.value.split('-').map(Number);
 
-        const fromDateValue = new Date(year, month - 1, day); 
+        const fromDateValue = new Date(year, month - 1, day);
 
         const adjustedFromDateE = new Date(fromDateValue);
         adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
 
         const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthNumber = fromDateValue.getMonth() + 1;
         const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
 
-    
+
 
         const firstPage = pdfDoc.getPages()[0];
         const { width, height } = firstPage.getSize();
@@ -375,7 +375,7 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-    
+
 
         const pdfBytes = await pdfDoc.save();
         const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
@@ -440,13 +440,13 @@ async function modificarExcel() {
         const fromDateInput = document.getElementById('from');
         const [year, month, day] = fromDateInput.value.split('-').map(Number);
 
-        const fromDateValue = new Date(year, month - 1, day); 
+        const fromDateValue = new Date(year, month - 1, day);
 
         const adjustedFromDateE = new Date(fromDateValue);
         adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
 
         const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthNumber = fromDateValue.getMonth() + 1;
         const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
 
         const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
@@ -494,8 +494,8 @@ async function modificarExcel() {
         // Obtener la primera hoja del libro
         const worksheet = workbook.getWorksheet(1);
 
-        
-    // Especificar celdas para los datos
+
+        // Especificar celdas para los datos
         //YA COLOCADOS COLUMNA TOTAL
 
         const cellGasolinaLitros = 'G18';
@@ -534,7 +534,7 @@ async function modificarExcel() {
         // Agregar datos a las celdas especificadas
 
         //YA COLOCADOS COLUMNA TOTAL
-        
+
         worksheet.getCell(cellGasolinaLitros).value = gasolinaLitros;
         worksheet.getCell(cellDieselLitros).value = dieselLitros;
         worksheet.getCell(cellGasolinaKilometraje).value = gasolinaKilometraje;
@@ -546,7 +546,7 @@ async function modificarExcel() {
 
 
         //YA COLOCADOS COLUMNA GENERAL
-        
+
         worksheet.getCell(cellGasolinaLitros2).value = gasolinaLitros;
         worksheet.getCell(cellDieselLitros2).value = dieselLitros;
         worksheet.getCell(cellGasolinaKilometraje2).value = gasolinaKilometraje;
@@ -565,17 +565,17 @@ async function modificarExcel() {
         worksheet.getCell(cellAno).value = yearValue;
         worksheet.getCell(cellMes).value = monthNameCapitalized;
 
-        
+
         // worksheet.getCell(cellFechaCreacion).value = fechaCreacionString;
         // worksheet.getCell(cellHoraCreacion).value = horaCreacionString;
 
         // Aplicar estilo a las celdas
         const cellsToStyle = [
-            cellPacientes, cellGasolinaLitros, cellDieselLitros, 
-            cellGasolinaKilometraje, cellDieselKilometraje, 
-            cellValesFiltrados, cellTotalFuncionariosPacientes, 
+            cellPacientes, cellGasolinaLitros, cellDieselLitros,
+            cellGasolinaKilometraje, cellDieselKilometraje,
+            cellValesFiltrados, cellTotalFuncionariosPacientes,
             cellAno, cellMes, cellNumeroMes, cellTotalFuncionarios,
-            
+
             // cellFechaCreacion, cellHoraCreacion
         ];
 
@@ -583,10 +583,10 @@ async function modificarExcel() {
             const cell = worksheet.getCell(cellAddress);
             cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 8 };
             cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' }
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
             };
             cell.alignment = { horizontal: 'center' };
         });
@@ -604,6 +604,55 @@ async function modificarExcel() {
     }
 }
 
+async function exportarVale() {
+    try {
+        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales`);
+        const datosVale = response.data;
 
-   
+        if (!datosVale) {
+            alert('No se encontró el vale con el ID especificado');
+            return;
+        }
+
+        const responseExcel = await fetch('ReporteVale.xlsx');
+        if (!responseExcel.ok) {
+            throw new Error('No se pudo descargar el archivo Excel');
+        }
+
+        const arrayBuffer = await responseExcel.arrayBuffer();
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+        const worksheet = workbook.getWorksheet(1);
+
+
+        worksheet.getCell('B8:C8').value = datosVale.Fecha_Solicitud;
+        worksheet.getCell('K8').value = datosVale.IdUnidadProgramatica;
+        worksheet.getCell('K8').value = datosVale.NombreUnidadProgramatica;
+        worksheet.getCell('I12:J12:K12').value = datosVale.Acompanante1;
+        worksheet.getCell('I13:J13:K13').value = datosVale.Acompanante2;
+        worksheet.getCell('I14:J14:K14').value = datosVale.Acompanante3;
+        worksheet.getCell('I15:J15:K15').value = datosVale.Acompanante4;
+        worksheet.getCell('I16:J16:K16').value = datosVale.Acompanante5;
+        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = datosVale.NombreMotivo;
+        worksheet.getCell('G17:H17:I17:J17:K17').value = datosVale.NombreSolicitante;
+        worksheet.getCell('H18:I18:J18:K18').value = datosVale.Detalle;
+        worksheet.getCell('G25').value = datosVale.Hora_Salida;
+        worksheet.getCell('C25:D25:E25').value = datosVale.Fecha_Solicitud;
+
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Vale.xlsx';
+        link.click();
+    } catch (error) {
+        console.error("Error al exportar el archivo Excel:", error);
+        alert("Hubo un error al exportar el archivo Excel. Por favor, intente de nuevo.");
+    }
+}
+
+
+
+
 
