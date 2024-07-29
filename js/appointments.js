@@ -256,7 +256,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const prioridadCheckbox = document.getElementById('prelacion');
             const camilla = camillaCheckbox.checked ? 'Requerido' : 'No requerido';
             const prioridad = prioridadCheckbox.checked ? 'Alta' : 'Baja';
-            const condicionCita = document.getElementById('condicion').value;
             const salida = document.getElementById('origen').value;
 
             const citaData = {
@@ -268,7 +267,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "ubicacionOrigen": ubicacionOrigen,
                 "camilla": camilla,
                 "prioridad": prioridad,
-                "condicionCita": condicionCita,
+                "condicionCita": "",
                 "tipoSeguro": tipoSeguro,
                 "diagnostico": diagnostico,
                 "fechaCita": fechaCita,

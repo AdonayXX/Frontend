@@ -29,35 +29,37 @@
                     aria-describedby="basic-addon1">
             </div>
         </div>
-        <div class="row" style="justify-content: center; text-align: center">
-            <!-- unidad -->
+        <div class="row justify-content-between align-items-center">
+            <!-- Unidad -->
             <div class="col-md-4 mb-3">
                 <label for="unidadFiltro" class="form-label">Unidad:</label>
                 <select required id="unidadFiltro" name="unidadFiltro" class="form-select">
                     <option selected disabled value="">Seleccionar</option>
                 </select>
             </div>
-            <!-- fechaMantenimiento -->
+            <!-- Fecha Mantenimiento -->
             <div class="col-md-4 mb-3">
-                <label for="fechaMantenimientoFiltro" class="form-label">Fecha de
-                    mantenimiento:</label>
-                <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro"
-                    class="form-control date-input">
+                <label for="fechaMantenimientoFiltro" class="form-label">Fecha de mantenimiento:</label>
+                <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro" class="form-control date-input">
+            </div>
+            <!-- Botón -->
+            <div class="col-md-4 mb-3 d-flex justify-content-end lign-items-end mt-4">
+                <button class="btn btn-success bi bi-plus " id="maintenancebtn" data-bs-toggle="modal" data-bs-placement="top" data-bs-target="#maintenanceModal">
+                    Agregar Mantenimiento
+                </button>
             </div>
         </div>
         <!-- Botón para abrir modal de tareas -->
-        <div class="d-flex  justify-content-end mb-3">
-
-
-
-
-            <button class="btn btn-success bi bi-plus mx-4" id="maintenancebtn" data-bs-toggle="modal"
-                data-bs-placement="top" data-bs-target="#maintenanceModal">
-                Agregar Mantenimiento
+      
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a PDF">
+                <img src="img/icons8-pdf.svg" alt="PDF Icon">
             </button>
-
-
-
+            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Exportar a Excel">
+                <img src="img/icons8-excel.svg" alt="Excel Icon">
+            </button>
         </div>
         <!-- Tabla de mantenimiento -->
         <div class="table-responsive-xxl mt-3">
@@ -73,7 +75,7 @@
                         <th class="text-center" id="color-th">Observación</th>
                         <th class="text-center" id="color-th">Descripción</th>
                         <th class="text-center" id="color-th">Cantidad</th>
-                        <th class="text-center" id="color-th">Unidad Medida</th>
+                        <th class="text-center" id="color-th">(Km) Mantenimiento</th>
                         <th class="text-center" id="color-th">Estado</th>
                         <th class="text-center" id="color-th">Acciones</th>
 
@@ -427,6 +429,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade mt-5" id="modalobservaciones" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Observación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyObservation" class="flex justify-content-center text-center">
+                    
+                    <!-- Aqui va la Observacion -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
