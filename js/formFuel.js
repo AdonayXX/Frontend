@@ -2,6 +2,20 @@
 
 (async function () {
 
+    function obtainHourandDate() {
+        const fechaInput = document.getElementById('fecha');
+        const horaInput = document.getElementById('hora');
+
+        const now = new Date();
+        const fechaActual = now.toISOString().split('T')[0];
+        const horaActual = now.toTimeString().split(' ')[0].slice(0, 5); 
+
+        fechaInput.value = fechaActual;
+        horaInput.value = horaActual;
+    }
+    obtainHourandDate();
+
+
     document.getElementById('fuelForm').addEventListener('submit', function (event) {
         if (event.submitter.id === 'btnGuardar') {
             showToast('Cargando', 'Guardando registro de combustible...');
