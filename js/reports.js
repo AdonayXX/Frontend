@@ -606,25 +606,43 @@ async function modificarExcel() {
 
 async function exportarVale() {
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales`);
-        const datosVale = response.data;
+        // Obtener el ID del vale desde un input en el HTML
+        const idVale = document.getElementById('idVale').value;
+
+        let datosVale;
+        try {
+            // Obtener el vale específico por ID
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            datosVale = response.data;
+        } catch (apiError) {
+            console.error("Error al obtener el vale desde la API:", apiError);
+            alert("Hubo un error al obtener los datos del vale. Por favor, intente de nuevo.");
+            return;
+        }
 
         if (!datosVale) {
             alert('No se encontró el vale con el ID especificado');
             return;
         }
 
-        const responseExcel = await fetch('ReporteVale.xlsx');
+        console.log('Datos del vale:', datosVale);
+
+        // Descargar el archivo Excel
+        const responseExcel = await fetch('reporteria/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
         }
 
         const arrayBuffer = await responseExcel.arrayBuffer();
+        console.log('Archivo Excel descargado con éxito');
+
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
+        console.log('Archivo Excel cargado en ExcelJS');
+
         const worksheet = workbook.getWorksheet(1);
 
-
+        // Llenar los datos del vale en el archivo Excel
         worksheet.getCell('B8:C8').value = datosVale.Fecha_Solicitud;
         worksheet.getCell('K8').value = datosVale.IdUnidadProgramatica;
         worksheet.getCell('K8').value = datosVale.NombreUnidadProgramatica;
@@ -639,7 +657,7 @@ async function exportarVale() {
         worksheet.getCell('G25').value = datosVale.Hora_Salida;
         worksheet.getCell('C25:D25:E25').value = datosVale.Fecha_Solicitud;
 
-
+        // Generar el archivo Excel
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -651,6 +669,7 @@ async function exportarVale() {
         alert("Hubo un error al exportar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
+
 
 
 
