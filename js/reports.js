@@ -401,6 +401,8 @@ async function modificarPDF() {
     }
 }
 
+// Excel
+
 async function modificarExcel() {
     try {
         const fromDate = new Date(document.getElementById('from').value);
@@ -604,6 +606,8 @@ async function modificarExcel() {
     }
 }
 
+
+//MANTEMIENTO DE LOS REPORTES
 
    
 
