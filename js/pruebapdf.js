@@ -137,7 +137,7 @@
 //             console.error("Error al obtener datos desde la API o al generar el PDF:", error)
 //         );
 // });
-// EXPORTAR A LA TABLA DE CITAS
+// EXPORTAR CITAS
 // function exportToPDF() {
 //     const token = localStorage.getItem('token');
 
