@@ -35,7 +35,7 @@
 
             // Configurar DataTables y eventos de cambio
             setupDataTable();
-            // ocultarSpinner();
+             ocultarSpinner();
         } catch (error) {
             console.error(error);
         }
@@ -85,6 +85,7 @@
                 const row = document.createElement("tr");
 
                 row.innerHTML = `
+                 <td>${atapItem.IdMantenimientoATAP || ''}</td>
                 <td>${formatDateBd(atapItem.FechaMantenimiento) || ''}</td>
                 <td>${atapItem.NombreChofer || ''}</td>
                 <td>${atapItem.numeroUnidad || ''}</td>
@@ -93,7 +94,7 @@
                 <td class='text-center'>${(atapItem.KilometrosEntrada - atapItem.KilometrosSalida) || ''}</td>
                 <td class='actions'>
                     <button class='btn btn-outline-primary btn-sm' id='btnEditAtap' onclick='editAtap(${JSON.stringify(atapItem)})'><i class='bi bi-pencil'></i></button>
-                    <button class='btn btn-outline-danger btn-sm' onclick='deleteAtap(${atapItem.IdMantenimientoATAP})'><i class='bi bi-trash'></i></button>
+                    <button class='btn btn-outline-danger btn-sm' onclick='deleteAtap(${JSON.stringify(atapItem)})'><i class='bi bi-trash'></i></button>
                 </td>
             `;
 
@@ -216,11 +217,11 @@
 
             const response = await axios.put(API_URL, atapData, { headers });
 
-            showToast('Éxito!', 'Mantenimiento actualizado correctamente.');
+            showToast('Éxito!', 'Actualizado correctamente.');
             $("#atapModalEdit").modal("hide");
             loadContent('dataTableKilometerControl.html', 'mainContent');
         } catch (error) {
-            showToast('Error', 'Ocurrió un error al actualizar el mantenimiento.');
+            showToast('Error', 'Ocurrió un error al actualizar.');
         } finally {
             hideLoaderModalAtapEdit();
         }
@@ -228,25 +229,64 @@
 
 
     // Función para eliminar un mantenimiento ATAP
-    window.deleteAtap = async function (idMantenimiento) {
-        try {
-            const token = localStorage.getItem('token');
-            const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${idMantenimiento}`;
-            const response = await axios.delete(API_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+    window.deleteAtap = async function (atapItem) {
+        let modal = new bootstrap.Modal(document.getElementById('confirmDeleteControlKm'), {
+            backdrop: 'static',
+            keyboard: false
+          });
+          let bodyConfirm = document.querySelector('#bodyDeleteControlKm');
+        
+          bodyConfirm.innerHTML = `
+          <p> <strong> Registro #:</strong>  ${atapItem.IdMantenimientoATAP}</p>
+          <p> <strong> Número Placa:</strong>  ${atapItem.numeroUnidad}</p>
+            <p>¿Estás seguro de que deseas eliminar este registro?</p>
+        `;
+        
+        
+          modal.show();
+        
+        
+          let confirmBtn = document.getElementById('confirmDeleteBtnPermission');
+        
+        
+          confirmBtn.onclick = function () {
+        
+            deleteControlKm(atapItem.IdMantenimientoATAP);
+        
+        
+            modal.hide();
+          };
+        
+        
+
+
+
+
+       
+
+        //Delete control km
+
+        async function deleteControlKm(idMantenimiento){
+            try {
+                const token = localStorage.getItem('token');
+                const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${idMantenimiento}`;
+                const response = await axios.delete(API_URL, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                showToast('Éxito', 'Eliminado exitosamente');
+                // Recargar la tabla de mantenimientos
+                loadContent('dataTableKilometerControl.html', 'mainContent');
+            } catch (error) {
+                if (error.response && error.response.status === 400) {
+                    const errorMessage = error.response.data.error;
+                    showToast('Ups!', errorMessage || 'Ocurrió un problema al eliminar.');
+                } else {
+                    showToast('Ups!', 'Error al elimina.');
                 }
-            });
-            showToast('Éxito', 'Mantenimiento eliminado exitosamente');
-            // Recargar la tabla de mantenimientos
-            loadContent('dataTableKilometerControl.html', 'mainContent');
-        } catch (error) {
-            if (error.response && error.response.status === 400) {
-                const errorMessage = error.response.data.error;
-                showToast('Ups!', errorMessage || 'Ocurrió un problema al eliminar el mantenimiento.');
-            } else {
-                showToast('Ups!', 'Error al eliminar el mantenimiento.');
             }
+
         }
     }
 
@@ -394,9 +434,9 @@
     }
 
     // Ocultar el spinner
-    // function ocultarSpinner() {
-    //     document.getElementById("spinnerContainer").style.display = "none";
-    // }
+     function ocultarSpinner() {
+        document.getElementById("spinnerContainer").style.display = "none";
+     } 
 
     function showLoaderModalAtapEdit() {
         document.querySelector('#loaderModalAtapEdit').style.display = 'flex';

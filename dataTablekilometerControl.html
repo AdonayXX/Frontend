@@ -1,6 +1,6 @@
-<!-- <div id="spinnerContainer">
+<div id="spinnerContainer">
     <div class="loader"></div>
-</div> -->
+</div>
 
 <div class="fade-in">
     <div class=" row justify-content-between align-items-center border-bottom m-2 p-2">
@@ -26,7 +26,7 @@
         </div>
         <!-- Fecha Mantenimiento -->
         <div class="col-md-4 mb-3">
-            <label for="fechaMantenimientoFiltro" class="form-label">Fecha de mantenimiento:</label>
+            <label for="fechaMantenimientoFiltro" class="form-label">Fecha :</label>
             <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro"
                 class="form-control date-input">
         </div>
@@ -46,6 +46,7 @@
             style="margin-left: 20px; margin-block: 10px;">
             <thead class="text-center">
                 <tr>
+                    <th class="text-center" id="color-th">#</th>
                     <th class="text-center" id="color-th">Fecha</th>
                     <th class="text-center" id="color-th">Chofer</th>
                     <th class="text-center" id="color-th">Unidad</th>
@@ -61,7 +62,7 @@
 
         </table>
     </div>
-    <div data-script="js/dataTableKilometerControl.js"></div>
+
 </div>
 
 <!-- Modal Editar ATAP -->
@@ -71,7 +72,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="atapModalLabel" style="text-align: center;">Editar Mantenimiento ATAP</h5>
+                <h5 class="modal-title" id="atapModalLabel" style="text-align: center;">Editar</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -168,3 +169,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade mt-5" id="confirmDeleteControlKm" data-bs-backdrop="static" data-bs-keyboard="false"
+tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog ">
+    <div class="modal-content">
+        <div class="modal-header" style="background-color:#094079; color: white;">
+            <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+            <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Confirmación de Eliminación</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="bodyDeleteControlKm">
+                <!-- El contenido se actualizará dinámicamente -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" id="confirmDeleteBtnPermission" class="btn btn-danger">Eliminar</button>
+        </div>
+    </div>
+</div>
+</div>
+<div data-script="js/dataTableKilometerControl.js"></div>
