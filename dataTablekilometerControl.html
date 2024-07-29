@@ -1,6 +1,6 @@
-<!-- <div id="spinnerContainer">
+<div id="spinnerContainer">
     <div class="loader"></div>
-</div> -->
+</div>
 
 <div class="fade-in">
     <div class=" row justify-content-between align-items-center border-bottom m-2 p-2">
@@ -16,7 +16,7 @@
             <input type="text" class="form-control" id="searchATAP" placeholder="Buscar...">
         </div>
     </div>
-    <div class="row justify-content-between align-items-center">
+    <div class="row justify-content-center align-items-center">
         <!-- Unidad -->
         <div class="col-md-4 mb-3">
             <label for="unidadFiltro" class="form-label">Unidad:</label>
@@ -26,7 +26,7 @@
         </div>
         <!-- Fecha Mantenimiento -->
         <div class="col-md-4 mb-3">
-            <label for="fechaMantenimientoFiltro" class="form-label">Fecha de mantenimiento:</label>
+            <label for="fechaMantenimientoFiltro" class="form-label">Fecha :</label>
             <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro"
                 class="form-control date-input">
         </div>
@@ -46,6 +46,7 @@
             style="margin-left: 20px; margin-block: 10px;">
             <thead class="text-center">
                 <tr>
+                    <th class="text-center" id="color-th">#</th>
                     <th class="text-center" id="color-th">Fecha</th>
                     <th class="text-center" id="color-th">Chofer</th>
                     <th class="text-center" id="color-th">Unidad</th>
@@ -53,7 +54,6 @@
                     <th class="text-center" id="color-th">Kilometraje Entrada</th>
                     <th class="text-center" id="color-th">Kilometraje Recorrido</th>
                     <th class="text-center" id="color-th">Acciones</th>
-
                 </tr>
             </thead>
             <tbody id="atap-body" class="text-start">
@@ -62,5 +62,133 @@
 
         </table>
     </div>
-    <div data-script="js/dataTableKilometerControl.js"></div>
+
 </div>
+
+<!-- Modal Editar ATAP -->
+<div class="modal fade mt-5" id="atapModalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="atapModalLabel" style="text-align: center;">Editar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalFormEdit">
+                <div class="loader-overlay" id="loaderModalAtapEdit">
+                    <div class="loader"></div>
+                </div>
+                <div class="container fade-in" style="max-width: 1100px;">
+                    <form id="formAtapEdit" name="formAtapEdit" class="bg-light p-4 border rounded-3">
+                        <div class="form-section">
+                            <div class="row">
+                                <!-- Fecha de mantenimiento -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="FechaMantenimientoEdit" class="form-label"><i
+                                            class="bi bi-calendar2-event"></i> Fecha de mantenimiento:</label>
+                                    <input type="date" class="form-control date-input" id="FechaMantenimientoEdit"
+                                        name="FechaMantenimiento">
+                                </div>
+                                <!-- Unidad -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="IdUnidadEdit" class="form-label"><i class="bi bi-hash"></i>
+                                        Unidad:</label>
+                                    <input type="text" class="form-control" id="IdUnidadEdit" name="IdUnidad" readonly>
+                                </div>
+                                <!-- Chofer -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="IdChoferEdit" class="form-label"><i class="bi bi-person"></i>
+                                        Chofer:</label>
+                                    <input type="text" class="form-control" id="IdChoferEdit" name="IdChofer" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Kilometraje de Salida -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="KilometrosSalidaEdit" class="form-label"><i
+                                            class="bi bi-speedometer"></i> Kilometros Salida:</label>
+                                    <input type="number" class="form-control" id="KilometrosSalidaEdit"
+                                        name="KilometrosSalida">
+                                </div>
+                                <!-- Kilometraje de Entrada -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="KilometrosEntradaEdit" class="form-label"><i
+                                            class="bi bi-speedometer2"></i> Kilometros Entrada:</label>
+                                    <input type="number" class="form-control" id="KilometrosEntradaEdit"
+                                        name="KilometrosEntrada">
+                                </div>
+                                <!-- Kilometraje Recorrido -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="KilometrosRecorridosEdit" class="form-label"><i
+                                            class="bi bi-calculator"></i> Kilometros Recorridos:</label>
+                                    <input type="number" class="form-control" id="KilometrosRecorridosEdit"
+                                        name="KilometrosRecorridos" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <!-- Lugar Visitado -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="LugarVisitadoSelect" class="form-label"><i class="bi bi-map"></i> Lugar
+                                        Visitado:</label>
+                                    <select id="LugarVisitadoSelect" name="LugarVisitadoSelect" class="form-control">
+                                        <option value="" disabled selected>Seleccione un lugar</option>
+                                        <option value="Upala1">Upala1</option>
+                                        <option value="Upala2">Upala2</option>
+                                        <option value="Upala3">Upala3</option>
+                                        <option value="Bijagua">Bijagua</option>
+                                        <option value="Canalete">Canalete</option>
+                                        <option value="Moreno Cañas">Moreno Cañas</option>
+                                        <option value="San Jose">San Jose</option>
+                                        <option value="Villanueva">Villanueva</option>
+                                        <option value="Paraiso">Paraiso</option>
+                                        <option value="Aguas Claras">Aguas Claras</option>
+                                        <option value="Colonia Puntarenas">Colonia Puntarenas</option>
+                                        <option value="Mexico">Mexico</option>
+                                        <option value="San Jorge">San Jorge</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <input type="text" id="LugarVisitadoInput" name="LugarVisitadoInput"
+                                        class="form-control mt-2" placeholder="Lugar Visitado" style="display:none;"
+                                        maxlength="30">
+                                </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <!-- Botón Guardar Cambios -->
+                                <div class="col-md-4 mb-3">
+                                    <button class="btn btn-primary bi bi-tools" id="saveAtapEdit" type="button">Guardar
+                                        Cambios</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade mt-5" id="confirmDeleteControlKm" data-bs-backdrop="static" data-bs-keyboard="false"
+tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog ">
+    <div class="modal-content">
+        <div class="modal-header" style="background-color:#094079; color: white;">
+            <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+            <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Confirmación de Eliminación</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="bodyDeleteControlKm">
+                <!-- El contenido se actualizará dinámicamente -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" id="confirmDeleteBtnPermission" class="btn btn-danger">Eliminar</button>
+        </div>
+    </div>
+</div>
+</div>
+<div data-script="js/dataTableKilometerControl.js"></div>
