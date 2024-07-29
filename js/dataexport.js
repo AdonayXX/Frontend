@@ -5,13 +5,13 @@ async function exportToExcel(tableId, page) {
     // Convertir la tabla de HTML en un array de objetos
     let data = [];
     let dRows = table.querySelectorAll('tr');
+    let encabezados = [];
 
     // Recorrer las filas de la tabla
     for (var i = 0; i < dRows.length; i++) {
         var celdas = dRows[i].querySelectorAll('th, td');
         if (i === 0) {
             // Procesa el encabezado
-            var encabezados = [];
             for (var j = 0; j < celdas.length; j++) {
                 encabezados.push(celdas[j].innerText);
             }
@@ -25,12 +25,35 @@ async function exportToExcel(tableId, page) {
         }
     }
 
-    // Eliminar la última columna de los datos
-    if (data.length > 0) {
-        let lastKey = Object.keys(data[0]).pop();
-        encabezados.pop();
+    // Definir las columnas a eliminar según el ID de la tabla
+    let columnasAEliminar = new Set();
+    switch (tableId) {
+         // Definir la tabla y las columnas que no se van a mostrar
+        case 'TableAppointment':
+            columnasAEliminar = new Set(['Información', 'Editar']);
+            break;
+        case 'tableTrips':
+            columnasAEliminar = new Set(['Seleccionar', 'Acciones']);
+            break;
+        case 'tableMaintenance':
+            columnasAEliminar = new Set(['Observación', 'Acciones']);
+            break;
+        default:
+            console.log("No se requiere modificar");
+            columnasAEliminar = null; // Marcar que no se requieren cambios
+            break;
+    }
+
+    //Validar que columnasAEliminar no sea Null, si no se debe de aplicar cambios
+    if (columnasAEliminar) {
+        // Se filtran los encabezados que se encuentran y se eliminan los que pasaron por columnasAEliminar
+        encabezados = encabezados.filter(encabezado => !columnasAEliminar.has(encabezado));
+
+        // Eliminar las columnas de los datos
         data = data.map(row => {
-            delete row[lastKey];
+            for (let columna of columnasAEliminar) {
+                delete row[columna];
+            }
             return row;
         });
     }
@@ -55,7 +78,7 @@ async function exportToExcel(tableId, page) {
         alignment: { horizontal: 'left', vertical: 'middle' }
     };
 
-    // Añadir una imagen (logo) a la derecha
+    // Añadir una imagen (logo) a la izquierda
     const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
     const logoResponse = await fetch(logoUrl);
     const logoBuffer = await logoResponse.arrayBuffer();
