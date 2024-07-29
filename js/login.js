@@ -1,6 +1,11 @@
 //funciones dinamicas
+document.addEventListener('DOMContentLoaded', () => {
+    getVales();
+    loadFormData();
+    addInputListeners();
+    getVales();
+});
 
-// Función para mostrar los campos según el motivo seleccionado
 var motivoSeleccionado;
 function mostrarCampos() {
     motivoSeleccionado = document.getElementById('motivo').value;
@@ -67,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('date').textContent = formattedDate;
 });
 
-//establece que no se puedan elegir fechas anteriores 
 const today = new Date();
 const year = today.getFullYear();
 const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -75,7 +79,6 @@ const day = String(today.getDate()).padStart(2, '0');
 const formattedDate = `${year}-${month}-${day}`;
 document.getElementById('b_date').min = formattedDate;
 
-//Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
     if (acompananteCount < 5) {
@@ -89,7 +92,6 @@ document.getElementById('addCompanion').addEventListener('click', function () {
     }
 });
 
-//Eliminar Acompañantes
 document.getElementById('removeCompanion').addEventListener('click', function () {
     if (acompananteCount > 0) {
         const acompDiv = document.getElementById('acompanante' + acompananteCount);
@@ -104,7 +106,6 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
     }
 });
 
-
 //Funcion para obtener los datos de la solicitud
 function SolicitarVale() {
     ObtenerUnidades();
@@ -115,7 +116,6 @@ function SolicitarVale() {
     ObtenerRutaSalida();
     ObtenerRutaDestino();
 }
-
 
 var url = 'https://backend-transporteccss.onrender.com/';
 //Obtener Unidades
@@ -257,10 +257,6 @@ function LlenarRutaDestino(data) {
     document.getElementById('lugarDes2').innerHTML = body;
 }
 
-
-//------------------------------------------------------------------------------------------
-//Valida que los campos se deban llenar
-//guarda los datos
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
     event.preventDefault();
     GuardarDatos();
@@ -364,7 +360,6 @@ function GuardarDatos() {
 }
 
 
-//Limpia los campos del modal 
 document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';
     document.getElementById('acompananteNombre2').value = '';
@@ -410,14 +405,6 @@ async function getVales() {
         document.getElementById('valeId').textContent = 'Error al obtener vales';
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    getVales();
-    loadFormData();
-    addInputListeners();
-    getVales();
-});
-
 
 function addInputListeners() {
     const inputs = document.querySelectorAll('input, select, textarea');
