@@ -41,8 +41,11 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('primerApellido').value = pacienteEncontrado.Apellido1 || '';
                 document.getElementById('segundoApellido').value = pacienteEncontrado.Apellido2 || '';
                 document.getElementById('telefonos').value = pacienteEncontrado.Telefono2 ? `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2}` : pacienteEncontrado.Telefono1 || '';  
-                document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
-                document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+                document.getElementById('provincia').value = pacienteEncontrado.Provincia || '';
+                document.getElementById('canton').value = pacienteEncontrado.Canton || '';
+                document.getElementById('distrito').value = pacienteEncontrado.Distrito || '';
+                document.getElementById('barrio').value = pacienteEncontrado.Barrio || '';    
+                document.getElementById('direccion').value = pacienteEncontrado.OtrasSenas || '';    
 
                 const prioridadCheckbox = document.getElementById('prelacion');
                 prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
@@ -60,7 +63,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         } catch (error) {
             console.error('Error fetching patient data:', error);
             showToast('Error', 'Error al obtener los datos del paciente.');
-            loadContent('formAppointment.html', 'mainContent');
+            // loadContent('formAppointment.html', 'mainContent');
             return false;
         }
     }

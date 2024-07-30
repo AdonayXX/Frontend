@@ -401,6 +401,8 @@ async function modificarPDF() {
     }
 }
 
+// Excel
+
 async function modificarExcel() {
     try {
         const fromDate = new Date(document.getElementById('from').value);
@@ -498,33 +500,33 @@ async function modificarExcel() {
     // Especificar celdas para los datos
         //YA COLOCADOS COLUMNA TOTAL
 
-        const cellGasolinaLitros = 'G18';
-        const cellDieselLitros = 'G19';
-        const cellGasolinaKilometraje = 'G20';
-        const cellDieselKilometraje = 'G21';
-        const cellValesFiltrados = 'G22';
-        const cellTotalFuncionariosPacientes = 'G23';
-        const cellPacientes = 'G24';
-        const cellTotalFuncionarios = 'G25';
+        const cellGasolinaLitros = 'N18:O18:P18:Q18';
+        const cellDieselLitros = 'N19:O19:P19:Q19';
+        const cellGasolinaKilometraje = 'N20:O20:P20:Q20';
+        const cellDieselKilometraje = 'N21:O21:P21:Q21';
+        const cellValesFiltrados = 'N22:O22:P22:Q22';
+        const cellTotalFuncionariosPacientes = 'N23:O23:P23:Q23';
+        const cellPacientes = 'N24:O24:P24:Q24';
+        const cellTotalFuncionarios = 'N25:O25:P25:Q25';
         //----------
 
         //YA COLOCADOS COLUMNA GENERAL
 
-        const cellGasolinaLitros2 = 'P18';
-        const cellDieselLitros2 = 'P19';
-        const cellGasolinaKilometraje2 = 'P20';
-        const cellDieselKilometraje2 = 'P21';
-        const cellValesFiltrados2 = 'P22';
-        const cellTotalFuncionariosPacientes2 = 'P23';
-        const cellPacientes2 = 'P24';
-        const cellTotalFuncionarios2 = 'P25';
+        const cellGasolinaLitros2 = 'AH18:AI18';
+        const cellDieselLitros2 = 'AH19:AI19';
+        const cellGasolinaKilometraje2 = 'AH20:AI20';
+        const cellDieselKilometraje2 = 'AH21:AI21';
+        const cellValesFiltrados2 = 'AH22:AI22';
+        const cellTotalFuncionariosPacientes2 = 'AH23:AI23';
+        const cellPacientes2 = 'AH24:AI24';
+        const cellTotalFuncionarios2 = 'AH25:AI25';
         //----------
 
         //prueba fecha
 
-        const cellNumeroMes = 'J9';
-        const cellAno = 'E10:F10';
-        const cellMes = 'E9:F9:G9';
+        const cellNumeroMes = 'O9:P9';
+        const cellAno = 'F10:G10:H10:I10:J10:K10:L10';
+        const cellMes = 'F9:G9:H9:I9:J9:K9';
         //-----
 
 
@@ -565,23 +567,18 @@ async function modificarExcel() {
         worksheet.getCell(cellAno).value = yearValue;
         worksheet.getCell(cellMes).value = monthNameCapitalized;
 
-        
-        // worksheet.getCell(cellFechaCreacion).value = fechaCreacionString;
-        // worksheet.getCell(cellHoraCreacion).value = horaCreacionString;
-
-        // Aplicar estilo a las celdas
+        //----------
         const cellsToStyle = [
             cellPacientes, cellGasolinaLitros, cellDieselLitros, 
             cellGasolinaKilometraje, cellDieselKilometraje, 
             cellValesFiltrados, cellTotalFuncionariosPacientes, 
             cellAno, cellMes, cellNumeroMes, cellTotalFuncionarios,
-            
-            // cellFechaCreacion, cellHoraCreacion
         ];
+
 
         cellsToStyle.forEach(cellAddress => {
             const cell = worksheet.getCell(cellAddress);
-            cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 8 };
+            cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 10 };
             cell.border = {
             top: { style: 'thin' },
             left: { style: 'thin' },
@@ -604,6 +601,8 @@ async function modificarExcel() {
     }
 }
 
+
+//MANTEMIENTO DE LOS REPORTES
 
    
 
