@@ -30,22 +30,20 @@ async function getRegistrosCombustibleATAP() {
             registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             registros.forEach(record => {
-                if (record.estado === 'activo') {
-                    const row = document.createElement('tr');
+                const row = document.createElement('tr');
 
-                    row.innerHTML = `
-                    <td class="text-center">${record.chofer || 'N/A'}</td>
-                    <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
-                    <td class="text-center">${record.numeroFactura || 'N/A'}</td>
-                    <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
-                    <td class="text-center">${record.kilometraje || 'N/A'}</td>
-                    <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
-                    <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
-                    <td class="text-center">${record.montoColones || 'N/A'}</td>
-                `;
+                row.innerHTML = `
+                <td class="text-center">${record.chofer || 'N/A'}</td>
+                <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
+                <td class="text-center">${record.numeroFactura || 'N/A'}</td>
+                <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
+                <td class="text-center">${record.kilometraje || 'N/A'}</td>
+                <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
+                <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
+                <td class="text-center">${record.montoColones || 'N/A'}</td>
+            `;
 
-                    tableBody.appendChild(row);
-                }
+                tableBody.appendChild(row);
             });
 
             $('#fuelTable').DataTable({
