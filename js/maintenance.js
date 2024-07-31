@@ -279,7 +279,7 @@
     document.getElementById("spinnerContainer").style.display = "none";
   }
 
-  $(document).ready(function () {
+ /*  $(document).ready(function () {
     $('#tipoMantenimiento').on('change', function () {
       kilometrajeType();
     });
@@ -300,7 +300,7 @@
     } else {
       kilometrajeInput.disabled = false;
     }
-  }
+  } 
 
   async function obtenerUltimoKilometraje(unidad) {
     try {
@@ -318,6 +318,7 @@
       return '';
     }
   }
+    */
 
   // Mostrar el modal de mantenimiento luego de agregar actividades
   $(document).on("click", "#btnCloseTask", async function () {
@@ -496,6 +497,7 @@
       // Añadir el event listener para cambio de selección
       unidadSelect.addEventListener("change", async () => {
         showLoaderModalMant();
+        const kilometrajeActualUnidad = document.querySelector("#kilometraje")
       
         document.querySelector("#tipoUnidad").value = '';
         document.querySelector("#chofer").value = '';
@@ -503,8 +505,14 @@
         const unidadFiltrda = uniLlenado.find(
           (unidad) => unidad.id === parseInt(unidadSelect.value)
         );
-        document.querySelector("#kilometraje").value =
-          unidadFiltrda.kilometrajeActual;
+        kilometrajeActualUnidad.value = unidadFiltrda.kilometrajeActual;
+
+        kilometrajeActualUnidad.addEventListener('blur', function () {
+          if (kilometrajeActualUnidad.value === "" || parseInt(kilometrajeActualUnidad.value) < unidadFiltrda.kilometrajeActual) {
+            kilometrajeActualUnidad.value = unidadFiltrda.kilometrajeActual;
+          }
+        });
+
         document.querySelector("#IdTipoUnidadHidden").value =
           unidadFiltrda.idTipoUnidad;
         document.querySelector("#IdChoferHidden").value =
@@ -633,7 +641,7 @@
       // Verificar si todos los valores necesarios existen y no están vacíos
       if (!idChofer || !idUnidad || !fechaMantenimiento || !kilometraje || !tipoMantenimiento) {
         showToast('', 'Por favor completa todos los campos obligatorios.');
-        // showLoaderModalMant();
+         hideLoaderModalMant();
         return;
 
       }
@@ -645,6 +653,7 @@
         IdUnidad: parseInt(idUnidad),
         FechaMantenimiento: fechaMantenimiento,
         Kilometraje: kilometraje,
+        Detalle : "Mantenimiento",
         TipoMantenimiento: tipoMantenimiento,
         Observacion: observacion,
         actividades: actividades
@@ -780,6 +789,7 @@
             IdUnidad: parseInt(document.querySelector("#unidadEditHidden").value.trim()),
             FechaMantenimiento: document.querySelector("#fechaMantenimientoEdit").value.trim(),
             Kilometraje: document.querySelector("#kilometrajeEdit").value.trim(),
+            Detalle : "Mantenimiento",
             TipoMantenimiento: document.querySelector("#tipoMantenimientoEdit").value.trim(),
             Observacion: document.querySelector("#observacionesEdit").value.trim() || "No hay observación",
           };
@@ -1186,7 +1196,7 @@
       // Encontrar la unidad correspondiente por ID
       const unidadEncontrada = unidadesLista.find(a => a.id === Idunidad);
       if (!unidadEncontrada) {
-        throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);sh
+        throw new Error(`Unidad con ID ${Idunidad} no encontrada.`);
       }
 
       // Preparar los datos de la unidad a actualizar
