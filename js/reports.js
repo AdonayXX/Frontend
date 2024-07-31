@@ -533,8 +533,8 @@ async function mantenimientoPdf() {
 
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
-        const fromDate = new Date(document.getElementById('from').value);
-        const toDate = new Date(document.getElementById('to').value);
+        const fromDate = new Date(document.getElementById('fromMaintenance').value);
+        const toDate = new Date(document.getElementById('toMaintenance').value);
 
         const token = localStorage.getItem('token');
 
@@ -549,18 +549,11 @@ async function mantenimientoPdf() {
         const datosRegistros = response2.data.registros;
         const datosCitas = response3.data;
 
-        
-        const fromDateInput = document.getElementById('from');
-        const [year, month, day] = fromDateInput.value.split('-').map(Number);
 
-        const fromDateValue = new Date(year, month - 1, day); 
 
-        const adjustedFromDateE = new Date(fromDateValue);
-        adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
-
-        const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
-        const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
+        const fechaCreacion = new Date();
+        const fechaCreacionString = fechaCreacion.toLocaleDateString();
+        const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
     
 
@@ -574,34 +567,25 @@ async function mantenimientoPdf() {
         const adjustedToDate = new Date(toDate);
         adjustedToDate.setDate(adjustedToDate.getDate() + 1);
 
-        const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
-        firstPage.drawText(`${monthNameCapitalized}`, {
-            x: 179,
-            y: height - 180,
+        firstPage.drawText(` De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
+            x: 321,
+            y: height - 140,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
-
-        firstPage.drawText(`${monthNumber}`, {
-            x: 287,
-            y: height - 180,
-            size: 10,
+        
+        firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
+            x: 590,
+            y: height - 523,
+            size: 8,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        firstPage.drawText(`${yearValue}`, {
-            x: 200,
-            y: height - 192,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-       
-       
+    
+    
 
         
         const pdfBytes = await pdfDoc.save();
@@ -610,7 +594,7 @@ async function mantenimientoPdf() {
         const blob = base64ToBlob(firstPageBytes, 'application/pdf');
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU.pdf';
+        link.download = 'Reportes_ASU_Mantenimiento.pdf';
         link.click();
 
 
@@ -628,13 +612,12 @@ async function mantenimientoPdf() {
     }
 }
 
-   
-
+    
 
 async function mantenimientoExcel() {
     try {
-        const fromDate = new Date(document.getElementById('from').value);
-        const toDate = new Date(document.getElementById('to').value);
+        const fromDate = new Date(document.getElementById('fromMaintenance').value);
+        const toDate = new Date(document.getElementById('toMaintenance').value);
 
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
@@ -647,22 +630,22 @@ async function mantenimientoExcel() {
         const datosCitas = response3.data;
 
 
-        const fromDateInput = document.getElementById('from');
-        const [year, month, day] = fromDateInput.value.split('-').map(Number);
-
-        const fromDateValue = new Date(year, month - 1, day); 
-
-        const adjustedFromDateE = new Date(fromDateValue);
+        const adjustedFromDateE = new Date(fromDate);
         adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
 
-        const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
-        const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
+        const adjustedToDate = new Date(toDate);
+        adjustedToDate.setDate(adjustedToDate.getDate() + 1);
 
-        const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+        const fechaCreacion = new Date();
+        const fechaCreacionString = fechaCreacion.toLocaleDateString();
+        const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-       
-        const response = await fetch('/documents/reporteGeneral.xlsx');
+
+
+     
+
+
+        const response = await fetch('/documents/reporteMantenimiento.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
@@ -670,18 +653,19 @@ async function mantenimientoExcel() {
 
         const worksheet = workbook.getWorksheet(1);
 
-        const cellNumeroMes = 'O9:P9';
-        const cellAno = 'F10:G10:H10:I10:J10:K10:L10';
-        const cellMes = 'F9:G9:H9:I9:J9:K9';
+  
+        const cellfechaCreacion = 'L39:M39:N39:O39';
+        const cellrangoFecha = 'G7:H7:I7:J7';
   
   
-       
-        worksheet.getCell(cellNumeroMes).value = monthNumber;
-        worksheet.getCell(cellAno).value = yearValue;
-        worksheet.getCell(cellMes).value = monthNameCapitalized;
+
+        
+        worksheet.getCell(cellfechaCreacion).value =  "Creado el " + fechaCreacionString + " a las " + horaCreacionString;
+        worksheet.getCell(cellrangoFecha).value =  "De: " + adjustedFromDateE.toLocaleDateString() + " Hasta: " + adjustedToDate.toLocaleDateString();
 
         const cellsToStyle = [
-            cellAno, cellMes, cellNumeroMes,
+            cellrangoFecha,
+         
         ];
 
 
@@ -702,13 +686,10 @@ async function mantenimientoExcel() {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU_Modificado.xlsx';
+        link.download = 'Reportes_ASU_Mantenimiento.xlsx';
         link.click();
     } catch (error) {
         console.error("Error al modificar el archivo Excel:", error);
         alert("Hubo un error al modificar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
-
-
-
