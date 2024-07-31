@@ -640,11 +640,6 @@ async function mantenimientoExcel() {
         const fechaCreacionString = fechaCreacion.toLocaleDateString();
         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-
-
-     
-
-
         const response = await fetch('/documents/reporteMantenimiento.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
