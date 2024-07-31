@@ -351,12 +351,13 @@ function GuardarDatos() {
         })
         .catch(error => {
             if (error.response) {
-                console.error('Hubo un problema al guardar los datos:', error.response.data);
-                console.error('Detalles del error:', error.response.status, error.response.headers);
+                console.log('Hubo un problema al guardar los datos:', error.response.data.message);
+                showToast("Error al guardar los datos", error.response.data.message);
             } else {
                 console.error('Error desconocido:', error);
             }
         });
+
 }
 
 
