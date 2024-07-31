@@ -1,6 +1,6 @@
-async function modificarPDF() {
+async function generalesPdf() {
     try {
-        const pdfUrl = 'reporte.pdf'; 
+        const pdfUrl = '/documents/reporteGeneral.pdf'; 
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -40,10 +40,6 @@ async function modificarPDF() {
             return sum + count;
         }, 0);
 
-        const fechaCreacion = new Date();
-        const fechaCreacionString = fechaCreacion.toLocaleDateString();
-        const horaCreacionString = fechaCreacion.toLocaleTimeString();
-
 
 
         const gasolinaLitros = datosRegistros
@@ -60,7 +56,6 @@ async function modificarPDF() {
             })
             .reduce((sum, registro) => sum + parseFloat(registro.litrosAproximados), 0);
 
-        //diesel
         const dieselKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
@@ -68,7 +63,6 @@ async function modificarPDF() {
             })
             .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
 
-        //GASOLINA
         const gasolinaKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
@@ -108,7 +102,6 @@ async function modificarPDF() {
 
         const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
-        //YA ACOMODADO
         firstPage.drawText(`${monthNameCapitalized}`, {
             x: 179,
             y: height - 180,
@@ -117,7 +110,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         firstPage.drawText(`${monthNumber}`, {
             x: 287,
             y: height - 180,
@@ -126,7 +118,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         firstPage.drawText(`${yearValue}`, {
             x: 200,
             y: height - 192,
@@ -135,18 +126,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-
-        firstPage.drawText(` De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
-            x: 331,
-            y: height - 125,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-
-
-        //YA ACOMODADO
         const gasolinaLitrosString = gasolinaLitros.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const gasolinaLitrosWidth = helveticaFont.widthOfTextAtSize(gasolinaLitrosString, 8);
         const gasolinaLitrosX = 273 + (50 - gasolinaLitrosWidth) / 2;
@@ -159,7 +138,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const dieselLitrosString = dieselLitros.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const dieselLitrosWidth = helveticaFont.widthOfTextAtSize(dieselLitrosString, 8);
         const dieselLitrosX = 273 + (50 - dieselLitrosWidth) / 2;
@@ -172,7 +150,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const gasolinaKilometrajeString = gasolinaKilometraje.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const gasolinaKilometrajeWidth = helveticaFont.widthOfTextAtSize(gasolinaKilometrajeString, 8);
         const gasolinaKilometrajeX = 273 + (50 - gasolinaKilometrajeWidth) / 2;
@@ -186,7 +163,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const dieselKilometrajeString = dieselKilometraje.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const dieselKilometrajeWidth = helveticaFont.widthOfTextAtSize(dieselKilometrajeString, 8);
         const dieselKilometrajeX = 273 + (50 - dieselKilometrajeWidth) / 2;
@@ -200,7 +176,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const valesLength = valesFiltrados.length;
         const valesWidth = helveticaFont.widthOfTextAtSize(valesLength.toString(), 8);
         const valesX = 267 + (50 - valesWidth) / 2;
@@ -213,7 +188,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const totalLength = cantidadFuncionariosTrasladados + pacientes.length;
         const totalWidth = helveticaFont.widthOfTextAtSize(totalLength.toString(), 8);
         const totalX = 267 + (50 - totalWidth) / 2;
@@ -226,7 +200,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const pacientesLength = pacientes.length;
         const pacientesWidth = helveticaFont.widthOfTextAtSize(pacientesLength.toString(), 8);
         const pacientesX = 267 + (50 - pacientesWidth) / 2;
@@ -238,7 +211,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const funcionariosLength = cantidadFuncionariosTrasladados.toString();
         const funcionariosWidth = helveticaFont.widthOfTextAtSize(funcionariosLength, 8);
         const funcionariosX = 267 + (50 - funcionariosWidth) / 2;
@@ -251,9 +223,7 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        // GENERALES 
 
-        //YA ACOMODADO
         const gasolinaLitrosStringG = gasolinaLitros.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const gasolinaLitrosWidthG = helveticaFont.widthOfTextAtSize(gasolinaLitrosStringG, 8);
         const gasolinaLitrosXG = 530 + (50 - gasolinaLitrosWidthG) / 2;
@@ -266,7 +236,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const dieselLitrosStringG = dieselLitros.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const dieselLitrosWidthG = helveticaFont.widthOfTextAtSize(dieselLitrosStringG, 8);
         const dieselLitrosXG = 530 + (50 - dieselLitrosWidthG) / 2;
@@ -279,7 +248,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const gasolinaKilometrajeStringG = gasolinaKilometraje.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const gasolinaKilometrajeWidthG = helveticaFont.widthOfTextAtSize(gasolinaKilometrajeStringG, 8);
         const gasolinaKilometrajeXG = 530 + (50 - gasolinaKilometrajeWidthG) / 2;
@@ -293,7 +261,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const dieselKilometrajeStringG = dieselKilometraje.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const dieselKilometrajeWidthG = helveticaFont.widthOfTextAtSize(dieselKilometrajeStringG, 8);
         const dieselKilometrajeXG = 530 + (50 - dieselKilometrajeWidthG) / 2;
@@ -307,7 +274,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const valesLengthG = valesFiltrados.length;
         const valesWidthG = helveticaFont.widthOfTextAtSize(valesLengthG.toString(), 8);
         const valesXG = 524 + (50 - valesWidthG) / 2;
@@ -320,7 +286,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const totalLengthG = cantidadFuncionariosTrasladados + pacientes.length;
         const totalWidthG = helveticaFont.widthOfTextAtSize(totalLengthG.toString(), 8);
         const totalXG = 524 + (50 - totalWidthG) / 2;
@@ -333,7 +298,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const pacientesLengthG = pacientes.length;
         const pacientesWidthG = helveticaFont.widthOfTextAtSize(pacientesLengthG.toString(), 8);
         const pacientesXG = 524 + (50 - pacientesWidthG) / 2;
@@ -345,7 +309,6 @@ async function modificarPDF() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        //YA ACOMODADO
         const funcionariosLengthG = cantidadFuncionariosTrasladados.toString();
         const funcionariosWidthG = helveticaFont.widthOfTextAtSize(funcionariosLengthG, 8);
         const funcionariosXG = 524 + (50 - funcionariosWidthG) / 2;
@@ -362,14 +325,6 @@ async function modificarPDF() {
         firstPage.drawText(`0`, {
             x: 547,
             y: height - 402,
-            size: 8,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
-            x: 590,
-            y: height - 593,
             size: 8,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
@@ -401,9 +356,8 @@ async function modificarPDF() {
     }
 }
 
-// Excel
 
-async function modificarExcel() {
+async function generalesExcel() {
     try {
         const fromDate = new Date(document.getElementById('from').value);
         const toDate = new Date(document.getElementById('to').value);
@@ -433,11 +387,6 @@ async function modificarExcel() {
             return sum + count;
         }, 0);
 
-        //preguntar si se quiere
-
-        // const fechaCreacion = new Date();
-        // const fechaCreacionString = fechaCreacion.toLocaleDateString();
-        // const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
         const fromDateInput = document.getElementById('from');
         const [year, month, day] = fromDateInput.value.split('-').map(Number);
@@ -487,18 +436,13 @@ async function modificarExcel() {
             return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
         });
 
-        // Leer el archivo Excel existente con ExcelJS
-        const response = await fetch('reporteExcel.xlsx');
+        const response = await fetch('/documents/reporteGeneral.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
 
-        // Obtener la primera hoja del libro
-        const worksheet = workbook.getWorksheet(1);
 
-        
-    // Especificar celdas para los datos
-        //YA COLOCADOS COLUMNA TOTAL
+        const worksheet = workbook.getWorksheet(1);
 
         const cellGasolinaLitros = 'N18:O18:P18:Q18';
         const cellDieselLitros = 'N19:O19:P19:Q19';
@@ -508,9 +452,7 @@ async function modificarExcel() {
         const cellTotalFuncionariosPacientes = 'N23:O23:P23:Q23';
         const cellPacientes = 'N24:O24:P24:Q24';
         const cellTotalFuncionarios = 'N25:O25:P25:Q25';
-        //----------
-
-        //YA COLOCADOS COLUMNA GENERAL
+    
 
         const cellGasolinaLitros2 = 'AH18:AI18';
         const cellDieselLitros2 = 'AH19:AI19';
@@ -520,23 +462,11 @@ async function modificarExcel() {
         const cellTotalFuncionariosPacientes2 = 'AH23:AI23';
         const cellPacientes2 = 'AH24:AI24';
         const cellTotalFuncionarios2 = 'AH25:AI25';
-        //----------
-
-        //prueba fecha
 
         const cellNumeroMes = 'O9:P9';
         const cellAno = 'F10:G10:H10:I10:J10:K10:L10';
         const cellMes = 'F9:G9:H9:I9:J9:K9';
-        //-----
-
-
-        // const cellFechaCreacion = 'A52';
-        // const cellHoraCreacion = 'A53';
-
-        // Agregar datos a las celdas especificadas
-
-        //YA COLOCADOS COLUMNA TOTAL
-        
+  
         worksheet.getCell(cellGasolinaLitros).value = gasolinaLitros;
         worksheet.getCell(cellDieselLitros).value = dieselLitros;
         worksheet.getCell(cellGasolinaKilometraje).value = gasolinaKilometraje;
@@ -546,9 +476,6 @@ async function modificarExcel() {
         worksheet.getCell(cellPacientes).value = pacientes.length;
         worksheet.getCell(cellTotalFuncionarios).value = cantidadFuncionariosTrasladados;
 
-
-        //YA COLOCADOS COLUMNA GENERAL
-        
         worksheet.getCell(cellGasolinaLitros2).value = gasolinaLitros;
         worksheet.getCell(cellDieselLitros2).value = dieselLitros;
         worksheet.getCell(cellGasolinaKilometraje2).value = gasolinaKilometraje;
@@ -558,16 +485,10 @@ async function modificarExcel() {
         worksheet.getCell(cellPacientes2).value = pacientes.length;
         worksheet.getCell(cellTotalFuncionarios2).value = cantidadFuncionariosTrasladados;
 
-
-
-        //prueba fecha
-
-
         worksheet.getCell(cellNumeroMes).value = monthNumber;
         worksheet.getCell(cellAno).value = yearValue;
         worksheet.getCell(cellMes).value = monthNameCapitalized;
 
-        //----------
         const cellsToStyle = [
             cellPacientes, cellGasolinaLitros, cellDieselLitros, 
             cellGasolinaKilometraje, cellDieselKilometraje, 
@@ -588,7 +509,7 @@ async function modificarExcel() {
             cell.alignment = { horizontal: 'center' };
         });
 
-        // Guardar el archivo modificado
+ 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -604,5 +525,190 @@ async function modificarExcel() {
 
 //MANTEMIENTO DE LOS REPORTES
 
+async function mantenimientoPdf() {
+    try {
+        const pdfUrl = '/documents/reporteMantenimiento.pdf'; 
+
+        const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
+
+        const fromDate = new Date(document.getElementById('from').value);
+        const toDate = new Date(document.getElementById('to').value);
+
+        const token = localStorage.getItem('token');
+
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+
+        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
+        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
+        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
+        const datosVales = response1.data.vales;
+        const datosRegistros = response2.data.registros;
+        const datosCitas = response3.data;
+
+        
+        const fromDateInput = document.getElementById('from');
+        const [year, month, day] = fromDateInput.value.split('-').map(Number);
+
+        const fromDateValue = new Date(year, month - 1, day); 
+
+        const adjustedFromDateE = new Date(fromDateValue);
+        adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
+
+        const yearValue = fromDateValue.getFullYear();
+        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
+
+    
+
+        const firstPage = pdfDoc.getPages()[0];
+        const { width, height } = firstPage.getSize();
+
+        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        const adjustedFromDate = new Date(fromDate);
+        adjustedFromDate.setDate(adjustedFromDate.getDate() + 1);
+
+        const adjustedToDate = new Date(toDate);
+        adjustedToDate.setDate(adjustedToDate.getDate() + 1);
+
+        const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+        firstPage.drawText(`${monthNameCapitalized}`, {
+            x: 179,
+            y: height - 180,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${monthNumber}`, {
+            x: 287,
+            y: height - 180,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        firstPage.drawText(`${yearValue}`, {
+            x: 200,
+            y: height - 192,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+       
+       
+
+        
+        const pdfBytes = await pdfDoc.save();
+        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+
+        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reportes_ASU.pdf';
+        link.click();
+
+
+        function base64ToBlob(base64, type) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; ++i) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new Blob([bytes], { type });
+        }
+
+    } catch (error) {
+    }
+}
+
    
+
+
+async function mantenimientoExcel() {
+    try {
+        const fromDate = new Date(document.getElementById('from').value);
+        const toDate = new Date(document.getElementById('to').value);
+
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
+        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
+        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
+        const datosVales = response1.data.vales;
+        const datosRegistros = response2.data.registros;
+        const datosCitas = response3.data;
+
+
+        const fromDateInput = document.getElementById('from');
+        const [year, month, day] = fromDateInput.value.split('-').map(Number);
+
+        const fromDateValue = new Date(year, month - 1, day); 
+
+        const adjustedFromDateE = new Date(fromDateValue);
+        adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
+
+        const yearValue = fromDateValue.getFullYear();
+        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
+
+        const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+       
+        const response = await fetch('/documents/reporteGeneral.xlsx');
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+
+
+        const worksheet = workbook.getWorksheet(1);
+
+        const cellNumeroMes = 'O9:P9';
+        const cellAno = 'F10:G10:H10:I10:J10:K10:L10';
+        const cellMes = 'F9:G9:H9:I9:J9:K9';
+  
+  
+       
+        worksheet.getCell(cellNumeroMes).value = monthNumber;
+        worksheet.getCell(cellAno).value = yearValue;
+        worksheet.getCell(cellMes).value = monthNameCapitalized;
+
+        const cellsToStyle = [
+            cellAno, cellMes, cellNumeroMes,
+        ];
+
+
+        cellsToStyle.forEach(cellAddress => {
+            const cell = worksheet.getCell(cellAddress);
+            cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 10 };
+            cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+            };
+            cell.alignment = { horizontal: 'center' };
+        });
+
+ 
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reportes_ASU_Modificado.xlsx';
+        link.click();
+    } catch (error) {
+        console.error("Error al modificar el archivo Excel:", error);
+        alert("Hubo un error al modificar el archivo Excel. Por favor, intente de nuevo.");
+    }
+}
+
+
 
