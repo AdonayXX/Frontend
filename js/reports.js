@@ -714,7 +714,7 @@ async function exportarVale() {
         console.log('Datos del vale:', datosVale);
 
         // Descargar el archivo Excel
-        const responseExcel = await fetch('reporteria/ReporteVale.xlsx');
+        const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
         }
