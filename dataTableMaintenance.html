@@ -72,7 +72,7 @@
                         <th class="text-center" id="color-th">Tipo Unidad</th>
                         <th class="text-center" id="color-th">Fecha Mantenimiento</th>
                         <th class="text-center" id="color-th">Tipo Mantenimiento</th>
-                        <th class="text-center" id="color-th">Observación</th>
+                        <th class="text-center" id="color-th">Detalle</th>
                         <th class="text-center" id="color-th">Descripción</th>
                         <th class="text-center" id="color-th">Cantidad</th>
                         <th class="text-center" id="color-th">(Km) Mantenimiento</th>
@@ -146,7 +146,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
                                             Kilometraje:</label>
-                                        <input required type="number" id="kilometrajeEdit" name="kilometraje"
+                                        <input required type="number" id="kilometrajeEdit" name="kilometraje" readonly
                                             class="form-control" maxlength="25" readonly>
                                     </div>
                                     <!-- Fecha de mantenimiento -->
@@ -169,11 +169,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="kilometrajeMantenimientoEdit" class="form-label"><i class="bi bi-speedometer"></i>
+                                            Kilometraje Mantenimiento:</label>
+                                        <input required type="number" id="kilometrajeMantenimientoEdit" name="kilometrajeMantenimientoEdit" 
+                                            class="form-control" maxlength="25">
+                                    </div>
+                            </div>
+                                <div class="row">
                                     <!-- Observaciones -->
                                     <div class="col-12 mb-3">
-                                        <label for="observaciones" class="form-label"><i
-                                                class="bi bi-pencil-square"></i> Observaciones:</label>
-                                        <textarea required id="observacionesEdit" name="observaciones"
+                                        <label for="detalle" class="form-label"><i
+                                                class="bi bi-pencil-square"></i> Detalle:</label>
+                                        <textarea required id="detalleEdit" name="detalle"
                                             class="form-control" maxlength="200"></textarea>
                                     </div>
                                 </div>
@@ -362,7 +370,7 @@
                                     <!-- Kilometraje -->
                                     <div class="col-md-4 mb-3">
                                         <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
-                                            Kilometraje:</label>
+                                            Kilometraje Unidad:</label>
                                         <input required type="number" id="kilometraje" name="kilometraje"
                                             class="form-control" maxlength="25">
                                     </div>
@@ -385,15 +393,24 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="kilometrajeMantenimiento" class="form-label"><i class="bi bi-speedometer"></i>
+                                                Kilometraje Mantenimiento:</label>
+                                            <input required type="number" id="kilometrajeMantenimiento" name="kilometrajeMantenimiento"
+                                                class="form-control" maxlength="25">
+                                        </div>
+                                </div>
 
                             </div>
+                         
                         </form>
                         <div class="row">
                             <!-- Observaciones -->
                             <div class="col-12 mb-3">
-                                <label for="observaciones" class="form-label"><i class="bi bi-pencil-square"></i>
-                                    Observaciones:</label>
-                                <textarea required id="observaciones" name="observaciones" class="form-control"
+                                <label for="detalle" class="form-label"><i class="bi bi-pencil-square"></i>
+                                    Detalle:</label>
+                                <textarea required id="detalle" name="detalle" class="form-control"
                                     maxlength="200"></textarea>
                             </div>
                         </div>
@@ -435,7 +452,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Observación</h5>
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Detalle</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

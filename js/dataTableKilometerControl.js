@@ -31,13 +31,13 @@
             $("#atap-body").empty();
             // Llenar la tabla de mantenimientos con los últimos 20
             fillAtapTable(lastATAP);
-            console.log("Ultimos ATAP obtenidos en el get: ", lastATAP);
+          
 
             // Configurar DataTables y eventos de cambio
             setupDataTable();
              ocultarSpinner();
         } catch (error) {
-            console.error(error);
+            showToast('Error','Inesperado.')
         }
     }
 
@@ -54,10 +54,10 @@
 
             // Actualizar la variable global allATAP
             allATAP = atapResponse.data;
-            console.log("Todos los ATAP obtenidos en el get: ", allATAP);
+         
 
         } catch (error) {
-            console.error(error);
+            showToast('Error','Inesperado.')
         }
     }
 
@@ -76,7 +76,7 @@
                 return;
             }
 
-            console.log("Atap que recibe la tabla: ", atapData);
+        
 
             const fragment = document.createDocumentFragment();
 
@@ -92,6 +92,7 @@
                 <td class='text-center'>${atapItem.KilometrosSalida || ''}</td>
                 <td class='text-center'>${atapItem.KilometrosEntrada || ''}</td>
                 <td class='text-center'>${(atapItem.KilometrosEntrada - atapItem.KilometrosSalida) || ''}</td>
+                  <td class='text-center'>${atapItem.LugarVisitado || ''}</td>
                 <td class='actions'>
                     <button class='btn btn-outline-primary btn-sm' id='btnEditAtap' onclick='editAtap(${JSON.stringify(atapItem)})'><i class='bi bi-pencil'></i></button>
                     <button class='btn btn-outline-danger btn-sm' onclick='deleteAtap(${JSON.stringify(atapItem)})'><i class='bi bi-trash'></i></button>
@@ -104,7 +105,7 @@
             tableBody.appendChild(fragment);
         } catch (error) {
             showToast("Ups!", "Error al llenar la tabla", "Por favor, intenta de nuevo");
-            console.error('Error al llenar la tabla:', error);
+         
         }
     }
 
@@ -321,25 +322,18 @@
                 return formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
             });
         } else if (selectedUnit === "All") {
-            console.log("Filtrando por todas las unidades");
-            console.log("Mantenimientos: ", allATAP);
             // Filtrar todos los mantenimientos por fecha
             filteredATAP = allATAP.mantenimientos.filter(atap => {
                 const formattedDate = formatDate(atap.FechaMantenimiento);
                 return formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
             });
         } else {
-            console.log("Filtrando por unidad específica", selectedUnit);
-            console.log("Ids de unidades de ataps obtenidos: ", allATAP.mantenimientos.map(atap => atap.IdUnidad));
             // Filtrar todos los mantenimientos por fecha y unidad específica
             const selectedUnitNumber = Number(selectedUnit); // Convertir selectedUnit a número
             filteredATAP = allATAP.mantenimientos.filter(atap => {
                 const formattedDate = formatDate(atap.FechaMantenimiento);
                 const matchDate = formattedSelectedDate ? formattedDate === formattedSelectedDate : true;
                 const matchUnit = selectedUnitNumber ? atap.IdUnidad === selectedUnitNumber : true;
-                console.log("Unidad seleccionada: ", selectedUnitNumber);
-                console.log("Id de unidad en atap: ", atap.IdUnidad);
-                console.log("Match Unit: ", matchUnit);
                 return matchDate && matchUnit;
             });
         }
@@ -349,7 +343,7 @@
             // Destruir la instancia existente
             $("#tableControlKm").DataTable().clear().destroy();
         }
-        console.log("ATAP filtrados: ", filteredATAP);
+        
 
         // Llenar la tabla con los mantenimientos filtrados
         fillAtapTable({ mantenimientos: filteredATAP });
@@ -418,8 +412,7 @@
 
             // Filtra las unidades para mostrar solo las de tipo 3 (Motos)
             const unidadesMotos = unidades.filter(unidad => unidad.idTipoUnidad === 3); // Ajusta la propiedad según tu estructura de datos
-            console.log("Unidades Motos: ", unidadesMotos);
-
+    
             // Agrega las opciones filtradas de la API
             unidadesMotos.forEach((unidad) => {
                 const option = document.createElement("option");
