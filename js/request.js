@@ -42,6 +42,7 @@
             ordering: false,
             searching: true,
             paging: true,
+            lengthMenu: [30, 60, 90, 120], //paginado
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
             },
@@ -79,6 +80,9 @@
                 break
             case "Aprobado":
                 return '<span style="color: blue;font-size: 1.5rem;">■ </span>' + status;
+                break
+            case "Completado":
+                return '<span style="color: green;font-size: 1.5rem;">■ </span>' + status;
                 break
             default:
                 return status;
