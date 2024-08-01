@@ -30,29 +30,24 @@ async function getRegistrosCombustibleATAP() {
             registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             registros.forEach(record => {
-                if (record.estado === 'activo') {
-                    const row = document.createElement('tr');
+                const row = document.createElement('tr');
 
-                    row.innerHTML = `
-                    <td class="text-center">${record.chofer || 'N/A'}</td>
-                    <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
-                    <td class="text-center">${record.numeroFactura || 'N/A'}</td>
-                    <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
-                    <td class="text-center">${record.kilometraje || 'N/A'}</td>
-                    <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
-                    <td class="text-center">${record.hora || 'N/A'}</td>
-                    <td class="text-center">${record.tipoCombustible || 'N/A'}</td>
-                    <td class="text-center">${record.lugar || 'N/A'}</td>
-                    <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
-                    <td class="text-center">${record.montoColones || 'N/A'}</td>
-                `;
+                row.innerHTML = `
+                <td class="text-center">${record.chofer || 'N/A'}</td>
+                <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
+                <td class="text-center">${record.numeroFactura || 'N/A'}</td>
+                <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
+                <td class="text-center">${record.kilometraje || 'N/A'}</td>
+                <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
+                <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
+                <td class="text-center">${record.montoColones || 'N/A'}</td>
+            `;
 
-                    tableBody.appendChild(row);
-                }
+                tableBody.appendChild(row);
             });
 
             $('#fuelTable').DataTable({
-                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                dom: "<'row'<'col-sm-6'l>" +
                     "<'row'<'col-sm-12't>>" +
                     "<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 ordering: false,
