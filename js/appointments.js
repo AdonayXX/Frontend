@@ -233,6 +233,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const idEspecialidad = document.getElementById('especialidad').value;
             const tipoSeguro = document.getElementById('tipoSeguro').value;
 
+            const provincia = document.getElementById('provincia').value;
+            const canton = document.getElementById('canton').value;
+            const distrito= document.getElementById('distrito').value;
+            const barrio = document.getElementById('barrio').value;
+            const direccion = document.getElementById('direccion').value;
+
             if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro || !idEspecialidad) {
                 const camposFaltantes = [];
                 if (!diagnostico) camposFaltantes.push('Diagnóstico');
@@ -276,7 +282,13 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "fechaCita": fechaCita,
                 "horaCita": horaCita,
                 "transladoCita": salida,
-                "idUsuario": idUsuario
+                "idUsuario": idUsuario,
+                "provincia" : provincia,
+                "canton": canton,
+                "distrito": distrito,
+                "barrio": barrio,
+                "direccionExacta": direccion
+
             };
 
             try {
