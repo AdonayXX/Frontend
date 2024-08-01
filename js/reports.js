@@ -1,6 +1,6 @@
 async function generalesPdf() {
     try {
-        const pdfUrl = '/documents/reporteGeneral.pdf'; 
+        const pdfUrl = '/documents/reporteGeneral.pdf';
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -75,20 +75,20 @@ async function generalesPdf() {
             return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
         });
 
-        
+
         const fromDateInput = document.getElementById('from');
         const [year, month, day] = fromDateInput.value.split('-').map(Number);
 
-        const fromDateValue = new Date(year, month - 1, day); 
+        const fromDateValue = new Date(year, month - 1, day);
 
         const adjustedFromDateE = new Date(fromDateValue);
         adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
 
         const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthNumber = fromDateValue.getMonth() + 1;
         const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
 
-    
+
 
         const firstPage = pdfDoc.getPages()[0];
         const { width, height } = firstPage.getSize();
@@ -330,7 +330,7 @@ async function generalesPdf() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-    
+
 
         const pdfBytes = await pdfDoc.save();
         const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
@@ -391,13 +391,13 @@ async function generalesExcel() {
         const fromDateInput = document.getElementById('from');
         const [year, month, day] = fromDateInput.value.split('-').map(Number);
 
-        const fromDateValue = new Date(year, month - 1, day); 
+        const fromDateValue = new Date(year, month - 1, day);
 
         const adjustedFromDateE = new Date(fromDateValue);
         adjustedFromDateE.setDate(adjustedFromDateE.getDate() + 1);
 
         const yearValue = fromDateValue.getFullYear();
-        const monthNumber = fromDateValue.getMonth() + 1; 
+        const monthNumber = fromDateValue.getMonth() + 1;
         const monthName = fromDateValue.toLocaleString('default', { month: 'long' });
 
         const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
@@ -452,7 +452,7 @@ async function generalesExcel() {
         const cellTotalFuncionariosPacientes = 'N23:O23:P23:Q23';
         const cellPacientes = 'N24:O24:P24:Q24';
         const cellTotalFuncionarios = 'N25:O25:P25:Q25';
-    
+
 
         const cellGasolinaLitros2 = 'AH18:AI18';
         const cellDieselLitros2 = 'AH19:AI19';
@@ -466,7 +466,7 @@ async function generalesExcel() {
         const cellNumeroMes = 'O9:P9';
         const cellAno = 'F10:G10:H10:I10:J10:K10:L10';
         const cellMes = 'F9:G9:H9:I9:J9:K9';
-  
+
         worksheet.getCell(cellGasolinaLitros).value = gasolinaLitros;
         worksheet.getCell(cellDieselLitros).value = dieselLitros;
         worksheet.getCell(cellGasolinaKilometraje).value = gasolinaKilometraje;
@@ -490,9 +490,9 @@ async function generalesExcel() {
         worksheet.getCell(cellMes).value = monthNameCapitalized;
 
         const cellsToStyle = [
-            cellPacientes, cellGasolinaLitros, cellDieselLitros, 
-            cellGasolinaKilometraje, cellDieselKilometraje, 
-            cellValesFiltrados, cellTotalFuncionariosPacientes, 
+            cellPacientes, cellGasolinaLitros, cellDieselLitros,
+            cellGasolinaKilometraje, cellDieselKilometraje,
+            cellValesFiltrados, cellTotalFuncionariosPacientes,
             cellAno, cellMes, cellNumeroMes, cellTotalFuncionarios,
         ];
 
@@ -501,15 +501,15 @@ async function generalesExcel() {
             const cell = worksheet.getCell(cellAddress);
             cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 10 };
             cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' }
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
             };
             cell.alignment = { horizontal: 'center' };
         });
 
- 
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -527,7 +527,7 @@ async function generalesExcel() {
 
 async function mantenimientoPdf() {
     try {
-        const pdfUrl = '/documents/reporteMantenimiento.pdf'; 
+        const pdfUrl = '/documents/reporteMantenimiento.pdf';
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -555,7 +555,7 @@ async function mantenimientoPdf() {
         const fechaCreacionString = fechaCreacion.toLocaleDateString();
         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-    
+
 
         const firstPage = pdfDoc.getPages()[0];
         const { width, height } = firstPage.getSize();
@@ -575,7 +575,7 @@ async function mantenimientoPdf() {
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
-        
+
         firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
             x: 590,
             y: height - 523,
@@ -584,10 +584,10 @@ async function mantenimientoPdf() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-    
-    
 
-        
+
+
+
         const pdfBytes = await pdfDoc.save();
         const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
 
@@ -612,7 +612,7 @@ async function mantenimientoPdf() {
     }
 }
 
-    
+
 
 async function mantenimientoExcel() {
     try {
@@ -648,19 +648,19 @@ async function mantenimientoExcel() {
 
         const worksheet = workbook.getWorksheet(1);
 
-  
+
         const cellfechaCreacion = 'L39:M39:N39:O39';
         const cellrangoFecha = 'G7:H7:I7:J7';
-  
-  
 
-        
-        worksheet.getCell(cellfechaCreacion).value =  "Creado el " + fechaCreacionString + " a las " + horaCreacionString;
-        worksheet.getCell(cellrangoFecha).value =  "De: " + adjustedFromDateE.toLocaleDateString() + " Hasta: " + adjustedToDate.toLocaleDateString();
+
+
+
+        worksheet.getCell(cellfechaCreacion).value = "Creado el " + fechaCreacionString + " a las " + horaCreacionString;
+        worksheet.getCell(cellrangoFecha).value = "De: " + adjustedFromDateE.toLocaleDateString() + " Hasta: " + adjustedToDate.toLocaleDateString();
 
         const cellsToStyle = [
             cellrangoFecha,
-         
+
         ];
 
 
@@ -668,15 +668,15 @@ async function mantenimientoExcel() {
             const cell = worksheet.getCell(cellAddress);
             cell.font = { name: 'Arial', bold: true, color: { argb: '#000000' }, size: 10 };
             cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' }
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
             };
             cell.alignment = { horizontal: 'center' };
         });
 
- 
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -686,5 +686,66 @@ async function mantenimientoExcel() {
     } catch (error) {
         console.error("Error al modificar el archivo Excel:", error);
         alert("Hubo un error al modificar el archivo Excel. Por favor, intente de nuevo.");
+    }
+}
+
+//REPORTE DE VALES
+async function exportarVale() {
+    try {
+        // Obtener el ID del vale desde un input en el HTML
+        const idVale = document.getElementById('idVale').value;
+
+        let datosVale;
+        try {
+            // Obtener el vale específico por ID
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            datosVale = response.data;
+        } catch (apiError) {
+            console.error("Error al obtener el vale desde la API:", apiError);
+            alert("Hubo un error al obtener los datos del vale. Por favor, intente de nuevo.");
+            return;
+        }
+
+        if (!datosVale) {
+            alert('No se encontró el vale con el ID especificado');
+            return;
+        }
+
+        console.log('Datos del vale:', datosVale);
+
+        // Descargar el archivo Excel
+        const responseExcel = await fetch('reporteria/ReporteVale.xlsx');
+        if (!responseExcel.ok) {
+            throw new Error('No se pudo descargar el archivo Excel');
+        }
+
+        const arrayBuffer = await responseExcel.arrayBuffer();
+        console.log('Archivo Excel descargado con éxito');
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+        console.log('Archivo Excel cargado en ExcelJS');
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.getCell('B8:C8').value = datosVale.Fecha_Solicitud;
+        worksheet.getCell('K8').value = datosVale.IdUnidadProgramatica;
+        worksheet.getCell('K8').value = datosVale.NombreUnidadProgramatica;
+        worksheet.getCell('I12:J12:K12').value = datosVale.Acompanante1;
+        worksheet.getCell('I13:J13:K13').value = datosVale.Acompanante2;
+        worksheet.getCell('I14:J14:K14').value = datosVale.Acompanante3;
+        worksheet.getCell('I15:J15:K15').value = datosVale.Acompanante4;
+        worksheet.getCell('I16:J16:K16').value = datosVale.Acompanante5;
+        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = datosVale.NombreMotivo;
+        worksheet.getCell('G17:H17:I17:J17:K17').value = datosVale.NombreSolicitante;
+        worksheet.getCell('H18:I18:J18:K18').value = datosVale.Detalle;
+        worksheet.getCell('G25').value = datosVale.Hora_Salida;
+        worksheet.getCell('C25:D25:E25').value = datosVale.Fecha_Solicitud;
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Vale.xlsx';
+        link.click();
+    } catch (error) {
+        console.error("Error al exportar el archivo Excel:", error);
+        alert("Hubo un error al exportar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
