@@ -14,30 +14,52 @@
 </head>
 
 <body>
-<div class="container-fluid contenedor">
-        <div id="6" name="formLogin" class="form-container">
+    <div class="container-fluid d-flex vh-100">
+        <div id="6" name="formLogin" class="form-container m-auto">
             <br>
-            <p class="title">Ingrese el correo</p>
-            <form class="form" id="formLogin" method="post" >
-
+            <p class="title">Ingrese su correo</p>
+            <form class="form" id="formLogin" method="post">
                 <div class="form-group input-container">
-                    <input id="emailUsuario" type="email" class="form-control input" placeholder="Correo" required
+                    <input id="emailUsuario" type="email" class="form-control input" placeholder="Email" required
                         maxlength="30">
+                </div>
+
+                <div class="alert-message">
+                    <p>Un correo electrónico con un enlace para restablecer su contraseña será enviado. Por favor,
+                        revise su bandeja de entrada, así como la carpeta de spam y otros correos.</p>
                 </div>
 
                 <button id="confirmarCorreo" type="submit" class="form-btn">Confirmar</button>
             </form>
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
         </div>
+    </div>
 
-        <div id="toast-container"></div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-            </script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="/js/login.js"></script>
-        <script src="/js/registerLogin.js"></script>
-        <script src="/js/script.js"></script>
+    <script>
+        document.getElementById("confirmarCorreo").addEventListener("click", function (event) {
+            event.preventDefault();
+            var email = document.getElementById("emailUsuario").value;
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (emailPattern.test(email)) {
+                showToast("¡Éxito!", "Correo enviado exitosamente.");
+
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 3500);
+
+            } else {
+                showToast("Atención", "Ingrese un correo válido.");
+
+            }
+        });
+
+    </script>
+    <div id="toast-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 
 </html>
