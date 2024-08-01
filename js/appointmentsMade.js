@@ -5,7 +5,6 @@ async function loadCitas() {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-
         });
         const citas = response.data;
         renderTable(citas);
@@ -20,6 +19,8 @@ async function loadCitas() {
             ordering: false,
             searching: true,
             paging: true,
+            pageLength: 25, 
+            lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
             },
@@ -57,6 +58,7 @@ async function loadCitas() {
 }
 
 loadCitas();
+
 
 function renderTable(citas) {
     citas.sort((a, b) => {
