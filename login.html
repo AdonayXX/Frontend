@@ -16,7 +16,7 @@
 <body>
     <div class="container-fluid contenedor">
         <div id="6" name="formLogin" class="form-container">
-            <p class="title" >Login</p>
+            <p class="title">Login</p>
             <form class="form" id="formLogin" method="post">
                 <div class="form-group">
                     <input id="userEmail" type="text" class="form-control input" placeholder="Usuario" required
@@ -27,17 +27,21 @@
                         required maxlength="30">
                     <i class="bi bi-eye toggle-password" id="togglePassword"></i>
                 </div>
+
                 <div class="row justify-content-center mt-2" style="text-align:center">
                     <h5 style="font-size: 14px;">¿Olvidó su contraseña?<br><a href="./ingresarCorreo.html" style="font: size 13px" id="a">Ingrese aquí</a>
                     </h5>
                 </div>
                 <button id="loginButton" type="submit" class="form-btn">Iniciar Sesión</button>
             </form>
+
+
             <div class="buttons-container">
-                <a href="" data-bs-toggle="modal" data-bs-  target="#form-request"><button id="btnModal" class="form-btn"
+                <a href="" data-bs-toggle="modal" data-bs-target="#form-request"><button id="btnModal" class="form-btn"
                         onclick="SolicitarVale()">Solicitar Vale</button></a>
 
             </div>
+
             <div class="row justify-content-center mt-3">
                 <div class="col-md-12 col-sm-12 ">
                     <button class="registro btn border btn-outline-secondary w-100 rounded-pill fs-6"
@@ -48,7 +52,7 @@
             </div>
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
         </div>
-        <!-- Modal  -->
+
         <div class="modal fade contenedor-Modal" id="form-request" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -66,7 +70,6 @@
                                 aria-label="Close"></button>
                         </div>
                     </div>
-
 
                     <div class="modal-body p-5" style="background-color: #ECEDEE;">
                         <form id="8" name="formManage" class="row needs-validation" method="get" novalidate>
@@ -153,7 +156,6 @@
                                     class="col-sm-12 col-md-4 col-lg-6 d-flex justify-content-between align-items-center w-100">
                                     <h5>Agregue un acompañante:</h5>
                                     <div class="botones">
-
                                         <button type="button" class="btn btn-outline-success mb-2" id="addCompanion">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
                                                 fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
@@ -187,12 +189,8 @@
                                                 class="bi bi-person-check"></i> Acompañante 2:</label>
                                         <input type="text" class="form-control" id="acompananteNombre2" maxlength="25">
                                     </div>
-
                                 </div>
 
-                                <div class="row g-1">
-
-                                </div>
                                 <div class="row g-1">
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante3" style="display: none;">
                                         <label for="acompananteNombre3" class="form-label"><i
