@@ -36,7 +36,7 @@
             data-bs-placement="top" title="Exportar a PDF">
             <img src="img/icons8-pdf.svg" alt="PDF Icon">
         </button>
-        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableControlKm', 'ControlKm')" data-bs-toggle="tooltip"
             data-bs-placement="top" title="Exportar a Excel">
             <img src="img/icons8-excel.svg" alt="Excel Icon">
         </button>
@@ -53,6 +53,7 @@
                     <th class="text-center" id="color-th">Kilometraje Salida</th>
                     <th class="text-center" id="color-th">Kilometraje Entrada</th>
                     <th class="text-center" id="color-th">Kilometraje Recorrido</th>
+                    <th class="text-center" id="color-th">Lugar Vistado</th>
                     <th class="text-center" id="color-th">Acciones</th>
                 </tr>
             </thead>
@@ -193,3 +194,4 @@ tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 </div>
 <div data-script="js/dataTableKilometerControl.js"></div>
 <div data-script="js/exportarpdf.js"></div>
+
