@@ -52,14 +52,7 @@
         <!-- Botón para abrir modal de tareas -->
       
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Exportar a PDF">
-                <img src="img/icons8-pdf.svg" alt="PDF Icon">
-            </button>
-            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableMaintenance','mantenimiento')" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Exportar a Excel">
-                <img src="img/icons8-excel.svg" alt="Excel Icon">
-            </button>
+
         </div>
         <!-- Tabla de mantenimiento -->
         <div class="table-responsive-xxl mt-3">
@@ -458,7 +451,10 @@
 
 
     <div data-script="js/maintenance.js"></div>
+    <div data-script="js/exportarpdf.js"></div>
     <div data-script="js/dataexport.js"></div>
+
+
 </body>
 
 </html>
