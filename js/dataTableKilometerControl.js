@@ -31,13 +31,13 @@
             $("#atap-body").empty();
             // Llenar la tabla de mantenimientos con los últimos 20
             fillAtapTable(lastATAP);
-          
+
 
             // Configurar DataTables y eventos de cambio
             setupDataTable();
-             ocultarSpinner();
+            ocultarSpinner();
         } catch (error) {
-            showToast('Error','Inesperado.')
+            showToast('Error', 'Inesperado.')
         }
     }
 
@@ -54,10 +54,10 @@
 
             // Actualizar la variable global allATAP
             allATAP = atapResponse.data;
-         
+
 
         } catch (error) {
-            showToast('Error','Inesperado.')
+            showToast('Error', 'Inesperado.')
         }
     }
 
@@ -76,7 +76,7 @@
                 return;
             }
 
-        
+
 
             const fragment = document.createDocumentFragment();
 
@@ -105,7 +105,7 @@
             tableBody.appendChild(fragment);
         } catch (error) {
             showToast("Ups!", "Error al llenar la tabla", "Por favor, intenta de nuevo");
-         
+
         }
     }
 
@@ -119,8 +119,8 @@
             ordering: false,
             searching: true,
             paging: true,
-            pageLength: 25, 
-            lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
+            pageLength: 25,
+            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
             },
@@ -147,15 +147,14 @@
 
     // Función para mostrar el modal y rellenar los campos
     function showEditModal(atapItem) {
-        $("#atapModalEdit").modal("show");
+        // Llenar los campos del modal
+        fillModalFields(atapItem);
 
-        document.querySelector('#IdUnidadEdit').value = atapItem.numeroUnidad;
-        document.querySelector('#IdChoferEdit').value = atapItem.NombreChofer;
-        document.querySelector('#KilometrosSalidaEdit').value = atapItem.KilometrosSalida;
-        document.querySelector('#KilometrosEntradaEdit').value = atapItem.KilometrosEntrada;
-        document.querySelector('#KilometrosRecorridosEdit').value = atapItem.KilometrosRecorridos;
-        document.querySelector('#FechaMantenimientoEdit').value = atapItem.FechaMantenimiento.substring(0, 10);
-        document.querySelector('#LugarVisitadoSelect').value = atapItem.LugarVisitado;
+        // Manejar la visualización del lugar visitado
+        handleLugarVisitado(atapItem);
+
+        // Configurar el listener del select después de mostrar el modal
+        setupLugarVisitadoListener();
     }
 
     // Función para agregar eventos de validación de kilometraje
@@ -183,6 +182,64 @@
                 showToast('Kilometraje Salida', 'No puede ser mayor al Kilometraje Entrada.');
             } else {
                 document.querySelector('#KilometrosRecorridosEdit').value = kmEValue - kmSValue;
+            }
+        });
+    }
+
+    function fillModalFields(atapItem) {
+        // Mostrar el modal
+        $("#atapModalEdit").modal("show");
+
+        // Rellenar campos del modal
+        document.querySelector('#IdUnidadEdit').value = atapItem.numeroUnidad;
+        document.querySelector('#IdChoferEdit').value = atapItem.NombreChofer;
+        document.querySelector('#KilometrosSalidaEdit').value = atapItem.KilometrosSalida;
+        document.querySelector('#KilometrosEntradaEdit').value = atapItem.KilometrosEntrada;
+        document.querySelector('#KilometrosRecorridosEdit').value = atapItem.KilometrosRecorridos;
+        document.querySelector('#FechaMantenimientoEdit').value = atapItem.FechaMantenimiento.substring(0, 10);
+    }
+
+    function handleLugarVisitado(atapItem) {
+        // Obtener el select y el input de lugar visitado
+        const lugarVisitadoSelect = document.querySelector('#LugarVisitadoSelect');
+        const lugarVisitadoInput = document.querySelector('#LugarVisitadoInput');
+
+        // Verificar si el lugar visitado está en las opciones del select
+        let optionExists = false;
+        for (let option of lugarVisitadoSelect.options) {
+            if (option.value === atapItem.LugarVisitado) {
+                optionExists = true;
+                break;
+            }
+        }
+
+        if (optionExists) {
+            // Si el lugar está en las opciones, seleccionarlo
+            lugarVisitadoSelect.value = atapItem.LugarVisitado;
+            lugarVisitadoSelect.style.display = 'block'; // Mostrar el select
+            lugarVisitadoInput.style.display = 'none'; // Ocultar el input
+        } else {
+            // Si el lugar no está en las opciones, seleccionar "Otro" y mostrar el input
+            lugarVisitadoSelect.value = 'Otro';
+            lugarVisitadoSelect.style.display = 'block'; // Mostrar el select
+            lugarVisitadoInput.style.display = 'block'; // Mostrar el input
+            lugarVisitadoInput.value = atapItem.LugarVisitado; // Cargar el valor en el input
+        }
+    }
+
+    // Manejador de eventos para el select de lugar visitado
+    function setupLugarVisitadoListener() {
+        const lugarVisitadoSelect = document.getElementById('LugarVisitadoSelect');
+        const lugarVisitadoInput = document.getElementById('LugarVisitadoInput');
+
+        lugarVisitadoSelect.addEventListener('change', function () {
+            if (lugarVisitadoSelect.value === 'Otro') {
+                lugarVisitadoInput.style.display = 'block';
+                lugarVisitadoInput.required = true; // Hacer el input requerido
+            } else {
+                lugarVisitadoInput.style.display = 'none';
+                lugarVisitadoInput.required = false; // Hacer el input no requerido
+                lugarVisitadoInput.value = ''; // Limpiar el valor del input
             }
         });
     }
@@ -236,40 +293,40 @@
         let modal = new bootstrap.Modal(document.getElementById('confirmDeleteControlKm'), {
             backdrop: 'static',
             keyboard: false
-          });
-          let bodyConfirm = document.querySelector('#bodyDeleteControlKm');
-        
-          bodyConfirm.innerHTML = `
+        });
+        let bodyConfirm = document.querySelector('#bodyDeleteControlKm');
+
+        bodyConfirm.innerHTML = `
           <p> <strong> Registro #:</strong>  ${atapItem.IdMantenimientoATAP}</p>
           <p> <strong> Número Placa:</strong>  ${atapItem.numeroUnidad}</p>
             <p>¿Estás seguro de que deseas eliminar este registro?</p>
         `;
-        
-        
-          modal.show();
-        
-        
-          let confirmBtn = document.getElementById('confirmDeleteBtnPermission');
-        
-        
-          confirmBtn.onclick = function () {
-        
+
+
+        modal.show();
+
+
+        let confirmBtn = document.getElementById('confirmDeleteBtnPermission');
+
+
+        confirmBtn.onclick = function () {
+
             deleteControlKm(atapItem.IdMantenimientoATAP);
-        
-        
+
+
             modal.hide();
-          };
-        
-        
+        };
 
 
 
 
-       
+
+
+
 
         //Delete control km
 
-        async function deleteControlKm(idMantenimiento){
+        async function deleteControlKm(idMantenimiento) {
             try {
                 const token = localStorage.getItem('token');
                 const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${idMantenimiento}`;
@@ -343,7 +400,7 @@
             // Destruir la instancia existente
             $("#tableControlKm").DataTable().clear().destroy();
         }
-        
+
 
         // Llenar la tabla con los mantenimientos filtrados
         fillAtapTable({ mantenimientos: filteredATAP });
@@ -412,7 +469,7 @@
 
             // Filtra las unidades para mostrar solo las de tipo 3 (Motos)
             const unidadesMotos = unidades.filter(unidad => unidad.idTipoUnidad === 3); // Ajusta la propiedad según tu estructura de datos
-    
+
             // Agrega las opciones filtradas de la API
             unidadesMotos.forEach((unidad) => {
                 const option = document.createElement("option");
@@ -429,9 +486,9 @@
     }
 
     // Ocultar el spinner
-     function ocultarSpinner() {
+    function ocultarSpinner() {
         document.getElementById("spinnerContainer").style.display = "none";
-     } 
+    }
 
     function showLoaderModalAtapEdit() {
         document.querySelector('#loaderModalAtapEdit').style.display = 'flex';
@@ -440,5 +497,4 @@
     function hideLoaderModalAtapEdit() {
         document.querySelector('#loaderModalAtapEdit').style.display = 'none';
     }
-
 })();
