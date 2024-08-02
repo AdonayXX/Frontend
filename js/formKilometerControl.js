@@ -381,6 +381,17 @@ function convertISOStringToDate(isoString) {
     return `${year}-${month}-${day}`;
   }
 
+   //Asginar fecha del sistema en el input date
+
+   // Obtiene la fecha actual
+   const today = new Date();
+   // Formatea la fecha a YYYY-MM-DD
+   const formattedDate = today.toISOString().split('T')[0];
+   // Asigna la fecha formateada al valor del campo de fecha
+   document.getElementById('dateControlKm').value = formattedDate;
+   
+  
+
 
 
     
