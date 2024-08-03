@@ -29,37 +29,20 @@
                         revise su bandeja de entrada, así como la carpeta de spam y otros correos.</p>
                 </div>
 
-                <button id="confirmarCorreo" type="submit" class="form-btn">Confirmar</button>
+                <button id="confirmarCorreo" type="submit" class="form-btn">Enviar</button>
             </form>
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
         </div>
     </div>
-
-    <script>
-        document.getElementById("confirmarCorreo").addEventListener("click", function (event) {
-            event.preventDefault();
-            var email = document.getElementById("emailUsuario").value;
-            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (emailPattern.test(email)) {
-                showToast("¡Éxito!", "Correo enviado exitosamente.");
-
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 3500);
-
-            } else {
-                showToast("Atención", "Ingrese un correo válido.");
-
-            }
-        });
-
-    </script>
+    
     <div id="toast-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./js/correo.js"></script>
     <script src="./js/script.js"></script>
+
 </body>
 
 </html>

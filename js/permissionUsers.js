@@ -101,7 +101,7 @@ function fillPermissionsTable(roles, forms) {
                     <td>${form.NombreFormulario}</td>
                     <td>${formattedDate}</td>
                     <td class="text-center">
-                    ${roleName !== 'Admin' ? `<button class="btn btn-outline-danger btn-sm" onclick="DeletePermiso(${role.IdRol})"><i class="bi bi-trash"></i></button>` : '-'}
+                        ${roleName !== 'Admin' ? `<button class="btn btn-outline-danger btn-sm" onclick="DeletePermiso(${role.IdRol})"><i class="bi bi-trash"></i></button>` : ''}
                     </td>
                 `;
                 fragment.appendChild(row);
@@ -131,6 +131,7 @@ function getRoleDescription(rol) {
         case 2: return 'Chofer';
         case 3: return 'Consulta';
         case 4: return 'Coordinador';
+        case 5: return 'Atap';
         default: return 'Desconocido';
     }
 }

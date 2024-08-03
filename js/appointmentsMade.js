@@ -39,26 +39,29 @@ async function loadCitas() {
             $('#TableAppointment').DataTable().column(2).search(fechaInput).draw();
         });
 
-        $('#seleccionar-estado').on('change', function () {
-            let selectedState = $(this).val().toLowerCase();
-            $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
+        $(document).ready(function () {
+            $('#seleccionar-estado').val('Iniciada').trigger('change');
 
-            let tituloCitas = document.getElementById('tituloCitas');
-            tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
+            $('#seleccionar-estado').on('change', function () {
+                let selectedState = $(this).val().toLowerCase();
+                $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
 
-            let inputValue = $('#searchAppointment').val().toLowerCase();
-            $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
+                let tituloCitas = document.getElementById('tituloCitas');
+                tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
+
+                let inputValue = $('#searchAppointment').val().toLowerCase();
+                $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
+            });
         });
 
+        $('#TableAppointment').DataTable().search('iniciada').draw();
         ocultarSpinner();
-
     } catch (error) {
-        showToast("Error", "Error al obtener las citas.")
+        showToast("Error", "Error al obtener las citas.");
     }
 }
 
 loadCitas();
-
 
 function renderTable(citas) {
     citas.sort((a, b) => {
@@ -100,9 +103,7 @@ function renderTable(citas) {
     });
 }
 
-
 function getAcompanantes(cita) {
-
     try {
         const tableBody = document.getElementById('AcompananteTableBody');
         tableBody.innerHTML = '';
@@ -132,6 +133,12 @@ function getAcompanantes(cita) {
     }
 }
 
+document.querySelector('#searchAppointment').addEventListener('input', function (e) {
+    if (this.value.length > 15) {
+        this.value = this.value.slice(0, 15);
+    }
+});
+
 function editarCita(cita) {
     document.querySelector('#editarIdCita').value = cita.idCita;
     document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
@@ -158,7 +165,9 @@ function getRutas() {
                 selectDestino.appendChild(option);
             });
         })
-        .catch();
+        .catch(() => {
+            showToast("Error", "Error al obtener los destinos.");
+        });
 }
 
 getRutas();
@@ -179,11 +188,10 @@ async function updateCita(idCita) {
     try {
         const token = localStorage.getItem('token');
         await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
-
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        })
+        });
 
         $('#editarModal').modal('hide');
         setTimeout(function () {
@@ -197,5 +205,8 @@ async function updateCita(idCita) {
 }
 
 function ocultarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'none';
+    const spinnerContainer = document.getElementById('spinnerContainer');
+    if (spinnerContainer) {
+        spinnerContainer.style.display = 'none';
+    }
 }

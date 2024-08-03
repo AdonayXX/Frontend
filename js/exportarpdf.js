@@ -52,6 +52,9 @@ async function exportToPDF(tableId, page) {
             case 'fuelTable':
                 columnasAEliminar = new Set([]);
                 break;
+            case 'tableMaintenance':
+                columnasAEliminar = new Set(['Acciones', 'Observación']);
+                break;
             default:
                 console.log("No se requiere modificar");
                 columnasAEliminar = null;
