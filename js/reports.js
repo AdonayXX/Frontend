@@ -61,14 +61,14 @@ async function generalesPdf() {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const gasolinaKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const pacientes = datosCitas.filter(paciente => {
             const fechaCita = new Date(paciente.fechaCita);
@@ -338,7 +338,7 @@ async function generalesPdf() {
         const blob = base64ToBlob(firstPageBytes, 'application/pdf');
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU.pdf';
+        link.download = 'Reporte_ASU.pdf';
         link.click();
 
 
@@ -422,14 +422,14 @@ async function generalesExcel() {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const gasolinaKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const pacientes = datosCitas.filter(paciente => {
             const fechaCita = new Date(paciente.fechaCita);
@@ -514,7 +514,7 @@ async function generalesExcel() {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU_Modificado.xlsx';
+        link.download = 'Reporte_ASU.xlsx';
         link.click();
     } catch (error) {
         console.error("Error al modificar el archivo Excel:", error);
