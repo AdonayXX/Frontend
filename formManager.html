@@ -2,22 +2,40 @@
     <h1 class="mb-4 text-center">Registro de Encargado</h1>
     <form id="form" name="formManager" class="bg-light p-4 border rounded-3">
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
+                <div class="form-group mb-3">
+                    <label for="id" class="form-label"><i class="bi bi-person"></i> Céluda:</label>
+                    <input type="text" class="form-control" id="id" name="id">
+                </div>
+            </div>
+            <div class="col-6">
                 <div class="form-group mb-3">
                     <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre">
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+                    <label for="apellidos" class="form-label"><i class="bi bi-person"></i> Apellidos:</label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group mb-3">
                     <label for="cargo" class="form-label"><i class="bi bi-briefcase"></i> Cargo</label>
-                    <input type="text" class="form-control" id="cargo" name="cargos" pattern="[A-Za-z]*" oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
+                    <input type="text" class="form-control" id="cargo" name="cargos" pattern="[A-Za-z]*" required oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+                    <label for="contacto" class="form-label"><i class="bi bi-telephone"></i> Contacto:</label>
+                    <input type="tel" class="form-control" id="contacto" name="contacto" pattern="[0-9]{10}" required>
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group mb-3">
                     <label for="email" class="form-label"><i class="bi bi-envelope-at"></i> Email</label>
-                    <input type="text" class="form-control" id="email" name="email">
+                    <input type="text" class="form-control" id="email" name="email" required>
                 </div>
             </div>
         </div>
@@ -27,6 +45,7 @@
                 <button type="button" id="btnGuardar" class="btn btn-primary m-2"><i class="bi bi-save"></i> Guardar</button>
                 <button type="submit" id="btnBuscar" class="btn btn-primary text-white m-2"><i class="bi bi-search"></i> Buscar</button>
                 <button type="button" id="btnActualizar" class="btn btn-primary text-white m-2"><i class="bi bi-pencil"></i> Actualizar</button>
+                <button type="button" id="btnClear" class="btn btn-secondary m-2"><i class="bi bi-eraser"></i> Limpiar</button>
                 <button type="button" id="btnEliminar" class="btn btn-danger text-white m-2"><i class="bi bi-trash"></i> Eliminar</button>
             </div>
         </div>
