@@ -106,11 +106,11 @@
           <td>${maintenanceItem.TipoUnidad || ''}</td>
           <td>${formatDate(maintenanceItem.FechaMantenimiento) || ''}</td>
           <td>${maintenanceItem.TipoMantenimiento || ''}</td>
-          <td class='text-center'><button class="btn btn-outline-primary btn-sm"  onclick='SeeObervation(${JSON.stringify(maintenanceItem.Observacion)})'><i class="bi bi-eye"></i></button>
+          <td class='text-center'><button class="btn btn-outline-primary btn-sm"  onclick='SeeObervation(${JSON.stringify(maintenanceItem.Detalle)})'><i class="bi bi-eye"></i></button>
 </td>
           <td>${maintenanceItem.Descripcion || ''}</td>
           <td class="text-center">${maintenanceItem.Cantidad || ''}</td>
-          <td class='text-center'>${maintenanceItem.Kilometraje|| ''}</td>
+          <td class='text-center'>${maintenanceItem.KilometrajeMantenimiento|| ''}</td>
           <td>${maintenanceItem.Estado || ''}</td>
           <td class="actions">
               <button class="btn btn-outline-success btn-sm text-center"
@@ -148,6 +148,8 @@
       ordering: false,
       searching: true,
       paging: true,
+      pageLength: 25, 
+      lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
       },
@@ -506,10 +508,12 @@
           (unidad) => unidad.id === parseInt(unidadSelect.value)
         );
         kilometrajeActualUnidad.value = unidadFiltrda.kilometrajeActual;
+        let kilometrajeMantenimiento = document.querySelector('#kilometrajeMantenimiento');
 
-        kilometrajeActualUnidad.addEventListener('blur', function () {
-          if (kilometrajeActualUnidad.value === "" || parseInt(kilometrajeActualUnidad.value) < unidadFiltrda.kilometrajeActual) {
-            kilometrajeActualUnidad.value = unidadFiltrda.kilometrajeActual;
+
+       kilometrajeMantenimiento.addEventListener('blur', function () {
+          if (kilometrajeMantenimiento.value === "" || parseInt(kilometrajeMantenimiento.value) < unidadFiltrda.kilometrajeActual) {
+            kilometrajeMantenimiento.value = unidadFiltrda.kilometrajeActual;
           }
         });
 
@@ -621,7 +625,8 @@
       const fechaMantenimiento = document.querySelector("#fechaMantenimiento").value.trim();
       const kilometraje = document.querySelector("#kilometraje").value.trim();
       const tipoMantenimiento = document.querySelector("#tipoMantenimiento").value.trim();
-      const observacion = document.querySelector("#observaciones").value.trim() || "No hay observación";
+      const detalle = document.querySelector("#detalle").value.trim() || "No hay detalle";
+      const kilometrajeMantenimiento = document.querySelector("#kilometrajeMantenimiento").value.trim();
       // Recopilar datos del formulario
       const actividades = [];
       for (let i = 1; i <= fieldCounter; i++) {
@@ -653,9 +658,9 @@
         IdUnidad: parseInt(idUnidad),
         FechaMantenimiento: fechaMantenimiento,
         Kilometraje: kilometraje,
-        Detalle : "Mantenimiento",
+        Detalle : detalle,
         TipoMantenimiento: tipoMantenimiento,
-        Observacion: observacion,
+        KilometrajeMantenimiento : kilometrajeMantenimiento ,
         actividades: actividades
       };
 
@@ -671,7 +676,7 @@
 
         if (response) {
           if (mantenimiento.TipoMantenimiento === 'Programado') {
-            await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.Kilometraje);
+            await ObtenerActualizarunidad(mantenimiento.IdUnidad, mantenimiento.FechaMantenimiento, mantenimiento.KilometrajeMantenimiento);
           }
           showToast("Exito", "Mantenimiento Creado.");
           // Cerrar el modal correctamente usando Bootstrap
@@ -749,13 +754,15 @@
       document.querySelector('#kilometrajeEdit').value = maintenanceItem.Kilometraje;
       document.querySelector('#tipoMantenimientoEdit').value = maintenanceItem.TipoMantenimiento;
       document.querySelector('#fechaMantenimientoEdit').value = maintenanceItem.FechaMantenimiento.substring(0, 10);
-      document.querySelector('#observacionesEdit').value = maintenanceItem.Observacion;
+      document.querySelector('#detalleEdit').value = maintenanceItem.Detalle;
+      document.querySelector('#kilometrajeMantenimientoEdit').value = maintenanceItem.KilometrajeMantenimiento;
       document.querySelector('#actividadEdit').value = activ.foundActivity.IdActividad;
       document.querySelector('#unidadMedidaEdit').value = activ.foundActivity.UnidadMedida;
       document.querySelector('#cantidadEdit').value = activ.foundActivity.Cantidad;
       document.querySelector('#estadoEdit').value = activ.foundActivity.Estado;
       document.querySelector("#IdTipoUnidadHiddenEdit").value = maintenanceItem.TipoUnidad;
       document.querySelector("#IdChoferHiddenEdit").value = maintenanceItem.IdChofer;
+      
 
       // Simular evento de cambio
       const changeEvent1 = new Event("change");
@@ -789,9 +796,9 @@
             IdUnidad: parseInt(document.querySelector("#unidadEditHidden").value.trim()),
             FechaMantenimiento: document.querySelector("#fechaMantenimientoEdit").value.trim(),
             Kilometraje: document.querySelector("#kilometrajeEdit").value.trim(),
-            Detalle : "Mantenimiento",
+            KilometrajeMantenimiento: document.querySelector('#kilometrajeMantenimientoEdit').value.trim(),
+            Detalle : document.querySelector('#detalleEdit').value.trim() || "No hay Detalle",
             TipoMantenimiento: document.querySelector("#tipoMantenimientoEdit").value.trim(),
-            Observacion: document.querySelector("#observacionesEdit").value.trim() || "No hay observación",
           };
 
           const actividadMantenimientoData = {
@@ -832,8 +839,9 @@
           showToast('Error',errorMessage)
         } else {
           showToast('Error','Inesperado')
-          hideLoaderModalMantEdit();
+         
         }
+        hideLoaderModalMantEdit();
       }
 
 
@@ -1249,14 +1257,24 @@
     document.querySelector('#loaderModalMantEdit').style.display = 'none';
   }
 
-  window.SeeObervation= function(observacion){
+  window.SeeObervation= function(detalle){
 
-    document.querySelector("#bodyObservation").textContent = observacion;
+    document.querySelector("#bodyObservation").textContent = detalle;
             let myModal = new bootstrap.Modal(document.getElementById('modalobservaciones'));
             myModal.show();
     
     
   }
+
+  //Asginar fecha del sistema en el input date
+
+   // Obtiene la fecha actual
+   const today = new Date();
+   // Formatea la fecha a YYYY-MM-DD
+   const formattedDate = today.toISOString().split('T')[0];
+   // Asigna la fecha formateada al valor del campo de fecha
+   document.getElementById('fechaMantenimiento').value = formattedDate;
+
   
 
  
@@ -1265,4 +1283,3 @@
 
 
 })();
-

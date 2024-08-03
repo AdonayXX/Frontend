@@ -18,15 +18,11 @@
     </div>
     <div class="row mt-3">
         <div class="col d-flex justify-content-end">
-            <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Imprimir">
-                <img src="img/icons8-print.svg" alt="Print Icon">
-            </button>
-            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
+            <button  id="btnChofer" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('driverTable','Choferes')" data-bs-toggle="tooltip"
                 data-bs-placement="top" title="Exportar a PDF">
                 <img src="img/icons8-pdf.svg" alt="PDF Icon">
             </button>
-            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('driverTable' , 'Choferes')" data-bs-toggle="tooltip"
                 data-bs-placement="top" title="Exportar a Excel">
                 <img src="img/icons8-excel.svg" alt="Excel Icon">
             </button>
@@ -86,3 +82,6 @@
 </div>
 
 <div data-script="js/tableDriver.js"></div>
+<div data-script="js/exportarpdf.js"></div>
+
+<div data-script="js/dataexport.js"></div>

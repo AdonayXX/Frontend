@@ -75,6 +75,14 @@ async function loadEspecialidades() {
             $('#tableEspecialidades').DataTable().search(inputValue).draw();
         });
 
+        document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+            checkbox.disabled = true;
+        });
+
+        document.querySelectorAll('#espe .btn-outline-danger').forEach(deleteBtn => {
+            deleteBtn.disabled = true;
+        });
+
         const handleSelectDestinosChange = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -105,6 +113,13 @@ async function loadEspecialidades() {
                         deleteBtn.disabled = true;
                     });
 
+                    document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.addEventListener('change', function () {
+                            const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
+                            deleteBtn.disabled = true;
+                        });
+                    });
+
                     return;
                 }
 
@@ -124,12 +139,13 @@ async function loadEspecialidades() {
                 document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
                     const idEspecialidad = parseInt(checkbox.dataset.id);
 
+                    checkbox.disabled = false;
+
                     if (especialidadesMarcadasInicial.includes(idEspecialidad)) {
                         checkbox.checked = true;
                         checkbox.disabled = true;
                     } else {
                         checkbox.checked = false;
-                        checkbox.disabled = false;
                     }
                 });
 
@@ -137,12 +153,20 @@ async function loadEspecialidades() {
                     const checkbox = row.querySelector('input[type="checkbox"]');
                     const deleteBtn = row.querySelector('.btn-outline-danger');
                     if (checkbox && deleteBtn) {
-                        deleteBtn.disabled = !checkbox.checked;
+                        deleteBtn.disabled = !especialidadesMarcadasInicial.includes(parseInt(checkbox.dataset.id));
                     }
                 });
 
+                document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
+                        const idEspecialidad = parseInt(this.dataset.id);
+                        deleteBtn.disabled = !especialidadesMarcadasInicial.includes(idEspecialidad) || !this.checked;
+                    });
+                });
+
             } catch (error) {
-                showToast("Error", "Error al obtener las especialidades del destino.")
+                showToast("Error", "Error al obtener las especialidades del destino.");
             }
         };
 
@@ -199,11 +223,12 @@ async function loadEspecialidades() {
         ocultarSpinner();
 
     } catch (error) {
-        showToast("Error", "Error al obtener las especialidades.")
+        showToast("Error", "Error al obtener las especialidades.");
     }
 }
 
 loadEspecialidades();
+
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
@@ -250,7 +275,6 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
         showToast('Error', 'Error al agregar la ubicación.');
     }
 });
-
 
 function renderTableDestinations(ubicaciones) {
     const tableBody = document.getElementById('destinosTableBody');

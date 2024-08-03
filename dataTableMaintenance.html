@@ -29,7 +29,7 @@
                     aria-describedby="basic-addon1">
             </div>
         </div>
-        <div class="row justify-content-between align-items-center">
+        <div class="row  align-items-center" style="justify-content: center; text-align: center;">
             <!-- Unidad -->
             <div class="col-md-4 mb-3">
                 <label for="unidadFiltro" class="form-label">Unidad:</label>
@@ -43,23 +43,29 @@
                 <input type="date" id="fechaMantenimientoFiltro" name="fechaMantenimientoFiltro" class="form-control date-input">
             </div>
             <!-- Botón -->
-            <div class="col-md-4 mb-3 d-flex justify-content-end lign-items-end mt-4">
-                <button class="btn btn-success bi bi-plus " id="maintenancebtn" data-bs-toggle="modal" data-bs-placement="top" data-bs-target="#maintenanceModal">
-                    Agregar Mantenimiento
+           
+        </div>
+        <div class="row mb-3 justify-content-end">
+            <button class="btn btn-success bi bi-plus col-md-2 col-sm-3 d-flex justify-content-center align-items-center " id="maintenancebtn" data-bs-toggle="modal" data-bs-placement="top" data-bs-target="#maintenanceModal">
+                Agregar Mantenimiento
+            </button>
+        </div>
+        
+
+       
+        <!-- Botón para abrir modal de tareas -->
+        <div class="row mt-3">
+            <div class="col d-flex justify-content-end">
+    
+                <button id="btnCita" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableMaintenance','Mantenimientos')" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Exportar a PDF">
+                    <img src="img/icons8-pdf.svg" alt="PDF Icon">
+                </button>
+                <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('TableAppointment', 'citas')" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Exportar a Excel">
+                    <img src="img/icons8-excel.svg" alt="Excel Icon">
                 </button>
             </div>
-        </div>
-        <!-- Botón para abrir modal de tareas -->
-      
-        <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Exportar a PDF">
-                <img src="img/icons8-pdf.svg" alt="PDF Icon">
-            </button>
-            <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
-                data-bs-placement="top" title="Exportar a Excel">
-                <img src="img/icons8-excel.svg" alt="Excel Icon">
-            </button>
         </div>
         <!-- Tabla de mantenimiento -->
         <div class="table-responsive-xxl mt-3">
@@ -72,7 +78,7 @@
                         <th class="text-center" id="color-th">Tipo Unidad</th>
                         <th class="text-center" id="color-th">Fecha Mantenimiento</th>
                         <th class="text-center" id="color-th">Tipo Mantenimiento</th>
-                        <th class="text-center" id="color-th">Observación</th>
+                        <th class="text-center" id="color-th">Detalle</th>
                         <th class="text-center" id="color-th">Descripción</th>
                         <th class="text-center" id="color-th">Cantidad</th>
                         <th class="text-center" id="color-th">(Km) Mantenimiento</th>
@@ -146,7 +152,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
                                             Kilometraje:</label>
-                                        <input required type="number" id="kilometrajeEdit" name="kilometraje"
+                                        <input required type="number" id="kilometrajeEdit" name="kilometraje" readonly
                                             class="form-control" maxlength="25" readonly>
                                     </div>
                                     <!-- Fecha de mantenimiento -->
@@ -169,11 +175,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="kilometrajeMantenimientoEdit" class="form-label"><i class="bi bi-speedometer"></i>
+                                            Kilometraje Mantenimiento:</label>
+                                        <input required type="number" id="kilometrajeMantenimientoEdit" name="kilometrajeMantenimientoEdit" 
+                                            class="form-control" maxlength="25">
+                                    </div>
+                            </div>
+                                <div class="row">
                                     <!-- Observaciones -->
                                     <div class="col-12 mb-3">
-                                        <label for="observaciones" class="form-label"><i
-                                                class="bi bi-pencil-square"></i> Observaciones:</label>
-                                        <textarea required id="observacionesEdit" name="observaciones"
+                                        <label for="detalle" class="form-label"><i
+                                                class="bi bi-pencil-square"></i> Detalle:</label>
+                                        <textarea required id="detalleEdit" name="detalle"
                                             class="form-control" maxlength="200"></textarea>
                                     </div>
                                 </div>
@@ -362,7 +376,7 @@
                                     <!-- Kilometraje -->
                                     <div class="col-md-4 mb-3">
                                         <label for="kilometraje" class="form-label"><i class="bi bi-speedometer"></i>
-                                            Kilometraje:</label>
+                                            Kilometraje Unidad:</label>
                                         <input required type="number" id="kilometraje" name="kilometraje"
                                             class="form-control" maxlength="25">
                                     </div>
@@ -385,15 +399,24 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="kilometrajeMantenimiento" class="form-label"><i class="bi bi-speedometer"></i>
+                                                Kilometraje Mantenimiento:</label>
+                                            <input required type="number" id="kilometrajeMantenimiento" name="kilometrajeMantenimiento"
+                                                class="form-control" maxlength="25">
+                                        </div>
+                                </div>
 
                             </div>
+                         
                         </form>
                         <div class="row">
                             <!-- Observaciones -->
                             <div class="col-12 mb-3">
-                                <label for="observaciones" class="form-label"><i class="bi bi-pencil-square"></i>
-                                    Observaciones:</label>
-                                <textarea required id="observaciones" name="observaciones" class="form-control"
+                                <label for="detalle" class="form-label"><i class="bi bi-pencil-square"></i>
+                                    Detalle:</label>
+                                <textarea required id="detalle" name="detalle" class="form-control"
                                     maxlength="200"></textarea>
                             </div>
                         </div>
@@ -435,7 +458,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Observación</h5>
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Detalle</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -458,6 +481,11 @@
 
 
     <div data-script="js/maintenance.js"></div>
+    <div data-script="js/exportarpdf.js"></div>
+    <div data-script="js/dataexport.js"></div>
+    <div data-script="js/exportarpdf.js"></div>
+
+
 </body>
 
 </html>

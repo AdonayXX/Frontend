@@ -57,13 +57,49 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Dirección:</label>
-                        <textarea id="direccion" name="direccion" class="form-control" readonly ></textarea>  
+                    <!-- Provincia -->
+                    <div class="col-md-4 mb-3">
+                        <label for="provincia" class="form-label"><i class="bi bi-compass"></i>
+                            Provincia: </label>
+                            <input type="text" id="provincia" name="provincia" class="form-control" readonly>
                     </div>
+
+                    <!-- canton -->
+                    <div class="col-md-4 mb-3">
+                        <label for="canton" class="form-label"><i class="bi bi-geo"></i> Cantón:
+                        </label>
+                        <input type="text" id="canton" name="canton" class="form-control" readonly>
+
+                    </div>
+
+                    <!-- distrito -->
+                    <div class="col-md-4 mb-3">
+                        <label for="distrito" class="form-label"><i class="bi bi-map"></i> Distrito:
+                        </label>
+                        <input type="text" id="distrito" name="distrito" class="form-control" readonly>
+
+                    </div>
+                </div>
+
+               
+                <div class="row">
+                    <!-- barrio -->
+                     <div class="col-md-4 mb-3">
+                        <label for="barrio" class="form-label"><i class="bi bi-building"></i> Barrio: </label>
+                        <input type="text" id="barrio" name="barrio" class="form-control" readonly></input>
+                     </div>
+                    <!-- Direccion -->
                     <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Otras señas: </label>
+                        <textarea  id="direccion" name="direccion" class="form-control" readonly></textarea>
+                    </div>
+                  
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
                         <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
-                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250"></textarea>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250" style="height: 50px;"></textarea>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>

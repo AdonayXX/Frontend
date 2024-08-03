@@ -1,6 +1,11 @@
 //funciones dinamicas
+document.addEventListener('DOMContentLoaded', () => {
+    getVales();
+    loadFormData();
+    addInputListeners();
+    getVales();
+});
 
-// Función para mostrar los campos según el motivo seleccionado
 var motivoSeleccionado;
 function mostrarCampos() {
     motivoSeleccionado = document.getElementById('motivo').value;
@@ -67,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('date').textContent = formattedDate;
 });
 
-//establece que no se puedan elegir fechas anteriores 
 const today = new Date();
 const year = today.getFullYear();
 const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -75,7 +79,6 @@ const day = String(today.getDate()).padStart(2, '0');
 const formattedDate = `${year}-${month}-${day}`;
 document.getElementById('b_date').min = formattedDate;
 
-//Añadir Acompañantes
 let acompananteCount = 0;
 document.getElementById('addCompanion').addEventListener('click', function () {
     if (acompananteCount < 5) {
@@ -89,7 +92,6 @@ document.getElementById('addCompanion').addEventListener('click', function () {
     }
 });
 
-//Eliminar Acompañantes
 document.getElementById('removeCompanion').addEventListener('click', function () {
     if (acompananteCount > 0) {
         const acompDiv = document.getElementById('acompanante' + acompananteCount);
@@ -104,7 +106,6 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
     }
 });
 
-
 //Funcion para obtener los datos de la solicitud
 function SolicitarVale() {
     ObtenerUnidades();
@@ -115,7 +116,6 @@ function SolicitarVale() {
     ObtenerRutaSalida();
     ObtenerRutaDestino();
 }
-
 
 var url = 'https://backend-transporteccss.onrender.com/';
 //Obtener Unidades
@@ -257,10 +257,6 @@ function LlenarRutaDestino(data) {
     document.getElementById('lugarDes2').innerHTML = body;
 }
 
-
-//------------------------------------------------------------------------------------------
-//Valida que los campos se deban llenar
-//guarda los datos
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
     event.preventDefault();
     GuardarDatos();
@@ -311,12 +307,6 @@ function GuardarDatos() {
     Acompanante3 = adjustToNullIfEmpty(Acompanante3);
     Acompanante4 = adjustToNullIfEmpty(Acompanante4);
     Acompanante5 = adjustToNullIfEmpty(Acompanante5);
-    // SalidaId = adjustToNullIfEmpty2(SalidaId);
-    // DestinoId = adjustToNullIfEmpty2(DestinoId);
-    // SalidaEbaisId = adjustToNullIfEmpty2(SalidaEbaisId);
-    // DestinoEbaisId = adjustToNullIfEmpty2(DestinoEbaisId);
-
-
 
     function adjustToNullIfEmpty(value) {
         if (typeof value === 'string' && value.trim() === '') {
@@ -324,18 +314,6 @@ function GuardarDatos() {
         }
         return value;
     }
-
-
-    // if (SalidaEbaisId) {
-    //     SalidaId = null;
-    // } else if (SalidaId) {
-    //     SalidaEbaisId = null;
-    // }
-    // if (DestinoEbaisId) {
-    //     DestinoId = null;
-    // } else if (DestinoId) {
-    //     DestinoEbaisId = null;
-    // }
 
     if (motivoSeleccionado === '3') {
         SalidaId = null;
@@ -369,19 +347,20 @@ function GuardarDatos() {
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
+            getVales();
         })
         .catch(error => {
             if (error.response) {
-                console.error('Hubo un problema al guardar los datos:', error.response.data);
-                console.error('Detalles del error:', error.response.status, error.response.headers);
+                console.log('Hubo un problema al guardar los datos:', error.response.data.message);
+                showToast("Error al guardar los datos", error.response.data.message);
             } else {
                 console.error('Error desconocido:', error);
             }
         });
+
 }
 
 
-//Limpia los campos del modal 
 document.getElementById('btn-limpiar').addEventListener('click', function () {
     document.getElementById('acompananteNombre1').value = '';
     document.getElementById('acompananteNombre2').value = '';
@@ -428,4 +407,35 @@ async function getVales() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', getVales);
+function addInputListeners() {
+    const inputs = document.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            localStorage.setItem(input.id, input.value);
+        });
+
+        if (input.tagName === 'SELECT') {
+            input.addEventListener('change', () => {
+                localStorage.setItem(input.id, input.value);
+            });
+        }
+    });
+}
+
+function loadFormData() {
+    const inputs = document.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+        const value = localStorage.getItem(input.id);
+        if (value !== null) {
+            input.value = value;
+        }
+    });
+
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+        const event = new Event('change');
+        select.dispatchEvent(event);
+    });
+}

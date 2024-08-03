@@ -1,6 +1,7 @@
 "use strict";
 
 (async function () {
+  alert('Bienvenido a la página de viajes del chófer');
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");

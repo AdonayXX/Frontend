@@ -49,15 +49,11 @@
 
 
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
-      data-bs-placement="top" title="Imprimir">
-      <img src="img/icons8-print.svg" alt="Print Icon">
-    </button>
-    <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF()" data-bs-toggle="tooltip" data-bs-placement="top"
+    <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableTrips','Datos Viajes')" data-bs-toggle="tooltip" data-bs-placement="top"
       title="Exportar a PDF">
       <img src="img/icons8-pdf.svg" alt="PDF Icon">
     </button>
-    <button class="btn btn-secondary me-2 excel" onclick="exportToExcel()" data-bs-toggle="tooltip"
+    <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableTrips','Viajes')" data-bs-toggle="tooltip"
       data-bs-placement="top" title="Exportar a Excel">
       <img src="img/icons8-excel.svg" alt="Excel Icon">
     </button>
@@ -71,7 +67,6 @@
           <th class="text-center" id="color-th">Paciente</th>
           <th class="text-center" id="color-th">Lugar Salida</th>
           <th class="text-center" id="color-th">Lugar Destino</th>
-          <th class="text-center" id="color-th">Condición</th>
           <th class="text-center" id="color-th">Hora Cita</th>
           <th class="text-center" id="color-th">Fecha Cita</th>
           <th class="text-center" id="color-th">Camilla</th>
@@ -139,3 +134,5 @@
 </div>
 
 <div data-script="js/dataTrips.js"></div>
+<div data-script="js/dataexport.js"></div>
+<div data-script="js/exportarpdf.js"></div>

@@ -41,8 +41,11 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 document.getElementById('primerApellido').value = pacienteEncontrado.Apellido1 || '';
                 document.getElementById('segundoApellido').value = pacienteEncontrado.Apellido2 || '';
                 document.getElementById('telefonos').value = pacienteEncontrado.Telefono2 ? `${pacienteEncontrado.Telefono1 || ''} / ${pacienteEncontrado.Telefono2}` : pacienteEncontrado.Telefono1 || '';  
-                document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
-                document.getElementById('direccion').value = pacienteEncontrado.Direccion || '';
+                document.getElementById('provincia').value = pacienteEncontrado.Provincia || '';
+                document.getElementById('canton').value = pacienteEncontrado.Canton || '';
+                document.getElementById('distrito').value = pacienteEncontrado.Distrito || '';
+                document.getElementById('barrio').value = pacienteEncontrado.Barrio || '';    
+                document.getElementById('direccion').value = pacienteEncontrado.OtrasSenas || '';    
 
                 const prioridadCheckbox = document.getElementById('prelacion');
                 prioridadCheckbox.checked = pacienteEncontrado.Prioridad === 1;
@@ -60,7 +63,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         } catch (error) {
             console.error('Error fetching patient data:', error);
             showToast('Error', 'Error al obtener los datos del paciente.');
-            loadContent('formAppointment.html', 'mainContent');
+            // loadContent('formAppointment.html', 'mainContent');
             return false;
         }
     }
@@ -216,12 +219,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         this.disabled = true;
 
         const guardarCita = async () => {
-            // if (!idPaciente) {
-            //     console.log('Error', 'No se ha obtenido el IdPaciente.');
-            //     this.disabled = false;
-            //     return;
-            // }
-
+          
             const diagnostico = document.getElementById('diagnostico').value;
             const fechaCita = document.getElementById('fechaCita').value;
             const horaCitaInput = document.getElementById('horaCita').value;
@@ -229,6 +227,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const idUbicacionDestino = document.getElementById('destino').value;
             const idEspecialidad = document.getElementById('especialidad').value;
             const tipoSeguro = document.getElementById('tipoSeguro').value;
+
+            const provincia = document.getElementById('provincia').value;
+            const canton = document.getElementById('canton').value;
+            const distrito= document.getElementById('distrito').value;
+            const barrio = document.getElementById('barrio').value;
+            const direccion = document.getElementById('direccion').value;
 
             if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro || !idEspecialidad) {
                 const camposFaltantes = [];
@@ -273,7 +277,13 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "fechaCita": fechaCita,
                 "horaCita": horaCita,
                 "transladoCita": salida,
-                "idUsuario": idUsuario
+                "idUsuario": idUsuario,
+                "provincia" : provincia,
+                "canton": canton,
+                "distrito": distrito,
+                "barrio": barrio,
+                "direccionExacta": direccion
+
             };
 
             try {
