@@ -692,7 +692,7 @@ async function mantenimientoExcel() {
 }
 
 //REPORTE DE VALES
-async function exportarVale() {
+async function exportarValeExcel() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
@@ -745,5 +745,173 @@ async function exportarVale() {
         link.click();
     } catch (error) {
         console.error("Error al exportar el archivo Excel:", error);
+    }
+}
+
+async function exportarValePdf() {
+    try {
+        const idVale = document.getElementById('idVale').value;
+        let datosVale;
+        try {
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            datosVale = response.data;
+        } catch (apiError) {
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            return;
+        }
+
+        const pdfUrl = '/documents/ReporteValePDF.pdf';
+        const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
+
+        const worksheet = pdfDoc.getPages()[0];
+        const { width, height } = worksheet.getSize();
+        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+        const valeData = datosVale.vale;
+        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
+        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 140,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
+            x: 120,
+            y: height - 152,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
+            x: 120,
+            y: height - 164,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante1 || ''), {
+            x: 120,
+            y: height - 176,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante2 || ''), {
+            x: 120,
+            y: height - 188,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante3 || ''), {
+            x: 120,
+            y: height - 200,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante4 || ''), {
+            x: 120,
+            y: height - 212,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante5 || ''), {
+            x: 120,
+            y: height - 224,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreMotivo || ''), {
+            x: 120,
+            y: height - 236,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
+            x: 120,
+            y: height - 248,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Detalle || ''), {
+            x: 120,
+            y: height - 260,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 120,
+            y: height - 272,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 284,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 284,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 120,
+            y: height - 272,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+
+        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Vale.pdf';
+
+        link.click();
+
+        function base64ToBlob(base64, type) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; ++i) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new Blob([bytes], { type });
+        }
+    } catch (error) {
+        console.error("Error al exportar el archivo PDF:", error);
     }
 }
