@@ -42,12 +42,12 @@
     </div>
     <br>
     <div class="d-flex justify-content-end mb-3">
-        <button  id="btnViajes" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tablaViajes','Viajes')" data-bs-toggle="tooltip"
-        data-bs-placement="top" title="Exportar a PDF">
-        <img src="img/icons8-pdf.svg" alt="PDF Icon">
-    </button>
-        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tablaViajes', 'Viajes')" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a Excel">
+        <button id="btnViajes" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tablaViajes','Viajes')"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
+            <img src="img/icons8-pdf.svg" alt="PDF Icon">
+        </button>
+        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tablaViajes', 'Viajes')"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
             <img src="img/icons8-excel.svg" alt="Excel Icon">
         </button>
     </div>
@@ -59,6 +59,7 @@
                     <th class="text-center" id="color-th">IdViaje</th>
                     <th class="text-center" id="color-th">Unidad</th>
                     <th class="text-center" id="color-th">Chofer</th>
+                    <th class="text-center" id="color-th">Recurso</th>
                     <th class="text-center" id="color-th">Ocupación</th>
                     <th class="text-center" id="color-th">Estado</th>
                     <th class="text-center" id="color-th">Fecha</th>
@@ -79,7 +80,8 @@
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                 <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Cita Asociada</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3" style="text-align: center;">
