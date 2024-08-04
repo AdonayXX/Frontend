@@ -15,14 +15,14 @@
     <div class="row mb-3 justify-content-center">
         <div class="col-md-4 text-center">
             <label for="unidad" class="form-label">Unidad</label>
-            <input class="form-control" id="unidadAsignada" type="text" readonly>
+            <input class="form-control" id="unidadAsignadaVale" type="text" readonly>
         </div>
         <div class="col-md-4 text-center">
             <label for="fecha" class="form-label">Fecha</label>
-            <input type="date" id="fecha" class="form-control" readonly>
+            <input type="date" id="fechaVale" class="form-control" readonly>
         </div>
         <div class="col-md-4 text-center">
-            <label for="tiempoTranscurrido" class="form-label ">Tiempo Transcurrido del viaje:</label>
+            <label for="tiempoTranscurrido" class="form-label">Tiempo Transcurrido del viaje:</label>
             <input type="text" id="tiempoTranscurrido" class="form-control" readonly>
         </div>
     </div>
@@ -79,7 +79,7 @@
 </div>
 
 <!-- Modal de Acompañantes -->
-<div class="modal fade" id="acompModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
+<div class="modal fade" id="acompanantesModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -121,26 +121,25 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <!-- Cambia el onclick para abrir el segundo modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#confirmarFinalizarModal">Finalizar Viaje</button>
+                    data-bs-target="#confirmarFinalizarModal" id="btnConfirmarFinalizar">Finalizar Viaje</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal de Confirmación Final de Viaje -->
+<!-- Modal de Confirmación Final de vale -->
 <div class="modal fade" id="confirmarFinalizarModal" tabindex="-1" aria-labelledby="confirmarFinalizarModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid" alt="Logo CCSS" width="50" height="50">
-                <h5 class="modal-title ms-2" id="confirmarFinalizarModalLabel">Por favor confirme el viaje.</h5>
+                <h5 class="modal-title ms-2" id="confirmarFinalizarModalLabel">Por favor confirme el vale.</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el viaje.
+                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el vale.
                 </p>
                 <form id="finalizarViajeForm">
                     <div class="row g-3">
@@ -169,4 +168,25 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Dirección -->
+<div class="modal fade mt-5" id="modalDireccion" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Dirreción</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyDireccion" class="flex justify-content-center text-center">
+                    <!-- Aqui va la Observacion -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div data-script="js/tableDriverTrips.js"></div>
