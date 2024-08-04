@@ -219,12 +219,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         this.disabled = true;
 
         const guardarCita = async () => {
-            // if (!idPaciente) {
-            //     console.log('Error', 'No se ha obtenido el IdPaciente.');
-            //     this.disabled = false;
-            //     return;
-            // }
-
+          
             const diagnostico = document.getElementById('diagnostico').value;
             const fechaCita = document.getElementById('fechaCita').value;
             const horaCitaInput = document.getElementById('horaCita').value;
@@ -232,6 +227,12 @@ document.getElementById('identificacion').addEventListener('blur', async functio
             const idUbicacionDestino = document.getElementById('destino').value;
             const idEspecialidad = document.getElementById('especialidad').value;
             const tipoSeguro = document.getElementById('tipoSeguro').value;
+
+            const provincia = document.getElementById('provincia').value;
+            const canton = document.getElementById('canton').value;
+            const distrito= document.getElementById('distrito').value;
+            const barrio = document.getElementById('barrio').value;
+            const direccion = document.getElementById('direccion').value;
 
             if (!diagnostico || !fechaCita || !horaCitaInput || !idUbicacionDestino || !tipoSeguro || !idEspecialidad) {
                 const camposFaltantes = [];
@@ -276,7 +277,13 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 "fechaCita": fechaCita,
                 "horaCita": horaCita,
                 "transladoCita": salida,
-                "idUsuario": idUsuario
+                "idUsuario": idUsuario,
+                "provincia" : provincia,
+                "canton": canton,
+                "distrito": distrito,
+                "barrio": barrio,
+                "direccionExacta": direccion
+
             };
 
             try {

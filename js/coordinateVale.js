@@ -262,6 +262,7 @@
 
     const btnCancel = document.getElementById('btn-rechazarSoli');
     btnCancel.addEventListener('click', function () {
+        event.preventDefault();
         const newIdEstado = 3;
         const valueId = document.getElementById('input-id').value;
         newStatus(valueId, newIdEstado);

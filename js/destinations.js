@@ -113,6 +113,13 @@ async function loadEspecialidades() {
                         deleteBtn.disabled = true;
                     });
 
+                    document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.addEventListener('change', function () {
+                            const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
+                            deleteBtn.disabled = true;
+                        });
+                    });
+
                     return;
                 }
 
@@ -154,7 +161,7 @@ async function loadEspecialidades() {
                     checkbox.addEventListener('change', function () {
                         const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
                         const idEspecialidad = parseInt(this.dataset.id);
-                        deleteBtn.disabled = !especialidadesMarcadasInicial.includes(idEspecialidad);
+                        deleteBtn.disabled = !especialidadesMarcadasInicial.includes(idEspecialidad) || !this.checked;
                     });
                 });
 
@@ -221,6 +228,7 @@ async function loadEspecialidades() {
 }
 
 loadEspecialidades();
+
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();

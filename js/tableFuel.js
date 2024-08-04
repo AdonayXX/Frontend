@@ -54,6 +54,8 @@ async function getRegistrosCombustble() {
                     "<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 ordering: false,
                 searching: true,
+                pageLength: 25, 
+                lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
                 paging: true,
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
