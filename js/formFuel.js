@@ -1,11 +1,27 @@
 "use strict";
 
 (async function () {
+
+    const infoUsuario = infoUser();
+    const idUsuario = infoUsuario.usuario.IdUsuario;
     const form = document.getElementById('fuelForm');
     const btnBuscar = document.getElementById('btnBuscar');
     const btnclearForm = document.getElementById('btnLimpiar');
     const token = localStorage.getItem('token');
+    const rol = infoUsuario?.usuario?.Rol;
     const apiUrl = 'https://backend-transporteccss.onrender.com/api/';
+
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    if (rol !== 2) {
+        showToast('Acceso denegado', 'Solo los chóferes pueden usar este módulo.');
+        document.getElementById('fuelForm').style.display = 'none';
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 3000);
+    }
 
     form.addEventListener('submit', handleSubmit);
     btnBuscar.addEventListener('click', handleBuscar);
@@ -55,18 +71,7 @@
         document.getElementById('btnGuardar').disabled = false;
     }
 
-    function infoUser() {
-        try {
-            return jwt_decode(token);
-        } catch (error) {
-            showToast('Error', 'Ocurrio un problema al obtener los datos del usuario');
-        }
-    }
-
-    const infoUsuario = infoUser();
-    const idUsuario = infoUsuario.usuario.IdUsuario;
-
-    async function obtenerUnidadAsignada(identificacion) {
+    async function getAssignedUnit(identificacion) {
         try {
             const response = await axios.get(`${apiUrl}chofer/unidades`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -77,18 +82,18 @@
         }
     }
 
-    async function setUnidadYChofer() {
+    async function setUnitDriver() {
         const infoUsuario = await infoUser();
         const identificacion = infoUsuario.usuario.Identificacion;
-        const unidadYChofer = await obtenerUnidadAsignada(identificacion);
+        const unidadYChofer = await getAssignedUnit(identificacion);
 
-        if (unidadYChofer) {
+        if (unidadYChofer && unidadYChofer.idEstado === 1) {
             document.getElementById('chofer').value = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
             document.getElementById('unidad').value = unidadYChofer.numeroUnidad;
         }
     }
 
-    setUnidadYChofer();
+    setUnitDriver();
 
     function obtainHourandDate() {
         const now = new Date();
