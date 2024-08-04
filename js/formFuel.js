@@ -16,11 +16,10 @@
     }
 
     if (rol !== 2) {
+        document.getElementById('btnBuscar').disabled = true;
+        document.getElementById('btnGuardar').disabled = true;
         showToast('Acceso denegado', 'Solo los chóferes pueden usar este módulo.');
-        document.getElementById('fuelForm').style.display = 'none';
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3000);
+        return;
     }
 
     form.addEventListener('submit', handleSubmit);
