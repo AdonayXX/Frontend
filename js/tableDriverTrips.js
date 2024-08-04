@@ -1,7 +1,7 @@
+
 "use strict";
 
 (async function () {
-  alert('Bienvenido a la página de viajes del chófer');
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");
@@ -10,6 +10,7 @@
 
 
   async function infoUser() {
+    alert('infoUser');
     try {
       const userInfo = jwt_decode(token);
       return userInfo;
@@ -27,6 +28,7 @@
           'Authorization': `Bearer ${token}`
         }
       });
+      console.log('Data Chóferes',response.data.choferesConUnidades);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       console.error("Error al obtener la unidad asignada:", error);
@@ -36,12 +38,14 @@
 
   async function obtenerIdUnidad(numeroUnidad) {
     const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
+
     try {
       const response = await axios.get(API_UNIDADES, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      console.log('Data Unidades',response.data.unidades);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
@@ -52,6 +56,7 @@
 
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
+    console.log(apiURLViajes);
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -71,6 +76,7 @@
       }
 
       renderizarViajes(viajes);
+      console.log('Viajes',viajes);
       haveTrips();
 
     } catch (error) {
@@ -140,7 +146,7 @@
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
       loadContent('tableDriverTrips.html', 'mainContent');
-      mostrarEstadoViaje(); 
+      mostrarEstadoViaje();
     } catch (error) {
       console.error("Error al finalizar el viaje:", error);
       if (error.response) {
@@ -168,6 +174,11 @@
       btnIniciarViaje.disabled = true;
       btnInitTripDriver.disabled = true;
       btnInitTripDriver.innerText = 'Viaje en tránsito';
+      btnInitTripDriver.disabled = false;
+      btnInitTripDriver.disabled = true;
+
+
+
       mostrarTiempoTranscurrido(viajeIniciado.hourInitTrip);
     } else {
       btnIniciarViaje.disabled = false;
@@ -260,8 +271,8 @@
         <td class="text-center">${data.NombrePaciente}</td>
         <td class="text-center">${data.Direccion}</td>
         <td class="text-center">${data.ubicacionOrigen}</td>
+            <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">${data.horaCita}</td>
-        <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">
           <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
             data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
@@ -279,6 +290,7 @@
     const tableBody = document.getElementById('viajesTableBody');
     const btnInitTripDriver = document.getElementById('btnInitTripDriver');
     const btnFinalizarViaje = document.getElementById('finalizarViajeBtn');
+    const btnIniciarViaje = document.getElementById('btnIniciarViaje');
 
     const hasTrip = tableBody.children.length > 0;
     btnInitTripDriver.disabled = !hasTrip;
@@ -286,12 +298,6 @@
     btnIniciarViaje.disabled = !hasTrip;
   }
 
-  function polling() {
-    setInterval(() => {
-      haveTrips();
-    }, 2000);
-  }
 
-  polling();
   await inicializarPagina();
 })();
