@@ -128,6 +128,7 @@
                     Contacto: contacto,
                     Correo: email,
                 };
+                console.log(manager);
                 const response = await axios.put(`${url}api/funcionarios/${ced}`, manager, {
                     headers: {
                         'Authorization': `Bearer ${token}`
