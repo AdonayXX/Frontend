@@ -700,7 +700,7 @@ async function exportarVale() {
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
             datosVale = response.data;
         } catch (apiError) {
-            showToast("Error","No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
         }
 
@@ -713,12 +713,12 @@ async function exportarVale() {
         const arrayBuffer = await responseExcel.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
-        
+
         const worksheet = workbook.getWorksheet(1);
-        const valeData = datosVale.vale; 
+        const valeData = datosVale.vale;
         const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
         const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
-          
+
         worksheet.getCell('B8:C8').value = fechaSolicitud;
         worksheet.getCell('K8').value = valeData.IdUnidadProgramatica;
         worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidadProgramatica;
@@ -745,6 +745,5 @@ async function exportarVale() {
         link.click();
     } catch (error) {
         console.error("Error al exportar el archivo Excel:", error);
-        alert("Hubo un error al exportar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
