@@ -1,12 +1,27 @@
 "use strict";
 
 (async function () {
+
+    const infoUsuario = infoUser();
+    const idUsuario = infoUsuario.usuario.IdUsuario;
     const form = document.getElementById('fuelForm');
     const btnBuscar = document.getElementById('btnBuscar');
     const btnclearForm = document.getElementById('btnLimpiar');
     const token = localStorage.getItem('token');
+    const rol = infoUsuario?.usuario?.Rol;
     const apiUrl = 'https://backend-transporteccss.onrender.com/api/';
-    
+
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    if (rol !== 2) {
+        document.getElementById('btnBuscar').disabled = true;
+        document.getElementById('btnGuardar').disabled = true;
+        showToast('Acceso denegado', 'Solo los chóferes pueden usar este módulo.');
+        return;
+    }
+
     form.addEventListener('submit', handleSubmit);
     btnBuscar.addEventListener('click', handleBuscar);
     btnclearForm.addEventListener('click', handleclearForm);
@@ -55,18 +70,7 @@
         document.getElementById('btnGuardar').disabled = false;
     }
 
-    function infoUser() {
-        try {
-            return jwt_decode(token);
-        } catch (error) {
-            showToast('Error', 'Ocurrio un problema al obtener los datos del usuario');
-        }
-    }
-
-    const infoUsuario = infoUser();
-    const idUsuario = infoUsuario.usuario.IdUsuario;
-
-    async function obtenerUnidadAsignada(identificacion) {
+    async function getAssignedUnit(identificacion) {
         try {
             const response = await axios.get(`${apiUrl}chofer/unidades`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -77,18 +81,18 @@
         }
     }
 
-    async function setUnidadYChofer() {
+    async function setUnitDriver() {
         const infoUsuario = await infoUser();
         const identificacion = infoUsuario.usuario.Identificacion;
-        const unidadYChofer = await obtenerUnidadAsignada(identificacion);
+        const unidadYChofer = await getAssignedUnit(identificacion);
 
-        if (unidadYChofer) {
+        if (unidadYChofer && unidadYChofer.idEstado === 1) {
             document.getElementById('chofer').value = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
             document.getElementById('unidad').value = unidadYChofer.numeroUnidad;
         }
     }
 
-    setUnidadYChofer();
+    setUnitDriver();
 
     function obtainHourandDate() {
         const now = new Date();
@@ -134,6 +138,17 @@
         }
     }
 
+    async function getUnitData(unidad) {
+        try {
+            const response = await axios.get(`${apiUrl}unidades/${unidad}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            return response.data.unidades[0];
+        } catch (error) {
+            showToast('Error', 'Error al obtener los datos de la unidad.');
+        }
+    }
+
     async function getCurrentMileage(unidad) {
         try {
             const response = await axios.get(`${apiUrl}unidades/${unidad}`, {
@@ -145,21 +160,35 @@
         }
     }
 
-    async function putCurrentMileage(unidad, kilometraje) {
+    async function updateCurrentMileage(unidad, kilometraje) {
         try {
-            const response = await axios.get(`${apiUrl}unidades/${unidad}`, {
+            const unitData = await getUnitData(unidad);
+
+            const data = {
+                idTipoUnidad: unitData.idTipoUnidad,
+                idTipoRecurso: unitData.idTipoRecurso,
+                tipoFrecuenciaCambio: unitData.tipoFrecuenciaCambio,
+                valorFrecuenciaC: unitData.valorFrecuenciaC,
+                ultimoMantenimientoFecha: unitData.ultimoMantenimientoFecha,
+                ultimoMantenimientoKilometraje: unitData.ultimoMantenimientoKilometraje,
+                numeroUnidad: unidad,
+                choferDesignado: unitData.choferDesignado,
+                fechaDekra: new Date(unitData.fechaDekra).toISOString().split('T')[0],
+                capacidadTotal: unitData.capacidadTotal,
+                capacidadCamas: unitData.capacidadCamas,
+                capacidadSillas: unitData.capacidadSillas,
+                kilometrajeInicial: unitData.kilometrajeInicial,
+                kilometrajeActual: kilometraje,
+                adelanto: unitData.adelanto,
+                idEstado: unitData.idEstado,
+                usuario: idUsuario
+            };
+
+            await axios.put(`${apiUrl}unidades/${unidad}`, data, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            const unidadData = response.data.unidades[0];
-            const kilometrajeAnterior = unidadData.kilometrajeActual;
-
-            if (kilometraje > kilometrajeAnterior) {
-                await axios.put(`${apiUrl}unidades/${unidad}`, { kilometrajeActual: kilometraje }, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-            }
         } catch (error) {
-            showToast('Error', 'Error al obtener el kilometraje actual de la unidad.');
+            showToast('Error', 'Error al actualizar el kilometraje actual de la unidad.');
         }
     }
 
@@ -239,6 +268,7 @@
             await axios.post(`${apiUrl}registroCombustible`, fuelLogData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            updateCurrentMileage(fuelLogData.numeroUnidad, fuelLogData.kilometraje);
             clearForm();
             showToast('Éxito', `El registro de combustible de la unidad "${fuelLogData.numeroUnidad}" se ha realizado exitosamente.`);
         }
@@ -247,7 +277,7 @@
     async function putFuelLog() {
         const fuelLogData = getFormData();
         const idRegistro = await getIdRegistroCombustible(fuelLogData.numeroUnidad);
-        
+
         if (await checkDuplicateBill(fuelLogData.numeroFactura, idRegistro)) {
             showToast('Error', `Ya existe un registro de combustible con el número de factura ${fuelLogData.numeroFactura}.`);
             return;
@@ -260,6 +290,7 @@
             await axios.put(`${apiUrl}registroCombustible/${idRegistro}`, fuelLogData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            updateCurrentMileage(fuelLogData.numeroUnidad, fuelLogData.kilometraje);
             clearForm();
             showToast('Éxito', `El registro de combustible de la unidad "${fuelLogData.numeroUnidad}" se ha actualizado exitosamente.`);
         }

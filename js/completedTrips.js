@@ -83,7 +83,7 @@ async function loadViajes() {
 
         $('#fechaViaje').on('change', function () {
             let fechaInput = $(this).val();
-            table.column(5).search(fechaInput).draw();
+            table.column(6).search(fechaInput).draw();
         });
 
         $('#seleccionar-unidad').on('change', function () {
@@ -123,6 +123,7 @@ function renderTable(viajes) {
             <td class="text-center">${viaje.idViaje}</td>
             <td class="text-center">${viaje.numeroUnidad}</td>
             <td class="text-center">${viaje.NombreChofer}</td>
+            <td class="text-center">${viaje.recurso}</td>
             <td class="text-center">${viaje.Ocupación}</td>
             <td class="text-center">${viaje.EstadoViaje}</td>
             <td class="text-center">${viaje.fechaInicioViaje.split('T')[0]}</td>

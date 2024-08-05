@@ -22,7 +22,7 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
         showToast("¡Éxito!", "Contraseña actualizada correctamente");
         setTimeout(() => {
             window.location.href = "login.html";
-        }, 3500);
+        }, 2500);
     } else {
         showToast("Atención", "Las contraseñas no coinciden.");
     }

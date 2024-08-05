@@ -55,6 +55,10 @@ async function exportToPDF(tableId, page) {
             case 'tableMaintenance':
                 columnasAEliminar = new Set(['Acciones', 'Observación']);
                 break;
+            case 'tableTrips':
+                columnasAEliminar = new Set(['Seleccionar', 'Acciones']);
+                break;    
+               
             default:
                 console.log("No se requiere modificar");
                 columnasAEliminar = null;
