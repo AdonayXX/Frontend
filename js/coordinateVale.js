@@ -11,6 +11,7 @@
         sessionStorage.removeItem('selectedIdVale');
         readChofer();
         readUnidad();
+        readManager();
     } else {
         console.error('No se encontró el ID del vale en sessionStorage.');
     }
@@ -170,7 +171,6 @@
                 Observaciones: "Agregando datos"
             };
             if (isCero == 0) {
-                console.log("siseñor");
                 coordinate.IdChofer = 25;
             }
             console.log(coordinate);
@@ -179,19 +179,28 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
+    
             const dataTripVale = {
                 fecha: obtenerFechaActual(),
                 idUnidad: document.getElementById('select-placa').value
-            }
-            console.log(dataTripVale);
-            await axios.post(`${url}api/viajeVale`, dataTripVale, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            };
+            const tripValeResponse = await axios.post(`${url}api/viajeVale`, dataTripVale, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
+    
             console.log('Datos guardados correctamente:', response.data);
-
+    
             return true;
         } catch (error) {
-            console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
+            if (error.response) {
+                console.error('Error al guardar datos:', error.response.data);
+            } else if (error.request) {
+                console.error('Error al guardar datos: No se recibió respuesta del servidor', error.request);
+            } else {
+                console.error('Error al guardar datos:', error.message);
+            }
             showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
@@ -227,6 +236,24 @@
             });
             document.getElementById('select-chofer').innerHTML = body;
 
+        } catch (error) {
+            console.error('No se cargaron los datos', error);
+        }
+    }
+
+    async function readManager() {
+        try {
+            const response = await axios.get(`${url}api/funcionarios`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const managers = response.data.funcionarios;
+            let body = '<option selected disabled value="">Seleccione una opción</option>';
+            managers.forEach(manager => {
+                body += `<option value="${manager.Nombre} ${manager.Apellidos}">${manager.Nombre} ${manager.Apellidos}</option>`;
+            });
+            document.getElementById('select-encargado').innerHTML = body;
         } catch (error) {
             console.error('No se cargaron los datos', error);
         }
