@@ -773,16 +773,16 @@ async function exportarValePdf() {
         const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
 
         worksheet.drawText(String(fechaSolicitud), {
-            x: 120,
-            y: height - 140,
+            x: 75,
+            y: height - 170,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
-            x: 120,
-            y: height - 152,
+            x: 480,
+            y: height - 175,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
