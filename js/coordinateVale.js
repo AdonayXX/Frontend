@@ -180,7 +180,7 @@
                 }
             });
             const dataTripVale = {
-                fecha: obtenerFechaActual(),
+                fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
             }
             console.log(dataTripVale);

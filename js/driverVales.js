@@ -4,14 +4,14 @@
   let idUnidadObtenida;
   let valeIdSeleccionado;
   let revisionIdSeleccionado;
-  // const btnInicioViajeVale = document.getElementById('btnInitTripDriver');
-  // const btnFinalizarViajeVale = document.getElementById('finalizarViajeBtn');
-  // const btnPreFinalizarViajeVale = document.getElementById('btnFinalizarJornada');
-  // const btnPreIniciarViajeVale = document.getElementById('btnIniciarJornada');
-  // btnInicioViajeVale.disabled = true;
-  // btnFinalizarViajeVale.disabled = true;
-  // btnPreFinalizarViajeVale.disabled = true;
-  // btnPreIniciarViajeVale.disabled = true;
+  const btnInicioViajeVale = document.getElementById('btnInitTripDriver');
+  const btnFinalizarViajeVale = document.getElementById('finalizarViajeBtn');
+  const btnPreFinalizarViajeVale = document.getElementById('btnFinalizarJornada');
+  const btnPreIniciarViajeVale = document.getElementById('btnIniciarJornada');
+  btnInicioViajeVale.disabled = true;
+  btnFinalizarViajeVale.disabled = true;
+  btnPreFinalizarViajeVale.disabled = true;
+  btnPreIniciarViajeVale.disabled = true;
 
   const token = localStorage.getItem('token');
   if (!token) {
@@ -288,7 +288,7 @@
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       console.log(data);
 
     } catch (error) {
@@ -298,33 +298,7 @@
       loadContent('tableDriverVales.html', 'mainContent');
     }
 
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-  // async function obtenerEstadoViaje(idUnidadObtenida) {
-  //   const fecha = new Date().toISOString().split('T')[0];
-  //   const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale${idUnidadObtenida}/${fecha}`;
-  //   try {
-  //     const response = await axios.get(API_OBTENER_ESTADO, {
-  //       headers: { 'Authorization': `Bearer ${token}` }
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error al obtener los viajes:', error);
-  //     showToast('Error', 'Ocurrió un problema al obtener los viajes');
-  //     throw error;
-  //   }
-  // };
+  };
 
   window.finalizarJornada = async function () {
     const fecha = new Date().toISOString().split('T')[0];
@@ -332,7 +306,6 @@
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
 
-    console.log("VAMOOOOOOOOS")
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -355,16 +328,12 @@
         showToast('Error', 'Ocurrió un problema al iniciar la jornada');
       }
     } catch (error) {
-    console.error('Error al iniciar la jornada:', error);
-    showToast('Error', 'Ocurrió un problema al iniciar la jornada');
+      console.error('Error al iniciar la jornada:', error);
+      showToast('Error', 'Ocurrió un problema al iniciar la jornada');
     } finally {
       loadContent('tableDriverVales.html', 'mainContent');
     }
-  }
-
-
-
-
+  };
 
   async function botones() {
     const fecha = new Date().toISOString().split('T')[0];
@@ -379,7 +348,7 @@
       if (response.data.Data.Data[0].EstadoViaje === 'Iniciado') {
         btnInicioViajeVale.disabled = false;
         btnPreIniciarViajeVale.disabled = false;
-      } 
+      }
 
       if (response.data.Data.Data[0].EstadoViaje === 'En curso') {
         btnFinalizarViajeVale.disabled = false;
@@ -391,15 +360,11 @@
       showToast('Error', 'Ocurrió un problema al obtener los viajes');
       throw error;
     }
-  }
+  };
 
 
-
-
-  // btnPreFinalizarViajeVale.addEventListener('click', finalizarJornada);
-  // btnIniciarJornada.addEventListener('click', iniciarJornada);
-
-
+  btnPreFinalizarViajeVale.addEventListener('click', finalizarJornada);
+  btnIniciarJornada.addEventListener('click', iniciarJornada);
 
   await inicializarPagina();
 })();
