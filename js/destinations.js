@@ -54,8 +54,8 @@ async function loadEspecialidades() {
             ordering: false,
             searching: true,
             paging: true,
-            pageLength: 30,
-            lengthMenu: [30, 60],
+            pageLength: 50,
+            lengthMenu: [50, 100],
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
@@ -68,15 +68,6 @@ async function loadEspecialidades() {
             },
             caseInsensitive: true,
             smart: true,
-        });
-
-        $('#buscarEspecialidad').on('keyup', function () {
-            let inputValue = $(this).val().toLowerCase();
-            if (inputValue === '') {
-                $(this).val('hola mundo');
-                inputValue = 'hola mundo';
-            }
-            dataTable.search(inputValue).draw();
         });
 
         dataTable.on('draw', function () {
