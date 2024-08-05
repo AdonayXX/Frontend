@@ -5,6 +5,7 @@ if (sessionExpired === 'true') {
 const Api_Url = 'https://backend-transporteccss.onrender.com/';
 document.querySelector('#formLogin').addEventListener('submit', function (event) {
     event.preventDefault();
+    showToast('','Iniciando Sesión...')
     handleLogin();
 });
 
@@ -55,6 +56,7 @@ function saveTokenLS(token) {
 
 document.querySelector('#formUserRegister').addEventListener('submit', function (event) {
     event.preventDefault();
+
 
     getUserData();
 });
@@ -239,20 +241,3 @@ document.getElementById('togglePassword').addEventListener('click', function () 
     this.classList.toggle('bi-eye-slash');
     this.classList.toggle('bi-eye');
 });
-
-
-
-// function handleClick(passwordId, buttonId) {
-//     const passwordField = document.getElementById(passwordId);
-//     const eyeIcon = document.getElementById(buttonId).querySelector('i');
-
-//     if (passwordField.type === 'password') {
-//         passwordField.type = 'text';
-//         eyeIcon.classList.remove('bi-eye-slash');
-//         eyeIcon.classList.add('bi-eye');
-//     } else {
-//         passwordField.type = 'password';
-//         eyeIcon.classList.remove('bi-eye');
-//         eyeIcon.classList.add('bi-eye-slash');
-//     }
-// }

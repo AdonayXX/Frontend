@@ -36,8 +36,23 @@ async function exportToExcel(tableId, page) {
             columnasAEliminar = new Set(['Seleccionar', 'Acciones']);
             break;
         case 'tableMaintenance':
-            columnasAEliminar = new Set(['Observación', 'Acciones']);
+            columnasAEliminar = new Set(['Detalle', 'Acciones']);
             break;
+        case 'tablaViajes':
+            columnasAEliminar = new Set(['Información']);
+            break;
+        case 'driverTable':
+            columnasAEliminar = new Set(['Contacto Emergencia']);
+            break;
+        case 'tablePatient':
+            columnasAEliminar = new Set(['Dirección','Ubicación','Acompañante','Acciones']);
+            break;
+        case 'tableControlKm':
+            columnasAEliminar = new Set(['Acciones']);
+            break;
+           
+        
+            
         default:
             console.log("No se requiere modificar");
             columnasAEliminar = null; // Marcar que no se requieren cambios
