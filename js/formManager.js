@@ -53,7 +53,7 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const managers = response.data;
+                const managers = response.data.funcionarios;
                 managers.forEach(manager => {
                     if (manager.Cedula == id) {
                         document.getElementById('nombre').value = manager.Nombre;
