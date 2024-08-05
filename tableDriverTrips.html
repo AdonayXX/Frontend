@@ -79,7 +79,7 @@
 </div>
 
 <!-- Modal de Acompañantes -->
-<div class="modal fade" id="acompanantesModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
+<div class="modal fade" id="acompModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -91,7 +91,7 @@
                 <div class="mb-3">
                     <div class="table-responsive">
                         <table class="table table-light table-bordered" id="tableComp">
-                            <tbody id="acompTableBody">
+                            <tbody id="acompTbody">
                                 <!-- Los datos de los acompañantes se insertarán aquí -->
                             </tbody>
                         </table>
@@ -176,7 +176,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Dirreción</h5>
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Dirección</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -188,37 +188,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade mt-5" id="showAccomp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Acompañantes</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive-xxl mt-1" id="tableComp" style="display: none;">
-                    <table class="table table-light table-striped table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th id="color-th">Nombre Completo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="accomp-tbody">
-                            <!-- Aquí se llenará dinámicamente con datos -->
-                        </tbody>
-                    </table>
-                </div>
 
-                <div id="messageNoComp" class="text-center text-muted" style="display: none;">
-                    No hay acompañantes registrados
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="modalContainer"></div>
 
-
+<!-- JavaScript -->
 <div data-script="js/tableDriverTrips.js"></div>

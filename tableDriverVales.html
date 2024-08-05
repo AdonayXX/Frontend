@@ -26,12 +26,6 @@
         </div>
     </div>
 
-    <div class="row mb-3 justify-content-center">
-        <div class="col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-            <button class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
-        </div>
-    </div>
-
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-secondary me-2 print" onclick="exportToPDF()" data-bs-toggle="tooltip"
             data-bs-placement="top" title="Imprimir">
@@ -41,8 +35,8 @@
             data-bs-placement="top" title="Exportar a PDF">
             <img src="img/icons8-pdf.svg" alt="PDF Icon">
         </button>
-        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableTrips', 'Traslados')" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="Exportar a Excel">
+        <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableTrips', 'Traslados')"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
             <img src="img/icons8-excel.svg" alt="Excel Icon">
         </button>
     </div>
@@ -66,6 +60,14 @@
         </table>
     </div>
     <br>
+    <!-- <div class="row text-end">
+        <div class="col-md-12 mt-auto col-sm-12">
+            <button class="btn btn-primary" id="btnInitTripDriver" data-bs-toggle="modal"
+                data-bs-target="#inciarJornada">Iniciar jornada</button>
+            <button class="btn btn-danger" id="finalizarViajeBtn" data-bs-toggle="modal"
+                data-bs-target="#finalizarJornada">Finalizar jornada</button>
+        </div>
+    </div> -->
 </div>
 
 
@@ -171,6 +173,50 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="inciarJornada" tabindex="-1" aria-labelledby="iniciarJornadaModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="iniciarJornadaModalLabel">Iniciar jornada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h4>¿Está seguro de Iniciar la jornada?</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnIniciarJornada">Iniciar
+                    jornada</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="finalizarJornada" tabindex="-1" aria-labelledby="finalizarJornadaModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="iniciarJornadaModalLabel">Finalizar jornada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h4>¿Está seguro de Finalizar la jornada?</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnFinalizarJornada">Finalizar
+                    jornada</button>
             </div>
         </div>
     </div>
