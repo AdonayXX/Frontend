@@ -103,38 +103,68 @@
       }
   });
 
+  async function getUnitData() {
+    const unidad = document.getElementById('unitSelect').value;
+    const API_UNIDAD = `https://backend-transporteccss.onrender.com/api/unidades/${unidad}`;
+    
+    try {
+      const response = await axios.get(API_UNIDAD, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      return response.data.unidades[0]; 
+      
+    } catch (error) {
+      console.error("Error al obtener los datos de la unidad:", error);
+      showToast('Error', 'Ocurrió un problema al obtener los datos de la unidad');
+    }
+  }
+
+
   async function postRegistroCombustible() {
-      const data = {
-          numeroUnidad: document.getElementById('unitSelect').value,
-          montoColones: parseInt(document.getElementById('totalAmount').value),
-          litrosAproximados: parseInt(document.getElementById('approxLiters').value),
-          kilometraje: parseInt(document.getElementById('currentMileage').value),
-          fecha: document.getElementById('date').value,
-          hora: document.getElementById('time').value + ':00',
-          lugar: document.getElementById('location').value,
-          chofer: document.getElementById('driverSelect').value,
-          tipoCombustible: document.getElementById('fuelType').value,
-          numeroFactura: document.getElementById('invoiceNumber').value,
-          numeroAutorizacion: document.getElementById('authorizationNumber').value,
-          idUsuario: (await infoUser()).usuario.IdUsuario,
-          estado: "Activo"
-      };
+    const unitData = await getUnitData();
+    const kilometrajeActual = unitData.kilometrajeActual;
+    const kilometrajeIngresado = parseInt(document.getElementById('currentMileage').value);
 
-      console.log(data);
+    console.log(kilometrajeActual);
+    console.log(kilometrajeIngresado);
 
-      try {
-          const response = await axios.post('https://backend-transporteccss.onrender.com/api/combustibleATAP', data, {
-              headers: {
-                  'Authorization': `Bearer ${token}`
-              }
-          });
+    if (kilometrajeIngresado < kilometrajeActual) {
+      showToast('Error', `El kilometraje ingresado no puede ser menor que el kilometraje actual de la unidad (${kilometrajeActual}).`);
+      return;
+    }
 
-          showToast('Éxito', 'Registro de combustible guardado exitosamente');
-          limpiarCamposFormulario();
-      } catch (error) {
-          console.error("Error al guardar el registro de combustible:", error);
-          showToast('Error', 'Ocurrió un problema al guardar el registro de combustible');
-      }
+    const data = {
+      numeroUnidad: document.getElementById('unitSelect').value,
+      montoColones: parseInt(document.getElementById('totalAmount').value),
+      litrosAproximados: parseInt(document.getElementById('approxLiters').value),
+      kilometraje: kilometrajeIngresado,
+      fecha: document.getElementById('date').value,
+      hora: document.getElementById('time').value + ':00',
+      lugar: document.getElementById('location').value,
+      chofer: document.getElementById('driverSelect').value,
+      tipoCombustible: document.getElementById('fuelType').value,
+      numeroFactura: document.getElementById('invoiceNumber').value,
+      numeroAutorizacion: document.getElementById('authorizationNumber').value,
+      idUsuario: (await infoUser()).usuario.IdUsuario,
+      estado: "Activo"
+    };
+
+    try {
+      const response = await axios.post('https://backend-transporteccss.onrender.com/api/combustibleATAP', data, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      showToast('Éxito', 'Registro de combustible guardado exitosamente');
+      limpiarCamposFormulario();
+    } catch (error) {
+      console.error("Error al guardar el registro de combustible:", error);
+      showToast('Error', 'Ocurrió un problema al guardar el registro de combustible');
+    }
   }
 
   document.getElementById('search-fuel-button').addEventListener('click', async function(event) {
@@ -200,6 +230,15 @@
 
 
 async function putRegistroCombustible() {
+    const unitData = await getUnitData();
+    const kilometrajeActual = unitData.kilometrajeActual;
+    const kilometrajeIngresado = parseInt(document.getElementById('currentMileage').value);
+
+    if (kilometrajeIngresado < kilometrajeActual) {
+        showToast('Error', `El kilometraje ingresado no puede ser menor que el kilometraje actual de la unidad (${kilometrajeActual}).`);
+        return;
+      }
+  
     const idCombustibleATAP = window.idCombustibleATAP; 
     if (!idCombustibleATAP) {
         showToast('Error', 'No se encontró el id del registro de combustible.');
