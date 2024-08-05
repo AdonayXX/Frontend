@@ -747,3 +747,233 @@ async function exportarVale() {
         console.error("Error al exportar el archivo Excel:", error);
     }
 }
+
+
+// REPORTE VEHICULAR 
+
+
+        async function viajesPdf() {
+            try {
+                // Obtener las fechas del modal
+                const fechaInicio = document.getElementById('fromViajes').value;
+                const fechaFin = document.getElementById('toViajes').value;
+                if (!fechaInicio || !fechaFin) {
+                    alert('Por favor, seleccione ambas fechas.');
+                    return;
+                }
+        
+                // Obtener el token
+                const token = localStorage.getItem('token');
+        
+                // Realizar la solicitud a la API usando Axios
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                    fechaInicio,
+                    fechaFin
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                // Verificar si la respuesta contiene datos y si fue exitosa
+                if (response.data && response.data.resultados && response.data.resultados.success) {
+                    const citas = response.data.resultados.citas;
+        
+                    // Procesar los datos de las citas
+                    const data = citas[0].map(item => ({
+                        'Tipo de Vehiculo': item['Tipo de Vehiculo'],
+                        'Cantidad de Viajes': item['Cantidad de Viajes'],
+                        'Total de Kilometros': item['Total de Kilometros'],
+                        'Total de Pacientes': item['Total de Pacientes']
+                    }));
+        
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('landscape');
+        
+                    const logoUrl = '/img/logo_ccss_azul.png';
+                    const logoResponse = await fetch(logoUrl);
+                    const logoBlob = await logoResponse.blob();
+                    const reader = new FileReader();
+        
+                    reader.onload = function(event) {
+                        const logoDataURL = event.target.result;
+        
+                        doc.addImage(logoDataURL, 'PNG', 10, 10, 30, 30);
+                        doc.setFontSize(12);
+        
+                        // Obtener el ancho de la página
+                        const pageWidth = doc.internal.pageSize.getWidth();
+                        
+                        // Textos a centrar
+                        const textos = [
+                            'Caja Costarricense de Seguro Social',
+                            'Área de Salud Upala',
+                            'Servicio de Transportes',
+                            `Reporte de Viajes del ${fechaInicio} al ${fechaFin}`
+                        ];
+        
+                        // Coordenadas Y para cada línea de texto
+                        const coordenadasY = [20, 27, 34, 41];
+        
+                        // Iterar sobre los textos y calcular el centro
+                        textos.forEach((texto, index) => {
+                            const textWidth = doc.getTextWidth(texto);
+                            const textX = (pageWidth - textWidth) / 2;
+                            doc.text(texto, textX, coordenadasY[index]);
+                        });
+        
+                        // Dibujar la línea separadora centrada
+                        const lineWidth = 290 - 10;
+                        const lineX = (pageWidth - lineWidth) / 2;
+                        doc.line(lineX, 45, lineX + lineWidth, 45);
+        
+                        // Obtener la fecha y hora actual
+                        const fechaActual = new Date();
+                        const fecha = fechaActual.toLocaleDateString();
+                        const hora = fechaActual.toLocaleTimeString();
+        
+                        // Añadir la tabla de datos
+                        const encabezados = [
+                            'Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'
+                        ];
+                        doc.autoTable({
+                            startY: 50,
+                            head: [encabezados],
+                            body: data.map(row => encabezados.map(header => row[header] || '')),
+                            headStyles: { fillColor: [9, 64, 121], textColor: [255, 255, 255] },
+                            theme: 'grid',
+                            didDrawPage: function (data) {
+                                // Número de página en la parte inferior derecha
+                                doc.setFontSize(10);
+                                doc.text(`Página ${data.pageNumber}`, pageWidth - 20, doc.internal.pageSize.height - 10);
+        
+                                // Fecha y hora en la parte inferior izquierda
+                                doc.text(`Fecha: ${fecha} Hora: ${hora}`, 10, doc.internal.pageSize.height - 10);
+                            }
+                        });
+        
+                        doc.save(`Reporte_Viajes_${fechaInicio}_${fechaFin}.pdf`);
+                    };
+        
+                    reader.readAsDataURL(logoBlob);
+                } else {
+                    console.error('No se encontraron datos para el reporte o la solicitud no fue exitosa.');
+                }
+            } catch (error) {
+                console.error('Error al exportar a PDF:', error);
+            }
+        }
+
+        
+        async function viajesExcel() {
+            try {
+                // Obtener las fechas del modal
+                const fechaInicio = document.getElementById('fromViajes').value;
+                const fechaFin = document.getElementById('toViajes').value;
+                if (!fechaInicio || !fechaFin) {
+                    alert('Por favor, seleccione ambas fechas.');
+                    return;
+                }
+
+                // Obtener el token
+                const token = localStorage.getItem('token');
+
+                // Realizar la solicitud a la API usando Axios
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                    fechaInicio,
+                    fechaFin
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.data && response.data.resultados && response.data.resultados.success) {
+                    const trips = response.data.resultados.citas[0];
+                    
+                    const workbook = new ExcelJS.Workbook();
+                    const worksheet = workbook.addWorksheet('Datos');
+
+                    // Añadir una imagen (logo) a la izquierda
+                    const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
+                    const logoResponse = await fetch(logoUrl);
+                    const logoBuffer = await logoResponse.arrayBuffer();
+
+                    const logoImage = workbook.addImage({
+                        buffer: logoBuffer,
+                        extension: 'png',
+                    });
+
+                    // Añadir la imagen en la primera columna
+                    worksheet.addImage(logoImage, {
+                        tl: { col: 0.5, row: 0.5 },
+                        ext: { width: 100, height: 100 },
+                    });
+
+                    // Añadir la información de la empresa y el autor en una sola columna
+                    worksheet.mergeCells('B2:E2'); // Ajusta el rango según el ancho necesario
+                    worksheet.getCell('B2').value = 'Caja Costarricense de Seguro Social';
+                    worksheet.mergeCells('B3:E3');
+                    worksheet.getCell('B3').value = 'Área de Salud Upala';
+                    worksheet.mergeCells('B4:E4');
+                    worksheet.getCell('B4').value = 'Servicio de Transportes';
+                    worksheet.mergeCells('B5:E5');
+                    worksheet.getCell('B5').value = `Lista de ${page} del ${fechaInicio} al ${fechaFin}`;
+
+                    // Asegúrate de centrar el texto en las celdas fusionadas
+                    worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B5').alignment = { horizontal: 'center', vertical: 'middle' };
+
+                    worksheet.addRow([]); // Añadir una fila en blanco para separar
+
+                    // Añadir encabezados de datos con estilo
+                    const headers = ['Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'];
+                    const headerRow = worksheet.addRow(headers);
+                    headerRow.eachCell((cell) => {
+                        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                        cell.fill = { 
+                            type: 'pattern', 
+                            pattern: 'solid', 
+                            fgColor: { argb: 'FF094079' } // Fondo azul
+                        };
+                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    });
+
+                    // Añadir datos de los viajes
+                    trips.forEach(trip => {
+                        const row = worksheet.addRow([
+                            trip['Tipo de Vehiculo'],
+                            trip['Cantidad de Viajes'],
+                            trip['Total de Kilometros'],
+                            trip['Total de Pacientes']
+                        ]);
+
+                        row.eachCell((cell) => {
+                            cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        });
+                    });
+
+                    // Ajustar el ancho de las columnas y centrar
+                    headers.forEach((header, index) => {
+                        const col = worksheet.getColumn(index + 1);
+                        col.width = 25;
+                        col.alignment = { horizontal: 'center', vertical: 'middle' };
+                    });
+
+                    // Exportar el libro de trabajo como archivo Excel
+                    const buffer = await workbook.xlsx.writeBuffer();
+                    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `${page}.xlsx`;
+                    link.click();
+
+                } else {
+                    console.error('Error al obtener datos');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
