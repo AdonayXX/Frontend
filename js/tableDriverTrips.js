@@ -1,6 +1,44 @@
 
 "use strict";
 
+
+function openAccomp(acompanante1, acompanante2) {
+  const accompTbody = document.getElementById('accomp-tbody');
+  const messageNoComp = document.getElementById('messageNoComp');
+  const tableComp = document.getElementById('tableComp');
+
+  accompTbody.innerHTML = ''; // Limpiar la tabla antes de llenarla
+
+  if (!acompanante1 && !acompanante2) {
+    messageNoComp.style.display = 'block';
+    tableComp.style.display = 'none';
+  } else {
+    messageNoComp.style.display = 'none';
+    tableComp.style.display = 'block';
+
+    if (acompanante1) {
+      const row1 = document.createElement('tr');
+      row1.innerHTML = `
+        <td>${acompanante1}</td>
+        <td>
+          <button class="btn btn-outline-primary btn-sm">Acción</button>
+        </td>
+      `;
+      accompTbody.appendChild(row1);
+    }
+
+    if (acompanante2) {
+      const row2 = document.createElement('tr');
+      row2.innerHTML = `
+        <td>${acompanante2}</td>
+      
+          <button class="btn btn-outline-primary btn-sm">Acción</button>
+        </td>
+      `;
+      accompTbody.appendChild(row2);
+    }
+  }
+}
 (async function () {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -28,7 +66,7 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Chóferes',response.data.choferesConUnidades);
+      console.log('Data Chóferes', response.data.choferesConUnidades);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       console.error("Error al obtener la unidad asignada:", error);
@@ -45,7 +83,7 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Unidades',response.data.unidades);
+      console.log('Data Unidades', response.data.unidades);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
@@ -76,7 +114,7 @@
       }
 
       renderizarViajes(viajes);
-      console.log('Viajes',viajes);
+      console.log('Viajes', viajes);
       haveTrips();
 
     } catch (error) {
