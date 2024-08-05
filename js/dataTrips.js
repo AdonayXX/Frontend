@@ -252,15 +252,9 @@
     });
 
     if (camilla > 1) {
-      showToast('Error', 'Solo puede seleccionar una cita con camilla');
-      return false;
-    } else if (camilla === 1 && totalCitas > 7) {
-      showToast('Error', 'No se pueden seleccionar más de 6 citas adicionales sin camilla');
-      return false;
-    } else if (camilla === 0 && totalCitas > 8) {
-      showToast('Error', 'No se pueden seleccionar más de 8 citas');
-      return false;
+      showToast('Advertencia', 'Ya hay una o más citas que requieren camilla');
     }
+
     return true;
   }
 
@@ -444,6 +438,8 @@
     const motivoAusencia = document.getElementById('motivoAusencia').value;
 
     const url = `https://backend-transporteccss.onrender.com/api/cita/${idCita}`;
+    const urlDesasociarCita = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
+
     const datosAusencia = {
       ausente: motivoAusencia,
       estadoCita: "Cancelada"
@@ -453,6 +449,7 @@
       await axios.put(url, datosAusencia, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {

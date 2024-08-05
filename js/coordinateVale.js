@@ -179,6 +179,16 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
+            const dataTripVale = {
+                fecha: obtenerFechaActual(),
+                idUnidad: document.getElementById('select-placa').value
+            }
+            console.log(dataTripVale);
+            await axios.post(`${url}api/viajeVale`, dataTripVale, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            console.log('Datos guardados correctamente:', response.data);
+
             return true;
         } catch (error) {
             console.error('Error al guardar datos:', error.response ? error.response.data : error.message);

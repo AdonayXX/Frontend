@@ -4,11 +4,7 @@ document.getElementById("confirmarCorreo").addEventListener("click", function (e
     var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (emailPattern.test(email)) {
         showToast("¡Éxito!", "Correo enviado exitosamente.");
-
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 3500);
-
+        window.location.href = "ingresarToken.html";
     } else {
         showToast("Atención", "Ingrese un correo válido.");
 

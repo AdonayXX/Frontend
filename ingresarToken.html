@@ -17,19 +17,19 @@
     <div class="container-fluid d-flex vh-100">
         <div id="6" name="formLogin" class="form-container m-auto">
             <br>
-            <p class="title">Ingrese su correo</p>
+            <p class="title">Ingrese el código</p>
             <form class="form" id="formLogin" method="post">
                 <div class="form-group input-container">
-                    <input id="emailUsuario" type="email" class="form-control input" placeholder="Email" required
+                    <input id="tokenUsuario" type="text" class="form-control input" placeholder="código" required
                         maxlength="30">
                 </div>
 
                 <div class="alert-message">
-                    <p>Un correo electrónico con un código para restablecer su contraseña será enviado. Por favor,
-                        revise su bandeja de entrada, así como la carpeta de spam y otros correos.</p>
+                    <p>¡Atención!</p>
+                    <p style="margin-top: -10px;">El código expira en 15 minutos.</p>
                 </div>
 
-                <button id="confirmarCorreo" type="submit" class="form-btn">Enviar</button>
+                <button id="confirmarToken" type="submit" class="form-btn btn">Validar</button>
             </form>
             <img class="logo" src="/img/Logo CCSS Negro.png" alt="">
         </div>
@@ -40,7 +40,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./js/correo.js"></script>
+    <script src="./js/ingresarToken.js"></script>
     <script src="./js/script.js"></script>
 
 </body>

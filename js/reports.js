@@ -1,3 +1,5 @@
+
+
 async function generalesPdf() {
     try {
         const pdfUrl = '/documents/reporteGeneral.pdf';
@@ -61,14 +63,14 @@ async function generalesPdf() {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const gasolinaKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const pacientes = datosCitas.filter(paciente => {
             const fechaCita = new Date(paciente.fechaCita);
@@ -338,7 +340,7 @@ async function generalesPdf() {
         const blob = base64ToBlob(firstPageBytes, 'application/pdf');
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU.pdf';
+        link.download = 'Reporte_ASU.pdf';
         link.click();
 
 
@@ -422,14 +424,14 @@ async function generalesExcel() {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Diesel';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const gasolinaKilometraje = datosRegistros
             .filter(registro => {
                 const fecha = new Date(registro.fecha);
                 return fecha >= fromDate && fecha <= toDate && registro.tipoCombustible === 'Gasolina';
             })
-            .reduce((sum, registro) => sum + parseFloat(registro.kilometraje), 0);
+            .reduce((sum, registro) => sum + parseFloat(registro.kilometrajeRecorrido), 0);
 
         const pacientes = datosCitas.filter(paciente => {
             const fechaCita = new Date(paciente.fechaCita);
@@ -514,7 +516,7 @@ async function generalesExcel() {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'Reportes_ASU_Modificado.xlsx';
+        link.download = 'Reporte_ASU.xlsx';
         link.click();
     } catch (error) {
         console.error("Error al modificar el archivo Excel:", error);
@@ -690,54 +692,51 @@ async function mantenimientoExcel() {
 }
 
 //REPORTE DE VALES
-async function exportarVale() {
+async function exportarValeExcel() {
     try {
-        // Obtener el ID del vale desde un input en el HTML
         const idVale = document.getElementById('idVale').value;
-
         let datosVale;
         try {
-            // Obtener el vale específico por ID
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
             datosVale = response.data;
         } catch (apiError) {
-            console.error("Error al obtener el vale desde la API:", apiError);
-            alert("Hubo un error al obtener los datos del vale. Por favor, intente de nuevo.");
-            return;
-        }
-
-        if (!datosVale) {
-            alert('No se encontró el vale con el ID especificado');
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
         }
 
         console.log('Datos del vale:', datosVale);
-
-        // Descargar el archivo Excel
-        const responseExcel = await fetch('reporteria/ReporteVale.xlsx');
+        const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
         }
 
         const arrayBuffer = await responseExcel.arrayBuffer();
-        console.log('Archivo Excel descargado con éxito');
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
-        console.log('Archivo Excel cargado en ExcelJS');
+
         const worksheet = workbook.getWorksheet(1);
-        worksheet.getCell('B8:C8').value = datosVale.Fecha_Solicitud;
-        worksheet.getCell('K8').value = datosVale.IdUnidadProgramatica;
-        worksheet.getCell('K8').value = datosVale.NombreUnidadProgramatica;
-        worksheet.getCell('I12:J12:K12').value = datosVale.Acompanante1;
-        worksheet.getCell('I13:J13:K13').value = datosVale.Acompanante2;
-        worksheet.getCell('I14:J14:K14').value = datosVale.Acompanante3;
-        worksheet.getCell('I15:J15:K15').value = datosVale.Acompanante4;
-        worksheet.getCell('I16:J16:K16').value = datosVale.Acompanante5;
-        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = datosVale.NombreMotivo;
-        worksheet.getCell('G17:H17:I17:J17:K17').value = datosVale.NombreSolicitante;
-        worksheet.getCell('H18:I18:J18:K18').value = datosVale.Detalle;
-        worksheet.getCell('G25').value = datosVale.Hora_Salida;
-        worksheet.getCell('C25:D25:E25').value = datosVale.Fecha_Solicitud;
+        const valeData = datosVale.vale;
+        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
+        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+
+        worksheet.getCell('B8:C8').value = fechaSolicitud;
+        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica;
+        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidadProgramatica;
+        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1;
+        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2;
+        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3;
+        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4;
+        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5;
+        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.NombreMotivo;
+        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante;
+        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle;
+        worksheet.getCell('G25').value = horaSalida;
+        worksheet.getCell('C25:D25:E25').value = fechaSolicitud;
+        worksheet.getCell('C9').value = valeData.NombreDestino;
+        worksheet.getCell('C9').value = valeData.NombreDestinoEbais;
+        worksheet.getCell('C20').value = horaSalida;
+        worksheet.getCell('C19').value = fechaSolicitud;
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -746,6 +745,173 @@ async function exportarVale() {
         link.click();
     } catch (error) {
         console.error("Error al exportar el archivo Excel:", error);
-        alert("Hubo un error al exportar el archivo Excel. Por favor, intente de nuevo.");
+    }
+}
+
+async function exportarValePdf() {
+    try {
+        const idVale = document.getElementById('idVale').value;
+        let datosVale;
+        try {
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            datosVale = response.data;
+        } catch (apiError) {
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            return;
+        }
+
+        const pdfUrl = '/documents/ReporteValePDF.pdf';
+        const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
+
+        const worksheet = pdfDoc.getPages()[0];
+        const { width, height } = worksheet.getSize();
+        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+        const valeData = datosVale.vale;
+        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
+        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 140,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
+            x: 120,
+            y: height - 152,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
+            x: 120,
+            y: height - 164,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante1 || ''), {
+            x: 120,
+            y: height - 176,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante2 || ''), {
+            x: 120,
+            y: height - 188,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante3 || ''), {
+            x: 120,
+            y: height - 200,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante4 || ''), {
+            x: 120,
+            y: height - 212,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante5 || ''), {
+            x: 120,
+            y: height - 224,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreMotivo || ''), {
+            x: 120,
+            y: height - 236,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
+            x: 120,
+            y: height - 248,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Detalle || ''), {
+            x: 120,
+            y: height - 260,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 120,
+            y: height - 272,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 284,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 120,
+            y: height - 284,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 120,
+            y: height - 272,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+
+        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Vale.pdf';
+
+        link.click();
+
+        function base64ToBlob(base64, type) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; ++i) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new Blob([bytes], { type });
+        }
+    } catch (error) {
+        console.error("Error al exportar el archivo PDF:", error);
     }
 }

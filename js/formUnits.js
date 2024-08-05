@@ -2,8 +2,13 @@
 
 (function () {
 
+    const token = localStorage.getItem('token');
     const infoUsuario = infoUser();
     const idUsuario = infoUsuario.usuario.IdUsuario;
+
+    if (!token) {
+        window.location.href = 'login.html';
+    }
 
     const elements = {
         unitsForm: document.getElementById('unitsForm'),
