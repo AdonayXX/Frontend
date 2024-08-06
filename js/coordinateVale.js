@@ -190,8 +190,6 @@
                 }
             });
     
-            console.log('Datos guardados correctamente:', response.data);
-    
             return true;
         } catch (error) {
             if (error.response) {
@@ -282,12 +280,10 @@
         try {
             const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
             const response = await axios.put(valUrl);
-            console.log('Campo actualizado correctamente:');
 
             if (newIdEstado === 2) {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
+
             } else {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
                 blockBtn();
             }
 
