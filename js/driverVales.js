@@ -4,14 +4,20 @@
   let idUnidadObtenida;
   let valeIdSeleccionado;
   let revisionIdSeleccionado;
+  let kilometrajeActualUnidad;
   const btnInicioViajeVale = document.getElementById('btnInitTripDriver');
   const btnFinalizarViajeVale = document.getElementById('finalizarViajeBtn');
   const btnPreFinalizarViajeVale = document.getElementById('btnFinalizarJornada');
   const btnPreIniciarViajeVale = document.getElementById('btnIniciarJornada');
+  const inputKilometrajeFinal = document.getElementById('kilometrajeFinal');
+  // no permitir fechas de decremento e incremento
+
+
   btnInicioViajeVale.disabled = true;
   btnFinalizarViajeVale.disabled = true;
   btnPreFinalizarViajeVale.disabled = true;
   btnPreIniciarViajeVale.disabled = true;
+
 
   const token = localStorage.getItem('token');
   if (!token) {
@@ -52,6 +58,7 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
+      kilometrajeActualUnidad = unidad.kilometrajeActual;
       return unidad.id;
     } catch (error) {
       console.error("Error al obtener el id de la unidad asignada:", error);
@@ -59,6 +66,9 @@
       throw error;
     }
   }
+
+
+
 
   async function obtenerVales(idUnidad, fecha) {
     const API_VALES = `https://backend-transporteccss.onrender.com/api/viajeVale/${idUnidad}/${fecha}`;
@@ -223,12 +233,18 @@
   window.seleccionarVale = async function (idVale, idRevisionValeViaje) {
     valeIdSeleccionado = idVale;
     revisionIdSeleccionado = idRevisionValeViaje;
+    validarKilometrajeFinal(kilometrajeActualUnidad);
   };
 
 
   window.finalizarVale = async function () {
+    if(inputKilometrajeFinal.value < kilometrajeActualUnidad){
+      showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
+      return;
+    }
     const IdVale = valeIdSeleccionado;
     const IdRevisionValeViaje = revisionIdSeleccionado;
+    console.log(IdVale, IdRevisionValeViaje);
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
     if (!valeIniciado || valeIniciado.IdVale !== IdVale) {
       showToast('Error', 'No se puede finalizar este vale porque no está en curso.');
@@ -361,6 +377,21 @@
       throw error;
     }
   };
+
+  function validarKilometrajeFinal(kilometrajeActualUnidad) {
+    inputKilometrajeFinal.value = kilometrajeActualUnidad;
+    inputKilometrajeFinal.min = kilometrajeActualUnidad;
+
+    finalizarValeForm.addEventListener('submit', function (event) {
+      if (parseFloat(inputKilometrajeFinal.value) < parseFloat(kilometrajeActualUnidad)) {
+        event.preventDefault();
+        showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
+      }
+    });
+  }
+
+  // Asumiendo que `kilometrajeActualUnidad` y `formulario` están definidos en el contexto adecuado
+  validarKilometrajeFinal(kilometrajeActualUnidad);
 
 
   btnPreFinalizarViajeVale.addEventListener('click', finalizarJornada);
