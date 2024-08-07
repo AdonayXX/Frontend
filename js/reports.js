@@ -918,7 +918,7 @@ async function exportarVale() {
                     worksheet.mergeCells('B4:E4');
                     worksheet.getCell('B4').value = 'Servicio de Transportes';
                     worksheet.mergeCells('B5:E5');
-                    worksheet.getCell('B5').value = `Lista de ${page} del ${fechaInicio} al ${fechaFin}`;
+                    worksheet.getCell('B5').value = `Lista de Viajes del ${fechaInicio} al ${fechaFin}`;
 
                     // Asegúrate de centrar el texto en las celdas fusionadas
                     worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
@@ -967,7 +967,7 @@ async function exportarVale() {
                     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = `${page}.xlsx`;
+                    link.download = `Reporte_Asu_Viajes.xlsx`;
                     link.click();
 
                 } else {
