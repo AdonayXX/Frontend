@@ -192,8 +192,8 @@ async function updateCita(idCita) {
 
         $('#editarModal').modal('hide');
         setTimeout(function () {
-            loadContent('AppointmentsMade.html', 'mainContent');
-        }, 1400);
+            loadContent('appointmentsMade.html', 'mainContent');
+        }, 1500);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
