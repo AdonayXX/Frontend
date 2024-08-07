@@ -36,7 +36,22 @@ async function exportToExcel(tableId, page) {
             columnasAEliminar = new Set(['Seleccionar', 'Acciones']);
             break;
         case 'tableMaintenance':
-            columnasAEliminar = new Set(['Observación', 'Acciones']);
+            columnasAEliminar = new Set(['Detalle', 'Acciones']);
+            break;
+        case 'tablaViajes':
+            columnasAEliminar = new Set(['Información']);
+            break;
+        case 'driverTable':
+            columnasAEliminar = new Set(['Contacto Emergencia']);
+            break;
+        case 'tableControlKm':
+            columnasAEliminar = new Set(['Acciones']);
+            break;
+        case 'tableRequest':
+            columnasAEliminar = new Set(['Coordinar']);
+            break;
+        case 'tablePatient':
+            columnasAEliminar = new Set(['Dirección','Ubicación','Acompañante','Acciones']);
             break;
         default:
             console.log("No se requiere modificar");
@@ -135,8 +150,9 @@ async function exportToExcel(tableId, page) {
     workbook.xlsx.writeBuffer().then((buffer) => {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
+        const date = new Date().toISOString().split('T')[0]; //Obtener la fecha 
         link.href = URL.createObjectURL(blob);
-        link.download = `${page}.xlsx`;
+        link.download = `${page}_${date}.xlsx`; //Se concatena el nombre con la fecha para descargarlo
         link.click();
     });
 }
