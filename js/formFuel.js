@@ -5,6 +5,7 @@
     const infoUsuario = infoUser();
     const idUsuario = infoUsuario.usuario.IdUsuario;
     const form = document.getElementById('fuelForm');
+    const selectUnidades = document.getElementById('unidades');
     const btnBuscar = document.getElementById('btnBuscar');
     const btnclearForm = document.getElementById('btnLimpiar');
     const token = localStorage.getItem('token');
@@ -15,16 +16,10 @@
         window.location.href = 'login.html';
     }
 
-    if (rol !== 2) {
-        document.getElementById('btnBuscar').disabled = true;
-        document.getElementById('btnGuardar').disabled = true;
-        showToast('Acceso denegado', 'Solo los chóferes pueden usar este módulo.');
-        return;
-    }
-
     form.addEventListener('submit', handleSubmit);
     btnBuscar.addEventListener('click', handleBuscar);
     btnclearForm.addEventListener('click', handleclearForm);
+    selectUnidades.addEventListener('change', actualizarChofer);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -54,20 +49,23 @@
     }
 
     function clearForm() {
-        const unidadInput = document.getElementById('unidad');
-        const choferInput = document.getElementById('chofer');
-        const unidadValue = unidadInput.value;
-        const choferValue = choferInput.value;
+        const formFields = form.querySelectorAll('input:not(#unidades):not(#choferes)');
 
-        form.reset();
-
-        unidadInput.value = unidadValue;
-        choferInput.value = choferValue;
+        if (rol !== 2) {
+            form.reset();
+            document.getElementById('choferes').innerHTML = '<option selected>Seleccionar chofer</option>';
+        } else {
+            formFields.forEach(field => {
+                field.value = '';
+            });
+        }
 
         btnclearForm.style.display = 'none';
         document.getElementById('btnActualizar').disabled = true;
         document.getElementById('btnEliminar').disabled = true;
         document.getElementById('btnGuardar').disabled = false;
+        document.getElementById('tipoCombustible').selectedIndex = 0;
+        obtainHourandDate();
     }
 
     async function getAssignedUnit(identificacion) {
@@ -87,8 +85,25 @@
         const unidadYChofer = await getAssignedUnit(identificacion);
 
         if (unidadYChofer && unidadYChofer.idEstado === 1) {
-            document.getElementById('chofer').value = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
-            document.getElementById('unidad').value = unidadYChofer.numeroUnidad;
+            await getUnits();
+            const unidadSelect = document.getElementById('unidades');
+            const choferSelect = document.getElementById('choferes');
+
+            document.getElementById('unidades').disabled = true;
+            document.getElementById('choferes').disabled = true;
+
+            for (let i = 0; i < unidadSelect.options.length; i++) {
+                if (unidadSelect.options[i].text === unidadYChofer.numeroUnidad) {
+                    unidadSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            choferSelect.options[0].textContent = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
+        } else if (rol !== 2) {
+            document.getElementById('unidades').disabled = false;
+            document.getElementById('choferes').disabled = false;
+            await getUnits();
         }
     }
 
@@ -135,6 +150,61 @@
         } catch (error) {
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
+        }
+    }
+
+    async function getUnits() {
+        try {
+            const URL_UNIDADES = `${apiUrl}chofer/unidades`;
+            const response = await axios.get(URL_UNIDADES, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const unidades = response.data.choferesConUnidades;
+            const selectBody = document.querySelector('#unidades');
+            const choferesSelect = document.querySelector('#choferes');
+
+            selectBody.innerHTML = '';
+
+            const opcionDefault = document.createElement('option');
+            opcionDefault.textContent = 'Seleccionar unidad';
+            opcionDefault.selected = true;
+            opcionDefault.disabled = false;
+            selectBody.appendChild(opcionDefault);
+
+            const opcionDefaultChofer = document.createElement('option');
+            opcionDefaultChofer.textContent = 'Seleccionar chofer';
+            opcionDefaultChofer.selected = true;
+            opcionDefaultChofer.disabled = false;
+            choferesSelect.appendChild(opcionDefaultChofer);
+
+            unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad)); // Sort units alphabetically
+
+            unidades.forEach(unidad => {
+                const option = document.createElement('option');
+                option.value = unidad.id;
+                option.dataset.choferNombre = `${unidad.nombre} ${unidad.apellido1} ${unidad.apellido2}`;
+                option.textContent = unidad.numeroUnidad;
+                selectBody.appendChild(option);
+            });
+
+            choferesSelect.innerHTML = opcionDefaultChofer.outerHTML;
+        } catch (error) {
+            console.error('Error al obtener las unidades:', error);
+        }
+    }
+
+    function actualizarChofer() {
+        const selectUnidades = document.getElementById('unidades');
+        const choferesSelect = document.getElementById('choferes');
+        const unidadSeleccionada = selectUnidades.options[selectUnidades.selectedIndex];
+
+        if (unidadSeleccionada && unidadSeleccionada.dataset.choferNombre) {
+            const choferOption = document.createElement('option');
+            choferOption.textContent = unidadSeleccionada.dataset.choferNombre;
+            choferesSelect.innerHTML = '';
+            choferesSelect.appendChild(choferOption);
+        } else {
+            choferesSelect.innerHTML = '<option selected>Seleccionar chofer</option>';
         }
     }
 
@@ -209,7 +279,8 @@
     }
 
     async function getFuelLog() {
-        const unidad = document.getElementById('unidad').value;
+        const unidad = getFormData().numeroUnidad;
+        const noSelected = document.getElementById('unidades').options[0].selected;
 
         try {
             const response = await axios.get(`${apiUrl}registrocombustible/${unidad}`, {
@@ -217,8 +288,10 @@
             });
             const registros = response.data.registro.filter(log => log.estado === 'activo');
 
-            if (registros.length === 0) {
-                showToast('Error', `No hay registros de combustible de la unidad ${unidad}.`);
+            if (registros.length === 0 && !noSelected) {
+                showToast('Error', `No hay registros de combustible de la unidad "${unidad}".`);
+                return;
+            } else if (noSelected) {
                 return;
             }
 
@@ -226,10 +299,18 @@
 
             const latestLog = registros[0];
             const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+            const choferSelect = document.getElementById('choferes');
 
             for (let i = 0; i < tipoCombustibleSelect.options.length; i++) {
                 if (tipoCombustibleSelect.options[i].text === latestLog.tipoCombustible) {
                     tipoCombustibleSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            for (let i = 0; i < choferSelect.options.length; i++) {
+                if (choferSelect.options[i].text === latestLog.chofer) {
+                    choferSelect.selectedIndex = i;
                     break;
                 }
             }
@@ -336,11 +417,16 @@
     function getFormData() {
         const horaCitaInput = document.getElementById('hora').value;
         const tipoCombustibleSelect = document.getElementById('tipoCombustible');
+        const unidad = document.getElementById('unidades');
+        const unidadSelected = unidad.options[unidad.selectedIndex].text;
+        const chofer = document.getElementById('choferes');
+        const choferSelected = chofer.options[chofer.selectedIndex].text;
+
         return {
-            numeroUnidad: document.getElementById('unidad').value,
+            numeroUnidad: unidadSelected,
             numeroFactura: document.getElementById('numeroFactura').value,
             numeroAutorizacion: document.getElementById('numeroAutorizacion').value,
-            chofer: document.getElementById('chofer').value,
+            chofer: choferSelected,
             tipoCombustible: tipoCombustibleSelect.options[tipoCombustibleSelect.selectedIndex].text,
             litrosAproximados: document.getElementById('litros').value,
             kilometraje: parseInt(document.getElementById('kilometraje').value),
