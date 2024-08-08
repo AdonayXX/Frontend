@@ -59,7 +59,7 @@ async function loadEspecialidades() {
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json',
+                url: '/assets/json/Spanish.json',
                 paginate: {
                     previous: 'Anterior',
                     next: 'Siguiente',
