@@ -7,7 +7,6 @@ async function loadCitas() {
             }
         });
         const citas = response.data;
-        ocultarSpinner();
         renderTable(citas);
 
         if ($.fn.DataTable.isDataTable('#TableAppointment')) {
@@ -20,9 +19,9 @@ async function loadCitas() {
             ordering: false,
             searching: true,
             paging: true,
-            language: {
-                url: '/assets/json/Spanish.json'
-              },
+            // language: {
+            //     url: '/assets/json/Spanish.json'
+            // },
             caseInsensitive: true,
             smart: true,
             pageLength: 25,
@@ -30,7 +29,6 @@ async function loadCitas() {
             caseInsensitive: true,
             smart: true
         });
-
 
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
@@ -59,11 +57,10 @@ async function loadCitas() {
         });
 
         $('#TableAppointment').DataTable().search('iniciada').draw();
+        ocultarSpinner();
     } catch (error) {
-    if(citas.length === 0){
-        showToast("Error", "No hay citas registradas.")
+        showToast("Error", "Error al obtener las citas.");
     }
-}
 }
 
 loadCitas();
