@@ -21,7 +21,7 @@ async function loadCitas() {
             searching: true,
             paging: true,
             language: {
-                url: spanish
+                url: '/assets/json/Spanish.json'
               },
             caseInsensitive: true,
             smart: true,
@@ -30,7 +30,7 @@ async function loadCitas() {
             caseInsensitive: true,
             smart: true
         });
-      const spanish =  DataTable().lenguage.url = '/assets/json/Spanish.json'; 
+
 
         $('#searchAppointment').on('keyup', function () {
             let inputValue = $(this).val().toLowerCase();
@@ -60,7 +60,7 @@ async function loadCitas() {
 
         $('#TableAppointment').DataTable().search('iniciada').draw();
     } catch (error) {
-    if(error.response.status === 404) {
+    if(citas.length === 0){
         showToast("Error", "No hay citas registradas.")
     }
 }
