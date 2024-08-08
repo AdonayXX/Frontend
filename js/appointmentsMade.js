@@ -19,9 +19,9 @@ async function loadCitas() {
             ordering: false,
             searching: true,
             paging: true,
-            // language: {
-            //     url: '/assets/json/Spanish.json'
-            // },
+            language: {
+                url: '/assets/json/Spanish.json'
+            },
             caseInsensitive: true,
             smart: true,
             pageLength: 25,
@@ -55,8 +55,9 @@ async function loadCitas() {
                 $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
             });
         });
-
-        $('#TableAppointment').DataTable().search('iniciada').draw();
+        setTimeout(function () {
+            $('#TableAppointment').DataTable().search('iniciada').draw();
+        }, 1)
         ocultarSpinner();
     } catch (error) {
         showToast("Error", "Error al obtener las citas.");
