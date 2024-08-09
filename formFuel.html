@@ -6,7 +6,7 @@
                 <div class="form-group mb-3">
                     <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
                     <select id="unidades" class="form-select" required>
-                        <option selected>Seleccionar unidad</option>
+                        <option disabled selected>Seleccionar unidad</option>
                     </select>
                 </div>
             </div>
@@ -29,8 +29,8 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer</label>
-                    <select id="choferes" class="form-select" disabled required>
-
+                    <select id="choferes" class="form-select" required>
+                        <option disabled selected>Seleccionar chofer</option>
                     </select>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                     onmouseout="this.style.backgroundColor='#094079';"><i class="bi bi-search"></i> Buscar</button>
                 <button type="submit" id="btnActualizar" class="btn btn-primary text-white"
                     style="background-color: #094079; margin: 5px;" onmouseover="this.style.backgroundColor='#073c64';"
-                    onmouseout="this.style.backgroundColor='#094079';" disabled><i class="bi bi-pencil"></i>
+                    onmouseout="this.style.backgroundColor='#094079';" disabled><i class="bi bi-arrow-clockwise"></i>
                     Actualizar</button>
                 <button type="submit" id="btnEliminar" class="btn btn-danger text-white" style="margin: 5px;"
                     disabled><i class="bi bi-trash"></i> Eliminar</button>
