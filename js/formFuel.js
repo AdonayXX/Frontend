@@ -157,6 +157,7 @@
             });
             const unidades = response.data.choferesConUnidades;
             const selectBody = document.querySelector('#unidades');
+            const choferesSelect = document.querySelector('#choferes');
 
             selectBody.innerHTML = '';
 
@@ -165,6 +166,12 @@
             opcionDefault.selected = true;
             opcionDefault.disabled = false;
             selectBody.appendChild(opcionDefault);
+
+            const opcionDefaultChofer = document.createElement('option');
+            opcionDefaultChofer.textContent = '';
+            opcionDefaultChofer.selected = true;
+            opcionDefaultChofer.disabled = false;
+            choferesSelect.appendChild(opcionDefaultChofer);
 
             unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
 
@@ -177,6 +184,7 @@
                     selectBody.appendChild(option);
                 }
             });
+            choferesSelect.innerHTML = opcionDefaultChofer.outerHTML;
         } catch (error) {
             console.error('Error al obtener las unidades:', error);
         }
