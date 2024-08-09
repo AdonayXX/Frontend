@@ -53,7 +53,7 @@
 
         if (rol !== 2) {
             form.reset();
-            document.getElementById('choferes').innerHTML = '<option selected>Seleccionar chofer</option>';
+            document.getElementById('choferes').innerHTML = '';
         } else {
             formFields.forEach(field => {
                 field.value = '';
@@ -89,9 +89,6 @@
             const unidadSelect = document.getElementById('unidades');
             const choferSelect = document.getElementById('choferes');
 
-            document.getElementById('unidades').disabled = true;
-            document.getElementById('choferes').disabled = true;
-
             for (let i = 0; i < unidadSelect.options.length; i++) {
                 if (unidadSelect.options[i].text === unidadYChofer.numeroUnidad) {
                     unidadSelect.selectedIndex = i;
@@ -102,7 +99,6 @@
             choferSelect.options[0].textContent = `${unidadYChofer.nombre} ${unidadYChofer.apellido1} ${unidadYChofer.apellido2}`;
         } else if (rol !== 2) {
             document.getElementById('unidades').disabled = false;
-            document.getElementById('choferes').disabled = false;
             await getUnits();
         }
     }
@@ -161,7 +157,6 @@
             });
             const unidades = response.data.choferesConUnidades;
             const selectBody = document.querySelector('#unidades');
-            const choferesSelect = document.querySelector('#choferes');
 
             selectBody.innerHTML = '';
 
@@ -171,23 +166,17 @@
             opcionDefault.disabled = false;
             selectBody.appendChild(opcionDefault);
 
-            const opcionDefaultChofer = document.createElement('option');
-            opcionDefaultChofer.textContent = 'Seleccionar chofer';
-            opcionDefaultChofer.selected = true;
-            opcionDefaultChofer.disabled = false;
-            choferesSelect.appendChild(opcionDefaultChofer);
-
-            unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad)); // Sort units alphabetically
+            unidades.sort((a, b) => a.numeroUnidad.localeCompare(b.numeroUnidad));
 
             unidades.forEach(unidad => {
-                const option = document.createElement('option');
-                option.value = unidad.id;
-                option.dataset.choferNombre = `${unidad.nombre} ${unidad.apellido1} ${unidad.apellido2}`;
-                option.textContent = unidad.numeroUnidad;
-                selectBody.appendChild(option);
+                if (unidad.idEstado !== 5) {
+                    const option = document.createElement('option');
+                    option.value = unidad.id;
+                    option.dataset.choferNombre = `${unidad.nombre} ${unidad.apellido1} ${unidad.apellido2}`;
+                    option.textContent = unidad.numeroUnidad;
+                    selectBody.appendChild(option);
+                }
             });
-
-            choferesSelect.innerHTML = opcionDefaultChofer.outerHTML;
         } catch (error) {
             console.error('Error al obtener las unidades:', error);
         }
@@ -204,7 +193,7 @@
             choferesSelect.innerHTML = '';
             choferesSelect.appendChild(choferOption);
         } else {
-            choferesSelect.innerHTML = '<option selected>Seleccionar chofer</option>';
+            choferesSelect.innerHTML = '';
         }
     }
 
