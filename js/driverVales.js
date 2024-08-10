@@ -1,5 +1,8 @@
 "use strict";
 
+
+// revisar la hora que se está obteniendo y envianco al backend
+
 (async function () {
   let idUnidadObtenida;
   let valeIdSeleccionado;
@@ -238,7 +241,7 @@
 
 
   window.finalizarVale = async function () {
-    if(inputKilometrajeFinal.value < kilometrajeActualUnidad){
+    if (inputKilometrajeFinal.value < kilometrajeActualUnidad) {
       showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
       return;
     }
@@ -317,9 +320,12 @@
   };
 
   window.finalizarJornada = async function () {
-    const fecha = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    console.log(fecha)
     const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
+    console.log(API_OBTENER_ESTADO);
     const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
 
     try {
@@ -352,7 +358,9 @@
   };
 
   async function botones() {
-    const fecha = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    console.log(fecha)
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
