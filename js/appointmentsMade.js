@@ -19,11 +19,13 @@ async function loadCitas() {
             ordering: false,
             searching: true,
             paging: true,
-            pageLength: 25, 
-            lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+                url: '/assets/json/Spanish.json'
             },
+            caseInsensitive: true,
+            smart: true,
+            pageLength: 25,
+            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             caseInsensitive: true,
             smart: true
         });
@@ -53,8 +55,9 @@ async function loadCitas() {
                 $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
             });
         });
-
-        $('#TableAppointment').DataTable().search('iniciada').draw();
+        setTimeout(function () {
+            $('#TableAppointment').DataTable().search('iniciada').draw();
+        }, 1)
         ocultarSpinner();
     } catch (error) {
         showToast("Error", "Error al obtener las citas.");
@@ -195,8 +198,8 @@ async function updateCita(idCita) {
 
         $('#editarModal').modal('hide');
         setTimeout(function () {
-            loadContent('AppointmentsMade.html', 'mainContent');
-        }, 1400);
+            loadContent('appointmentsMade.html', 'mainContent');
+        }, 1500);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
