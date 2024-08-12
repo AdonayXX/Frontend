@@ -205,12 +205,11 @@
       return;
     }
 
-    const fechaInicio = new Date().toISOString().split('T')[0];
-    const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
+
     const idUnidad = document.getElementById('unidadAsignadaVale').value;
 
     try {
-      await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
+    const valeInfo=   await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
         Indicador: 2,  //  para "En curso"
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'En curso',
@@ -222,11 +221,12 @@
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
       localStorage.setItem('valeIniciado', JSON.stringify({ IdVale, IdRevisionValeViaje }));
+      console.log('Vale iniciado:', valeInfo);  
 
       inicializarPagina();
       showToast('Éxito', 'Vale iniciado correctamente');
+      console.log('vale inciiado', IdVale, IdRevisionValeViaje);
     } catch (error) {
       console.error('Error al iniciar el vale:', error);
       showToast('Error', 'Ocurrió un problema al iniciar el vale');
@@ -257,11 +257,16 @@
     const Observacion = document.getElementById('observaciones').value;
     const horasExtras = document.getElementById('horasExtras').value;
     const viaticos = document.getElementById('viaticos').value;
-    const horaFinVale = new Date().toISOString().split('T')[1].split('.')[0];
+    const currentDate = new Date();
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
+    const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
+    const horaFin = costaRicaTime.toISOString().split('T')[1].split('.')[0];
+    const horaFinVale = horaFin;
+    
 
     try {
       await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
-        Indicador: 3,  //  para "Finalizado"
+        Indicador: 3,  
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'Finalizado',
         HoraFinVale: horaFinVale,
@@ -295,8 +300,12 @@
   }
   window.iniciarJornada = async function () {
     const API_INICIARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/iniciarViajevale';
-    const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
-    const fecha = new Date().toISOString().split('T')[0];
+    const currentDate = new Date();
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
+    const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
+    const horaInicio = costaRicaTime.toISOString().split('T')[1].split('.')[0];
+    const today = new Date();
+    const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
     try {
       const data = await axios.put(API_INICIARJORNADA, {
@@ -323,7 +332,12 @@
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     console.log(fecha)
-    const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
+    const currentDate = new Date();
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
+    const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
+    const finJornada = costaRicaTime.toISOString().split('T')[1].split('.')[0];
+    const horaFin = finJornada; 
+    console.log(horaFin);
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     console.log(API_OBTENER_ESTADO);
     const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
@@ -337,7 +351,7 @@
         const data = await axios.put(API_FINALIZARJORNADA, {
           idViajeVale: response.data.Data.Data[0].idViajeVale,
           EstadoViaje: 'Finalizado',
-          horaFinViaje: horaInicio
+          horaFinViaje: horaFin
         }, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -398,7 +412,7 @@
     });
   }
 
-  // Asumiendo que `kilometrajeActualUnidad` y `formulario` están definidos en el contexto adecuado
+
   validarKilometrajeFinal(kilometrajeActualUnidad);
 
 
