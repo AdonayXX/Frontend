@@ -85,6 +85,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "usuario": idUsuario
         };
 
+        console.log('Datos enviados:', choferData);
 
         try {
             const token = localStorage.getItem('token');
@@ -101,6 +102,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
                 }, 2000);
             }
         } catch (error) {
+            console.error('Error al registrar el chofer:', error.response ? error.response.data : error.message);
             showToast('Error', 'Error al registrar el chofer.');
             this.disabled = false;
         }
@@ -115,6 +117,7 @@ function infoUser() {
       const decodedToken = jwt_decode(token);
       return (decodedToken);
     } catch (error) {
+      console.error(error);
       showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
     }
   }
@@ -298,6 +301,7 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         }, 2000);
     })
     .catch(error => {
+        console.error('Error al actualizar el chofer:', error.message);
         showToast('Error', 'Error al actualizar el chofer.');
     })
    
