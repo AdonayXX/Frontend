@@ -26,14 +26,17 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
     var sqlKeywords = [
         'INSERT', 'UPDATE', 'DELETE', 'SELECT', 'DROP', 'CREATE', 'ALTER',
         'TRUNCATE', 'RENAME', 'GRANT', 'REVOKE', 'MERGE', 'EXPLAIN',
-        'SHOW', 'DESCRIBE', 'USE', 'CALL', 'MASTER'
+        'SHOW', 'DESCRIBE', 'USE', 'CALL', 'MASTER', 'DENY', 'TABLE', 'WHERE', 'FROM'
     ];
 
     var tokenUpper = token.toUpperCase();
 
     for (var i = 0; i < sqlKeywords.length; i++) {
         if (tokenUpper.includes(sqlKeywords[i])) {
-            showToast("Atención", "El token contiene palabras reservadas, por favor ingrese un valor válido.");
+            showToast("Atención", "El token contiene caracteres inválidos, por favor ingrese un valor válido.");
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 3000);
             return;
         }
     }
@@ -53,7 +56,7 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
                 showToast("¡Éxito!", "Contraseña actualizada correctamente.");
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, 3000);
+                }, 2500);
             })
             .catch(function () {
                 showToast("Error", "No se pudo actualizar la contraseña.");
