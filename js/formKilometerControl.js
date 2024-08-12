@@ -15,7 +15,6 @@
 
         fillChoferes(listaChoferes, unidadFiltrada.choferDesignado);
         document.querySelector('#placaUnidad').value = unidadFiltrada.numeroUnidad;
-        console.log(document.querySelector('#placaUnidad').value);
         const kmS = document.querySelector('#KmS');
         kmS.value = unidadFiltrada.kilometrajeActual;
     
@@ -101,13 +100,12 @@ async function postDataControlKm(dataControlKm,numplaca) {
             }
            
         }
-        console.log(response.data);
+
         showToast("Éxito", "Se ha guardado Correctamente.");
         setTimeout(function () {
             loadContent('formKilometerControl.html', 'mainContent');
           }, 500);
     } catch (error) {
-        console.log(error);
         showToast("Error", "Hubo un error al guardar");
     }
 }
@@ -132,7 +130,6 @@ async function getUnidadPlaca(numUnidad) {
        
         
     } catch (error) {
-        console.log('Error en la solicitud:', error);
         showToast("Error", "Hubo un error al cargar las unidades");
     }
 }
@@ -177,7 +174,6 @@ async function actulizarUnidad( dataunidadplaca,kilometrajeActualizar,numplaca){
        valorFrecuenciaC,
        usuario
     }
-    console.log(dataUnidad)
        const response = axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numplaca}`, dataUnidad, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -185,7 +181,7 @@ async function actulizarUnidad( dataunidadplaca,kilometrajeActualizar,numplaca){
     }); 
         
     } catch (error) {
-        console.error(error);
+        showToast('Error','Inesperado.')
         
     }
    
@@ -247,7 +243,6 @@ async function cargarUnidades() {
         const unidades = response.data.unidades;
         return unidades;
     } catch (error) {
-        console.log(error);
         showToast("Error", "Hubo un error al cargar las unidades");
     }
 }
@@ -294,7 +289,6 @@ async function cargarChoferes() {
 
       
     } catch (error) {
-        console.log(error);
         showToast("Error", "Hubo un error al cargar los choferes");
     }
 }
@@ -304,7 +298,6 @@ function  fillUnitUser(listaChoferes,unidades,usuario){
     const choferusuarioFiltrado = listaChoferes.find(chofer => chofer.cedula === usuario.usuario.Identificacion)
     // Filtrar unidades de tipo id 3 (Motos)
     const moto = unidades.filter(unidad => unidad.idTipoUnidad === 3 && unidad.choferDesignado === choferusuarioFiltrado.idChofer);
-    console.log(moto);
 
     // Obtener el elemento select
     const selectUnidades = document.getElementById("choferControlKm");
