@@ -12,6 +12,7 @@
         readChofer();
         readUnidad();
     } else {
+        console.error('No se encontró el ID del vale en sessionStorage.');
     }
 
     async function readVale(id) {
@@ -92,6 +93,7 @@
             }
 
         } catch (error) {
+            console.error('Error fetching vale data:', error);
         }
     }
 
@@ -168,8 +170,10 @@
                 Observaciones: "Agregando datos"
             };
             if (isCero == 0) {
+                console.log("siseñor");
                 coordinate.IdChofer = 25;
             }
+            console.log(coordinate);
             const response = await axios.post(`${url}api/revicionVale`, coordinate, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -179,12 +183,15 @@
                 fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
             }
+            console.log(dataTripVale);
             await axios.post(`${url}api/viajeVale`, dataTripVale, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            console.log('Datos guardados correctamente:', response.data);
 
             return true;
         } catch (error) {
+            console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
             showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
@@ -221,6 +228,7 @@
             document.getElementById('select-chofer').innerHTML = body;
 
         } catch (error) {
+            console.error('No se cargaron los datos', error);
         }
     }
 
@@ -239,6 +247,7 @@
             document.getElementById('select-placa').innerHTML = body;
 
         } catch (error) {
+            console.error('No se cargaron los datos', error);
         }
     }
 
@@ -246,6 +255,7 @@
         try {
             const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
             const response = await axios.put(valUrl);
+            console.log('Campo actualizado correctamente:');
 
             if (newIdEstado === 2) {
                 showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
@@ -255,6 +265,7 @@
             }
 
         } catch (error) {
+            console.error('Error al actualizar el campo:', error);
             throw error;
         }
     }

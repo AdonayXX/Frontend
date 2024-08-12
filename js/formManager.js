@@ -34,6 +34,7 @@
                 showToast('Éxito', 'Encargado guardado con éxito.');
                 return true;
             } catch (error) {
+                console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
                 showToast('Error', 'Error al guardar el encargado.');
                 return false;
             }
@@ -64,6 +65,7 @@
                     }
                 });
             } catch (error) {
+                console.error('Error al buscar datos', error.response ? error.response.data : error.message);
                 showToast('Error', 'Error al buscar el encargado.');
                 return false;
             }
@@ -100,6 +102,7 @@
                 }
     
             } catch (error) {
+                console.error('Error al eliminar encargado:', error.response ? error.response.data : error.message);
                 showToast('Error', 'Error al eliminar el encargado.');
                 return false;
             }
@@ -130,9 +133,12 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log('Respuesta del servidor:', response);
                 showToast('Éxito', 'Encargado actualizado con éxito.');
                 return true;
             } catch (error) {
+                console.error('Error al actualizar datos:', error.response ? error.response.data : error.message);
+                console.error('Detalles del error:', error.response ? error.response : error);
                 showToast('Error', 'Error al actualizar el encargado.');
                 return false;
             }
