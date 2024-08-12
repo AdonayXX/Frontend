@@ -122,7 +122,7 @@
             pageLength: 25,
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             language: {
-                url: "assets/json/Spanish.json"
+                url: "https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json",
             },
             caseInsensitive: true,
             smart: true,
@@ -279,7 +279,7 @@
 
             showToast('Éxito!', 'Actualizado correctamente.');
             $("#atapModalEdit").modal("hide");
-            loadContent('dataTablekilometerControl.html', 'mainContent');
+            loadContent('dataTableKilometerControl.html', 'mainContent');
         } catch (error) {
             showToast('Error', 'Ocurrió un error al actualizar.');
         } finally {
@@ -337,13 +337,13 @@
                 });
                 showToast('Éxito', 'Eliminado exitosamente');
                 // Recargar la tabla de mantenimientos
-                loadContent('dataTablekilometerControl.html', 'mainContent');
+                loadContent('dataTableKilometerControl.html', 'mainContent');
             } catch (error) {
                 if (error.response && error.response.status === 400) {
                     const errorMessage = error.response.data.error;
                     showToast('Ups!', errorMessage || 'Ocurrió un problema al eliminar.');
                 } else {
-                    showToast('Ups!', 'Error al eliminar.');
+                    showToast('Ups!', 'Error al elimina.');
                 }
             }
 

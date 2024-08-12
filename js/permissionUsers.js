@@ -34,7 +34,7 @@ async function getUserPermission() {
               searching: true,
               paging: true,
               language: {
-                url: "assets/json/Spanish.json"
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
               },
               caseInsensitive: true,
               smart: true
