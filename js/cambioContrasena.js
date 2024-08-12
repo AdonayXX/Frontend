@@ -23,6 +23,21 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
 
     var passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    var sqlKeywords = [
+        'INSERT', 'UPDATE', 'DELETE', 'SELECT', 'DROP', 'CREATE', 'ALTER',
+        'TRUNCATE', 'RENAME', 'GRANT', 'REVOKE', 'MERGE', 'EXPLAIN',
+        'SHOW', 'DESCRIBE', 'USE', 'CALL', 'MASTER'
+    ];
+
+    var tokenUpper = token.toUpperCase();
+
+    for (var i = 0; i < sqlKeywords.length; i++) {
+        if (tokenUpper.includes(sqlKeywords[i])) {
+            showToast("Atención", "El token contiene palabras reservadas, por favor ingrese un valor válido.");
+            return;
+        }
+    }
+
     if (contra1 !== contra2) {
         showToast("Atención", "Las contraseñas no coinciden.");
     } else if (!passwordPattern.test(contra1)) {
