@@ -1,5 +1,3 @@
-
-
 async function generalesPdf() {
     try {
         const pdfUrl = '/documents/reporteGeneral.pdf';
@@ -696,15 +694,19 @@ async function exportarValeExcel() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
+
         try {
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+
             datosVale = response.data;
+
         } catch (apiError) {
-            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            console.error("Error al obtener los datos del vale:", apiError);
+            showToast("Error", "No se encontró el ID del vale o hubo un problema con la conexión.");
             return;
         }
 
-        console.log('Datos del vale:', datosVale);
+
         const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
@@ -736,7 +738,6 @@ async function exportarValeExcel() {
         worksheet.getCell('C9').value = valeData.NombreDestinoEbais;
         worksheet.getCell('C20').value = horaSalida;
         worksheet.getCell('C19').value = fechaSolicitud;
-
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -773,120 +774,120 @@ async function exportarValePdf() {
         const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
 
         worksheet.drawText(String(fechaSolicitud), {
-            x: 120,
-            y: height - 140,
+            x: 75,
+            y: height - 170,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
-            x: 120,
-            y: height - 152,
+            x: 480,
+            y: height - 175,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
-            x: 120,
-            y: height - 164,
+            x: 180,
+            y: height - 175,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante1 || ''), {
-            x: 120,
-            y: height - 176,
+            x: 405,
+            y: height - 234,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante2 || ''), {
-            x: 120,
-            y: height - 188,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante3 || ''), {
-            x: 120,
-            y: height - 200,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante4 || ''), {
-            x: 120,
-            y: height - 212,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante5 || ''), {
-            x: 120,
-            y: height - 224,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.NombreMotivo || ''), {
-            x: 120,
-            y: height - 236,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
-            x: 120,
+            x: 405,
             y: height - 248,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
+        worksheet.drawText(String(valeData.Acompanante3 || ''), {
+            x: 405,
+            y: height - 263,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante4 || ''), {
+            x: 405,
+            y: height - 278,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante5 || ''), {
+            x: 405,
+            y: height - 292,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreMotivo || ''), {
+            x: 260,
+            y: height - 205,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
+            x: 260,
+            y: height - 307,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
         worksheet.drawText(String(valeData.Detalle || ''), {
-            x: 120,
-            y: height - 260,
+            x: 348,
+            y: height - 325,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(horaSalida), {
-            x: 120,
-            y: height - 272,
+            x: 115,
+            y: height - 355,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(fechaSolicitud), {
-            x: 120,
-            y: height - 284,
+            x: 115,
+            y: height - 340,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(fechaSolicitud), {
-            x: 120,
-            y: height - 284,
+            x: 90,
+            y: height - 425,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(horaSalida), {
-            x: 120,
-            y: height - 272,
+            x: 245,
+            y: height - 425,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
