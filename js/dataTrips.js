@@ -53,6 +53,7 @@
       });
       return respuesta.data.citas || [];
     } catch (error) {
+      console.error('Error al obtener las citas:', error);
       showToast('Error', 'Ocurrió un problema al obtener las citas');
     }
   }
@@ -65,6 +66,7 @@
       });
       return respuesta.data.viaje || [];
     } catch (error) {
+      console.error('Error al obtener los viajes:', error);
       showToast('Error', 'Ocurrió un problema al obtener los viajes');
     }
   }
@@ -77,6 +79,7 @@
       });
       return respuesta.data.ViajesCitas.ViajesCitas || [];
     } catch (error) {
+      console.error('Error al obtener las relaciones entre viajes y citas:', error);
       showToast('Error', 'Ocurrió un problema al obtener las relaciones entre viajes y citas');
     }
   }
@@ -213,6 +216,7 @@
           this.disabled = false;
           obtenerCitas();
         } catch (error) {
+          console.error('Error al desasociar la cita del viaje:', error);
           showToast('Error', 'No se pudo desasociar la cita del viaje');
           this.checked = true;
         }
@@ -229,6 +233,7 @@
       });
       showToast('Éxito', 'Cita desasociada del viaje exitosamente');
     } catch (error) {
+      console.error('Error al desasociar la cita del viaje:', error.response.data);
       throw error;
     }
   }
@@ -282,6 +287,7 @@
 
       choferesSelect.innerHTML = opcionDefault.outerHTML;
     } catch (error) {
+      console.error('Error al obtener las unidades:', error);
     }
   }
 
@@ -342,6 +348,7 @@
     const idChofer = idChoferElement.value;
 
     if (!idUnidadElement || !fechaInicioElement || !idChofer) {
+      console.error('Algunos elementos del formulario no se encontraron.');
       showToast('Error', 'Por favor, complete todos los campos');
       return;
     }
@@ -394,6 +401,7 @@
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
         showToast('Error', 'Error al crear el viaje');
+        console.error(error);
       }
     } else {
       const asignarCita = {
@@ -408,6 +416,7 @@
         citasSeleccionadas.forEach(cita => citasConfirmadas.add(cita.idCita));
       } catch (error) {
         showToast('Error', 'Error al asignar las citas al viaje');
+        console.error(error);
       }
     }
 
@@ -444,6 +453,7 @@
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
+      console.error('Error al marcar la cita como ausente:', error.response.data);
     }
   }
 
@@ -497,6 +507,7 @@
       const decodedToken = jwt_decode(token);
       return decodedToken;
     } catch (error) {
+      console.error(error);
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
     }
   }

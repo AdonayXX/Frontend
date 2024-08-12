@@ -29,6 +29,7 @@
             createTableRequest();
             ocultarSpinner();
         } catch (error) {
+            console.error('Hubo un problema con la operación de obtención:', error);
         }
     }
 

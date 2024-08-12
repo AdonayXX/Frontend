@@ -3,6 +3,7 @@ async function exportToPDF(tableId, page) {
     try {
         let table = document.getElementById(tableId);
         if (!table) {
+            console.error(`No se encontró una tabla con el ID: ${tableId}`);
             return;
         }
 
@@ -59,6 +60,7 @@ async function exportToPDF(tableId, page) {
                 break;    
                
             default:
+                console.log("No se requiere modificar");
                 columnasAEliminar = null;
                 break;
         }
@@ -140,5 +142,6 @@ async function exportToPDF(tableId, page) {
 
         reader.readAsDataURL(logoBlob);
     } catch (error) {
+        console.error('Error al exportar a PDF:', error);
     }
 }
