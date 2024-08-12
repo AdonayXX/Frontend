@@ -24,7 +24,6 @@
 
   const token = localStorage.getItem('token');
   if (!token) {
-    console.error("Token no encontrado en localStorage");
     window.location.href = 'login.html';
     return;
   }
@@ -34,7 +33,6 @@
       const userInfo = jwt_decode(token);
       return userInfo;
     } catch (error) {
-      console.error("Error al decodificar el token:", error);
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
       throw error;
     }
@@ -48,7 +46,6 @@
       });
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
-      console.error("Error al obtener la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
       throw error;
     }
@@ -64,7 +61,6 @@
       kilometrajeActualUnidad = unidad.kilometrajeActual;
       return unidad.id;
     } catch (error) {
-      console.error("Error al obtener el id de la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
       throw error;
     }
@@ -75,7 +71,6 @@
 
   async function obtenerVales(idUnidad, fecha) {
     const API_VALES = `https://backend-transporteccss.onrender.com/api/viajeVale/${idUnidad}/${fecha}`;
-    console.log(API_VALES);
     try {
       const response = await axios.get(API_VALES, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -90,7 +85,6 @@
       const valesNoFinalizados = vales.filter(vale => vale.Estado !== 'Finalizado');
       mostrarVales(valesNoFinalizados);
     } catch (error) {
-      console.error('Error al obtener los vales:', error);
       showToast('Error', 'Ocurrió un problema al obtener los vales');
       throw error;
     }
@@ -99,10 +93,8 @@
   function mostrarVales(vales) {
     const valesTableBody = document.getElementById('valesTableBody');
     if (!valesTableBody) {
-      console.error("Elemento 'valesTableBody' no encontrado");
       return;
     }
-    console.log(vales);
 
     valesTableBody.innerHTML = '';
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
@@ -170,7 +162,6 @@
         if (unidadAsignadaElement) {
           unidadAsignadaElement.value = unidadAsignada.numeroUnidad;
         } else {
-          console.error("Elemento 'unidadAsignadaVale' no encontrado");
         }
 
         const idUnidad = await obtenerIdUnidad(unidadAsignada.numeroUnidad);
@@ -182,7 +173,6 @@
           if (fechaElement) {
             fechaElement.value = fechaValue;
           } else {
-            console.error("Elemento 'fechaVale' no encontrado");
           }
 
           await obtenerVales(idUnidad, fechaValue);
@@ -193,7 +183,6 @@
         }
       }
     } catch (error) {
-      console.error("Error al inicializar la página:", error);
       showToast('Error', 'Ocurrió un problema al cargar la página');
     }
   }
@@ -222,13 +211,10 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       localStorage.setItem('valeIniciado', JSON.stringify({ IdVale, IdRevisionValeViaje }));
-      console.log('Vale iniciado:', valeInfo);  
 
       inicializarPagina();
       showToast('Éxito', 'Vale iniciado correctamente');
-      console.log('vale inciiado', IdVale, IdRevisionValeViaje);
     } catch (error) {
-      console.error('Error al iniciar el vale:', error);
       showToast('Error', 'Ocurrió un problema al iniciar el vale');
     }
   };
@@ -247,7 +233,6 @@
     }
     const IdVale = valeIdSeleccionado;
     const IdRevisionValeViaje = revisionIdSeleccionado;
-    console.log(IdVale, IdRevisionValeViaje);
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
     if (!valeIniciado || valeIniciado.IdVale !== IdVale) {
       showToast('Error', 'No se puede finalizar este vale porque no está en curso.');
@@ -283,7 +268,6 @@
       inicializarPagina();
       showToast('Éxito', 'Vale finalizado correctamente');
     } catch (error) {
-      console.error('Error al finalizar el vale:', error);
       showToast('Error', 'Ocurrió un problema al finalizar el vale');
     }
   };
@@ -317,10 +301,8 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      console.log(data);
 
     } catch (error) {
-      console.error('Error al iniciar la jornada:', error);
       showToast('Error', 'Ocurrió un problema al iniciar la jornada');
     } finally {
       loadContent('tableDriverVales.html', 'mainContent');
@@ -331,22 +313,18 @@
   window.finalizarJornada = async function () {
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    console.log(fecha)
     const currentDate = new Date();
     const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
     const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
     const finJornada = costaRicaTime.toISOString().split('T')[1].split('.')[0];
     const horaFin = finJornada; 
-    console.log(horaFin);
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
-    console.log(API_OBTENER_ESTADO);
     const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
 
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log(response.data.Data.Data[0].idViajeVale);
       try {
         const data = await axios.put(API_FINALIZARJORNADA, {
           idViajeVale: response.data.Data.Data[0].idViajeVale,
@@ -357,14 +335,11 @@
         });
         ;
 
-        console.log(data);
 
       } catch (error) {
-        console.error('Error al iniciar la jornada:', error);
         showToast('Error', 'Ocurrió un problema al iniciar la jornada');
       }
     } catch (error) {
-      console.error('Error al iniciar la jornada:', error);
       showToast('Error', 'Ocurrió un problema al iniciar la jornada');
     } finally {
       loadContent('tableDriverVales.html', 'mainContent');
@@ -374,13 +349,11 @@
   async function botones() {
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    console.log(fecha)
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log(response.data.Data.Data[0].EstadoViaje);
 
 
       if (response.data.Data.Data[0].EstadoViaje === 'Iniciado') {
@@ -394,7 +367,6 @@
       }
 
     } catch (error) {
-      console.error('Error al obtener los viajes:', error);
       showToast('Error', 'Ocurrió un problema al obtener los viajes');
       throw error;
     }

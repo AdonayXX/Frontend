@@ -519,7 +519,6 @@ async function generalesExcel() {
         link.download = 'Reporte_ASU.xlsx';
         link.click();
     } catch (error) {
-        console.error("Error al modificar el archivo Excel:", error);
         alert("Hubo un error al modificar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
@@ -686,7 +685,6 @@ async function mantenimientoExcel() {
         link.download = 'Reportes_ASU_Mantenimiento.xlsx';
         link.click();
     } catch (error) {
-        console.error("Error al modificar el archivo Excel:", error);
         alert("Hubo un error al modificar el archivo Excel. Por favor, intente de nuevo.");
     }
 }
@@ -704,7 +702,6 @@ async function exportarVale() {
             return;
         }
 
-        console.log('Datos del vale:', datosVale);
         const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
@@ -744,7 +741,6 @@ async function exportarVale() {
         link.download = 'Reporte_Vale.xlsx';
         link.click();
     } catch (error) {
-        console.error("Error al exportar el archivo Excel:", error);
     }
 }
 
@@ -857,10 +853,8 @@ async function exportarVale() {
         
                     reader.readAsDataURL(logoBlob);
                 } else {
-                    console.error('No se encontraron datos para el reporte o la solicitud no fue exitosa.');
                 }
             } catch (error) {
-                console.error('Error al exportar a PDF:', error);
             }
         }
 
@@ -971,9 +965,7 @@ async function exportarVale() {
                     link.click();
 
                 } else {
-                    console.error('Error al obtener datos');
                 }
             } catch (error) {
-                console.error('Error:', error);
             }
         }

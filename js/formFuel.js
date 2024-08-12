@@ -186,7 +186,6 @@
             });
             choferesSelect.innerHTML = opcionDefaultChofer.outerHTML;
         } catch (error) {
-            console.error('Error al obtener las unidades:', error);
         }
     }
 

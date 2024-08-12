@@ -1,7 +1,6 @@
 (async function () {
   const token = localStorage.getItem('token');
   if (!token) {
-      console.error("Token no encontrado en localStorage");
       return;
   }
 
@@ -10,7 +9,6 @@
           const userInfo = jwt_decode(token);
           return userInfo;
       } catch (error) {
-          console.error("Error al decodificar el token:", error);
           showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
       }
   }
@@ -25,7 +23,6 @@
           });
           return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
       } catch (error) {
-          console.error("Error al obtener la unidad asignada:", error);
           showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
       }
   }
@@ -56,7 +53,6 @@
               unitSelect.appendChild(option);
           });
       } catch (error) {
-          console.error("Error al obtener las unidades:", error);
           showToast('Error', 'Ocurrió un problema al obtener las unidades');
       }
   }
@@ -113,11 +109,9 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response.data);
       return response.data.unidades[0]; 
       
     } catch (error) {
-      console.error("Error al obtener los datos de la unidad:", error);
       showToast('Error', 'Ocurrió un problema al obtener los datos de la unidad');
     }
   }
@@ -128,8 +122,6 @@
     const kilometrajeActual = unitData.kilometrajeActual;
     const kilometrajeIngresado = parseInt(document.getElementById('currentMileage').value);
 
-    console.log(kilometrajeActual);
-    console.log(kilometrajeIngresado);
 
     if (kilometrajeIngresado < kilometrajeActual) {
       showToast('Error', `El kilometraje ingresado no puede ser menor que el kilometraje actual de la unidad (${kilometrajeActual}).`);
@@ -162,7 +154,6 @@
       showToast('Éxito', 'Registro de combustible guardado exitosamente');
       limpiarCamposFormulario();
     } catch (error) {
-      console.error("Error al guardar el registro de combustible:", error);
       showToast('Error', 'Ocurrió un problema al guardar el registro de combustible');
     }
   }
@@ -246,7 +237,6 @@ async function putRegistroCombustible() {
         return;
     }
 
-    console.log(idCombustibleATAP);
     const data = {
         montoColones: parseInt(document.getElementById('totalAmount').value),
         litrosAproximados: parseInt(document.getElementById('approxLiters').value),
@@ -262,7 +252,6 @@ async function putRegistroCombustible() {
         estado: "Activo"
     };
 
-    console.log(data);
 
     try {
         const response = await axios.put(`https://backend-transporteccss.onrender.com/api/combustibleATAP/${idCombustibleATAP}`, data, {
@@ -273,7 +262,6 @@ async function putRegistroCombustible() {
         showToast('Éxito', 'Registro de combustible actualizado exitosamente');
         limpiarCamposFormulario();
     } catch (error) {
-        console.error("Error al actualizar el registro de combustible:", error);
         showToast('Error', 'Ocurrió un problema al actualizar el registro de combustible');
     }
   }
@@ -296,7 +284,6 @@ async function putRegistroCombustible() {
           showToast('Éxito', 'Registro de combustible eliminado exitosamente');
           limpiarCamposFormulario();
       } catch (error) {
-          console.error("Error al eliminar el registro de combustible:", error);
           showToast('Error', 'Ocurrió un problema al eliminar el registro de combustible');
       }
   }

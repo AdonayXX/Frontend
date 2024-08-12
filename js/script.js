@@ -31,10 +31,11 @@ function loadToastTemplate(callback) {
                 toastContainer.innerHTML = data;
                 if (callback) callback();
             } else {
-                console.error('Toast container not found');
             }
         })
-        .catch(error => console.error('Error loading toast template:', error));
+        .catch(
+
+        );
 }
 function showToast(title, message) {
     loadToastTemplate(() => {
@@ -48,7 +49,6 @@ function showToast(title, message) {
                 toast.hide();
             }, 3000);
         } else {
-            console.error('Toast element not found');
         }
     });
 }
@@ -62,10 +62,9 @@ function loadModalTemplate(callback) {
                 modalContainer.innerHTML = data;
                 if (callback) callback();
             } else {
-                console.error('Modal container not found');
             }
         })
-        .catch(error => console.error('Error loading modal template:', error));
+        .catch();
 }
 
 function showModal(title, message, confirmCallback) {
@@ -81,7 +80,6 @@ function showModal(title, message, confirmCallback) {
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
     } else {
-        console.error('Modal element not found');
     }
 }
 //DecodificarToken
@@ -90,7 +88,6 @@ function decodeToken(token) {
         const decodedToken = jwt_decode(token);
         return decodedToken.exp;
     } catch (error) {
-        console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
     }
 }
@@ -107,7 +104,6 @@ function setupAutoLogout(token) {
             }, timeUntilExpiration);
         }
     } catch (error) {
-        console.error('Error al configurar el cierre de sesión automático:', error);
     }
 }
 
@@ -126,7 +122,6 @@ function tokenrol(token) {
         const decodedToken = jwt_decode(token);
         return (decodedToken.usuario); 
     } catch (error) {
-        console.error('Error al decodificar el token:', error);
         throw new Error('Error al decodificar el token');
     }
 }
@@ -143,12 +138,10 @@ async function getCatForm(rolUser) {
         const Rol = rolUser.Rol;
         obtenerFormulariosPorRol(rolesFr, Rol);
     } catch (error) {
-        console.error('Error al obtener datos :', error);
         if (error.response && error.response.status === 400) {
             const errorMessage = error.response.data.error;
             showToast('Error', 'Inicie Sesión de nuevo');
         } else {
-            console.error('Ha ocurrido un problema:', error);
             showToast('Atención', 'No tienes permisos, contacte al administrador.');
             const allItems = document.querySelectorAll('.items');
             allItems.forEach(item => {
@@ -196,7 +189,6 @@ function infoUser(){
         const decodedToken = jwt_decode(token);
         return (decodedToken);
     } catch (error) {
-        console.error(error);
         showToast('Error','Ocurrio un problema al obtener loss datos del usuario')
         
     }
@@ -211,7 +203,6 @@ try {
      const nombreCompleto = `${usuario.Nombre} ${usuario.Apellido1} ${usuario.Apellido2}`   
      userNameSpan.textContent = nombreCompleto;
 } catch (error) {
-    console.error(error);
     
 }
 }

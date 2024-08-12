@@ -31,7 +31,6 @@ function openAccomp(cedula) {
             modal.show();
         })
         .catch(error => {
-            console.error('Error fetching driver emergency contact data:', error);
             showToast('Error', 'Error al obtener los datos de contacto de emergencia.');
         });
 }
@@ -81,7 +80,6 @@ async function getChoferes() {
         });
 
     } catch (error) {
-        console.error('Error fetching driver data:', error);
         showToast('Error', 'Error al obtener los datos del chofer.');
     }
 }

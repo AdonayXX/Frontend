@@ -40,10 +40,9 @@ function loadToastTemplate(callback) {
                 toastContainer.innerHTML = data;
                 if (callback) callback();
             } else {
-                console.error('Toast container no encontrado');
             }
         })
-        .catch(error => console.error('Error al cargar la plantilla de toast:', error));
+        .catch();
 }
 
 function showToast(title, message, reloadCallback) {
@@ -61,7 +60,6 @@ function showToast(title, message, reloadCallback) {
                 }
             }, 2000);
         } else {
-            console.error('Toast element no encontrado');
         }
     });
 }
@@ -126,7 +124,6 @@ function ObtenerUnidades() {
             LlenarUnidadesProgramaticas(response.data);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
         });
 }
 
@@ -146,7 +143,6 @@ function ObtenerServicios() {
             LlenarServicios(response.data);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
         });
 }
 
@@ -165,7 +161,6 @@ function ObtenerMotivos() {
             llenarMotivos(response.data);
         })
         .catch(error => {
-            console.error('Hubo un problema al obtener los datos:', error);
         });
 }
 
@@ -186,7 +181,6 @@ function ObtenerSalida() {
             LlenarSalida(response.data.ebaisPerifericos);
         })
         .catch(error => {
-            console.error('Hubo un problema con la operación de obtención:', error);
         });
 }
 
@@ -206,7 +200,6 @@ function ObtenerDestino() {
             LlenarDestino(response.data.ebaisPerifericos);
         })
         .catch(error => {
-            console.error('Hubo un problema con la operación de obtención:', error);
         });
 }
 
@@ -226,7 +219,6 @@ function ObtenerRutaSalida() {
             LlenarRutaSalida(response.data);
         })
         .catch(error => {
-            console.error('Hubo un problema al obtener los datos:', error);
         });
 }
 
@@ -245,7 +237,6 @@ function ObtenerRutaDestino() {
             LlenarRutaDestino(response.data);
         })
         .catch(error => {
-            console.error('Hubo un problema al obtener los datos:', error);
         });
 }
 
@@ -351,10 +342,8 @@ function GuardarDatos() {
         })
         .catch(error => {
             if (error.response) {
-                console.log('Hubo un problema al guardar los datos:', error.response.data.message);
                 showToast("Error al guardar los datos", error.response.data.message);
             } else {
-                console.error('Error desconocido:', error);
             }
         });
 
@@ -402,7 +391,6 @@ async function getVales() {
             document.getElementById('valeId').textContent = '2024-001';
         }
     } catch (error) {
-        console.error('Hubo un problema con la operación de obtención:', error);
         document.getElementById('valeId').textContent = 'Error al obtener vales';
     }
 }

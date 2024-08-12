@@ -1,7 +1,6 @@
 "use strict";
 
 function abrirDireccion(direccionData) {
-  console.log('openDireccion called', direccionData);
 
   const { provincia, canton, distrito, barrio, direccionExacta } = direccionData;
 
@@ -19,8 +18,6 @@ function abrirDireccion(direccionData) {
 
 
 function openAccomp(acompanante1, acompanante2) {
-  console.log('openAccomp called');
-  console.log('Acompañantes en modal:', acompanante1, acompanante2);
 
   const accompTbody = document.getElementById('acompTbody');
   const messageNoComp = document.getElementById('messageNoComp');
@@ -56,7 +53,6 @@ function openAccomp(acompanante1, acompanante2) {
 (async function () {
   const token = localStorage.getItem('token');
   if (!token) {
-    console.error("Token no encontrado en localStorage");
     return;
   }
 
@@ -65,7 +61,6 @@ function openAccomp(acompanante1, acompanante2) {
       const userInfo = jwt_decode(token);
       return userInfo;
     } catch (error) {
-      console.error("Error al decodificar el token:", error);
       showToast('Error', 'Ocurrió un problema al obtener los datos del usuario');
     }
   }
@@ -78,10 +73,8 @@ function openAccomp(acompanante1, acompanante2) {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Chóferes', response.data.choferesConUnidades);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
-      console.error("Error al obtener la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener la unidad asignada');
     }
   }
@@ -94,18 +87,15 @@ function openAccomp(acompanante1, acompanante2) {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Unidades', response.data.unidades);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
-      console.error("Error al obtener el id de la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
     }
   }
 
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
-    console.log(apiURLViajes);
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -125,11 +115,9 @@ function openAccomp(acompanante1, acompanante2) {
       }
 
       renderizarViajes(viajes);
-      console.log('Viajes', viajes);
       haveTrips();
 
     } catch (error) {
-      console.error("Error al obtener los viajes:", error);
       showToast('Información', 'No hay viajes asignados, vuelve pronto.');
       haveTrips();
     }
@@ -160,10 +148,7 @@ function openAccomp(acompanante1, acompanante2) {
       showToast('Éxito', 'El viaje ha sido iniciado correctamente');
       mostrarEstadoViaje();
     } catch (error) {
-      console.error("Error al iniciar el viaje:", error);
       if (error.response) {
-        console.error("Datos de error de la respuesta:", error.response.data);
-        console.error("Estado de error de la respuesta:", error.response.status);
       }
       showToast('Error', 'Ocurrió un problema al iniciar el viaje');
     }
@@ -195,10 +180,7 @@ function openAccomp(acompanante1, acompanante2) {
       loadContent('tableDriverTrips.html', 'mainContent');
       mostrarEstadoViaje();
     } catch (error) {
-      console.error("Error al finalizar el viaje:", error);
       if (error.response) {
-        console.error("Datos de error de la respuesta:", error.response.data);
-        console.error("Estado de error de la respuesta:", error.response.status);
       }
       showToast('Error', 'Ocurrió un problema al finalizar el viaje');
     }
@@ -298,7 +280,6 @@ function openAccomp(acompanante1, acompanante2) {
         }
       }
     } catch (error) {
-      console.error("Error al inicializar la página:", error);
       showToast('Error', 'Ocurrió un problema al cargar la página');
     }
   }
@@ -318,7 +299,6 @@ function openAccomp(acompanante1, acompanante2) {
         barrio: data.barrio,
         direccionExacta: data.direccionExacta
       };
-      console.log('DireccionData:', direccionData);
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="text-center">${data.NombrePaciente}</td>

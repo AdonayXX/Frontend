@@ -20,14 +20,11 @@ async function loadContent(page, containerId = 'mainContent') {
                 script.async = true; 
                 script.defer = true; 
                 script.onerror = function() {
-                    console.error(`Failed to load script: ${script.src}`);
                 };
                 document.head.appendChild(script);
             });
         } else {
-            console.error(`Container with id ${containerId} not found`);
         }
     } catch (error) {
-        console.error(error.message);
     }
 }

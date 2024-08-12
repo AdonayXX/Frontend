@@ -53,7 +53,6 @@ function addPersona() {
 
   } catch (error) {
     showToast('Ups!', 'Ocurrio un problema con los campos del formulario.');
-    console.error(error);
 
   }
 
@@ -83,12 +82,10 @@ async function addPerson(personaData) {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error(error);
       showToast('Ups!', errorMessage);
 
     } else {
       showToast('Error', 'Hubo un problema al enviar los datos.');
-      console.error(error);
 
     }
   }
@@ -97,7 +94,6 @@ async function addPerson(personaData) {
 //3 Agregar Persona
 async function addPeople(personaData) {
   try {
-    console.log(personaData)
     const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, personaData, {
@@ -112,12 +108,10 @@ async function addPeople(personaData) {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error(error);
       showToast('Ups!', errorMessage);
 
     } else {
       showToast('Error', 'hubo un problema al enviar los datos.');
-      console.error(error);
 
     }
   }
@@ -180,7 +174,6 @@ function addDataPatient(IdPersonaCreada) {
     "Barrio": barrio,
     "OtrasSenas": direccion
   }
-  console.log(pacienteData)
 
   addPatient(pacienteData);
 
@@ -197,7 +190,6 @@ async function addPatient(pacienteData) {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response)
     const idPaciente = (response.data.paciente.insertId);
     addCompanion(idPaciente);
     showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
@@ -205,7 +197,6 @@ async function addPatient(pacienteData) {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error('Error específico:', errorMessage);
       showToast('Ups!', errorMessage);
 
     } else {
@@ -270,12 +261,10 @@ async function addComp(companionData) {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       const errorMessage = error.response.data.error;
-      console.error(error);
       showToast('Ups!', errorMessage);
 
     } else {
       showToast('Error', 'Hubo un problema al enviar los datos del acompañante.');
-      console.error(error);
 
     }
   }
@@ -621,7 +610,6 @@ function cargarDatos() {
                       cantonSelect.appendChild(option);
                   });
               }
-              console.log(provinciaSeleccionada)
           });
 
           // Evento para cargar distritos al seleccionar un cantón
@@ -644,11 +632,10 @@ function cargarDatos() {
                       distritoSelect.appendChild(option);
                   });
               }
-              console.log(cantonSeleccionado)
           });
        
       })
-      .catch(error => console.error('Error al cargar el JSON:', error));
+      .catch();
 }
 
 // Llamar a la función cargarDatos inmediatamente
