@@ -29,6 +29,7 @@ async function fetchViajes() {
         const data = await response.json();
         return data.viaje;
     } catch (error) {
+        console.error('Error fetching viajes:', error);
     }
 }
 
@@ -96,6 +97,7 @@ async function assignUnidad(viajeId) {
         if (!response.ok) throw new Error('Network response was not ok.');
         alert('Unidad asignada correctamente.');
     } catch (error) {
+        console.error('Error assigning unidad:', error);
     }
 }
 
@@ -111,5 +113,6 @@ async function unassignUnidad(viajeId) {
         if (!response.ok) throw new Error('Network response was not ok.');
         alert('Unidad desasignada correctamente.');
     } catch (error) {
+        console.error('Error unassigning unidad:', error);
     }
 }

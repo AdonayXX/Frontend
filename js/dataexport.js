@@ -54,6 +54,7 @@ async function exportToExcel(tableId, page) {
         
             
         default:
+            console.log("No se requiere modificar");
             columnasAEliminar = null; // Marcar que no se requieren cambios
             break;
     }
