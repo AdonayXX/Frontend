@@ -17,7 +17,6 @@
 
 
 // ---------------------------------POST------------------------------------------------ //
-
 document.getElementById('btnActualizar').disabled = true;
 
 document.getElementById('btnGuardar').addEventListener('click', async function (event) {
@@ -34,6 +33,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         const tipoLicencia = document.getElementById('tipoLicencia').value;
         const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value;
         const estadoChofer = document.getElementById('estado').value;
+        const autorizado = document.getElementById('autorizado').value === 'Sí' ? 1 : 0;
 
         //A1
         const contactoEmergencia = document.getElementById('contactoEmergencia').value || null;
@@ -46,7 +46,6 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         const nombreCE2 = document.getElementById('acompananteNombreN2').value || null;
         const apellido1CE2 = document.getElementById('apellido1CE2').value || null;
         const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
-
 
         if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoSangre || !tipoLicencia || !fechaVencimientoLicencia) {
             const camposFaltantes = [];
@@ -82,15 +81,15 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "apellido1CE2": apellido1CE2,
             "apellido2CE2": apellido2CE2,
             "estadoChofer": estadoChofer,
+            "autorizado": parseInt(autorizado),
             "usuario": idUsuario
         };
 
-        try {
+        console.log('Datos enviados:', choferData);
 
-            
-            
+        try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer',choferData, {
+            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer', choferData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -103,7 +102,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
                 }, 2000);
             }
         } catch (error) {
-            console.error('Error al registrar el chofer:', error);
+            console.error('Error al registrar el chofer:', error.response ? error.response.data : error.message);
             showToast('Error', 'Error al registrar el chofer.');
             this.disabled = false;
         }
@@ -121,11 +120,10 @@ function infoUser() {
       console.error(error);
       showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
     }
-
   }
-  const infoUsuario = infoUser();
-  const idUsuario = infoUsuario.usuario.IdUsuario;
 
+const infoUsuario = infoUser();
+const idUsuario = infoUsuario.usuario.IdUsuario;
 
 document.getElementById('contacto').addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
@@ -150,7 +148,6 @@ document.getElementById('contactoEmergencia2').addEventListener('input', functio
     }
     e.target.value = value;
 });
-
 
 // ---------------------------------GET------------------------------------------------ //
 
@@ -180,7 +177,7 @@ async function getChofer(cedula) {
 
         const choferes = response.data.chofer;
 
-        const choferEncontrado = choferes[0]; // como la cedula es unica, solo se espera un chofer	
+        const choferEncontrado = choferes[0]; 
         if (choferEncontrado) {
             document.getElementById('nombre').value = choferEncontrado.nombre || '';
             document.getElementById('apellido1').value = choferEncontrado.apellido1 || '';
@@ -198,6 +195,7 @@ async function getChofer(cedula) {
             document.getElementById('apellido1CE2').value = choferEncontrado.apellido1CE2 || '';
             document.getElementById('apellido2CE2').value = choferEncontrado.apellido2CE2 || '';
             document.getElementById('contactoEmergencia2').value = choferEncontrado.contactoEmergencia2 || '';
+            document.getElementById('autorizado').value = choferEncontrado.autorizado === 1 ? 'Si' : 'No';
 
             document.getElementById('nombre').disabled = false;
             document.getElementById('apellido1').disabled = false;
@@ -260,6 +258,9 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
     const nombreCE2 = document.getElementById('acompananteNombreN2').value || null;
     const apellido1CE2 = document.getElementById('apellido1CE2').value || null;
     const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
+    const autorizado = document.getElementById('autorizado').value === 'Sí' ? 1 : 0;
+
+
 
     if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoLicencia || !fechaVencimientoLicencia) {
         showToast('Error', 'Por favor, complete todos los campos requeridos.');
@@ -284,7 +285,8 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "apellido1CE2": apellido1CE2,
         "apellido2CE2": apellido2CE2,
         "estadoChofer": estadoChofer,
-        "usuario": 1
+        "autorizado": parseInt(autorizado),
+        "usuario": idUsuario
     };
 
     const token = localStorage.getItem('token');
