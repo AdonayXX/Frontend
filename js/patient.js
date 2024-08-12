@@ -149,7 +149,7 @@ function fillPatientComp(listPatientComp) {
     </button>
 </td>
             <td class='text-center'>${patient.Prioridad ? 'Si' : 'No'}</td>
-            <td class='text-center'>${patient.Traslado ? 'Si' : 'No'}</td>
+            <td class='text-center'>${patient.VbDM ? 'Si' : 'No'}</td>
             <td class='text-center'>
               ${dontShowButton ? 'Sin datos' : `<button class="btn btn-outline-success btn-sm" onclick="getLocation('${patient.Latitud}', '${patient.Longitud}')"><i class="bi bi-geo-alt-fill"></i></button>`}
             </td>
@@ -384,9 +384,15 @@ window.patientEdit = function (button) {
           'Authorization': `Bearer ${token}`
         }
       });
-
-
-      modal.hide();
+ // Cerrar el modal correctamente usando Bootstrap
+ const modalElement = document.querySelector("#editPatient");
+ const modalInstance = bootstrap.Modal.getInstance(modalElement);
+ if (modalInstance) {
+   modalInstance.hide();
+ } else {
+   const newModalInstance = new bootstrap.Modal(modalElement);
+   newModalInstance.hide();
+ }
       showToast('Paciente', 'Se han guardado los cambios')
       setTimeout(function () {
         loadContent('dataTablePatient.html', 'mainContent');
@@ -451,6 +457,27 @@ window.patientEdit = function (button) {
 
   }
   function llenarcampos(pacientes) {
+      // Limpiar los campos antes de llenarlos
+      document.querySelector('#primerApellido').value = '';
+      document.querySelector('#nombre').value = '';
+      document.querySelector('#segundoApellido').value = '';
+      document.querySelector('#genero').value = '';
+      document.querySelector('#tipoIdentificacion').value = '';
+      document.querySelector('#identificacion').value = '';
+      document.querySelector('#telefono1').value = '';
+      document.querySelector('#telefono2').value = '';
+      document.querySelector('#tipoSangre').value = '';
+      document.querySelector('#latitud').value = '';
+      document.querySelector('#longitud').value = '';
+      document.querySelector('#direccion').value = '';
+      document.querySelector('#lugarSalida').value = '';
+      document.querySelector('#prioridad').checked = false;
+      document.querySelector('#trasladable').checked = false;
+      document.querySelector('#encamado').value = '';
+      document.querySelector('#provincia').value = '';
+      document.querySelector('#canton').value = '';
+      document.querySelector('#distrito').value = '';
+      document.querySelector('#barrio').value = '';
    
 
     document.querySelector('#primerApellido').value = pacientes.Apellido1 || '';
@@ -467,7 +494,7 @@ window.patientEdit = function (button) {
     document.querySelector('#direccion').value = pacientes.Direccion || '';
     document.querySelector('#lugarSalida').value = pacientes.LugarSalida || '';
     document.querySelector('#prioridad').checked = pacientes.Prioridad || '';
-    document.querySelector('#trasladable').checked = pacientes.Traslado || '';
+    document.querySelector('#trasladable').checked = pacientes.VbDM || '';
     document.querySelector('#encamado').value = pacientes.Encamado || '';
       // Simular la selección de una provincia y cargar cantones
       const provinciaSelect = document.querySelector('#provincia');

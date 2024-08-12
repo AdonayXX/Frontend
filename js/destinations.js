@@ -47,19 +47,19 @@ async function loadEspecialidades() {
             $('#tableEspecialidades').DataTable().clear().destroy();
         }
 
-        $('#tableEspecialidades').DataTable({
+        const dataTable = $('#tableEspecialidades').DataTable({
             dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                 "<'row'<'col-sm-12't>>" +
                 "<'row'<'col-sm-12'p>>",
             ordering: false,
             searching: true,
             paging: true,
-            pageLength: 5,
-            lengthMenu: [5, 10],
+            pageLength: 50,
+            lengthMenu: [50, 100],
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json',
+                url: '/assets/json/Spanish.json',
                 paginate: {
                     previous: 'Anterior',
                     next: 'Siguiente',
@@ -70,9 +70,9 @@ async function loadEspecialidades() {
             smart: true,
         });
 
-        $('#buscarEspecialidad').on('keyup', function () {
-            let inputValue = $(this).val().toLowerCase();
-            $('#tableEspecialidades').DataTable().search(inputValue).draw();
+        dataTable.on('draw', function () {
+            restoreCheckboxesAndButtons(especialidadesMarcadasInicial);
+            sortTableEspecialidades();
         });
 
         document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
@@ -227,8 +227,106 @@ async function loadEspecialidades() {
     }
 }
 
+function restoreCheckboxesAndButtons(especialidadesMarcadasInicial) {
+    document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+        const idEspecialidad = parseInt(checkbox.dataset.id);
+        checkbox.disabled = false;
+        if (especialidadesMarcadasInicial.includes(idEspecialidad)) {
+            checkbox.checked = true;
+            checkbox.disabled = true;
+        } else {
+            checkbox.checked = false;
+        }
+    });
+
+    document.querySelectorAll('#espe tr').forEach(row => {
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        const deleteBtn = row.querySelector('.btn-outline-danger');
+        if (checkbox && deleteBtn) {
+            deleteBtn.disabled = !especialidadesMarcadasInicial.includes(parseInt(checkbox.dataset.id));
+        }
+    });
+
+    document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
+            const idEspecialidad = parseInt(this.dataset.id);
+            deleteBtn.disabled = !especialidadesMarcadasInicial.includes(idEspecialidad) || !this.checked;
+        });
+    });
+}
+
+function sortTableEspecialidades() {
+    const tableBody = document.getElementById('espe');
+    const rows = Array.from(tableBody.rows);
+
+    rows.sort((a, b) => {
+        const aCheckbox = a.querySelector('input[type="checkbox"]');
+        const bCheckbox = b.querySelector('input[type="checkbox"]');
+        const aChecked = aCheckbox.checked;
+        const bChecked = bCheckbox.checked;
+        return bChecked - aChecked;
+    });
+
+    rows.forEach(row => tableBody.appendChild(row));
+}
+
 loadEspecialidades();
 
+function renderTableEspecialidades(especialidades, especialidadesMarcadasInicial = []) {
+    const tableBody = document.getElementById('espe');
+    tableBody.innerHTML = '';
+
+    especialidades.sort((a, b) => {
+        const aMarcada = especialidadesMarcadasInicial.includes(a.idEspecialidad);
+        const bMarcada = especialidadesMarcadasInicial.includes(b.idEspecialidad);
+        return bMarcada - aMarcada;
+    });
+
+    especialidades.forEach(especialidad => {
+
+        const row = document.createElement('tr');
+        const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
+
+        const checked = especialidadesMarcadasInicial.includes(especialidad.idEspecialidad) ? 'checked' : '';
+        const disabled = checked ? '' : 'disabled';
+
+        row.innerHTML = `
+            <td class="text-center"><input type="checkbox" data-id="${especialidad.idEspecialidad}" ${checked} onchange="toggleDeleteButton(this)"></td>
+            <td class="text-center">${especialidad.Especialidad}</td>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="deletebtn" onclick='createDeleteModal2(${idEspecialidadStr})' ${disabled}>
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+document.querySelectorAll('#espe input[type="checkbox"]').forEach(checkbox => {
+    const idEspecialidad = parseInt(checkbox.dataset.id);
+
+    if (especialidadesMarcadasInicial.includes(idEspecialidad)) {
+        checkbox.checked = true;
+        checkbox.disabled = true;
+    }
+
+    checkbox.addEventListener('change', function () {
+        const deleteBtn = this.closest('tr').querySelector('.btn-outline-danger');
+        deleteBtn.disabled = !especialidadesMarcadasInicial.includes(idEspecialidad) || !this.checked;
+    });
+});
+
+
+function toggleDeleteButton(checkbox) {
+    const deleteButton = checkbox.closest('tr').querySelector('.btn-outline-danger');
+    if (checkbox.checked) {
+        deleteButton.disabled = false;
+    } else {
+        deleteButton.disabled = true;
+    }
+}
 
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
@@ -297,45 +395,6 @@ function renderTableDestinations(ubicaciones) {
     });
 }
 
-function renderTableEspecialidades(especialidades, especialidadesMarcadasInicial = []) {
-    const tableBody = document.getElementById('espe');
-    tableBody.innerHTML = '';
-
-    especialidades.sort((a, b) => {
-        const aMarcada = especialidadesMarcadasInicial.includes(a.idEspecialidad);
-        const bMarcada = especialidadesMarcadasInicial.includes(b.idEspecialidad);
-        return bMarcada - aMarcada;
-    });
-
-    especialidades.forEach(especialidad => {
-
-        const row = document.createElement('tr');
-        const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
-
-        const checked = especialidadesMarcadasInicial.includes(especialidad.idEspecialidad) ? 'checked' : '';
-        const disabled = checked ? '' : 'disabled';
-
-        row.innerHTML = `
-            <td class="text-center"><input type="checkbox" data-id="${especialidad.idEspecialidad}" ${checked} onchange="toggleDeleteButton(this)"></td>
-            <td class="text-center">${especialidad.Especialidad}</td>
-            <td>
-                <button type="button" class="btn btn-outline-danger btn-sm" id="deletebtn" onclick='createDeleteModal2(${idEspecialidadStr})' ${disabled}>
-                    <i class="bi bi-trash"></i>
-                </button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-function toggleDeleteButton(checkbox) {
-    const deleteButton = checkbox.closest('tr').querySelector('.btn-outline-danger');
-    if (checkbox.checked) {
-        deleteButton.disabled = false;
-    } else {
-        deleteButton.disabled = true;
-    }
-}
 
 async function loadDestinations2() {
     try {

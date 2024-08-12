@@ -1,6 +1,27 @@
 "use strict";
 
+
+// revisar la hora que se está obteniendo y envianco al backend
+
 (async function () {
+  let idUnidadObtenida;
+  let valeIdSeleccionado;
+  let revisionIdSeleccionado;
+  let kilometrajeActualUnidad;
+  const btnInicioViajeVale = document.getElementById('btnInitTripDriver');
+  const btnFinalizarViajeVale = document.getElementById('finalizarViajeBtn');
+  const btnPreFinalizarViajeVale = document.getElementById('btnFinalizarJornada');
+  const btnPreIniciarViajeVale = document.getElementById('btnIniciarJornada');
+  const inputKilometrajeFinal = document.getElementById('kilometrajeFinal');
+  // no permitir fechas de decremento e incremento
+
+
+  btnInicioViajeVale.disabled = true;
+  btnFinalizarViajeVale.disabled = true;
+  btnPreFinalizarViajeVale.disabled = true;
+  btnPreIniciarViajeVale.disabled = true;
+
+
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");
@@ -40,6 +61,7 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
+      kilometrajeActualUnidad = unidad.kilometrajeActual;
       return unidad.id;
     } catch (error) {
       console.error("Error al obtener el id de la unidad asignada:", error);
@@ -47,6 +69,9 @@
       throw error;
     }
   }
+
+
+
 
   async function obtenerVales(idUnidad, fecha) {
     const API_VALES = `https://backend-transporteccss.onrender.com/api/viajeVale/${idUnidad}/${fecha}`;
@@ -61,13 +86,9 @@
         throw new Error('La respuesta no contiene un array de vales');
       }
 
-      if (vales.length > 0) {
-        const infoUsuario = await infoUser();
-        const Nombre = infoUsuario?.usuario?.Nombre;
-        showToast('Información', `Hola ${Nombre}, tienes ${vales.length} vales asignados para hoy.`);
-      }
 
-      mostrarVales(vales);
+      const valesNoFinalizados = vales.filter(vale => vale.Estado !== 'Finalizado');
+      mostrarVales(valesNoFinalizados);
     } catch (error) {
       console.error('Error al obtener los vales:', error);
       showToast('Error', 'Ocurrió un problema al obtener los vales');
@@ -88,16 +109,17 @@
 
     vales.forEach(vale => {
       const isValeIniciado = valeIniciado && valeIniciado.IdVale === vale.IdVale;
+
       const row = document.createElement('tr');
-      
+
       let destino = '';
       let salida = '';
       if (vale.MotivoId === 3) {
-        destino = vale.DestinoEbaisId;
-        salida = vale.SalidaEbaisId;
+        destino = vale.DestinoEbais;
+        salida = vale.SalidaEbais;
       } else {
-        destino = vale.DestinoId;
-        salida = vale.SalidaId;
+        destino = vale.Destino;
+        salida = vale.Salida;
       }
 
       const acompanantes = [vale.Acompanante1, vale.Acompanante2, vale.Acompanante3, vale.Acompanante4].filter(a => a).join(', ') || 'No hay acompañantes';
@@ -115,7 +137,7 @@
         </td>
         <td>
           <button class="btn btn-outline-primary btn-sm" ${isValeIniciado ? 'disabled' : ''} onclick="iniciarVale('${vale.IdVale}', '${vale.idRevisionValeViaje}')">Iniciar</button>
-          <button class="btn btn-outline-danger btn-sm" ${isValeIniciado ? '' : 'disabled'} onclick="finalizarVale('${vale.IdVale}', '${vale.idRevisionValeViaje}')">Finalizar</button>
+          <button data-bs-toggle="modal" data-bs-target="#finalizarValeModal" onclick="seleccionarVale('${vale.IdVale}', '${vale.idRevisionValeViaje}')"          class="btn btn-outline-danger btn-sm" ${isValeIniciado ? '' : 'disabled'}>Finalizar</button>
         </td>
       `;
       valesTableBody.appendChild(row);
@@ -164,6 +186,8 @@
           }
 
           await obtenerVales(idUnidad, fechaValue);
+          idUnidadObtenida = idUnidad;
+          await botones();
         } else {
           showToast('Error', 'No se encontró la unidad asignada para el chófer logueado');
         }
@@ -191,7 +215,10 @@
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'En curso',
         HoraFinVale: '',
-        Observacion: ''
+        kilometrajeFinalVale: 0,
+        horasExtrasVale: '',
+        viaticosVale: 0,
+        Observacion: '',
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -206,13 +233,30 @@
     }
   };
 
-  window.finalizarVale = async function (IdVale, IdRevisionValeViaje) {
+  window.seleccionarVale = async function (idVale, idRevisionValeViaje) {
+    valeIdSeleccionado = idVale;
+    revisionIdSeleccionado = idRevisionValeViaje;
+    validarKilometrajeFinal(kilometrajeActualUnidad);
+  };
+
+
+  window.finalizarVale = async function () {
+    if (inputKilometrajeFinal.value < kilometrajeActualUnidad) {
+      showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
+      return;
+    }
+    const IdVale = valeIdSeleccionado;
+    const IdRevisionValeViaje = revisionIdSeleccionado;
+    console.log(IdVale, IdRevisionValeViaje);
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
     if (!valeIniciado || valeIniciado.IdVale !== IdVale) {
       showToast('Error', 'No se puede finalizar este vale porque no está en curso.');
       return;
     }
-
+    const kilometrajeFinal = parseInt(document.getElementById('kilometrajeFinal').value);
+    const Observacion = document.getElementById('observaciones').value;
+    const horasExtras = document.getElementById('horasExtras').value;
+    const viaticos = document.getElementById('viaticos').value;
     const horaFinVale = new Date().toISOString().split('T')[1].split('.')[0];
 
     try {
@@ -221,7 +265,10 @@
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'Finalizado',
         HoraFinVale: horaFinVale,
-        Observacion: 'Ninguna'
+        kilometrajeFinalVale: kilometrajeFinal,
+        horasExtrasVale: horasExtras || '',
+        viaticosVale: viaticos || 0,
+        Observacion: Observacion
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -235,6 +282,128 @@
       showToast('Error', 'Ocurrió un problema al finalizar el vale');
     }
   };
+
+  document.getElementById('btnConfirmarFinalizarVale').addEventListener('click', finalizarVale);
+
+  async function confirmarFinalizarVale(idUnidad, fecha) {
+    if (!valeIdSeleccionado || !revisionIdSeleccionado) {
+      showToast('Error', 'No se ha seleccionado un vale para finalizar');
+      return;
+    }
+
+    await finalizarVale(valeIdSeleccionado, revisionIdSeleccionado);
+  }
+  window.iniciarJornada = async function () {
+    const API_INICIARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/iniciarViajevale';
+    const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
+    const fecha = new Date().toISOString().split('T')[0];
+
+    try {
+      const data = await axios.put(API_INICIARJORNADA, {
+        idUnidad: idUnidadObtenida,
+        Estado: 'En curso',
+        fechaInicio: fecha,
+        horaInicio: horaInicio
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      console.log(data);
+
+    } catch (error) {
+      console.error('Error al iniciar la jornada:', error);
+      showToast('Error', 'Ocurrió un problema al iniciar la jornada');
+    } finally {
+      loadContent('tableDriverVales.html', 'mainContent');
+    }
+
+  };
+
+  window.finalizarJornada = async function () {
+    const today = new Date();
+    const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    console.log(fecha)
+    const horaInicio = new Date().toISOString().split('T')[1].split('.')[0];
+    const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
+    console.log(API_OBTENER_ESTADO);
+    const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
+
+    try {
+      const response = await axios.get(API_OBTENER_ESTADO, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log(response.data.Data.Data[0].idViajeVale);
+      try {
+        const data = await axios.put(API_FINALIZARJORNADA, {
+          idViajeVale: response.data.Data.Data[0].idViajeVale,
+          EstadoViaje: 'Finalizado',
+          horaFinViaje: horaInicio
+        }, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        ;
+
+        console.log(data);
+
+      } catch (error) {
+        console.error('Error al iniciar la jornada:', error);
+        showToast('Error', 'Ocurrió un problema al iniciar la jornada');
+      }
+    } catch (error) {
+      console.error('Error al iniciar la jornada:', error);
+      showToast('Error', 'Ocurrió un problema al iniciar la jornada');
+    } finally {
+      loadContent('tableDriverVales.html', 'mainContent');
+    }
+  };
+
+  async function botones() {
+    const today = new Date();
+    const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    console.log(fecha)
+    const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
+    try {
+      const response = await axios.get(API_OBTENER_ESTADO, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log(response.data.Data.Data[0].EstadoViaje);
+
+
+      if (response.data.Data.Data[0].EstadoViaje === 'Iniciado') {
+        btnInicioViajeVale.disabled = false;
+        btnPreIniciarViajeVale.disabled = false;
+      }
+
+      if (response.data.Data.Data[0].EstadoViaje === 'En curso') {
+        btnFinalizarViajeVale.disabled = false;
+        btnPreFinalizarViajeVale.disabled = false;
+      }
+
+    } catch (error) {
+      console.error('Error al obtener los viajes:', error);
+      showToast('Error', 'Ocurrió un problema al obtener los viajes');
+      throw error;
+    }
+  };
+
+  function validarKilometrajeFinal(kilometrajeActualUnidad) {
+    inputKilometrajeFinal.value = kilometrajeActualUnidad;
+    inputKilometrajeFinal.min = kilometrajeActualUnidad;
+
+    finalizarValeForm.addEventListener('submit', function (event) {
+      if (parseFloat(inputKilometrajeFinal.value) < parseFloat(kilometrajeActualUnidad)) {
+        event.preventDefault();
+        showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
+      }
+    });
+  }
+
+  // Asumiendo que `kilometrajeActualUnidad` y `formulario` están definidos en el contexto adecuado
+  validarKilometrajeFinal(kilometrajeActualUnidad);
+
+
+  btnPreFinalizarViajeVale.addEventListener('click', finalizarJornada);
+  btnIniciarJornada.addEventListener('click', iniciarJornada);
 
   await inicializarPagina();
 })();

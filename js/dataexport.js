@@ -28,7 +28,7 @@ async function exportToExcel(tableId, page) {
     // Definir las columnas a eliminar según el ID de la tabla
     let columnasAEliminar = new Set();
     switch (tableId) {
-         // Definir la tabla y las columnas que no se van a mostrar
+        // Definir la tabla y las columnas que no se van a mostrar
         case 'TableAppointment':
             columnasAEliminar = new Set(['Información', 'Editar']);
             break;
@@ -51,8 +51,7 @@ async function exportToExcel(tableId, page) {
             columnasAEliminar = new Set(['Coordinar']);
             break;
         case 'tablePatient':
-            columnasAEliminar = new Set(['Dirección','Ubicación','Acompañante','Acciones']);
-            break;
+            columnasAEliminar = new Set(['Dirección', 'Ubicación', 'Acompañante', 'Acciones']);
         default:
             console.log("No se requiere modificar");
             columnasAEliminar = null; // Marcar que no se requieren cambios
@@ -80,16 +79,16 @@ async function exportToExcel(tableId, page) {
     // Define el estilo para los encabezados de datos
     const headerStyle = {
         font: { bold: true, color: { argb: 'FFFFFFFF' } }, // Letra blanca
-        fill: { 
-            type: 'pattern', 
-            pattern: 'solid', 
+        fill: {
+            type: 'pattern',
+            pattern: 'solid',
             fgColor: { argb: 'FF094079' } // Fondo azul
         },
         alignment: { horizontal: 'center', vertical: 'middle' }
     };
 
-     // Define el estilo para la imagen
-     const imageStyle = {
+    // Define el estilo para la imagen
+    const imageStyle = {
         alignment: { horizontal: 'left', vertical: 'middle' }
     };
 
@@ -110,41 +109,41 @@ async function exportToExcel(tableId, page) {
     });
 
 
-     // Añadir la información de la empresa y el autor en una sola columna
-     worksheet.mergeCells('B2:E2'); // Ajusta el rango según el ancho necesario
-     worksheet.getCell('B2').value = 'Caja Costarricense de Seguro Social';
-     worksheet.mergeCells('B3:E3');
-     worksheet.getCell('B3').value = 'Área de Salud Upala';
-     worksheet.mergeCells('B4:E4');
-     worksheet.getCell('B4').value = 'Servicio de Transportes';
-     worksheet.mergeCells('B5:E5');
-     worksheet.getCell('B5').value = `Lista de ${page}`;
+    // Añadir la información de la empresa y el autor en una sola columna
+    worksheet.mergeCells('B2:E2'); // Ajusta el rango según el ancho necesario
+    worksheet.getCell('B2').value = 'Caja Costarricense de Seguro Social';
+    worksheet.mergeCells('B3:E3');
+    worksheet.getCell('B3').value = 'Área de Salud Upala';
+    worksheet.mergeCells('B4:E4');
+    worksheet.getCell('B4').value = 'Servicio de Transportes';
+    worksheet.mergeCells('B5:E5');
+    worksheet.getCell('B5').value = `Lista de ${page}`;
 
-     // Asegúrate de centrar el texto en las celdas fusionadas
-     worksheet.getCell('B1').alignment = { horizontal: 'center', vertical: 'middle' };
-     worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
-     worksheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' };
-     worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
+    // Asegúrate de centrar el texto en las celdas fusionadas
+    worksheet.getCell('B1').alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
 
-     worksheet.addRow([]); // Añadir una fila en blanco para separar
+    worksheet.addRow([]); // Añadir una fila en blanco para separar
 
-     // Añadir encabezados de datos con estilo
-     let headerRow = worksheet.addRow(encabezados);
-     headerRow.eachCell({ includeEmpty: true }, (cell) => {
-         cell.style = headerStyle;
-     });
+    // Añadir encabezados de datos con estilo
+    let headerRow = worksheet.addRow(encabezados);
+    headerRow.eachCell({ includeEmpty: true }, (cell) => {
+        cell.style = headerStyle;
+    });
 
-     // Añadir datos de la tabla
-     data.forEach(row => {
-         worksheet.addRow(encabezados.map(header => row[header] || ''));
-     });
+    // Añadir datos de la tabla
+    data.forEach(row => {
+        worksheet.addRow(encabezados.map(header => row[header] || ''));
+    });
 
-     // Ajustar el ancho de las columnas y centrar
-     encabezados.forEach((header, index) => {
-         const col = worksheet.getColumn(index + 1);
-         col.width = 25;
-         col.alignment = { horizontal: 'center', vertical: 'middle' };
-     });
+    // Ajustar el ancho de las columnas y centrar
+    encabezados.forEach((header, index) => {
+        const col = worksheet.getColumn(index + 1);
+        col.width = 25;
+        col.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
 
     // Exportar el libro de trabajo como archivo Excel
     workbook.xlsx.writeBuffer().then((buffer) => {

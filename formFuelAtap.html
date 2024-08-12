@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label for="driverSelect"><i class="bi bi-person"></i> Chofer</label>
-                <input type="text" class="form-control" id="driverSelect"  readonly required>
+                <input type="text" class="form-control" id="driverSelect" readonly required>
             </div>
             
             <div class="col-md-4 mb-3">
@@ -34,8 +34,11 @@
                 <input type="number" class="form-control" id="approxLiters" min="0" required>
             </div>
             <div class="col-md-4 mb-3">
-                <label for="totalAmount"><i class="bi bi-currency-dollar"></i> Monto Total</label>
-                <input type="number" class="form-control" id="totalAmount" min="0" required>
+                <label for="totalAmount"><i class="bi bi-cash-stack"></i> Monto Total</label>
+                <div class="input-group">
+                    <span class="input-group-text">₡</span>
+                    <input type="number" class="form-control" id="totalAmount" min="0" required>
+                </div>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>

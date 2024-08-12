@@ -15,11 +15,11 @@
     <div class="row mb-3 justify-content-center">
         <div class="col-md-4 text-center">
             <label for="unidad" class="form-label">Unidad</label>
-            <input class="form-control" id="unidadAsignadaVale" type="text" readonly>
+            <input class="form-control" id="unidadAsignada" type="text" readonly>
         </div>
         <div class="col-md-4 text-center">
             <label for="fecha" class="form-label">Fecha</label>
-            <input type="date" id="fechaVale" class="form-control" readonly>
+            <input type="date" id="fecha" class="form-control" readonly>
         </div>
         <div class="col-md-4 text-center">
             <label for="tiempoTranscurrido" class="form-label">Tiempo Transcurrido del viaje:</label>
@@ -79,7 +79,7 @@
 </div>
 
 <!-- Modal de Acompañantes -->
-<div class="modal fade" id="acompanantesModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
+<div class="modal fade" id="acompModal" tabindex="-1" aria-labelledby="acompModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
@@ -91,7 +91,7 @@
                 <div class="mb-3">
                     <div class="table-responsive">
                         <table class="table table-light table-bordered" id="tableComp">
-                            <tbody id="acompTableBody">
+                            <tbody id="acompTbody">
                                 <!-- Los datos de los acompañantes se insertarán aquí -->
                             </tbody>
                         </table>
@@ -128,7 +128,7 @@
     </div>
 </div>
 
-<!-- Modal de Confirmación Final de vale -->
+<!-- Modal de Confirmación Final de viaje -->
 <div class="modal fade" id="confirmarFinalizarModal" tabindex="-1" aria-labelledby="confirmarFinalizarModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -139,7 +139,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el vale.
+                <p class="text-center mb-4">Complete los detalles a continuación y confirme si desea finalizar el viaje.
                 </p>
                 <form id="finalizarViajeForm">
                     <div class="row g-3">
@@ -176,7 +176,7 @@
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
                 <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
-                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Dirreción</h5>
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Dirección</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -189,4 +189,7 @@
     </div>
 </div>
 
+<div id="modalContainer"></div>
+
+<!-- JavaScript -->
 <div data-script="js/tableDriverTrips.js"></div>

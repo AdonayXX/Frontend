@@ -5,19 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/formvale.css">
     <link rel="stylesheet" href="style/animation.css">
     <link rel="icon" href="img/Logo-CCSS-CostaRica-negro.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script> <!--Excel -->
+    <link rel="stylesheet" href="assets/bootstrap-icons/font/bootstrap-icons.min.css">
+    <script src="assets/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="assets/css/datatables.min.css">
+    <link rel="stylesheet" href="assets/css/datatables.css">
+    <script src="assets/js/datatables.min.js"></script>
+    <script src="assets/js/datatables.js"></script>
+    <script src="assets/js/exceljs.min.js"></script> <!--Excel -->
 </head>
 
 <body>
@@ -133,14 +132,14 @@
                             onclick="loadContent('dataTableMaintenance.html', 'mainContent')"><i class="bi bi-tools"
                                 style="font-size: 1.5rem;"></i> Mantenimiento</a>
                         <a id="8" class="items hidden" href="#"
-                            onclick="loadContent('AppointmentsMade.html', 'mainContent')">
+                            onclick="loadContent('appointmentsMade.html', 'mainContent')">
                             <i class="bi bi-journal-medical" style="font-size: 1.5rem;"></i> Catálogo-Citas</a>
                         <a id="26" class="items hidden" href="#"
                             onclick="loadContent('tableFuelATAP.html', 'mainContent')"><i class="bi bi-journal-medical"
                                 style="font-size: 1.5rem;"></i>
                             Catalago-ATAP</a>
                         <a id="14" class="items hidden" href="#"
-                            onclick="loadContent('CompletedTrips.html', 'mainContent')"><i class="bi bi-journal-medical"
+                            onclick="loadContent('completedTrips.html', 'mainContent')"><i class="bi bi-journal-medical"
                                 style="font-size: 1.5rem;"></i> Catálogo-Viajes</a>
                         <a id="18" class="items hidden" href="#"
                             onclick="loadContent('tableDriver.html', 'mainContent')"><i class="bi bi-journal-medical"
@@ -195,16 +194,13 @@
     </div>
     <div id="toast-container"></div>
     <div id="modal-container"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="assets/js/jspdf.umd.min.js"></script>
+    <script src="assets/js/jspdf.plugin.autotable.min.js"></script>
+    <script src="assets/js/jwt-decode.min.js"></script>
+    <script src="assets/js/html2pdf.bundle.min.js"></script>
+    <script src="assets/js/axios.min.js"></script>
+    <script src="assets/js/pdf-lib.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="js/dinamicContent.js"></script>
     <script src="js/script.js"></script>
     <script src="js/sidebar.js"></script>

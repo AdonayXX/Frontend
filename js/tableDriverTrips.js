@@ -1,5 +1,57 @@
-
 "use strict";
+
+function abrirDireccion(direccionData) {
+  console.log('openDireccion called', direccionData);
+
+  const { provincia, canton, distrito, barrio, direccionExacta } = direccionData;
+
+  const bodyDireccion = document.getElementById('bodyDireccion');
+  bodyDireccion.innerHTML = `
+    <p><strong>Provincia:</strong> ${provincia || 'N/A'} </p>
+    <p><strong>Cantón:</strong> ${canton || 'N/A'}</p>
+    <p><strong>Distrito:</strong> ${distrito || 'N/A'}</p>
+    <p><strong>Barrio:</strong> ${barrio || 'N/A'}</p>
+    <p><strong>Dirección Exacta:</strong> ${direccionExacta || 'N/A'}</p>
+  `;
+  const direccionModal = new bootstrap.Modal(document.getElementById('modalDireccion'));
+  direccionModal.show();
+}
+
+
+function openAccomp(acompanante1, acompanante2) {
+  console.log('openAccomp called');
+  console.log('Acompañantes en modal:', acompanante1, acompanante2);
+
+  const accompTbody = document.getElementById('acompTbody');
+  const messageNoComp = document.getElementById('messageNoComp');
+  const tableComp = document.getElementById('tableComp');
+
+  accompTbody.innerHTML = '';
+
+  if (!acompanante1 && !acompanante2) {
+    messageNoComp.style.display = 'block';
+    tableComp.style.display = 'none';
+  } else {
+    messageNoComp.style.display = 'none';
+    tableComp.style.display = 'block';
+
+    if (acompanante1) {
+      const row1 = document.createElement('tr');
+      row1.innerHTML = `<td>${acompanante1}</td>`;
+      accompTbody.appendChild(row1);
+    }
+
+    if (acompanante2) {
+      const row2 = document.createElement('tr');
+      row2.innerHTML = `<td>${acompanante2}</td>`;
+      accompTbody.appendChild(row2);
+    }
+  }
+
+
+  const accompModal = new bootstrap.Modal(document.getElementById('acompModal'));
+  accompModal.show();
+}
 
 (async function () {
   const token = localStorage.getItem('token');
@@ -8,9 +60,7 @@
     return;
   }
 
-
   async function infoUser() {
-    alert('infoUser');
     try {
       const userInfo = jwt_decode(token);
       return userInfo;
@@ -28,7 +78,7 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Chóferes',response.data.choferesConUnidades);
+      console.log('Data Chóferes', response.data.choferesConUnidades);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       console.error("Error al obtener la unidad asignada:", error);
@@ -38,14 +88,13 @@
 
   async function obtenerIdUnidad(numeroUnidad) {
     const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
-
     try {
       const response = await axios.get(API_UNIDADES, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log('Data Unidades',response.data.unidades);
+      console.log('Data Unidades', response.data.unidades);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       return unidad.id;
     } catch (error) {
@@ -76,7 +125,7 @@
       }
 
       renderizarViajes(viajes);
-      console.log('Viajes',viajes);
+      console.log('Viajes', viajes);
       haveTrips();
 
     } catch (error) {
@@ -93,14 +142,12 @@
 
     const hourInitTripFormatted = hourInitTrip.split(':').slice(0, 2).join(':') + ":00";
 
-
     const requestBody = {
       idUnidad: idUnidad,
       fechaInicioViaje: fechaValue,
       horaInicioViaje: hourInitTripFormatted,
       IdUsuarioInicioViaje: IdUsuario
     };
-
 
     try {
       const response = await axios.put(API_INIT_TRIP, requestBody, {
@@ -176,8 +223,6 @@
       btnInitTripDriver.innerText = 'Viaje en tránsito';
       btnInitTripDriver.disabled = false;
       btnInitTripDriver.disabled = true;
-
-
 
       mostrarTiempoTranscurrido(viajeIniciado.hourInitTrip);
     } else {
@@ -266,16 +311,27 @@
     viajes.forEach(data => {
       const acompanante1 = data.Acompanante1 || 'N/A';
       const acompanante2 = data.Acompanante2 || 'N/A';
+      const direccionData = {
+        provincia: data.provincia,
+        canton: data.canton,
+        distrito: data.distrito,
+        barrio: data.barrio,
+        direccionExacta: data.direccionExacta
+      };
+      console.log('DireccionData:', direccionData);
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="text-center">${data.NombrePaciente}</td>
-        <td class="text-center">${data.Direccion}</td>
+        <td class="text-center">
+          <button class="btn btn-outline-primary btn-sm full-width mx-auto" onclick='(function() { abrirDireccion(${JSON.stringify(direccionData)}) })()'>
+            <i class="bi bi-eye"></i>
+          </button>
+        </td>
         <td class="text-center">${data.ubicacionOrigen}</td>
-            <td class="text-center">${data.ubicacionDestino}</td>
+        <td class="text-center">${data.ubicacionDestino}</td>
         <td class="text-center">${data.horaCita}</td>
         <td class="text-center">
-          <button class="btn btn-outline-primary btn-sm full-width mx-auto" data-bs-toggle="modal"
-            data-bs-target="#acompModal" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
+          <button class="btn btn-outline-primary btn-sm full-width mx-auto" onclick="openAccomp('${acompanante1}', '${acompanante2}')">
             <i class="bi bi-eye"></i>
           </button>
         </td>
@@ -285,6 +341,7 @@
 
     viajesTableBody.appendChild(fragment);
   }
+
 
   function haveTrips() {
     const tableBody = document.getElementById('viajesTableBody');
@@ -297,7 +354,6 @@
     btnFinalizarViaje.disabled = !hasTrip;
     btnIniciarViaje.disabled = !hasTrip;
   }
-
 
   await inicializarPagina();
 })();

@@ -181,7 +181,7 @@
             });
     
             const dataTripVale = {
-                fecha: obtenerFechaActual(),
+                fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
             };
             const tripValeResponse = await axios.post(`${url}api/viajeVale`, dataTripVale, {
