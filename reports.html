@@ -97,6 +97,7 @@
 <!-- FIN DE MODAL DE GENERALES -->
 
 <!-- //MODAL DE VALES -->
+<!-- //MODAL DE VALES -->
 <div class="modal fade" id="valesModal" tabindex="-1" aria-labelledby="ausenteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -115,16 +116,29 @@
                                 <label for="idVale">Ingrese el ID del vale que quiera exportar</label>
                                 <input type="text" id="idVale" name="idVale" class="form-control">
                             </div>
+                            
                             <div class="col-md-4 mt-1 d-flex justify-content-end">
-                                <button class="btn btn-secondary me-2 pdf" onclick="downloadPDF()"
+                                <button class="btn btn-secondary me-2 pdf" onclick="exportarValePdf()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
                                     <img src="img/icons8-pdf.svg" alt="PDF Icon">
                                 </button>
-                                <button class="btn btn-secondary me-2 excel" onclick="exportarVale()"
+                                <button class="btn btn-secondary me-2 excel" onclick="exportarValeExcel()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
                                     <img src="img/icons8-excel.svg" alt="Excel Icon">
                                 </button>
                             </div>
+                            <!-- <div class="col-md-8 mt-1">
+                                <div class="col d-flex justify-content-center">
+                                    <div class="col-md-5 mt-1 m-3 text-center">
+                                        <label for="from">De:</label>
+                                        <input type="date" id="fromViajes" name="from" class="form-control">
+                                    </div>
+                                    <div class="col-md-5 mt-1 m-3 text-center">
+                                        <label for="to">Hasta:</label>
+                                        <input type="date" id="toViajes" name="to" class="form-control">
+                                    </div>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -132,6 +146,7 @@
         </div>
     </div>
 </div>
+<!-- FIN DE MODAL DE VALES -->
 <!-- FIN DE MODAL DE VALES -->
 <!-- //MODAL DE MANTENIMIENTO -->
 <!--  

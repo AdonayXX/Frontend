@@ -791,21 +791,195 @@ async function generalesExcel() {
 //     }
 // }
 
-//REPORTE DE VALES
-async function exportarVale() {
+//REPORTE DE VALES PDF
+
+
+
+//REPORTE DE VALES EXCEL
+
+async function exportarValePdf() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
+        try {
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            datosVale = response.data;
+        } catch (apiError) {
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            return;
+        }
 
+        const pdfUrl = '/documents/ReporteValePDF.pdf';
+        const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
+        const worksheet = pdfDoc.getPages()[0];
+        const { width, height } = worksheet.getSize();
+        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+        const valeData = datosVale.vale;
+        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
+        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 75,
+            y: height - 170,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
+            x: 480,
+            y: height - 175,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
+            x: 180,
+            y: height - 175,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante1 || ''), {
+            x: 405,
+            y: height - 234,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante2 || ''), {
+            x: 405,
+            y: height - 248,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante3 || ''), {
+            x: 405,
+            y: height - 263,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante4 || ''), {
+            x: 405,
+            y: height - 278,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Acompanante5 || ''), {
+            x: 405,
+            y: height - 292,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreMotivo || ''), {
+            x: 260,
+            y: height - 205,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
+            x: 260,
+            y: height - 307,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.Detalle || ''), {
+            x: 348,
+            y: height - 325,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 115,
+            y: height - 355,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 115,
+            y: height - 340,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 90,
+            y: height - 425,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaSalida), {
+            x: 245,
+            y: height - 425,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+
+        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Reporte_Vale.pdf';
+
+        link.click();
+
+        function base64ToBlob(base64, type) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; ++i) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new Blob([bytes], { type });
+        }
+    } catch (error) {
+        console.error("Error al exportar el archivo PDF:", error);
+    }
+}
+
+async function exportarValeExcel() {
+    try {
+        const idVale = document.getElementById('idVale').value;
+        let datosVale;
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
 
         try {
             const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
+    
+
         } catch (apiError) {
-            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
+            console.error("Error al obtener los datos del vale:", apiError);
+            showToast("Error", "No se encontró el ID del vale o hubo un problema con la conexión.");
             return;
         }
 
@@ -824,23 +998,32 @@ async function exportarVale() {
         const fechaSolicitud = valeData.Fecha_Solicitud ? new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0] : '';
         const horaSalida = valeData.Hora_Salida ? valeData.Hora_Salida.split(':').slice(0, 2).join(':') : '';
 
-        worksheet.getCell('B8:C8').value = fechaSolicitud;
-        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica;
-        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidadProgramatica;
-        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1;
-        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2;
-        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3;
-        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4;
-        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5;
-        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.NombreMotivo;
-        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante;
-        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle;
+        worksheet.getCell('B8:C8').value = new Date().toISOString().split('T')[0];
+        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica || '';
+        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidad || '';
+        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1 || '';
+        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2 || '';
+        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3 || '';
+        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4 || '';
+        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5 || '';
+        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.DescripcionMotivo;
+        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante || '';
+        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle || '';
         worksheet.getCell('G25').value = horaSalida;
         worksheet.getCell('C25:D25:E25').value = fechaSolicitud;
-        worksheet.getCell('C9').value = valeData.NombreDestino;
-        worksheet.getCell('C9').value = valeData.NombreDestinoEbais;
+        worksheet.getCell('C9').value = valeData.DescripcionDestino || '';
+        worksheet.getCell('C9').value = valeData.NombreEbais || '';
         worksheet.getCell('C20').value = horaSalida;
         worksheet.getCell('C19').value = fechaSolicitud;
+        worksheet.getCell('K25').value = valeData.HoraFinVale || '';
+        worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
+        worksheet.getCell('G30').value = valeData.kilometrajeFinalVale || '';
+        worksheet.getCell('E20').value = valeData.HoraFinVale || '';
+        worksheet.getCell('E19').value = fechaSolicitud;
+        worksheet.getCell('I25').value = fechaSolicitud;
+
+
+
 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

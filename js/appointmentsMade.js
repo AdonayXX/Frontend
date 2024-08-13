@@ -180,10 +180,6 @@ function getRutas() {
                 option.textContent = ruta.Descripcion;
                 selectDestino.appendChild(option);
             });
-
-            if (selectDestino.value === cita.idUbicacionDestino) {
-                getEspecialidadesByDestino(selectDestino.value, cita.especialidad);
-            }
         })
 }
 
