@@ -1,7 +1,37 @@
+//funciones dinamicas
+function saveFormData() {
+    const inputs = document.querySelectorAll('input[data-save="true"], select[data-save="true"], textarea[data-save="true"]');
+
+    inputs.forEach(input => {
+        localStorage.setItem(input.id, input.value);
+    });
+}
+
+function loadFormData() {
+    const inputs = document.querySelectorAll('input[data-save="true"], select[data-save="true"], textarea[data-save="true"]');
+
+    inputs.forEach(input => {
+        const value = localStorage.getItem(input.id);
+        if (value !== null) {
+            input.value = value;
+        }
+    });
+
+    const selects = document.querySelectorAll('select[data-save="true"]');
+    selects.forEach(select => {
+        const event = new Event('change');
+        select.dispatchEvent(event);
+    });
+}
+
+document.querySelector('form').addEventListener('submit', saveFormData);
+window.addEventListener('load', loadFormData);
+
 
 document.addEventListener('DOMContentLoaded', () => {
+    getVales();
+    loadFormData();
     addInputListeners();
-    SolicitarVale();
     getVales();
 });
 
@@ -87,7 +117,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
             acompDiv.style.display = 'block';
         }
     } else {
-        showToast("Error", "No se pueden agregar más de 5 acompañantes");
+        showToast("Error", "No se pueden agregar mas de 5 acompañantes");
     }
 });
 
@@ -105,29 +135,24 @@ document.getElementById('removeCompanion').addEventListener('click', function ()
     }
 });
 
+//Funcion para obtener los datos de la solicitud
 function SolicitarVale() {
-    Promise.all([
-        ObtenerUnidades(),
-        ObtenerServicios(),
-        ObtenerMotivos(),
-        ObtenerDestino(),
-        ObtenerSalida(),
-        ObtenerRutaSalida(),
-        ObtenerRutaDestino()
-    ]).then(() => {
-        console.log('Todos los selects han sido llenados. Ahora cargando datos del localStorage.');
-        loadFormData();
-    }).catch(error => {
-        console.error('Hubo un problema al cargar los datos:', error);
-    });
+    ObtenerUnidades();
+    ObtenerServicios();
+    ObtenerMotivos();
+    ObtenerDestino();
+    ObtenerSalida();
+    ObtenerRutaSalida();
+    ObtenerRutaDestino();
 }
 
 var url = 'https://backend-transporteccss.onrender.com/';
 //Obtener Unidades
 function ObtenerUnidades() {
-    return axios.get(`${url}api/unidadProgramatica`)
+    axios.get(`${url}api/unidadProgramatica`)
         .then(response => {
-            return LlenarUnidadesProgramaticas(response.data);
+
+            LlenarUnidadesProgramaticas(response.data);
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -135,21 +160,19 @@ function ObtenerUnidades() {
 }
 
 function LlenarUnidadesProgramaticas(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        for (let index = 0; index < data.length; index++) {
-            body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
-        }
-        document.getElementById('Up').innerHTML = body;
-        resolve();
-    });
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdUnidadProgramatica}">${data[index].IdUnidadProgramatica} - ${data[index].NombreUnidad}</option>`;
+    }
+    document.getElementById('Up').innerHTML = body;
 }
 
 //Obtener servicios
 function ObtenerServicios() {
-    return axios.get(`${url}api/servicios`)
+    axios.get(`${url}api/servicios`)
         .then(response => {
-            return LlenarServicios(response.data);
+
+            LlenarServicios(response.data);
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -157,21 +180,18 @@ function ObtenerServicios() {
 }
 
 function LlenarServicios(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        for (let index = 0; index < data.length; index++) {
-            body += `<option value="${data[index].ServicioID}">${data[index].Descripcion}</option>`;
-        }
-        document.getElementById('service').innerHTML = body;
-        resolve();
-    });
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value = ${data[index].ServicioID}>${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('service').innerHTML = body;
 }
 
 //Obtener los Motivos
 function ObtenerMotivos() {
-    return axios.get(`${url}api/motivoVale`)
+    axios.get(`${url}api/motivoVale`)
         .then(response => {
-            return llenarMotivos(response.data);
+            llenarMotivos(response.data);
         })
         .catch(error => {
             console.error('Hubo un problema al obtener los datos:', error);
@@ -180,21 +200,19 @@ function ObtenerMotivos() {
 
 // Función para llenar las opciones del select de motivo
 function llenarMotivos(data) {
-    return new Promise((resolve) => {
-        let options = '<option selected disabled value="">Seleccione una opción</option>';
-        data.forEach(motivo => {
-            options += `<option value="${motivo.id}">${motivo.descripcion}</option>`;
-        });
-        document.getElementById('motivo').innerHTML = options;
-        resolve();
+    let options = '<option selected disabled value="">Seleccione una opción</option>';
+    data.forEach(motivo => {
+        options += `<option value="${motivo.id}">${motivo.descripcion}</option>`;
     });
+    document.getElementById('motivo').innerHTML = options;
 }
 
 //Obtener Lugar de Salida
 function ObtenerSalida() {
-    return axios.get(`${url}api/ebais/perifericos`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            return LlenarSalida(response.data.ebaisPerifericos);
+
+            LlenarSalida(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -203,21 +221,18 @@ function ObtenerSalida() {
 
 // Llenar selector de lugar de salida con EBAIS
 function LlenarSalida(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        data.forEach(ebai => {
-            body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
-        });
-        document.getElementById('lugarSa').innerHTML = body;
-        resolve();
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    data.forEach(ebai => {
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
+    document.getElementById('lugarSa').innerHTML = body;
 }
 
 // Obtener EBAIS para lugar de destino
 function ObtenerDestino() {
-    return axios.get(`${url}api/ebais/perifericos`)
+    axios.get(`${url}api/ebais/perifericos`)
         .then(response => {
-            return LlenarDestino(response.data.ebaisPerifericos);
+            LlenarDestino(response.data.ebaisPerifericos);
         })
         .catch(error => {
             console.error('Hubo un problema con la operación de obtención:', error);
@@ -226,22 +241,18 @@ function ObtenerDestino() {
 
 // Llenar selector de lugar de destino con EBAIS
 function LlenarDestino(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        data.forEach(ebai => {
-            body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
-        });
-        document.getElementById('lugarDes').innerHTML = body;
-        resolve();
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    data.forEach(ebai => {
+        body += `<option value="${ebai.id}">${ebai.Ebais} - ${ebai.Periferico}</option>`;
     });
+    document.getElementById('lugarDes').innerHTML = body;
 }
-
 //------------------------------------------------------------------------------------------
 //Funciones para obtener las rutas
 function ObtenerRutaSalida() {
-    return axios.get(`${url}api/rutas`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
-            return LlenarRutaSalida(response.data);
+            LlenarRutaSalida(response.data);
         })
         .catch(error => {
             console.error('Hubo un problema al obtener los datos:', error);
@@ -249,20 +260,18 @@ function ObtenerRutaSalida() {
 }
 
 function LlenarRutaSalida(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        for (let index = 0; index < data.length; index++) {
-            body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
-        }
-        document.getElementById('lugarSa2').innerHTML = body;
-        resolve();
-    });
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarSa2').innerHTML = body;
 }
 
+
 function ObtenerRutaDestino() {
-    return axios.get(`${url}api/rutas`)
+    axios.get(`${url}api/rutas`)
         .then(response => {
-            return LlenarRutaDestino(response.data);
+            LlenarRutaDestino(response.data);
         })
         .catch(error => {
             console.error('Hubo un problema al obtener los datos:', error);
@@ -270,14 +279,11 @@ function ObtenerRutaDestino() {
 }
 
 function LlenarRutaDestino(data) {
-    return new Promise((resolve) => {
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        for (let index = 0; index < data.length; index++) {
-            body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
-        }
-        document.getElementById('lugarDes2').innerHTML = body;
-        resolve();
-    });
+    let body = '<option selected disabled value="">Seleccione una opción</option>';
+    for (let index = 0; index < data.length; index++) {
+        body += `<option value="${data[index].IdRuta}">${data[index].IdRuta} - ${data[index].Descripcion}</option>`;
+    }
+    document.getElementById('lugarDes2').innerHTML = body;
 }
 
 document.getElementById('btn_Guardar').addEventListener('click', function (event) {
@@ -319,7 +325,7 @@ function GuardarDatos() {
     const Estado = 1;
     const Hora_Salida = document.getElementById('hora_salida').value;
     const Fecha_Solicitud = document.getElementById('b_date').value;
-    const Chofer = document.getElementById('chofer').checked ? 1 : 0; 
+    const Chofer = document.getElementById('chofer').checked ? 1 : 0;
     let SalidaId = document.getElementById('lugarSa2').value;
     let DestinoId = document.getElementById('lugarDes2').value;
     let SalidaEbaisId = document.getElementById('lugarSa').value;
@@ -367,25 +373,10 @@ function GuardarDatos() {
         Chofer: Chofer
     };
 
-    const camposSensibles = ['userEmail', 'userPassword', 'userRegisterEmail', 'token'];
-    for (const [key, value] of Object.entries(datos)) {
-        if (!camposSensibles.includes(key)) {
-            localStorage.setItem(key, value !== null ? value : '');
-        }
-    }
-
-
-
     axios.post(`${url}api/vales`, datos)
         .then(response => {
             showToast("", "Se generó la solicitud exitosamente");
             getVales();
-
-            for (const [key, value] of Object.entries(datos)) {
-                localStorage.setItem(key, value !== null ? value : '');
-            }
-
-            console.log('Guardado en localStorage:', datos);
         })
         .catch(error => {
             if (error.response) {
@@ -395,27 +386,29 @@ function GuardarDatos() {
                 console.error('Error desconocido:', error);
             }
         });
+
 }
 
+
 document.getElementById('btn-limpiar').addEventListener('click', function () {
-    const fields = [
-        'acompananteNombre1', 'acompananteNombre2', 'acompananteNombre3',
-        'acompananteNombre4', 'acompananteNombre5', 'Up', 'lugarSa', 'service',
-        'motivo', 'lugarDes', 'detalle', 'nameSoli', 'hora_salida', 'b_date',
-        'lugarSa2', 'lugarDes2', 'chofer'
-    ];
-
-    fields.forEach(field => {
-        const element = document.getElementById(field);
-        if (element.type === 'checkbox') {
-            element.checked = false;
-        } else {
-            element.value = '';
-        }
-    });
-
+    document.getElementById('acompananteNombre1').value = '';
+    document.getElementById('acompananteNombre2').value = '';
+    document.getElementById('acompananteNombre3').value = '';
+    document.getElementById('acompananteNombre4').value = '';
+    document.getElementById('acompananteNombre5').value = '';
+    document.getElementById('Up').value = '';
+    document.getElementById('lugarSa').value = '';
+    document.getElementById('service').value = '';
+    document.getElementById('motivo').value = '';
+    document.getElementById('lugarDes').value = '';
+    document.getElementById('detalle').value = '';
+    document.getElementById('nameSoli').value = '';
+    document.getElementById('hora_salida').value = '';
+    document.getElementById('b_date').value = '';
     document.addEventListener('DOMContentLoaded', getVales);
-    localStorage.clear();
+    document.getElementById('chofer').checked = false;
+    document.getElementById('lugarSa2').value = '';
+    document.getElementById('lugarDes2').value = '';
 });
 
 var error;
@@ -448,11 +441,7 @@ function addInputListeners() {
 
     inputs.forEach(input => {
         input.addEventListener('input', () => {
-            if (input.type === 'checkbox') {
-                localStorage.setItem(input.id, input.checked ? '1' : '0');
-            } else {
-                localStorage.setItem(input.id, input.value);
-            }
+            localStorage.setItem(input.id, input.value);
         });
 
         if (input.tagName === 'SELECT') {
@@ -461,28 +450,4 @@ function addInputListeners() {
             });
         }
     });
-
 }
-
-function loadFormData() {
-    const fields = [
-        'acompananteNombre1', 'acompananteNombre2', 'acompananteNombre3',
-        'acompananteNombre4', 'acompananteNombre5', 'Up', 'lugarSa', 'service',
-        'motivo', 'lugarDes', 'detalle', 'nameSoli', 'hora_salida', 'b_date',
-        'lugarSa2', 'lugarDes2'
-    ];
-
-    fields.forEach(field => {
-        const value = localStorage.getItem(field);
-        if (value !== null && value !== "") {
-            const element = document.getElementById(field);
-            element.value = value;
-        }
-    });
-
-    const choferValue = localStorage.getItem('chofer');
-    if (choferValue !== null) {
-        document.getElementById('chofer').checked = choferValue === '1';
-    }
-}
-

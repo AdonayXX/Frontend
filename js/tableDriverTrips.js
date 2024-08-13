@@ -1,7 +1,7 @@
 "use strict";
 
 function abrirDireccion(direccionData) {
-  // console.log('openDireccion called', direccionData);
+  console.log('openDireccion called', direccionData);
 
   const { provincia, canton, distrito, barrio, direccionExacta } = direccionData;
 
@@ -19,8 +19,8 @@ function abrirDireccion(direccionData) {
 
 
 function openAccomp(acompanante1, acompanante2) {
-  // console.log('openAccomp called');
-  // console.log('Acompañantes en modal:', acompanante1, acompanante2);
+  console.log('openAccomp called');
+  console.log('Acompañantes en modal:', acompanante1, acompanante2);
 
   const accompTbody = document.getElementById('acompTbody');
   const messageNoComp = document.getElementById('messageNoComp');
@@ -48,13 +48,12 @@ function openAccomp(acompanante1, acompanante2) {
     }
   }
 
+
   const accompModal = new bootstrap.Modal(document.getElementById('acompModal'));
   accompModal.show();
 }
 
 (async function () {
-  let kilometrajeActualUnidad;
-  const inputKilometrajeFinal = document.getElementById('kilometrajeFinal');
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");
@@ -79,7 +78,7 @@ function openAccomp(acompanante1, acompanante2) {
           'Authorization': `Bearer ${token}`
         }
       });
-      // console.log('Data Chóferes', response.data.choferesConUnidades);
+      console.log('Data Chóferes', response.data.choferesConUnidades);
       return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
     } catch (error) {
       console.error("Error al obtener la unidad asignada:", error);
@@ -95,35 +94,18 @@ function openAccomp(acompanante1, acompanante2) {
           'Authorization': `Bearer ${token}`
         }
       });
-
-      // console.log('Respuesta completa de la API:', response.data);
-
+      console.log('Data Unidades', response.data.unidades);
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
-
-      if (unidad) {
-        kilometrajeActualUnidad = unidad.kilometrajeActual;
-        // console.log('Kilometraje actual asignado:', kilometrajeActualUnidad);
-
-        // Llamar a la validación del kilometraje final solo si se ha obtenido el kilometraje
-        validarKilometrajeFinal(kilometrajeActualUnidad);
-
-        return unidad.id;
-      } else {
-        console.error('No se encontró la unidad con el número proporcionado:', numeroUnidad);
-        showToast('Error', 'No se encontró la unidad asignada.');
-        return null;
-      }
+      return unidad.id;
     } catch (error) {
       console.error("Error al obtener el id de la unidad asignada:", error);
       showToast('Error', 'Ocurrió un problema al obtener el id de la unidad asignada');
-      return null;
     }
   }
 
-
   async function obtenerViajes(idUnidad, fechaValue) {
     const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
-    // console.log(apiURLViajes);
+    console.log(apiURLViajes);
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -143,7 +125,7 @@ function openAccomp(acompanante1, acompanante2) {
       }
 
       renderizarViajes(viajes);
-      // console.log('Viajes', viajes);
+      console.log('Viajes', viajes);
       haveTrips();
 
     } catch (error) {
@@ -188,10 +170,6 @@ function openAccomp(acompanante1, acompanante2) {
   }
 
   async function finishTrip() {
-    if(inputKilometrajeFinal.value < kilometrajeActualUnidad) {
-      showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
-      return;
-    }
     const kilometrajeFinal = parseInt(document.getElementById('kilometrajeFinal').value);
     const horasExtras = document.getElementById('horasExtras').value;
     const viaticos = document.getElementById('viaticos').value;
@@ -340,7 +318,7 @@ function openAccomp(acompanante1, acompanante2) {
         barrio: data.barrio,
         direccionExacta: data.direccionExacta
       };
-      // console.log('DireccionData:', direccionData);
+      console.log('DireccionData:', direccionData);
       const row = document.createElement('tr');
       row.innerHTML = `
         <td class="text-center">${data.NombrePaciente}</td>
@@ -376,27 +354,6 @@ function openAccomp(acompanante1, acompanante2) {
     btnFinalizarViaje.disabled = !hasTrip;
     btnIniciarViaje.disabled = !hasTrip;
   }
-
-  function validarKilometrajeFinal(kilometrajeActual) {
-    if (kilometrajeActual) {
-      inputKilometrajeFinal.value= kilometrajeActual;
-      inputKilometrajeFinal.min = kilometrajeActual;
-      // console.log('Kilometraje actual:', kilometrajeActual);
-    } else {
-      console.error('El kilometraje actual no está definido.');
-      showToast('Error', 'El kilometraje actual no está disponible.');
-    }
-
-    const finalizarViajeForm = document.getElementById('finalizarViajeForm');
-    finalizarViajeForm.addEventListener('submit', function (event) {
-      const kilometrajeFinal = parseFloat(inputKilometrajeFinal.value);
-      if (kilometrajeFinal < kilometrajeActual) {
-        event.preventDefault();
-        showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
-      }
-    });
-  }
-
 
   await inicializarPagina();
 })();

@@ -798,12 +798,8 @@ async function exportarVale() {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
         try {
-
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`);
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
             datosVale = response.data;
-            console.log("Datos del vale:", datosVale);
-
-
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
@@ -821,34 +817,26 @@ async function exportarVale() {
 
         const worksheet = workbook.getWorksheet(1);
         const valeData = datosVale.vale;
-        const fechaSolicitud = valeData.Fecha_Solicitud ? new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0] : '';
-        const horaSalida = valeData.Hora_Salida ? valeData.Hora_Salida.split(':').slice(0, 2).join(':') : '';
+        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
+        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
 
-        worksheet.getCell('B8:C8').value = new Date().toISOString().split('T')[0];
-        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica || '';
-        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidad || '';
-        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1 || '';
-        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2 || '';
-        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3 || '';
-        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4 || '';
-        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5 || '';
-        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.DescripcionMotivo;
-        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante || '';
-        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle || '';
+        worksheet.getCell('B8:C8').value = fechaSolicitud;
+        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica;
+        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidadProgramatica;
+        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1;
+        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2;
+        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3;
+        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4;
+        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5;
+        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.NombreMotivo;
+        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante;
+        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle;
         worksheet.getCell('G25').value = horaSalida;
         worksheet.getCell('C25:D25:E25').value = fechaSolicitud;
-        worksheet.getCell('C9').value = valeData.DescripcionDestino || '';
-        worksheet.getCell('C9').value = valeData.NombreEbais || '';
+        worksheet.getCell('C9').value = valeData.NombreDestino;
+        worksheet.getCell('C9').value = valeData.NombreDestinoEbais;
         worksheet.getCell('C20').value = horaSalida;
         worksheet.getCell('C19').value = fechaSolicitud;
-        worksheet.getCell('K25').value = valeData.HoraFinVale || '';
-        worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
-        worksheet.getCell('G30').value = valeData.kilometrajeFinalVale || '';
-        worksheet.getCell('E20').value = valeData.HoraFinVale || '';
-        worksheet.getCell('E19').value = fechaSolicitud;
-        worksheet.getCell('I25').value = fechaSolicitud;
-
-
 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
