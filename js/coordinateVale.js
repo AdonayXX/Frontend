@@ -6,13 +6,11 @@
     const btnAdd = document.getElementById('btn-agregarSoli');
     let isCero = 1;
 
-
     if (idVale) {
         readVale(idVale);
         sessionStorage.removeItem('selectedIdVale');
         readChofer();
         readUnidad();
-        readManager();
     } else {
         console.error('No se encontró el ID del vale en sessionStorage.');
     }
@@ -68,13 +66,8 @@
                             blockBtn();
                         }
                     }
-                    if (vale.Chofer === 0 || vale.Chofer === null) {
-                        let callChofer = 0;
-                        readChofer(callChofer);
-                        // selects(callChofer);
-                    } else {
-                        let callChofer = 1;
-                        readChofer(callChofer);
+                    if (vale.Chofer == 0 || null) {
+                        selects();
                     }
                     acompanantes(vale);
                     valeObject = vale;
@@ -96,7 +89,7 @@
                 }
             });
             if (valeObject.Chofer == 0 || null) {
-                // selects();
+                selects();
             }
 
         } catch (error) {
@@ -104,17 +97,17 @@
         }
     }
 
-    // function selects() {
-    //     const selectElement = document.getElementById('select-chofer');
-    //     const newOption = document.createElement('option');
-    //     newOption.id = '0';
-    //     newOption.value = '0';
-    //     newOption.textContent = 'Chofer ASU';
-    //     selectElement.appendChild(newOption);
-    //     selectElement.value = '0';
-    //     selectElement.disabled = true;
-    //     isCero = 0;
-    // }
+    function selects() {
+        const selectElement = document.getElementById('select-chofer');
+        const newOption = document.createElement('option');
+        newOption.id = '0';
+        newOption.value = '0';
+        newOption.textContent = 'Chofer ASU';
+        selectElement.appendChild(newOption);
+        selectElement.value = '0';
+        selectElement.disabled = true;
+        isCero = 0;
+    }
 
     function acompanantes(vale) {
         if (vale.Acompanante1 != null) {
@@ -186,11 +179,9 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
-
             const dataTripVale = {
                 fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
-
             }
             console.log(dataTripVale);
             await axios.post(`${url}api/viajeVale`, dataTripVale, {
@@ -201,143 +192,102 @@
             return true;
         } catch (error) {
             console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
-
-        };
-        const tripValeResponse = await axios.post(`${url}api/viajeVale`, dataTripVale, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        return true;
-    } catch (error) {
-        if (error.response) {
-            console.error('Error al guardar datos:', error.response.data);
-        } else if (error.request) {
-            console.error('Error al guardar datos: No se recibió respuesta del servidor', error.request);
-        } else {
-            console.error('Error al guardar datos:', error.message);
+            showToast('Error', 'Error al guardar la revisión.');
+            return false;
         }
-
-        showToast('Error', 'Error al guardar la revisión.');
-        return false;
     }
 
-}
-
     btnAdd.addEventListener('click', function () {
-    if (addCoordinate()) {
+        if (addCoordinate()) {
+            const selectPlaca = document.getElementById('select-placa');
+            const selectChofer = document.getElementById('select-chofer');
+            const selectEncargado = document.getElementById('select-encargado');
+            selectPlaca.disabled = true;
+            selectChofer.disabled = true;
+            selectEncargado.disabled = true;
+            showToast('Datos Agregados', 'Los datos se han guardado correctamente');
+            const newIdEstado = 2;
+            const valueId = document.getElementById('input-id').value;
+            newStatus(valueId, newIdEstado);
+            blockBtn();
+        }
+    })
+
+    async function readChofer() {
+        try {
+            const response = await axios.get(`${url}api/chofer`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const choferes = response.data.choferes;
+            let body = '<option selected disabled value="">Seleccione una opción</option>';
+            choferes.forEach(chofer => {
+                body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+            });
+            document.getElementById('select-chofer').innerHTML = body;
+
+        } catch (error) {
+            console.error('No se cargaron los datos', error);
+        }
+    }
+
+    async function readUnidad() {
+        try {
+            const response = await axios.get(`${url}api/unidades`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const unidades = response.data.unidades;
+            let body = '<option selected disabled value="">Seleccione una opción</option>';
+            unidades.forEach(unidad => {
+                body += `<option value="${unidad.id}">${unidad.numeroUnidad}</option>`;
+            });
+            document.getElementById('select-placa').innerHTML = body;
+
+        } catch (error) {
+            console.error('No se cargaron los datos', error);
+        }
+    }
+
+    async function newStatus(valueId, newIdEstado) {
+        try {
+            const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
+            const response = await axios.put(valUrl);
+            console.log('Campo actualizado correctamente:');
+
+            if (newIdEstado === 2) {
+                showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
+            } else {
+                showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
+                blockBtn();
+            }
+
+        } catch (error) {
+            console.error('Error al actualizar el campo:', error);
+            throw error;
+        }
+    }
+
+    const btnCancel = document.getElementById('btn-rechazarSoli');
+    btnCancel.addEventListener('click', function () {
+        event.preventDefault();
+        const newIdEstado = 3;
+        const valueId = document.getElementById('input-id').value;
+        newStatus(valueId, newIdEstado);
         const selectPlaca = document.getElementById('select-placa');
         const selectChofer = document.getElementById('select-chofer');
         const selectEncargado = document.getElementById('select-encargado');
         selectPlaca.disabled = true;
         selectChofer.disabled = true;
         selectEncargado.disabled = true;
-        showToast('Datos Agregados', 'Los datos se han guardado correctamente');
-        const newIdEstado = 2;
-        const valueId = document.getElementById('input-id').value;
-        newStatus(valueId, newIdEstado);
-        blockBtn();
+    });
+
+    function blockBtn() {
+        btnCancel.disabled = true;
+        btnAdd.disabled = true;
     }
-})
-
-async function readChofer(callChofer) {
-    try {
-        const response = await axios.get(`${url}api/chofer`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const choferes = response.data.choferes;
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        choferes.forEach(chofer => {
-            if (callChofer == chofer.autorizado) {
-                body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
-            } else if (callChofer == chofer.autorizado) {
-                body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
-            }
-        });
-        document.getElementById('select-chofer').innerHTML = body;
-
-    } catch (error) {
-        console.error('No se cargaron los datos', error);
-
-    }
-}
-
-async function readManager() {
-    try {
-        const response = await axios.get(`${url}api/funcionarios`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const managers = response.data.funcionarios;
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        managers.forEach(manager => {
-            body += `<option value="${manager.Nombre} ${manager.Apellidos}">${manager.Nombre} ${manager.Apellidos}</option>`;
-        });
-        document.getElementById('select-encargado').innerHTML = body;
-    } catch (error) {
-        console.error('No se cargaron los datos', error);
-    }
-}
-
-async function readUnidad() {
-    try {
-        const response = await axios.get(`${url}api/unidades`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const unidades = response.data.unidades;
-        let body = '<option selected disabled value="">Seleccione una opción</option>';
-        unidades.forEach(unidad => {
-            body += `<option value="${unidad.id}">${unidad.numeroUnidad}</option>`;
-        });
-        document.getElementById('select-placa').innerHTML = body;
-
-    } catch (error) {
-        console.error('No se cargaron los datos', error);
-    }
-}
-
-async function newStatus(valueId, newIdEstado) {
-    try {
-        const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
-        const response = await axios.put(valUrl);
-        console.log('Campo actualizado correctamente:');
-
-        if (newIdEstado === 2) {
-
-        } else {
-            blockBtn();
-        }
-
-    } catch (error) {
-        console.error('Error al actualizar el campo:', error);
-        throw error;
-    }
-}
-
-const btnCancel = document.getElementById('btn-rechazarSoli');
-btnCancel.addEventListener('click', function () {
-    event.preventDefault();
-    const newIdEstado = 3;
-    const valueId = document.getElementById('input-id').value;
-    newStatus(valueId, newIdEstado);
-    const selectPlaca = document.getElementById('select-placa');
-    const selectChofer = document.getElementById('select-chofer');
-    const selectEncargado = document.getElementById('select-encargado');
-    selectPlaca.disabled = true;
-    selectChofer.disabled = true;
-    selectEncargado.disabled = true;
-});
-
-function blockBtn() {
-    btnCancel.disabled = true;
-    btnAdd.disabled = true;
-}
 
     /*
 //Funcion para mandar el usuario
@@ -355,5 +305,6 @@ function infoUser() {
   }
   const infoUsuario = infoUser();
   const idUsuario = infoUsuario.usuario.IdUsuario;
-*/) ();
+*/
+})();
 

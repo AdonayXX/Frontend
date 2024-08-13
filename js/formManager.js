@@ -8,7 +8,6 @@
     const btnDelete = document.getElementById('btnEliminar');
 
     async function addManager() {
-        exists = false;
         ced = document.getElementById('id').value;
         nombre = document.getElementById('nombre').value;
         apellidos = document.getElementById('apellidos').value;
@@ -38,49 +37,10 @@
                 console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
                 showToast('Error', 'Error al guardar el encargado.');
                 return false;
-        const response2 = await axios.get(`${url}api/funcionarios`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
             }
-        });
-        const managers = response2.data.funcionarios;
-        managers.forEach(manager => {
-            if (manager.Cedula == ced) {
-                exists = true;
-            }
-        });
-        if (exists==false) {
-            if (ced !== null && ced !== "" && nombre !== null && nombre !== "" && apellidos !== null && apellidos !== "" &&
-                cargo !== null && cargo !== "" && contacto !== null && contacto !== "" && email !== null && email !== "") {
-                try {
-                    const manager = {
-                        Cedula: ced,
-                        Nombre: nombre,
-                        Apellidos: apellidos,
-                        Cargo: cargo,
-                        Contacto: contacto,
-                        Correo: email,
-                    };
-                    const response = await axios.post(`${url}api/funcionarios`, manager, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    showToast('Éxito', 'Encargado guardado con éxito.');
-                    return true;
-                } catch (error) {
-                    console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
-                    showToast('Error', 'Error al guardar el encargado.');
-                    return false;
-                }
-            } else {
-                showToast('Error', 'Completa la información necesaria');
-            }
-        }else{
-            showToast('Error', 'Cedula ya existente');
+        } else {
+            showToast('Error', 'Completa la información necesaria');
         }
-
-        
 
     }
 
@@ -93,7 +53,7 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const managers = response.data.funcionarios;
+                const managers = response.data;
                 managers.forEach(manager => {
                     if (manager.Cedula == id) {
                         document.getElementById('nombre').value = manager.Nombre;
@@ -119,34 +79,28 @@
         let exists = false;
         if (id) {
             try {
-                const response2 = await axios.get(`${url}api/funcionarios`, {
+                const response = await axios.get(`${url}api/funcionarios`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const managers = response2.data.funcionarios;
+                const managers = response.data;
                 managers.forEach(manager => {
                     if (manager.Cedula == id) {
                         exists = true;
                     }
                 });
                 if (exists) {
-                    const response = await axios.delete(`${url}api/funcionarios/cedula/${id}`, {
+                    const response2 = await axios.delete(`${url}api/funcionarios`, id, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-                    document.getElementById('id').value = "";
-                    document.getElementById('nombre').value = "";
-                    document.getElementById('apellidos').value = "";
-                    document.getElementById('cargo').value = "";
-                    document.getElementById('contacto').value = "";
-                    document.getElementById('email').value = "";
                     showToast('Éxito', 'Encargado eliminado con éxito.');
                 } else {
                     showToast('Error', 'Encargado no encontrado.');
                 }
-
+    
             } catch (error) {
                 console.error('Error al eliminar encargado:', error.response ? error.response.data : error.message);
                 showToast('Error', 'Error al eliminar el encargado.');
@@ -168,15 +122,13 @@
         if (ced && nombre && apellidos && cargo && contacto && email) {
             try {
                 const manager = {
-                    Cedula: ced,
                     Nombre: nombre,
                     Apellidos: apellidos,
                     Cargo: cargo,
                     Contacto: contacto,
-                    Correo: email
+                    Correo: email,
                 };
-                console.log(manager);
-                const response = await axios.put(`${url}api/funcionarios/cedula/${ced}`, manager, {
+                const response = await axios.put(`${url}api/funcionarios/${ced}`, manager, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -225,6 +177,4 @@
         deleteManager();
     });
 
-            }
-        }
-    })
+})();
