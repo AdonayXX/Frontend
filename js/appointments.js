@@ -61,9 +61,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 return false;
             }
         } catch (error) {
-            console.error('Error fetching patient data:', error);
             showToast('Error', 'Error al obtener los datos del paciente.');
-            // loadContent('formAppointment.html', 'mainContent');
             return false;
         }
     }
@@ -109,10 +107,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                 }, 1000);
             }
         } catch (error) {
-            console.error('Error fetching companions data:', error);
             showToast('Error', 'Error al obtener los datos de los acompañantes.');
-
-            console.log(acompanantes)
         }
     }
 
@@ -300,7 +295,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
                     loadContent('formAppointment.html', 'mainContent');
                 }, 1450);
             } catch (error) {
-                console.error('Error saving appointment:', error);
                 document.getElementById('btnGuardar').disabled = false;
                 showToast('Error', 'Error al guardar la cita.');
             }
@@ -315,7 +309,6 @@ document.getElementById('identificacion').addEventListener('blur', async functio
           const decodedToken = jwt_decode(token);
           return (decodedToken);
         } catch (error) {
-          console.error(error);
           showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
         }
     
@@ -343,7 +336,6 @@ function getRutas() {
             });
         })
         .catch(error => {
-            console.error('Error fetching destinos:', error);
         });
 }
 
@@ -375,7 +367,6 @@ function getEspecialidadesByDestino(IdRuta) {
             });
         })
         .catch(error => {
-            console.error('Error fetching especialidades:', error);
         });
 }
 
