@@ -694,9 +694,11 @@ async function exportarValeExcel() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
 
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`);
+            const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
             console.log("Datos del vale:", datosVale);
 
