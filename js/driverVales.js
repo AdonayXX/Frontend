@@ -1,8 +1,5 @@
 "use strict";
 
-
-// revisar la hora que se está obteniendo y envianco al backend
-
 (async function () {
   let idUnidadObtenida;
   let valeIdSeleccionado;
@@ -13,14 +10,11 @@
   const btnPreFinalizarViajeVale = document.getElementById('btnFinalizarJornada');
   const btnPreIniciarViajeVale = document.getElementById('btnIniciarJornada');
   const inputKilometrajeFinal = document.getElementById('kilometrajeFinal');
-  // no permitir fechas de decremento e incremento
-
 
   btnInicioViajeVale.disabled = true;
   btnFinalizarViajeVale.disabled = true;
   btnPreFinalizarViajeVale.disabled = true;
   btnPreIniciarViajeVale.disabled = true;
-
 
   const token = localStorage.getItem('token');
   if (!token) {
@@ -70,12 +64,9 @@
     }
   }
 
-
-
-
   async function obtenerVales(idUnidad, fecha) {
     const API_VALES = `https://backend-transporteccss.onrender.com/api/viajeVale/${idUnidad}/${fecha}`;
-    console.log(API_VALES);
+    // console.log(API_VALES);
     try {
       const response = await axios.get(API_VALES, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -85,7 +76,6 @@
       if (!Array.isArray(vales)) {
         throw new Error('La respuesta no contiene un array de vales');
       }
-
 
       const valesNoFinalizados = vales.filter(vale => vale.Estado !== 'Finalizado');
       mostrarVales(valesNoFinalizados);
@@ -102,7 +92,7 @@
       console.error("Elemento 'valesTableBody' no encontrado");
       return;
     }
-    console.log(vales);
+    // console.log(vales);
 
     valesTableBody.innerHTML = '';
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
@@ -205,11 +195,10 @@
       return;
     }
 
-
     const idUnidad = document.getElementById('unidadAsignadaVale').value;
 
     try {
-    const valeInfo=   await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
+      const valeInfo = await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
         Indicador: 2,  //  para "En curso"
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'En curso',
@@ -222,11 +211,11 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
       localStorage.setItem('valeIniciado', JSON.stringify({ IdVale, IdRevisionValeViaje }));
-      console.log('Vale iniciado:', valeInfo);  
+      // console.log('Vale iniciado:', valeInfo);  
 
       inicializarPagina();
       showToast('Éxito', 'Vale iniciado correctamente');
-      console.log('vale inciiado', IdVale, IdRevisionValeViaje);
+      // console.log('vale inciiado', IdVale, IdRevisionValeViaje);
     } catch (error) {
       console.error('Error al iniciar el vale:', error);
       showToast('Error', 'Ocurrió un problema al iniciar el vale');
@@ -239,7 +228,6 @@
     validarKilometrajeFinal(kilometrajeActualUnidad);
   };
 
-
   window.finalizarVale = async function () {
     if (inputKilometrajeFinal.value < kilometrajeActualUnidad) {
       showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
@@ -247,7 +235,7 @@
     }
     const IdVale = valeIdSeleccionado;
     const IdRevisionValeViaje = revisionIdSeleccionado;
-    console.log(IdVale, IdRevisionValeViaje);
+    // console.log(IdVale, IdRevisionValeViaje);
     const valeIniciado = JSON.parse(localStorage.getItem('valeIniciado'));
     if (!valeIniciado || valeIniciado.IdVale !== IdVale) {
       showToast('Error', 'No se puede finalizar este vale porque no está en curso.');
@@ -262,7 +250,6 @@
     const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
     const horaFin = costaRicaTime.toISOString().split('T')[1].split('.')[0];
     const horaFinVale = horaFin;
-    
 
     try {
       await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
@@ -298,6 +285,7 @@
 
     await finalizarVale(valeIdSeleccionado, revisionIdSeleccionado);
   }
+
   window.iniciarJornada = async function () {
     const API_INICIARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/iniciarViajevale';
     const currentDate = new Date();
@@ -317,7 +305,7 @@
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      console.log(data);
+      // console.log(data);
 
     } catch (error) {
       console.error('Error al iniciar la jornada:', error);
@@ -331,22 +319,22 @@
   window.finalizarJornada = async function () {
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    console.log(fecha)
+    // console.log(fecha)
     const currentDate = new Date();
     const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
     const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
     const finJornada = costaRicaTime.toISOString().split('T')[1].split('.')[0];
     const horaFin = finJornada; 
-    console.log(horaFin);
+    // console.log(horaFin);
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
-    console.log(API_OBTENER_ESTADO);
+    // console.log(API_OBTENER_ESTADO);
     const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
 
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log(response.data.Data.Data[0].idViajeVale);
+      // console.log(response.data.Data.Data[0].idViajeVale);
       try {
         const data = await axios.put(API_FINALIZARJORNADA, {
           idViajeVale: response.data.Data.Data[0].idViajeVale,
@@ -355,9 +343,8 @@
         }, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        ;
 
-        console.log(data);
+        // console.log(data);
 
       } catch (error) {
         console.error('Error al iniciar la jornada:', error);
@@ -374,14 +361,13 @@
   async function botones() {
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    console.log(fecha)
+    // console.log(fecha)
     const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log(response.data.Data.Data[0].EstadoViaje);
-
+      // console.log(response.data.Data.Data[0].EstadoViaje);
 
       if (response.data.Data.Data[0].EstadoViaje === 'Iniciado') {
         btnInicioViajeVale.disabled = false;
@@ -398,7 +384,7 @@
       showToast('Error', 'Ocurrió un problema al obtener los viajes');
       throw error;
     }
-  };
+  }
 
   function validarKilometrajeFinal(kilometrajeActualUnidad) {
     inputKilometrajeFinal.value = kilometrajeActualUnidad;
@@ -412,9 +398,7 @@
     });
   }
 
-
   validarKilometrajeFinal(kilometrajeActualUnidad);
-
 
   btnPreFinalizarViajeVale.addEventListener('click', finalizarJornada);
   btnIniciarJornada.addEventListener('click', iniciarJornada);
