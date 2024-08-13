@@ -1,4 +1,33 @@
 //funciones dinamicas
+function saveFormData() {
+    const inputs = document.querySelectorAll('input[data-save="true"], select[data-save="true"], textarea[data-save="true"]');
+
+    inputs.forEach(input => {
+        localStorage.setItem(input.id, input.value);
+    });
+}
+
+function loadFormData() {
+    const inputs = document.querySelectorAll('input[data-save="true"], select[data-save="true"], textarea[data-save="true"]');
+
+    inputs.forEach(input => {
+        const value = localStorage.getItem(input.id);
+        if (value !== null) {
+            input.value = value;
+        }
+    });
+
+    const selects = document.querySelectorAll('select[data-save="true"]');
+    selects.forEach(select => {
+        const event = new Event('change');
+        select.dispatchEvent(event);
+    });
+}
+
+document.querySelector('form').addEventListener('submit', saveFormData);
+window.addEventListener('load', loadFormData);
+
+
 document.addEventListener('DOMContentLoaded', () => {
     getVales();
     loadFormData();
@@ -420,22 +449,5 @@ function addInputListeners() {
                 localStorage.setItem(input.id, input.value);
             });
         }
-    });
-}
-
-function loadFormData() {
-    const inputs = document.querySelectorAll('input, select, textarea');
-
-    inputs.forEach(input => {
-        const value = localStorage.getItem(input.id);
-        if (value !== null) {
-            input.value = value;
-        }
-    });
-
-    const selects = document.querySelectorAll('select');
-    selects.forEach(select => {
-        const event = new Event('change');
-        select.dispatchEvent(event);
     });
 }
