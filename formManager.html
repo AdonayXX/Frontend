@@ -23,7 +23,7 @@
             <div class="col-6">
                 <div class="form-group mb-3">
                     <label for="cargo" class="form-label"><i class="bi bi-briefcase"></i> Cargo</label>
-                    <input type="text" class="form-control" id="cargo" name="cargos" pattern="[A-Za-z]*" required>
+                    <input type="text" class="form-control" id="cargo" name="cargos" pattern="[A-Za-z]*" required oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')">
                 </div>
             </div>
             <div class="col-6">

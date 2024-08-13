@@ -89,7 +89,6 @@ async function mostrarProximosViajes() {
         }
 
     } catch (error) {
-        console.error('Error al mostrar los próximos viajes:', error);
     }
 }
 
@@ -103,7 +102,6 @@ async function mostrarFecha() {
         const fechaFormateada = hoyUTC.split('-').reverse().join('-');
         document.getElementById('fecha').textContent = fechaFormateada;
     } catch (error) {
-        console.error('Error al mostrar la fecha:', error);
     }
 }
 
@@ -159,7 +157,6 @@ async function contarCitasHome() {
         document.getElementById('contadorViajesFinalizados').textContent = viajesFinalizados.length;
 
     } catch (error) {
-        console.error('Error al contar las citas y viajes:', error);
     }
 }
 
@@ -192,7 +189,6 @@ async function mostrarUnidadesPorDekra() {
         unidadesPorVencerContainer.innerHTML = '';
 
         if (unidadesPorVencer.length === 0) {
-            console.log('No hay unidades cuya fecha de revisión de Dekra vence en menos de 30 días.');
 
         } else {
             const tituloFechasDekra = document.createElement('h5');
@@ -217,7 +213,6 @@ async function mostrarUnidadesPorDekra() {
             });
         }
     } catch (error) {
-        console.error('Error al mostrar las unidades por vencer:', error);
     }
 }
 
@@ -249,7 +244,6 @@ async function mostrarChoferesPorVencer() {
         choferesPorVencerContainer.innerHTML = '';
 
         if (choferesPorVencer.length === 0) {
-            console.log('No hay choferes cuya fecha de vencimiento de licencia vence en menos de 30 días.');
         } else {
             const tituloFechasChofer = document.createElement('h5');
             tituloFechasChofer.textContent = 'Fechas de Vencimiento de Licencia';
@@ -277,7 +271,6 @@ async function mostrarChoferesPorVencer() {
             });
         }
     } catch (error) {
-        console.error('Error al mostrar los choferes por vencer:', error);
     }
 }
 
@@ -316,7 +309,6 @@ async function mostrarUnidadesPorKilometraje() {
         unidadesPorKilometrajeContainer.innerHTML = '';
 
         if (unidadesPorKilometraje.length === 0) {
-            console.log('No hay unidades próximas a necesitar mantenimiento por kilometraje.');
         } else {
             const tituloMantenimientoKilometraje = document.createElement('h5');
             tituloMantenimientoKilometraje.textContent = 'Mantenimiento por Kilometraje';
@@ -341,6 +333,5 @@ async function mostrarUnidadesPorKilometraje() {
             });
         }
     } catch (error) {
-        console.error('Error al mostrar las unidades por kilometraje:', error);
     }
 }

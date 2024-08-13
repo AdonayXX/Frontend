@@ -1,3 +1,5 @@
+
+
 async function generalesPdf() {
     try {
         const pdfUrl = '/documents/reporteGeneral.pdf';
@@ -8,6 +10,12 @@ async function generalesPdf() {
 
         const fromDate = new Date(document.getElementById('from').value);
         const toDate = new Date(document.getElementById('to').value);
+
+        
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
 
         const token = localStorage.getItem('token');
 
@@ -362,6 +370,12 @@ async function generalesExcel() {
         const fromDate = new Date(document.getElementById('from').value);
         const toDate = new Date(document.getElementById('to').value);
 
+           
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
+
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -529,95 +543,184 @@ async function mantenimientoPdf() {
     try {
         const pdfUrl = '/documents/reporteMantenimiento.pdf';
 
+        // Fetch existing PDF
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+        const existingPdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
-        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
+        // Create a new PDF document
+        const newPdfDoc = await PDFLib.PDFDocument.create();
+        const [templatePage] = await existingPdfDoc.copyPages(existingPdfDoc, [0]);
 
         const fromDate = new Date(document.getElementById('fromMaintenance').value);
         const toDate = new Date(document.getElementById('toMaintenance').value);
-
-        const token = localStorage.getItem('token');
-
-        const headers = {
-            'Authorization': `Bearer ${token}`
-        };
-
-        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
-        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
-        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
-        const datosVales = response1.data.vales;
-        const datosRegistros = response2.data.registros;
-        const datosCitas = response3.data;
+        const idActividad = document.getElementById('actividad').value; // Asegúrate de tener este input en tu HTML
+        const unidad = document.getElementById('equipo').value; // Asegúrate de tener este input en tu HTML
+    
 
 
-
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
+           
+      
         const fechaCreacion = new Date();
         const fechaCreacionString = fechaCreacion.toLocaleDateString();
         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-
-
-        const firstPage = pdfDoc.getPages()[0];
-        const { width, height } = firstPage.getSize();
-
-        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        
+        // Adjust dates by one day
         const adjustedFromDate = new Date(fromDate);
-        adjustedFromDate.setDate(adjustedFromDate.getDate() + 1);
-
+        adjustedFromDate.setDate(adjustedFromDate.getDate() + 1 );
         const adjustedToDate = new Date(toDate);
         adjustedToDate.setDate(adjustedToDate.getDate() + 1);
 
+        // Construct the API URL with the date range parameters
+            // Construct the API URL with the date range, activity ID, and unit parameters
+            let apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porFecha?fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
 
-        firstPage.drawText(` De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
-            x: 321,
-            y: height - 140,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
+            if (idActividad) {
+                apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porActividad?IdActividad=${idActividad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+            }
 
-        firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
-            x: 590,
-            y: height - 523,
-            size: 8,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
+            if (unidad) {
+                apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porUnidad?id=${unidad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+            }    
+
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+
+    
+        // Get mantenimiento data from the API
+        const response = await axios.get(apiUrl, { headers });
+        const mantenimientos = response.data.mantenimiento;
 
 
+        // Embed font for adding text
+        const helveticaFont = await newPdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
+        // Create a page for each mantenimiento
+        for (const mantenimiento of mantenimientos) {
+            // Create a new page and add the template content
+            const [newPage] = await newPdfDoc.copyPages(existingPdfDoc, [0]);
+            newPdfDoc.addPage(newPage);
 
+            const { height } = newPage.getSize();
 
-        const pdfBytes = await pdfDoc.save();
-        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+            // Add maintenance details on the page
+            newPage.drawText(`De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
+                x: 321,
+                y: height - 140,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
 
-        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+            newPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
+                x: 590,
+                y: height - 523,
+                size: 8,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+
+            //YA COLOCADO
+            newPage.drawText(`${mantenimiento.numeroUnidad}`, {
+                x: 443,
+                y: height - 247,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            newPage.drawText(`${mantenimiento.kilometrajeActual}`, {
+                x: 443,
+                y: height - 260,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            
+            newPage.drawText(`${mantenimiento.KilometrajeMantenimiento}`, {
+                x: 443,
+                y: height - 273,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            
+
+            newPage.drawText(`${mantenimiento.Detalle}`, {
+                x: 443,
+                y: height - 295,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+
+          
+            let actividadYPosition = height - 328;
+            mantenimiento.Actividades.forEach((actividad, index) => {
+                const descripcion = `${actividad.Descripcion}`;
+                const cantidad = `${actividad.Cantidad}`;
+                const unidadMedida = `${actividad.UnidadMedida}`;
+            
+                newPage.drawText(descripcion, {
+                    x: 80,
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+
+                newPage.drawText(cantidad, {
+                    x: 443,
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+     
+                newPage.drawText(unidadMedida, {
+                    x: 585, 
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+                actividadYPosition -= 14;
+            });
+        }            
+
+        // Save the new PDF document
+        const pdfBytes = await newPdfDoc.save();
+
+        // Create a blob from the updated PDF and trigger download
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'Reportes_ASU_Mantenimiento.pdf';
         link.click();
 
-
-        function base64ToBlob(base64, type) {
-            const binaryString = window.atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; ++i) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return new Blob([bytes], { type });
-        }
-
     } catch (error) {
+        console.error('Error generating PDF:', error);
     }
 }
-
 
 
 async function mantenimientoExcel() {
     try {
         const fromDate = new Date(document.getElementById('fromMaintenance').value);
         const toDate = new Date(document.getElementById('toMaintenance').value);
+
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
 
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
@@ -690,23 +793,23 @@ async function mantenimientoExcel() {
 }
 
 //REPORTE DE VALES
-async function exportarValeExcel() {
+async function exportarVale() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
-
         try {
+
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`);
             datosVale = response.data;
             console.log("Datos del vale:", datosVale);
 
+
         } catch (apiError) {
-            console.error("Error al obtener los datos del vale:", apiError);
-            showToast("Error", "No se encontró el ID del vale o hubo un problema con la conexión.");
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
         }
 
-
+        console.log('Datos del vale:', datosVale);
         const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
@@ -747,7 +850,6 @@ async function exportarValeExcel() {
 
 
 
-
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -760,396 +862,313 @@ async function exportarValeExcel() {
 }
 
 
-async function exportarValePdf() {
-    try {
-        const idVale = document.getElementById('idVale').value;
-        let datosVale;
-        try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
-            datosVale = response.data;
-        } catch (apiError) {
-            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
-            return;
-        }
-
-        const pdfUrl = '/documents/ReporteValePDF.pdf';
-        const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
-        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
-
-        const worksheet = pdfDoc.getPages()[0];
-        const { width, height } = worksheet.getSize();
-        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-
-        const valeData = datosVale.vale;
-        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
-        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
-
-        worksheet.drawText(String(fechaSolicitud), {
-            x: 75,
-            y: height - 170,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
-            x: 480,
-            y: height - 175,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
-            x: 180,
-            y: height - 175,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante1 || ''), {
-            x: 405,
-            y: height - 234,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante2 || ''), {
-            x: 405,
-            y: height - 248,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante3 || ''), {
-            x: 405,
-            y: height - 263,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante4 || ''), {
-            x: 405,
-            y: height - 278,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Acompanante5 || ''), {
-            x: 405,
-            y: height - 292,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.NombreMotivo || ''), {
-            x: 260,
-            y: height - 205,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.NombreSolicitante || ''), {
-            x: 260,
-            y: height - 307,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(valeData.Detalle || ''), {
-            x: 348,
-            y: height - 325,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(horaSalida), {
-            x: 115,
-            y: height - 355,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(fechaSolicitud), {
-            x: 115,
-            y: height - 340,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(fechaSolicitud), {
-            x: 90,
-            y: height - 425,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        worksheet.drawText(String(horaSalida), {
-            x: 245,
-            y: height - 425,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
-
-        const pdfBytes = await pdfDoc.save();
-        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
-
-        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'Reporte_Vale.pdf';
-
-        link.click();
-
-        function base64ToBlob(base64, type) {
-            const binaryString = window.atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; ++i) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return new Blob([bytes], { type });
-        }
-    } catch (error) {
-        console.error("Error al exportar el archivo PDF:", error);
-    }
-}
-
 // REPORTE VEHICULAR 
-async function viajesPdf() {
-    try {
-        // Obtener las fechas del modal
-        const fechaInicio = document.getElementById('fromViajes').value;
-        const fechaFin = document.getElementById('toViajes').value;
-        if (!fechaInicio || !fechaFin) {
-            alert('Por favor, seleccione ambas fechas.');
-            return;
+
+
+        async function viajesPdf() {
+            try {
+                // Obtener las fechas del modal
+                const fechaInicio = document.getElementById('fromViajes').value;
+                const fechaFin = document.getElementById('toViajes').value;
+                if (!fechaInicio || !fechaFin) {
+                    alert('Por favor, seleccione ambas fechas.');
+                    return;
+                }
+                if (fechaInicio > fechaFin) {
+                    showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+                    return;
+                }
+        
+                // Obtener el token
+                const token = localStorage.getItem('token');
+        
+                // Realizar la solicitud a la API usando Axios
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                    fechaInicio,
+                    fechaFin
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                // Verificar si la respuesta contiene datos y si fue exitosa
+                if (response.data && response.data.resultados && response.data.resultados.success) {
+                    const citas = response.data.resultados.citas;
+        
+                    // Procesar los datos de las citas
+                    const data = citas[0].map(item => ({
+                        'Tipo de Vehiculo': item['Tipo de Vehiculo'],
+                        'Cantidad de Viajes': item['Cantidad de Viajes'],
+                        'Total de Kilometros': item['Total de Kilometros'],
+                        'Total de Pacientes': item['Total de Pacientes']
+                    }));
+        
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('landscape');
+        
+                    const logoUrl = '/img/logo_ccss_azul.png';
+                    const logoResponse = await fetch(logoUrl);
+                    const logoBlob = await logoResponse.blob();
+                    const reader = new FileReader();
+        
+                    reader.onload = function(event) {
+                        const logoDataURL = event.target.result;
+        
+                        doc.addImage(logoDataURL, 'PNG', 10, 10, 30, 30);
+                        doc.setFontSize(12);
+        
+                        // Obtener el ancho de la página
+                        const pageWidth = doc.internal.pageSize.getWidth();
+                        
+                        // Textos a centrar
+                        const textos = [
+                            'Caja Costarricense de Seguro Social',
+                            'Área de Salud Upala',
+                            'Servicio de Transportes',
+                            `Reporte de Viajes del ${fechaInicio} al ${fechaFin}`
+                        ];
+        
+                        // Coordenadas Y para cada línea de texto
+                        const coordenadasY = [20, 27, 34, 41];
+        
+                        // Iterar sobre los textos y calcular el centro
+                        textos.forEach((texto, index) => {
+                            const textWidth = doc.getTextWidth(texto);
+                            const textX = (pageWidth - textWidth) / 2;
+                            doc.text(texto, textX, coordenadasY[index]);
+                        });
+        
+                        // Dibujar la línea separadora centrada
+                        const lineWidth = 290 - 10;
+                        const lineX = (pageWidth - lineWidth) / 2;
+                        doc.line(lineX, 45, lineX + lineWidth, 45);
+        
+                        // Obtener la fecha y hora actual
+                        const fechaActual = new Date();
+                        const fecha = fechaActual.toLocaleDateString();
+                        const hora = fechaActual.toLocaleTimeString();
+        
+                        // Añadir la tabla de datos
+                        const encabezados = [
+                            'Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'
+                        ];
+                        doc.autoTable({
+                            startY: 50,
+                            head: [encabezados],
+                            body: data.map(row => encabezados.map(header => row[header] || '')),
+                            headStyles: { fillColor: [9, 64, 121], textColor: [255, 255, 255] },
+                            theme: 'grid',
+                            didDrawPage: function (data) {
+                                // Número de página en la parte inferior derecha
+                                doc.setFontSize(10);
+                                doc.text(`Página ${data.pageNumber}`, pageWidth - 20, doc.internal.pageSize.height - 10);
+        
+                                // Fecha y hora en la parte inferior izquierda
+                                doc.text(`Fecha: ${fecha} Hora: ${hora}`, 10, doc.internal.pageSize.height - 10);
+                            }
+                        });
+        
+                        doc.save(`Reporte_Viajes_${fechaInicio}_${fechaFin}.pdf`);
+                    };
+        
+                    reader.readAsDataURL(logoBlob);
+                } else {
+                    console.error('No se encontraron datos para el reporte o la solicitud no fue exitosa.');
+                }
+            } catch (error) {
+                console.error('Error al exportar a PDF:', error);
+            }
         }
 
-        // Obtener el token
-        const token = localStorage.getItem('token');
+        
+        async function viajesExcel() {
+            try {
+                // Obtener las fechas del modal
+                const fechaInicio = document.getElementById('fromViajes').value;
+                const fechaFin = document.getElementById('toViajes').value;
+                if (!fechaInicio || !fechaFin) {
+                    alert('Por favor, seleccione ambas fechas.');
+                    return;
+                }
+                if (fechaInicio > fechaFin) {
+                    showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+                    return;
+                }
+        
 
-        // Realizar la solicitud a la API usando Axios
-        const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
-            fechaInicio,
-            fechaFin
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+                // Obtener el token
+                const token = localStorage.getItem('token');
 
-        // Verificar si la respuesta contiene datos y si fue exitosa
-        if (response.data && response.data.resultados && response.data.resultados.success) {
-            const citas = response.data.resultados.citas;
-
-            // Procesar los datos de las citas
-            const data = citas[0].map(item => ({
-                'Tipo de Vehiculo': item['Tipo de Vehiculo'],
-                'Cantidad de Viajes': item['Cantidad de Viajes'],
-                'Total de Kilometros': item['Total de Kilometros'],
-                'Total de Pacientes': item['Total de Pacientes']
-            }));
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape');
-
-            const logoUrl = '/img/logo_ccss_azul.png';
-            const logoResponse = await fetch(logoUrl);
-            const logoBlob = await logoResponse.blob();
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                const logoDataURL = event.target.result;
-
-                doc.addImage(logoDataURL, 'PNG', 10, 10, 30, 30);
-                doc.setFontSize(12);
-
-                // Obtener el ancho de la página
-                const pageWidth = doc.internal.pageSize.getWidth();
-
-                // Textos a centrar
-                const textos = [
-                    'Caja Costarricense de Seguro Social',
-                    'Área de Salud Upala',
-                    'Servicio de Transportes',
-                    `Reporte de Viajes del ${fechaInicio} al ${fechaFin}`
-                ];
-
-                // Coordenadas Y para cada línea de texto
-                const coordenadasY = [20, 27, 34, 41];
-
-                // Iterar sobre los textos y calcular el centro
-                textos.forEach((texto, index) => {
-                    const textWidth = doc.getTextWidth(texto);
-                    const textX = (pageWidth - textWidth) / 2;
-                    doc.text(texto, textX, coordenadasY[index]);
-                });
-
-                // Dibujar la línea separadora centrada
-                const lineWidth = 290 - 10;
-                const lineX = (pageWidth - lineWidth) / 2;
-                doc.line(lineX, 45, lineX + lineWidth, 45);
-
-                // Obtener la fecha y hora actual
-                const fechaActual = new Date();
-                const fecha = fechaActual.toLocaleDateString();
-                const hora = fechaActual.toLocaleTimeString();
-
-                // Añadir la tabla de datos
-                const encabezados = [
-                    'Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'
-                ];
-                doc.autoTable({
-                    startY: 50,
-                    head: [encabezados],
-                    body: data.map(row => encabezados.map(header => row[header] || '')),
-                    headStyles: { fillColor: [9, 64, 121], textColor: [255, 255, 255] },
-                    theme: 'grid',
-                    didDrawPage: function (data) {
-                        // Número de página en la parte inferior derecha
-                        doc.setFontSize(10);
-                        doc.text(`Página ${data.pageNumber}`, pageWidth - 20, doc.internal.pageSize.height - 10);
-
-                        // Fecha y hora en la parte inferior izquierda
-                        doc.text(`Fecha: ${fecha} Hora: ${hora}`, 10, doc.internal.pageSize.height - 10);
+                // Realizar la solicitud a la API usando Axios
+                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                    fechaInicio,
+                    fechaFin
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
-                doc.save(`Reporte_Viajes_${fechaInicio}_${fechaFin}.pdf`);
-            };
+                if (response.data && response.data.resultados && response.data.resultados.success) {
+                    const trips = response.data.resultados.citas[0];
+                    
+                    const workbook = new ExcelJS.Workbook();
+                    const worksheet = workbook.addWorksheet('Datos');
 
-            reader.readAsDataURL(logoBlob);
-        } else {
-            console.error('No se encontraron datos para el reporte o la solicitud no fue exitosa.');
+                    // Añadir una imagen (logo) a la izquierda
+                    const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
+                    const logoResponse = await fetch(logoUrl);
+                    const logoBuffer = await logoResponse.arrayBuffer();
+
+                    const logoImage = workbook.addImage({
+                        buffer: logoBuffer,
+                        extension: 'png',
+                    });
+
+                    // Añadir la imagen en la primera columna
+                    worksheet.addImage(logoImage, {
+                        tl: { col: 0.5, row: 0.5 },
+                        ext: { width: 100, height: 100 },
+                    });
+
+                    // Añadir la información de la empresa y el autor en una sola columna
+                    worksheet.mergeCells('B2:E2'); // Ajusta el rango según el ancho necesario
+                    worksheet.getCell('B2').value = 'Caja Costarricense de Seguro Social';
+                    worksheet.mergeCells('B3:E3');
+                    worksheet.getCell('B3').value = 'Área de Salud Upala';
+                    worksheet.mergeCells('B4:E4');
+                    worksheet.getCell('B4').value = 'Servicio de Transportes';
+                    worksheet.mergeCells('B5:E5');
+                    worksheet.getCell('B5').value = `Lista de Viajes del ${fechaInicio} al ${fechaFin}`;
+
+                    // Asegúrate de centrar el texto en las celdas fusionadas
+                    worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getCell('B5').alignment = { horizontal: 'center', vertical: 'middle' };
+
+                    worksheet.addRow([]); // Añadir una fila en blanco para separar
+
+                    // Añadir encabezados de datos con estilo
+                    const headers = ['Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'];
+                    const headerRow = worksheet.addRow(headers);
+                    headerRow.eachCell((cell) => {
+                        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                        cell.fill = { 
+                            type: 'pattern', 
+                            pattern: 'solid', 
+                            fgColor: { argb: 'FF094079' } // Fondo azul
+                        };
+                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    });
+
+                    // Añadir datos de los viajes
+                    trips.forEach(trip => {
+                        const row = worksheet.addRow([
+                            trip['Tipo de Vehiculo'],
+                            trip['Cantidad de Viajes'],
+                            trip['Total de Kilometros'],
+                            trip['Total de Pacientes']
+                        ]);
+
+                        row.eachCell((cell) => {
+                            cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                        });
+                    });
+
+                    // Ajustar el ancho de las columnas y centrar
+                    headers.forEach((header, index) => {
+                        const col = worksheet.getColumn(index + 1);
+                        col.width = 25;
+                        col.alignment = { horizontal: 'center', vertical: 'middle' };
+                    });
+
+                    // Exportar el libro de trabajo como archivo Excel
+                    const buffer = await workbook.xlsx.writeBuffer();
+                    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `Reporte_Asu_Viajes.xlsx`;
+                    link.click();
+
+                } else {
+                    console.error('Error al obtener datos');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    } catch (error) {
-        console.error('Error al exportar a PDF:', error);
-    }
-}
 
-async function viajesExcel() {
-    try {
-        // Obtener las fechas del modal
-        const fechaInicio = document.getElementById('fromViajes').value;
-        const fechaFin = document.getElementById('toViajes').value;
-        if (!fechaInicio || !fechaFin) {
-            alert('Por favor, seleccione ambas fechas.');
-            return;
-        }
 
-        // Obtener el token
+
+(() => {
+    let idActividadSeleccionada = null;
+    let idUnidadSeleccionada = null;
+    
+    function cargarUnidadesActivas() {
+        const url = 'https://backend-transporteccss.onrender.com/api/unidades';
         const token = localStorage.getItem('token');
-
-        // Realizar la solicitud a la API usando Axios
-        const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
-            fechaInicio,
-            fechaFin
-        }, {
+    
+        axios.get(url, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
+        })
+        .then(response => {
+            const unidades = response.data.unidades;
+            const unidadesActivas = unidades.filter(unidad => unidad.idEstado === 1);
+            const equipoSelect = document.getElementById('equipo');
+    
+            equipoSelect.innerHTML = '<option value="" selected>Selecciona un equipo</option>';
+    
+            unidadesActivas.forEach(unidad => {
+                const option = document.createElement('option');
+                option.value = unidad.id; // Aquí guardamos el id de la unidad
+                option.textContent = `Unidad ${unidad.numeroUnidad}`;
+                equipoSelect.appendChild(option);
+            });
+    
+            // Manejar la selección del usuario
+            equipoSelect.addEventListener('change', function() {
+                idUnidadSeleccionada = this.value; 
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener las unidades:', error);
         });
-
-        if (response.data && response.data.resultados && response.data.resultados.success) {
-            const trips = response.data.resultados.citas[0];
-
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet('Datos');
-
-            // Añadir una imagen (logo) a la izquierda
-            const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
-            const logoResponse = await fetch(logoUrl);
-            const logoBuffer = await logoResponse.arrayBuffer();
-
-            const logoImage = workbook.addImage({
-                buffer: logoBuffer,
-                extension: 'png',
-            });
-
-            // Añadir la imagen en la primera columna
-            worksheet.addImage(logoImage, {
-                tl: { col: 0.5, row: 0.5 },
-                ext: { width: 100, height: 100 },
-            });
-
-            // Añadir la información de la empresa y el autor en una sola columna
-            worksheet.mergeCells('B2:E2'); // Ajusta el rango según el ancho necesario
-            worksheet.getCell('B2').value = 'Caja Costarricense de Seguro Social';
-            worksheet.mergeCells('B3:E3');
-            worksheet.getCell('B3').value = 'Área de Salud Upala';
-            worksheet.mergeCells('B4:E4');
-            worksheet.getCell('B4').value = 'Servicio de Transportes';
-            worksheet.mergeCells('B5:E5');
-            worksheet.getCell('B5').value = `Lista de ${page} del ${fechaInicio} al ${fechaFin}`;
-
-            // Asegúrate de centrar el texto en las celdas fusionadas
-            worksheet.getCell('B2').alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.getCell('B3').alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.getCell('B5').alignment = { horizontal: 'center', vertical: 'middle' };
-
-            worksheet.addRow([]); // Añadir una fila en blanco para separar
-
-            // Añadir encabezados de datos con estilo
-            const headers = ['Tipo de Vehiculo', 'Cantidad de Viajes', 'Total de Kilometros', 'Total de Pacientes'];
-            const headerRow = worksheet.addRow(headers);
-            headerRow.eachCell((cell) => {
-                cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-                cell.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: 'FF094079' } // Fondo azul
-                };
-                cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            });
-
-            // Añadir datos de los viajes
-            trips.forEach(trip => {
-                const row = worksheet.addRow([
-                    trip['Tipo de Vehiculo'],
-                    trip['Cantidad de Viajes'],
-                    trip['Total de Kilometros'],
-                    trip['Total de Pacientes']
-                ]);
-
-                row.eachCell((cell) => {
-                    cell.alignment = { horizontal: 'center', vertical: 'middle' };
-                });
-            });
-
-            // Ajustar el ancho de las columnas y centrar
-            headers.forEach((header, index) => {
-                const col = worksheet.getColumn(index + 1);
-                col.width = 25;
-                col.alignment = { horizontal: 'center', vertical: 'middle' };
-            });
-
-            // Exportar el libro de trabajo como archivo Excel
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${page}.xlsx`;
-            link.click();
-
-        } else {
-            console.error('Error al obtener datos');
-        }
-    } catch (error) {
-        console.error('Error:', error);
     }
-}
+    function cargarActividades() {
+        const url = 'https://backend-transporteccss.onrender.com/api/actividad';
+        const token = localStorage.getItem('token');
+    
+        axios.get(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            const actividades = response.data.actividades;
+            const actividadSelect = document.getElementById('actividad');
+    
+            actividadSelect.innerHTML = '<option value="" selected>Selecciona una actividad</option>';
+    
+            actividades.forEach(actividad => {
+                const option = document.createElement('option');
+                option.value = actividad.IdActividad; // Aquí guardamos el IdActividad
+                option.textContent = actividad.Descripcion;
+                actividadSelect.appendChild(option);
+            });
+    
+            // Manejar la selección del usuario
+            actividadSelect.addEventListener('change', function() {
+                idActividadSeleccionada = this.value; 
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener las actividades:', error);
+        });
+    }
+    cargarActividades();
+    cargarUnidadesActivas();
+})();

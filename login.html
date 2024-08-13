@@ -77,14 +77,14 @@
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="Up" class="form-label"><i class="bi bi-building"></i> Unidad
                                         Programatica</label>
-                                    <select data-save="true" class="form-select" id="Up" required>
+                                    <select class="form-select" id="Up" required>
                                         <option selected disabled value="">Seleccione una opción</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="motivo" class="form-label"><i class="bi bi-chat-left-text"></i> Motivo
                                         de la gira: </label>
-                                    <select data-save="true" class="form-select" id="motivo" onchange="mostrarCampos()">
+                                    <select class="form-select" id="motivo" onchange="mostrarCampos()">
                                         <option selected disabled value="">Seleccione una opción</option>
                                     </select>
                                 </div>
@@ -93,13 +93,13 @@
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="nameSoli" class="form-label"><i class="bi bi-person-circle"></i> Nombre
                                         del Solicitante:</label>
-                                    <input data-save="true" type="text" class="form-control" id="nameSoli"
-                                        maxlength="25" required placeholder="Ingrese su nombre">
+                                    <input type="text" class="form-control" id="nameSoli" maxlength="25" required
+                                        placeholder="Ingrese su nombre">
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="service" class="form-label"><i class="bi bi-briefcase"></i>
                                         Servicios:</label>
-                                    <select data-save="true" class="form-select" id="service" required>
+                                    <select class="form-select" id="service" required>
                                         <option selected disabled value="">Seleccionar</option>
                                     </select>
                                 </div>
@@ -107,49 +107,46 @@
                             <div class="row g-1">
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorSelectSalida"
                                     style="display: none;">
-                                    <label data-save="true" for="lugarSa" class="form-label"><i
-                                            class="bi bi-geo-alt"></i> Lugar de
+                                    <label for="lugarSa" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de
                                         Salida: </label>
                                     <select class="form-select" id="lugarSa">
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorSelectDestino"
                                     style="display: none;">
-                                    <label data-save="true" for="lugarDes" class="form-label"><i
-                                            class="bi bi-geo-alt-fill"></i> Lugar de
+                                    <label for="lugarDes" class="form-label"><i class="bi bi-geo-alt-fill"></i> Lugar de
                                         Destino:</label>
                                     <select class="form-select" id="lugarDes">
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirSalida">
-                                    <label data-save="true" for="lugarSa2" class="form-label"><i
-                                            class="bi bi-geo-alt"></i> Lugar de
+                                    <label for="lugarSa2" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de
                                         Salida: </label>
-                                    <select data-save="true" class="form-select" id="lugarSa2">
+                                    <select class="form-select" id="lugarSa2">
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6" id="contenedorEscribirDestino">
                                     <label for="lugarDes2" class="form-label"> <i class="bi bi-geo-alt-fill"></i>Lugar
                                         de Destino:</label>
-                                    <select data-save="true" class="form-select" id="lugarDes2">
+                                    <select class="form-select" id="lugarDes2">
                                     </select>
                                 </div>
                                 <div class="col-sm-12  col-md-4 col-lg-6">
                                     <label for="b_date" class="form-label"><i class="bi bi-calendar3"></i> Fecha para la
                                         Solicitud: </label>
-                                    <input data-save="true" type="date" class="form-control" min="1910-02-01"
-                                        id="b_date" placeholder="dd/mm/aaaa" required>
+                                    <input type="date" class="form-control" min="1910-02-01" id="b_date"
+                                        placeholder="dd/mm/aaaa" required>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6">
                                     <label for="user_gen" class="form-label"><i class="bi bi-clock"></i> Hora de salida:
                                     </label>
-                                    <input data-save="true" type="time" class="form-control" id="hora_salida" required>
+                                    <input type="time" class="form-control" id="hora_salida" required>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-6 ">
                                     <label class="form-label"><i class="bi bi-exclamation-circle"></i> Solicitar
                                         Chofer:</label>
                                     <div class="form-check form-switch">
-                                        <input data-save="true" class="form-check-input" type="checkbox" id="chofer">
+                                        <input class="form-check-input" type="checkbox" id="chofer">
                                         <label class="form-check-label" for="user_gen">Si</label>
                                     </div>
                                 </div>
@@ -184,15 +181,13 @@
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante1" style="display: none;">
                                         <label for="acompananteNombre1" class="form-label"><i
                                                 class="bi bi-person-check"></i> Acompañante 1:</label>
-                                        <input data-save="true" type="text" class="form-control" id="acompananteNombre1"
-                                            maxlength="25">
+                                        <input type="text" class="form-control" id="acompananteNombre1" maxlength="25">
                                     </div>
 
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante2" style="display: none;">
                                         <label for="acompananteNombre2" class="form-label"><i
                                                 class="bi bi-person-check"></i> Acompañante 2:</label>
-                                        <input data-save="true" type="text" class="form-control" id="acompananteNombre2"
-                                            maxlength="25">
+                                        <input type="text" class="form-control" id="acompananteNombre2" maxlength="25">
                                     </div>
                                 </div>
 
@@ -200,22 +195,19 @@
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante3" style="display: none;">
                                         <label for="acompananteNombre3" class="form-label"><i
                                                 class="bi bi-person-check"></i> Acompañante 3:</label>
-                                        <input data-save="true" type="text" class="form-control" id="acompananteNombre3"
-                                            maxlength="25">
+                                        <input type="text" class="form-control" id="acompananteNombre3" maxlength="25">
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante4" style="display: none;">
                                         <label for="acompananteNombre4" class="form-label"><i
                                                 class="bi bi-person-check"></i> Acompañante 4:</label>
-                                        <input data-save="true" type="text" class="form-control" id="acompananteNombre4"
-                                            maxlength="25">
+                                        <input type="text" class="form-control" id="acompananteNombre4" maxlength="25">
                                     </div>
                                 </div>
                                 <div class="row g-1">
                                     <div class="col-sm-12 col-md-4 col-lg-6" id="acompanante5" style="display: none;">
                                         <label for="acompananteNombre5" class="form-label"><i
                                                 class="bi bi-person-check"></i> Acompañante 5:</label>
-                                        <input data-save="true" type="text" class="form-control" id="acompananteNombre5"
-                                            maxlength="25">
+                                        <input type="text" class="form-control" id="acompananteNombre5" maxlength="25">
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +215,7 @@
                                 <div class="col-sm-12 col-md-4 col-lg-12">
                                     <label for="detalle" class="form-label"><i class="bi bi-journal-text"></i>
                                         Detalle:</label>
-                                    <textarea data-save="true" class="form-control" id="detalle" rows="3" maxlength="50"
+                                    <textarea class="form-control" id="detalle" rows="3" maxlength="50"
                                         required></textarea>
                                 </div>
                             </div>
