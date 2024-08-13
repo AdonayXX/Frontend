@@ -28,6 +28,7 @@ async function loadCitas() {
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             caseInsensitive: true,
             smart: true
+
         });
 
         $('#searchAppointment').on('keyup', function () {
@@ -57,7 +58,7 @@ async function loadCitas() {
         });
         setTimeout(function () {
             $('#TableAppointment').DataTable().search('iniciada').draw();
-        }, 1000)
+        }, 1200)
         ocultarSpinner();
     } catch (error) {
         showToast("Error", "Error al obtener las citas.");
@@ -70,7 +71,6 @@ function renderTable(citas) {
     citas.sort((a, b) => {
         const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
         const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
-
         return fechaHoraB - fechaHoraA;
     });
 
@@ -106,6 +106,7 @@ function renderTable(citas) {
     });
 }
 
+
 function getAcompanantes(cita) {
     try {
         const tableBody = document.getElementById('AcompananteTableBody');
@@ -135,12 +136,6 @@ function getAcompanantes(cita) {
         showToast("Error", 'Error al obtener los acompañantes.');
     }
 }
-
-document.querySelector('#searchAppointment').addEventListener('input', function (e) {
-    if (this.value.length > 15) {
-        this.value = this.value.slice(0, 15);
-    }
-});
 
 function editarCita(cita) {
     document.querySelector('#editarIdCita').value = cita.idCita;
