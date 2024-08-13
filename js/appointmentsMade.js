@@ -156,14 +156,17 @@ function editarCita(cita) {
         event.preventDefault();
 
         const especialidadSeleccionada = document.querySelector('#especialidad').value;
-        if (!especialidadSeleccionada) {
-            showToast('Error','Debe seleccionar una especialidad antes de guardar los cambios.');
+        const selectDestino = document.querySelector('#seleccionar-destino').value;
+
+        if (selectDestino !== cita.idUbicacionDestino && (!especialidadSeleccionada || especialidadSeleccionada === '-- Seleccione una especialidad --')) {
+            showToast('Error', 'Debe seleccionar una especialidad antes de guardar los cambios.');
             return;
         }
 
         updateCita(cita.idCita);
     });
 }
+
 
 function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
@@ -187,8 +190,6 @@ function getRutas() {
                 getEspecialidadesByDestino(selectDestino.value, cita.especialidad);
             }
         })
-        .catch(error => {
-        });
 }
 
 getRutas();
@@ -261,7 +262,7 @@ async function updateCita(idCita) {
         $('#editarModal').modal('hide');
         setTimeout(function () {
             loadContent('appointmentsMade.html', 'mainContent');
-        }, 1500);
+        }, 2000);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
