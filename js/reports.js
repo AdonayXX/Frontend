@@ -700,7 +700,7 @@ async function exportarValeExcel() {
         try {
             const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
-            console.log("Datos del vale:", datosVale);
+    
 
         } catch (apiError) {
             console.error("Error al obtener los datos del vale:", apiError);
