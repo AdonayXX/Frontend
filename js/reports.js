@@ -796,8 +796,14 @@ async function exportarVale() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
+
+
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
+
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
+
             datosVale = response.data;
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
