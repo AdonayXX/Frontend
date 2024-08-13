@@ -11,6 +11,12 @@ async function generalesPdf() {
         const fromDate = new Date(document.getElementById('from').value);
         const toDate = new Date(document.getElementById('to').value);
 
+        
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
+
         const token = localStorage.getItem('token');
 
         const headers = {
@@ -364,6 +370,12 @@ async function generalesExcel() {
         const fromDate = new Date(document.getElementById('from').value);
         const toDate = new Date(document.getElementById('to').value);
 
+           
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
+
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -531,95 +543,184 @@ async function mantenimientoPdf() {
     try {
         const pdfUrl = '/documents/reporteMantenimiento.pdf';
 
+        // Fetch existing PDF
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
+        const existingPdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
-        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
+        // Create a new PDF document
+        const newPdfDoc = await PDFLib.PDFDocument.create();
+        const [templatePage] = await existingPdfDoc.copyPages(existingPdfDoc, [0]);
 
         const fromDate = new Date(document.getElementById('fromMaintenance').value);
         const toDate = new Date(document.getElementById('toMaintenance').value);
-
-        const token = localStorage.getItem('token');
-
-        const headers = {
-            'Authorization': `Bearer ${token}`
-        };
-
-        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
-        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
-        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
-        const datosVales = response1.data.vales;
-        const datosRegistros = response2.data.registros;
-        const datosCitas = response3.data;
+        const idActividad = document.getElementById('actividad').value; // Asegúrate de tener este input en tu HTML
+        const unidad = document.getElementById('equipo').value; // Asegúrate de tener este input en tu HTML
+    
 
 
-
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
+           
+      
         const fechaCreacion = new Date();
         const fechaCreacionString = fechaCreacion.toLocaleDateString();
         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-
-
-        const firstPage = pdfDoc.getPages()[0];
-        const { width, height } = firstPage.getSize();
-
-        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+        
+        // Adjust dates by one day
         const adjustedFromDate = new Date(fromDate);
-        adjustedFromDate.setDate(adjustedFromDate.getDate() + 1);
-
+        adjustedFromDate.setDate(adjustedFromDate.getDate() + 1 );
         const adjustedToDate = new Date(toDate);
         adjustedToDate.setDate(adjustedToDate.getDate() + 1);
 
+        // Construct the API URL with the date range parameters
+            // Construct the API URL with the date range, activity ID, and unit parameters
+            let apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porFecha?fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
 
-        firstPage.drawText(` De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
-            x: 321,
-            y: height - 140,
-            size: 10,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
+            if (idActividad) {
+                apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porActividad?IdActividad=${idActividad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+            }
 
-        firstPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
-            x: 590,
-            y: height - 523,
-            size: 8,
-            font: helveticaFont,
-            color: PDFLib.rgb(0, 0, 0),
-        });
+            if (unidad) {
+                apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porUnidad?id=${unidad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+            }    
+
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+
+    
+        // Get mantenimiento data from the API
+        const response = await axios.get(apiUrl, { headers });
+        const mantenimientos = response.data.mantenimiento;
 
 
+        // Embed font for adding text
+        const helveticaFont = await newPdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
+        // Create a page for each mantenimiento
+        for (const mantenimiento of mantenimientos) {
+            // Create a new page and add the template content
+            const [newPage] = await newPdfDoc.copyPages(existingPdfDoc, [0]);
+            newPdfDoc.addPage(newPage);
 
+            const { height } = newPage.getSize();
 
-        const pdfBytes = await pdfDoc.save();
-        const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
+            // Add maintenance details on the page
+            newPage.drawText(`De: ${adjustedFromDate.toLocaleDateString()} Hasta: ${adjustedToDate.toLocaleDateString()}`, {
+                x: 321,
+                y: height - 140,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
 
-        const blob = base64ToBlob(firstPageBytes, 'application/pdf');
+            newPage.drawText(`Creado el ${fechaCreacionString} a las ${horaCreacionString}`, {
+                x: 590,
+                y: height - 523,
+                size: 8,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+
+            //YA COLOCADO
+            newPage.drawText(`${mantenimiento.numeroUnidad}`, {
+                x: 443,
+                y: height - 247,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            newPage.drawText(`${mantenimiento.kilometrajeActual}`, {
+                x: 443,
+                y: height - 260,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            
+            newPage.drawText(`${mantenimiento.KilometrajeMantenimiento}`, {
+                x: 443,
+                y: height - 273,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+            
+
+            newPage.drawText(`${mantenimiento.Detalle}`, {
+                x: 443,
+                y: height - 295,
+                size: 10,
+                font: helveticaFont,
+                color: PDFLib.rgb(0, 0, 0),
+            });
+
+          
+            let actividadYPosition = height - 328;
+            mantenimiento.Actividades.forEach((actividad, index) => {
+                const descripcion = `${actividad.Descripcion}`;
+                const cantidad = `${actividad.Cantidad}`;
+                const unidadMedida = `${actividad.UnidadMedida}`;
+            
+                newPage.drawText(descripcion, {
+                    x: 80,
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+
+                newPage.drawText(cantidad, {
+                    x: 443,
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+     
+                newPage.drawText(unidadMedida, {
+                    x: 585, 
+                    y: actividadYPosition,
+                    size: 10,
+                    font: helveticaFont,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+            
+                actividadYPosition -= 14;
+            });
+        }            
+
+        // Save the new PDF document
+        const pdfBytes = await newPdfDoc.save();
+
+        // Create a blob from the updated PDF and trigger download
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'Reportes_ASU_Mantenimiento.pdf';
         link.click();
 
-
-        function base64ToBlob(base64, type) {
-            const binaryString = window.atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; ++i) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return new Blob([bytes], { type });
-        }
-
     } catch (error) {
+        console.error('Error generating PDF:', error);
     }
 }
-
 
 
 async function mantenimientoExcel() {
     try {
         const fromDate = new Date(document.getElementById('fromMaintenance').value);
         const toDate = new Date(document.getElementById('toMaintenance').value);
+
+        if (fromDate > toDate) {
+            showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+            return;
+        }
 
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
@@ -761,6 +862,10 @@ async function exportarVale() {
                     alert('Por favor, seleccione ambas fechas.');
                     return;
                 }
+                if (fechaInicio > fechaFin) {
+                    showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+                    return;
+                }
         
                 // Obtener el token
                 const token = localStorage.getItem('token');
@@ -874,6 +979,11 @@ async function exportarVale() {
                     alert('Por favor, seleccione ambas fechas.');
                     return;
                 }
+                if (fechaInicio > fechaFin) {
+                    showToast("Aviso", "La fecha de inicio no puede ser mayor a la fecha de fin.");
+                    return;
+                }
+        
 
                 // Obtener el token
                 const token = localStorage.getItem('token');
@@ -977,3 +1087,76 @@ async function exportarVale() {
                 console.error('Error:', error);
             }
         }
+
+
+
+(() => {
+    let idActividadSeleccionada = null;
+    let idUnidadSeleccionada = null;
+    
+    function cargarUnidadesActivas() {
+        const url = 'https://backend-transporteccss.onrender.com/api/unidades';
+        const token = localStorage.getItem('token');
+    
+        axios.get(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            const unidades = response.data.unidades;
+            const unidadesActivas = unidades.filter(unidad => unidad.idEstado === 1);
+            const equipoSelect = document.getElementById('equipo');
+    
+            equipoSelect.innerHTML = '<option value="" selected>Selecciona un equipo</option>';
+    
+            unidadesActivas.forEach(unidad => {
+                const option = document.createElement('option');
+                option.value = unidad.id; // Aquí guardamos el id de la unidad
+                option.textContent = `Unidad ${unidad.numeroUnidad}`;
+                equipoSelect.appendChild(option);
+            });
+    
+            // Manejar la selección del usuario
+            equipoSelect.addEventListener('change', function() {
+                idUnidadSeleccionada = this.value; 
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener las unidades:', error);
+        });
+    }
+    function cargarActividades() {
+        const url = 'https://backend-transporteccss.onrender.com/api/actividad';
+        const token = localStorage.getItem('token');
+    
+        axios.get(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            const actividades = response.data.actividades;
+            const actividadSelect = document.getElementById('actividad');
+    
+            actividadSelect.innerHTML = '<option value="" selected>Selecciona una actividad</option>';
+    
+            actividades.forEach(actividad => {
+                const option = document.createElement('option');
+                option.value = actividad.IdActividad; // Aquí guardamos el IdActividad
+                option.textContent = actividad.Descripcion;
+                actividadSelect.appendChild(option);
+            });
+    
+            // Manejar la selección del usuario
+            actividadSelect.addEventListener('change', function() {
+                idActividadSeleccionada = this.value; 
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener las actividades:', error);
+        });
+    }
+    cargarActividades();
+    cargarUnidadesActivas();
+})();
