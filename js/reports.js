@@ -803,14 +803,13 @@ async function exportarVale() {
 
         try {
             const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
-
             datosVale = response.data;
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
         }
 
-        console.log('Datos del vale:', datosVale);
+
         const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
@@ -822,8 +821,8 @@ async function exportarVale() {
 
         const worksheet = workbook.getWorksheet(1);
         const valeData = datosVale.vale;
-        const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
-        const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+        const fechaSolicitud = valeData.Fecha_Solicitud ? new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0] : '';
+        const horaSalida = valeData.Hora_Salida ? valeData.Hora_Salida.split(':').slice(0, 2).join(':') : '';
 
         worksheet.getCell('B8:C8').value = fechaSolicitud;
         worksheet.getCell('K8').value = valeData.IdUnidadProgramatica;
