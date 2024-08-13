@@ -57,7 +57,7 @@ async function loadCitas() {
         });
         setTimeout(function () {
             $('#TableAppointment').DataTable().search('iniciada').draw();
-        }, 1)
+        }, 1000)
         ocultarSpinner();
     } catch (error) {
         showToast("Error", "Error al obtener las citas.");
