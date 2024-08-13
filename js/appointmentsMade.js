@@ -150,22 +150,18 @@ function editarCita(cita) {
     document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
     document.querySelector('#tipoSeguro').value = cita.tipoSeguro;
 
-    // Llamamos a getEspecialidadesByDestino para cargar las especialidades disponibles
     getEspecialidadesByDestino(cita.idUbicacionDestino, cita.especialidad);
 
     document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const especialidadSeleccionada = document.querySelector('#especialidad').value;
-        const selectDestino = document.querySelector('#seleccionar-destino').value;
 
-        // Verifica si se ha seleccionado una especialidad antes de guardar
         if (!especialidadSeleccionada || especialidadSeleccionada === '-- Seleccione una especialidad --') {
             showToast('Error', 'Debe seleccionar una especialidad antes de guardar los cambios.');
             return;
         }
 
-        // Llama a la función de actualización de la cita
         updateCita(cita.idCita);
     });
 }
