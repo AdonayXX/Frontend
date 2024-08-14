@@ -25,7 +25,7 @@
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
     return;
   }
 

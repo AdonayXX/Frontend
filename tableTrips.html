@@ -12,7 +12,7 @@
     <div class="col-sm-3 search-bar input-group m-2">
       <span class="input-group-text" id="lupa">
         <i class="bi bi-search"></i>
-    </span>
+      </span>
       <input type="text" class="form-control" id="searchTrips" placeholder="Buscar...">
     </div>
   </div>
@@ -29,8 +29,8 @@
       <label for="fechaInicio" class="form-label">Fecha Inicio</label>
       <input type="date" id="fechaInicio" class="form-control">
     </div>
-  
- 
+
+
     <div class="col-md-3">
       <label for="choferes" class="form-label">Chóferes</label>
       <select id="choferes" class="form-select">
@@ -42,20 +42,20 @@
 
   <div class="row mb-3 justify-content-center">
     <div class="col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-        <button class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
+      <button class="btn btn-primary" id="confirmarViajesBtn">Confirmar</button>
     </div>
-</div>
+  </div>
 
 
 
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableTrips','Datos Viajes')" data-bs-toggle="tooltip" data-bs-placement="top"
-      title="Exportar a PDF">
-      <img src="img/icons8-pdf.svg" alt="PDF Icon">
+    <button class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableTrips','Datos Viajes')"
+      data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
+      <img src="./img/icons8-pdf.svg" alt="PDF Icon">
     </button>
-    <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableTrips','Datos Viajes')" data-bs-toggle="tooltip"
-      data-bs-placement="top" title="Exportar a Excel">
-      <img src="img/icons8-excel.svg" alt="Excel Icon">
+    <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableTrips','Datos Viajes')"
+      data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
+      <img src="./img/icons8-excel.svg" alt="Excel Icon">
     </button>
   </div>
 
@@ -86,7 +86,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" style="background-color:#094079; color: white;">
-        <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+        <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
         <h5 class="modal-title" id="ausenteModalLabel">Motivo de Ausencia</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -94,17 +94,18 @@
         <div class="mb-3">
           <label for="motivoAusencia" class="form-label">Seleccionar Motivo</label>
           <select id="motivoAusencia" class="form-select">
-            <option value="Se durmió">Se durmió</option>
-            <option value="Se murió">Se murió</option>
-            <option value="Se extravió">Se extravió</option>
-            <option value="Otra razón">Otra razón</option>
+            <option value="Rechaza traslado">Rechaza Traslado</option>
+            <option value="Fallecimiento">Fallecimiento</option>
+            <option value="Internamiento">Internamiento</option>
+            <option value="Reprogramación de cita">Reprogramación de cita</option>
+            <option value="Condición de salud">Condición de salud</option>
           </select>
         </div>
         <input type="hidden" id="ausenteCitaId">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  id="guardarAusenciaBtn">Guardar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="guardarAusenciaBtn">Guardar</button>
       </div>
     </div>
   </div>
@@ -116,7 +117,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header text-white d-flex align-items-center" style="background-color: #094079;">
-        <img src="img/LogoCCSS.png" class="img-fluid p-1 me-2" alt="Logo CCSS" width="50" height="50">
+        <img src="./img/LogoCCSS.png" class="img-fluid p-1 me-2" alt="Logo CCSS" width="50" height="50">
         <h5 class="modal-title" id="confirmModalLabel">Confirmar Creación de Viajes</h5>
         <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -127,12 +128,13 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" id="confirmarViajesBtnModal" data-bs-dismiss="modal">Confirmar</button>
+        <button type="button" class="btn btn-primary" id="confirmarViajesBtnModal"
+          data-bs-dismiss="modal">Confirmar</button>
       </div>
     </div>
   </div>
 </div>
 
-<div data-script="js/dataTrips.js"></div>
-<div data-script="js/dataexport.js"></div>
-<div data-script="js/exportarpdf.js"></div>
+<div data-script="./js/dataTrips.js"></div>
+<div data-script="./js/dataexport.js"></div>
+<div data-script="./js/exportarpdf.js"></div>

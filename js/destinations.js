@@ -59,7 +59,7 @@ async function loadEspecialidades() {
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: '/assets/json/Spanish.json',
+                url: './assets/json/Spanish.json',
                 paginate: {
                     previous: 'Anterior',
                     next: 'Siguiente',
@@ -424,7 +424,7 @@ async function loadDestinations2() {
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true

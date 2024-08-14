@@ -4,7 +4,7 @@
   const token = localStorage.getItem('token');
   if (!token) {
     // Redirigir al usuario a la página de inicio de sesión
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   }
 
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
@@ -23,7 +23,7 @@
     error => {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
       }
       return Promise.reject(error);
     }
@@ -168,7 +168,7 @@
         searching: true,
         paging: true,
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
       });
 

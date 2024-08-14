@@ -34,7 +34,7 @@ async function getUserPermission() {
               searching: true,
               paging: true,
               language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
               caseInsensitive: true,
               smart: true

@@ -94,7 +94,7 @@ async function exportToExcel(tableId, page) {
     };
 
     // Añadir una imagen (logo) a la izquierda
-    const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
+    const logoUrl = './img/logo_ccss_azul.png'; // URL del logo
     const logoResponse = await fetch(logoUrl);
     const logoBuffer = await logoResponse.arrayBuffer();
 

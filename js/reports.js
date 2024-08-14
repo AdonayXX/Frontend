@@ -2,7 +2,7 @@
 
 async function generalesPdf() {
     try {
-        const pdfUrl = '/documents/reporteGeneral.pdf';
+        const pdfUrl = './documents/reporteGeneral.pdf';
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -448,7 +448,7 @@ async function generalesExcel() {
             return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
         });
 
-        const response = await fetch('/documents/reporteGeneral.xlsx');
+        const response = await fetch('./documents/reporteGeneral.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
@@ -540,7 +540,7 @@ async function generalesExcel() {
 
 // async function mantenimientoPdf() {
 //     try {
-//         const pdfUrl = '/documents/reporteMantenimiento.pdf';
+//         const pdfUrl = './documents/reporteMantenimiento.pdf';
 
 //         // Fetch existing PDF
 //         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
@@ -742,7 +742,7 @@ async function generalesExcel() {
 //         const fechaCreacionString = fechaCreacion.toLocaleDateString();
 //         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-//         const response = await fetch('/documents/reporteMantenimiento.xlsx');
+//         const response = await fetch('./documents/reporteMantenimiento.xlsx');
 //         const arrayBuffer = await response.arrayBuffer();
 //         const workbook = new ExcelJS.Workbook();
 //         await workbook.xlsx.load(arrayBuffer);
@@ -809,7 +809,7 @@ async function exportarValePdf() {
             return;
         }
 
-        const pdfUrl = '/documents/ReporteValePDF.pdf';
+        const pdfUrl = './documents/ReporteValePDF.pdf';
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
@@ -973,7 +973,7 @@ async function exportarValeExcel() {
         const headers = { 'Authorization': `Bearer ${token}` };
 
         try {
-            const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
+            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
     
 
@@ -984,7 +984,7 @@ async function exportarValeExcel() {
         }
 
 
-        const responseExcel = await fetch('documents/ReporteVale.xlsx');
+        const responseExcel = await fetch('./documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
         }
@@ -1082,7 +1082,7 @@ async function exportarValeExcel() {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('landscape');
         
-                    const logoUrl = '/img/logo_ccss_azul.png';
+                    const logoUrl = './img/logo_ccss_azul.png';
                     const logoResponse = await fetch(logoUrl);
                     const logoBlob = await logoResponse.blob();
                     const reader = new FileReader();
@@ -1192,7 +1192,7 @@ async function exportarValeExcel() {
                     const worksheet = workbook.addWorksheet('Datos');
 
                     // Añadir una imagen (logo) a la izquierda
-                    const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
+                    const logoUrl = './img/logo_ccss_azul.png'; // URL del logo
                     const logoResponse = await fetch(logoUrl);
                     const logoBuffer = await logoResponse.arrayBuffer();
 

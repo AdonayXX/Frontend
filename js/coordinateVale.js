@@ -5,12 +5,14 @@
     var url = 'https://backend-transporteccss.onrender.com/';
     const btnAdd = document.getElementById('btn-agregarSoli');
     let isCero = 1;
+    
 
     if (idVale) {
         readVale(idVale);
         sessionStorage.removeItem('selectedIdVale');
         readChofer();
         readUnidad();
+        readManager();
     } else {
         console.error('No se encontró el ID del vale en sessionStorage.');
     }
@@ -66,8 +68,13 @@
                             blockBtn();
                         }
                     }
-                    if (vale.Chofer == 0 || null) {
-                        selects();
+                    if (vale.Chofer === 1 || vale.Chofer === null) {
+                        let callChofer = 1;
+                        readChofer(callChofer);
+                        // selects(callChofer);
+                    }else{
+                        let callChofer = 0;
+                        readChofer(callChofer);
                     }
                     acompanantes(vale);
                     valeObject = vale;
@@ -89,7 +96,7 @@
                 }
             });
             if (valeObject.Chofer == 0 || null) {
-                selects();
+                // selects();
             }
 
         } catch (error) {
@@ -97,17 +104,17 @@
         }
     }
 
-    function selects() {
-        const selectElement = document.getElementById('select-chofer');
-        const newOption = document.createElement('option');
-        newOption.id = '0';
-        newOption.value = '0';
-        newOption.textContent = 'Chofer ASU';
-        selectElement.appendChild(newOption);
-        selectElement.value = '0';
-        selectElement.disabled = true;
-        isCero = 0;
-    }
+    // function selects() {
+    //     const selectElement = document.getElementById('select-chofer');
+    //     const newOption = document.createElement('option');
+    //     newOption.id = '0';
+    //     newOption.value = '0';
+    //     newOption.textContent = 'Chofer ASU';
+    //     selectElement.appendChild(newOption);
+    //     selectElement.value = '0';
+    //     selectElement.disabled = true;
+    //     isCero = 0;
+    // }
 
     function acompanantes(vale) {
         if (vale.Acompanante1 != null) {
@@ -170,7 +177,6 @@
                 Observaciones: "Agregando datos"
             };
             if (isCero == 0) {
-                console.log("siseñor");
                 coordinate.IdChofer = 25;
             }
             console.log(coordinate);
@@ -179,19 +185,26 @@
                     'Authorization': `Bearer ${token}`
                 }
             });
+    
             const dataTripVale = {
                 fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
-            }
-            console.log(dataTripVale);
-            await axios.post(`${url}api/viajeVale`, dataTripVale, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            };
+            const tripValeResponse = await axios.post(`${url}api/viajeVale`, dataTripVale, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
-            console.log('Datos guardados correctamente:', response.data);
-
+    
             return true;
         } catch (error) {
-            console.error('Error al guardar datos:', error.response ? error.response.data : error.message);
+            if (error.response) {
+                console.error('Error al guardar datos:', error.response.data);
+            } else if (error.request) {
+                console.error('Error al guardar datos: No se recibió respuesta del servidor', error.request);
+            } else {
+                console.error('Error al guardar datos:', error.message);
+            }
             showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
@@ -213,7 +226,7 @@
         }
     })
 
-    async function readChofer() {
+    async function readChofer(callChofer) {
         try {
             const response = await axios.get(`${url}api/chofer`, {
                 headers: {
@@ -223,10 +236,32 @@
             const choferes = response.data.choferes;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             choferes.forEach(chofer => {
-                body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                if (callChofer == chofer.autorizado ) {
+                    body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                } else if (callChofer == chofer.autorizado) {
+                    body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                }
             });
             document.getElementById('select-chofer').innerHTML = body;
 
+        } catch (error) {
+            console.error('No se cargaron los datos', error);
+        }
+    }
+
+    async function readManager() {
+        try {
+            const response = await axios.get(`${url}api/funcionarios`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const managers = response.data.funcionarios;
+            let body = '<option selected disabled value="">Seleccione una opción</option>';
+            managers.forEach(manager => {
+                body += `<option value="${manager.Nombre} ${manager.Apellidos}">${manager.Nombre} ${manager.Apellidos}</option>`;
+            });
+            document.getElementById('select-encargado').innerHTML = body;
         } catch (error) {
             console.error('No se cargaron los datos', error);
         }
@@ -255,12 +290,10 @@
         try {
             const valUrl = `${url}api/vales/actualizarEstado/${valueId}/${newIdEstado}`;
             const response = await axios.put(valUrl);
-            console.log('Campo actualizado correctamente:');
 
             if (newIdEstado === 2) {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido aprobado');
+
             } else {
-                showToast('Se ha modificado el estado del vale', 'El vale ha sido rechazado');
                 blockBtn();
             }
 
@@ -307,4 +340,3 @@ function infoUser() {
   const idUsuario = infoUsuario.usuario.IdUsuario;
 */
 })();
-

@@ -35,7 +35,7 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
         if (tokenUpper.includes(sqlKeywords[i])) {
             showToast("Atención", "El token contiene caracteres inválidos, por favor ingrese un valor válido.");
             setTimeout(() => {
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }, 3000);
             return;
         }
@@ -55,7 +55,7 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
             .then(function () {
                 showToast("¡Éxito!", "Contraseña actualizada correctamente.");
                 setTimeout(() => {
-                    window.location.href = "login.html";
+                    window.location.href = "index.html";
                 }, 2500);
             })
             .catch(function () {

@@ -78,7 +78,7 @@ async function exportToPDF(tableId, page) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('landscape');
 
-        const logoUrl = '/img/logo_ccss_azul.png';
+        const logoUrl = './img/logo_ccss_azul.png';
         const logoResponse = await fetch(logoUrl);
         const logoBlob = await logoResponse.blob();
         const reader = new FileReader();

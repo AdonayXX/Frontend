@@ -31,7 +31,7 @@ async function getPatientComp() {
         pageLength: 25,
         lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
         caseInsensitive: true,
         smart: true
