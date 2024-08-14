@@ -12,7 +12,7 @@
     //Funcion para obtener los ultimos ATAP
     async function getLastATAP() {
         try {
-            const API_URL = "https://backend-transporteccss.onrender.com/";
+            const API_URL = "http://10.30.153.34:3366/";
             const token = localStorage.getItem("token");
 
             const atapResponse = await axios.get(`${API_URL}api/mantenimientoATAP/last`, {
@@ -44,7 +44,7 @@
     // Función para obtener todos los ATAP
     async function getAllATAP() {
         try {
-            const API_URL = "https://backend-transporteccss.onrender.com/api/mantenimientoATAP/";
+            const API_URL = "http://10.30.153.34:3366/api/mantenimientoATAP/";
             const token = localStorage.getItem("token");
 
             // Obtener todos los registros de ATAP
@@ -122,7 +122,7 @@
             pageLength: 25,
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true,
@@ -271,7 +271,7 @@
                 return;
             }
 
-            const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${atapItem.IdMantenimientoATAP}`;
+            const API_URL = `http://10.30.153.34:3366/api/mantenimientoATAP/${atapItem.IdMantenimientoATAP}`;
             const token = localStorage.getItem('token');
             const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -329,7 +329,7 @@
         async function deleteControlKm(idMantenimiento) {
             try {
                 const token = localStorage.getItem('token');
-                const API_URL = `https://backend-transporteccss.onrender.com/api/mantenimientoATAP/${idMantenimiento}`;
+                const API_URL = `http://10.30.153.34:3366/api/mantenimientoATAP/${idMantenimiento}`;
                 const response = await axios.delete(API_URL, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -442,7 +442,7 @@
     async function getUnidades() {
         try {
             const token = localStorage.getItem("token");
-            const API_URL = "https://backend-transporteccss.onrender.com/api/unidades";
+            const API_URL = "http://10.30.153.34:3366/api/unidades";
 
             const response = await axios.get(API_URL, {
                 headers: {

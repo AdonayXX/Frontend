@@ -89,7 +89,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer', choferData, {
+            const response = await axios.post('http://10.30.153.34:3366/api/chofer', choferData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -167,7 +167,7 @@ async function getChofer(cedula) {
 
 
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`,{
+        const response = await axios.get(`http://10.30.153.34:3366/api/chofer/cedula/${cedula}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -290,7 +290,7 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
     };
 
     const token = localStorage.getItem('token');
-    axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
+    axios.put(`http://10.30.153.34:3366/api/chofer/${cedula}`, updatedDataChofer, {
         headers: {
             'Authorization': `Bearer ${token}`
         }

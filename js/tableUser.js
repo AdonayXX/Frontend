@@ -30,7 +30,7 @@ function getUserRegisterData() {
 //Funcion para guardar el usuario
 async function saveUser(userData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/usuario/';
+    const API_URL = 'http://10.30.153.34:3366/api/usuario/';
     const response = await axios.post(API_URL, userData);
     const userExist = response.data.usuario;
     showToast('Éxito!', 'Usuario registrado correctamente');
@@ -80,7 +80,7 @@ async function deleteButton(userId, nombreCompleto, identificacion) {
 // Función para eliminar usuarios
 async function deleteUser(userId) {
   try {
-    const API_URL = `https://backend-transporteccss.onrender.com/api/usuario/${userId}`;
+    const API_URL = `http://10.30.153.34:3366/api/usuario/${userId}`;
     const token = localStorage.getItem('token'); // Obtén el token de autenticación del almacenamiento local
 
     if (!token) {
@@ -104,7 +104,7 @@ async function deleteUser(userId) {
 async function getUserData() {
   mostrarSpinner();
   try {
-    const Api_Url = 'https://backend-transporteccss.onrender.com/';
+    const Api_Url = 'http://10.30.153.34:3366/';
     const token = localStorage.getItem('token');
     const response = await axios.get(`${Api_Url}api/usuario`, {
       headers: {
@@ -129,7 +129,7 @@ async function getUserData() {
         pageLength: 25, 
         lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
         caseInsensitive: true,
         smart: true
@@ -240,7 +240,7 @@ window.sendUserData = function (button) {
 
   async function editUserData(userData, userIdentification) {
     try {
-      const API_URL = `https://backend-transporteccss.onrender.com/api/usuario/identificacion/${userIdentification}`;
+      const API_URL = `http://10.30.153.34:3366/api/usuario/identificacion/${userIdentification}`;
       const token = localStorage.getItem('token');
       const response = await axios.put(API_URL, userData, {
         headers: {

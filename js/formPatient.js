@@ -63,7 +63,7 @@ function addPersona() {
 //2 Obtener Persona si  ya existe
 async function addPerson(personaData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const API_URL = 'http://10.30.153.34:3366/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.get(API_URL, {
       headers: {
@@ -98,7 +98,7 @@ async function addPerson(personaData) {
 async function addPeople(personaData) {
   try {
     console.log(personaData)
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
+    const API_URL = 'http://10.30.153.34:3366/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, personaData, {
       headers: {
@@ -190,7 +190,7 @@ function addDataPatient(IdPersonaCreada) {
 //6
 async function addPatient(pacienteData) {
   try {
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente';
+    const API_URL = 'http://10.30.153.34:3366/api/paciente';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, pacienteData, {
       headers: {
@@ -259,7 +259,7 @@ function addCompanion(idPaciente) {
 async function addComp(companionData) {
   try {
 
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+    const API_URL = 'http://10.30.153.34:3366/api/acompanantes';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, companionData, {
       headers: {

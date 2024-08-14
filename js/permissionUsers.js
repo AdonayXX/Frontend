@@ -3,7 +3,7 @@ getUserPermission();
 //Funcion para obtener los roles y formularios
 async function getUserPermission() {
     try {
-        const Api_Url = 'https://backend-transporteccss.onrender.com/';
+        const Api_Url = 'http://10.30.153.34:3366/';
         const token = localStorage.getItem('token');
 
         const rolesResponse = await axios.get(`${Api_Url}api/rolesCatalogo`, {
@@ -34,7 +34,7 @@ async function getUserPermission() {
               searching: true,
               paging: true,
               language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
               caseInsensitive: true,
               smart: true
@@ -171,7 +171,7 @@ document.querySelector('#formAddPermission').addEventListener('submit',function(
 async function addNewPermission(DataRolPermission) {
     try {
      
-        const Api_Url = 'https://backend-transporteccss.onrender.com/';
+        const Api_Url = 'http://10.30.153.34:3366/';
         const token = localStorage.getItem('token');
 
         const response = await axios.post(`${Api_Url}api/rolesCatalogo`,DataRolPermission, {
@@ -227,7 +227,7 @@ async function DeletePermiso(Idrol){
     async function deletePer(Idrol){
         try {
             const token = localStorage.getItem('token');
-            const API_URL = `https://backend-transporteccss.onrender.com/api/rolesCatalogo/${Idrol}`;
+            const API_URL = `http://10.30.153.34:3366/api/rolesCatalogo/${Idrol}`;
             const response = await axios.delete(API_URL,{
                 headers: {
                     'Authorization': `Bearer ${token}`

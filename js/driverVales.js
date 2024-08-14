@@ -25,7 +25,7 @@
   const token = localStorage.getItem('token');
   if (!token) {
     console.error("Token no encontrado en localStorage");
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
     return;
   }
 
@@ -41,7 +41,7 @@
   }
 
   async function obtenerUnidadAsignada(identificacion) {
-    const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
+    const API_CHOFERES_CON_UNIDADES = 'http://10.30.153.34:3366/api/chofer/unidades';
     try {
       const response = await axios.get(API_CHOFERES_CON_UNIDADES, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -55,7 +55,7 @@
   }
 
   async function obtenerIdUnidad(numeroUnidad) {
-    const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
+    const API_UNIDADES = 'http://10.30.153.34:3366/api/unidades';
     try {
       const response = await axios.get(API_UNIDADES, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -74,7 +74,7 @@
 
 
   async function obtenerVales(idUnidad, fecha) {
-    const API_VALES = `https://backend-transporteccss.onrender.com/api/viajeVale/${idUnidad}/${fecha}`;
+    const API_VALES = `http://10.30.153.34:3366/api/viajeVale/${idUnidad}/${fecha}`;
     console.log(API_VALES);
     try {
       const response = await axios.get(API_VALES, {
@@ -209,7 +209,7 @@
     const idUnidad = document.getElementById('unidadAsignadaVale').value;
 
     try {
-    const valeInfo=   await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
+    const valeInfo=   await axios.put('http://10.30.153.34:3366/api/viajeVale/viaje/revisionvale', {
         Indicador: 2,  //  para "En curso"
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'En curso',
@@ -265,7 +265,7 @@
     
 
     try {
-      await axios.put('https://backend-transporteccss.onrender.com/api/viajeVale/viaje/revisionvale', {
+      await axios.put('http://10.30.153.34:3366/api/viajeVale/viaje/revisionvale', {
         Indicador: 3,  
         idRevisionValeViaje: IdRevisionValeViaje,
         Estado: 'Finalizado',
@@ -299,7 +299,7 @@
     await finalizarVale(valeIdSeleccionado, revisionIdSeleccionado);
   }
   window.iniciarJornada = async function () {
-    const API_INICIARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/iniciarViajevale';
+    const API_INICIARJORNADA = 'http://10.30.153.34:3366/api/viajeVale/iniciarViajevale';
     const currentDate = new Date();
     const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; 
     const costaRicaTime = new Date(currentDate.getTime() - timeZoneOffset);
@@ -338,9 +338,9 @@
     const finJornada = costaRicaTime.toISOString().split('T')[1].split('.')[0];
     const horaFin = finJornada; 
     // console.log(horaFin);
-    const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
+    const API_OBTENER_ESTADO = `http://10.30.153.34:3366/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     // console.log(API_OBTENER_ESTADO);
-    const API_FINALIZARJORNADA = 'https://backend-transporteccss.onrender.com/api/viajeVale/viaje/finalizar';
+    const API_FINALIZARJORNADA = 'http://10.30.153.34:3366/api/viajeVale/viaje/finalizar';
 
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
@@ -375,7 +375,7 @@
     const today = new Date();
     const fecha = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     // console.log(fecha)
-    const API_OBTENER_ESTADO = `https://backend-transporteccss.onrender.com/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
+    const API_OBTENER_ESTADO = `http://10.30.153.34:3366/api/viajeVale/viaje/ViajeVale/${idUnidadObtenida}/${fecha}`;
     try {
       const response = await axios.get(API_OBTENER_ESTADO, {
         headers: { 'Authorization': `Bearer ${token}` }

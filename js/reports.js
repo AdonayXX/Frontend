@@ -2,7 +2,7 @@
 
 async function generalesPdf() {
     try {
-        const pdfUrl = '/documents/reporteGeneral.pdf';
+        const pdfUrl = './documents/reporteGeneral.pdf';
 
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
 
@@ -22,9 +22,9 @@ async function generalesPdf() {
             'Authorization': `Bearer ${token}`
         };
 
-        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
-        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
-        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
+        const response1 = await axios.get('http://10.30.153.34:3366/api/vales', { headers });
+        const response2 = await axios.get('http://10.30.153.34:3366/api/registrocombustible', { headers });
+        const response3 = await axios.get('http://10.30.153.34:3366/api/cita', { headers });
         const datosVales = response1.data.vales;
         const datosRegistros = response2.data.registros;
         const datosCitas = response3.data;
@@ -377,9 +377,9 @@ async function generalesExcel() {
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
 
-        const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
-        const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
-        const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
+        const response1 = await axios.get('http://10.30.153.34:3366/api/vales', { headers });
+        const response2 = await axios.get('http://10.30.153.34:3366/api/registrocombustible', { headers });
+        const response3 = await axios.get('http://10.30.153.34:3366/api/cita', { headers });
         const datosVales = response1.data.vales;
         const datosRegistros = response2.data.registros;
         const datosCitas = response3.data;
@@ -448,7 +448,7 @@ async function generalesExcel() {
             return fechaCita >= fromDate && fechaCita <= toDate && paciente.estadoCita === 'Finalizada';
         });
 
-        const response = await fetch('/documents/reporteGeneral.xlsx');
+        const response = await fetch('./documents/reporteGeneral.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
@@ -540,7 +540,7 @@ async function generalesExcel() {
 
 // async function mantenimientoPdf() {
 //     try {
-//         const pdfUrl = '/documents/reporteMantenimiento.pdf';
+//         const pdfUrl = './documents/reporteMantenimiento.pdf';
 
 //         // Fetch existing PDF
 //         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
@@ -576,14 +576,14 @@ async function generalesExcel() {
 
 //         // Construct the API URL with the date range parameters
 //             // Construct the API URL with the date range, activity ID, and unit parameters
-//             let apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porFecha?fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+//             let apiUrl = `http://10.30.153.34:3366/api/reporteMantenimiento/porFecha?fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
 
 //             if (idActividad) {
-//                 apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porActividad?IdActividad=${idActividad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+//                 apiUrl = `http://10.30.153.34:3366/api/reporteMantenimiento/porActividad?IdActividad=${idActividad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
 //             }
 
 //             if (unidad) {
-//                 apiUrl = `https://backend-transporteccss.onrender.com/api/reporteMantenimiento/porUnidad?id=${unidad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
+//                 apiUrl = `http://10.30.153.34:3366/api/reporteMantenimiento/porUnidad?id=${unidad}&fechaInicio=${fromDate.toISOString().split('T')[0]}&fechaFin=${toDate.toISOString().split('T')[0]}`;
 //             }    
 
 //         const token = localStorage.getItem('token');
@@ -724,9 +724,9 @@ async function generalesExcel() {
 //         const token = localStorage.getItem('token');
 //         const headers = { 'Authorization': `Bearer ${token}` };
 
-//         const response1 = await axios.get('https://backend-transporteccss.onrender.com/api/vales', { headers });
-//         const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/registrocombustible', { headers });
-//         const response3 = await axios.get('https://backend-transporteccss.onrender.com/api/cita', { headers });
+//         const response1 = await axios.get('http://10.30.153.34:3366/api/vales', { headers });
+//         const response2 = await axios.get('http://10.30.153.34:3366/api/registrocombustible', { headers });
+//         const response3 = await axios.get('http://10.30.153.34:3366/api/cita', { headers });
 //         const datosVales = response1.data.vales;
 //         const datosRegistros = response2.data.registros;
 //         const datosCitas = response3.data;
@@ -742,7 +742,7 @@ async function generalesExcel() {
 //         const fechaCreacionString = fechaCreacion.toLocaleDateString();
 //         const horaCreacionString = fechaCreacion.toLocaleTimeString();
 
-//         const response = await fetch('/documents/reporteMantenimiento.xlsx');
+//         const response = await fetch('./documents/reporteMantenimiento.xlsx');
 //         const arrayBuffer = await response.arrayBuffer();
 //         const workbook = new ExcelJS.Workbook();
 //         await workbook.xlsx.load(arrayBuffer);
@@ -802,14 +802,14 @@ async function exportarValePdf() {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            const response = await axios.get(`http://10.30.153.34:3366/api/vales/${idVale}`);
             datosVale = response.data;
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
             return;
         }
 
-        const pdfUrl = '/documents/ReporteValePDF.pdf';
+        const pdfUrl = './documents/ReporteValePDF.pdf';
         const existingPdfBytes = await axios.get(pdfUrl, { responseType: 'arraybuffer' });
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes.data);
 
@@ -973,7 +973,7 @@ async function exportarValeExcel() {
         const headers = { 'Authorization': `Bearer ${token}` };
 
         try {
-            const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
+            const response = await axios.get(`http://10.30.153.34:3366/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
     
 
@@ -984,7 +984,7 @@ async function exportarValeExcel() {
         }
 
 
-        const responseExcel = await fetch('documents/ReporteVale.xlsx');
+        const responseExcel = await fetch('./documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
             throw new Error('No se pudo descargar el archivo Excel');
         }
@@ -1058,7 +1058,7 @@ async function exportarValeExcel() {
                 const token = localStorage.getItem('token');
         
                 // Realizar la solicitud a la API usando Axios
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                const response = await axios.post('http://10.30.153.34:3366/api/reporteViaje', {
                     fechaInicio,
                     fechaFin
                 }, {
@@ -1082,7 +1082,7 @@ async function exportarValeExcel() {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF('landscape');
         
-                    const logoUrl = '/img/logo_ccss_azul.png';
+                    const logoUrl = './img/logo_ccss_azul.png';
                     const logoResponse = await fetch(logoUrl);
                     const logoBlob = await logoResponse.blob();
                     const reader = new FileReader();
@@ -1176,7 +1176,7 @@ async function exportarValeExcel() {
                 const token = localStorage.getItem('token');
 
                 // Realizar la solicitud a la API usando Axios
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/reporteViaje', {
+                const response = await axios.post('http://10.30.153.34:3366/api/reporteViaje', {
                     fechaInicio,
                     fechaFin
                 }, {
@@ -1192,7 +1192,7 @@ async function exportarValeExcel() {
                     const worksheet = workbook.addWorksheet('Datos');
 
                     // Añadir una imagen (logo) a la izquierda
-                    const logoUrl = '/img/logo_ccss_azul.png'; // URL del logo
+                    const logoUrl = './img/logo_ccss_azul.png'; // URL del logo
                     const logoResponse = await fetch(logoUrl);
                     const logoBuffer = await logoResponse.arrayBuffer();
 
@@ -1283,7 +1283,7 @@ async function exportarValeExcel() {
 //     let idUnidadSeleccionada = null;
     
 //     function cargarUnidadesActivas() {
-//         const url = 'https://backend-transporteccss.onrender.com/api/unidades';
+//         const url = 'http://10.30.153.34:3366/api/unidades';
 //         const token = localStorage.getItem('token');
     
 //         axios.get(url, {
@@ -1315,7 +1315,7 @@ async function exportarValeExcel() {
 //         });
 //     }
 //     function cargarActividades() {
-//         const url = 'https://backend-transporteccss.onrender.com/api/actividad';
+//         const url = 'http://10.30.153.34:3366/api/actividad';
 //         const token = localStorage.getItem('token');
     
 //         axios.get(url, {

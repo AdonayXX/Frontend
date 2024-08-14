@@ -7,7 +7,7 @@
     const idUsuario = infoUsuario.usuario.IdUsuario;
 
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 
     const elements = {
@@ -186,7 +186,7 @@
     async function getDrivers() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+            const response = await axios.get('http://10.30.153.34:3366/api/chofer', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -213,7 +213,7 @@
     async function getResourceTypeSelect() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
+            const response = await axios.get('http://10.30.153.34:3366/api/tiporecurso', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -229,7 +229,7 @@
     async function getUnitTypeSelect() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
+            const response = await axios.get('http://10.30.153.34:3366/api/tipounidad', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -245,7 +245,7 @@
     async function getUnits() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+            const response = await axios.get('http://10.30.153.34:3366/api/unidades', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -261,7 +261,7 @@
     async function getUnitType() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoUnidad', {
+            const response = await axios.get('http://10.30.153.34:3366/api/tipoUnidad', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -279,7 +279,7 @@
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, {
+            const response = await axios.get(`http://10.30.153.34:3366/api/unidades/${unitNumber}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -311,7 +311,7 @@
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://backend-transporteccss.onrender.com/api/unidades', data, {
+            await axios.post('http://10.30.153.34:3366/api/unidades', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -332,7 +332,7 @@
 
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, data, {
+            await axios.put(`http://10.30.153.34:3366/api/unidades/${unitNumber}`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -359,7 +359,7 @@
             try {
                 const token = localStorage.getItem('token');
                 data.idEstado = 5;
-                await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${unitNumber}`, data, {
+                await axios.put(`http://10.30.153.34:3366/api/unidades/${unitNumber}`, data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -377,7 +377,7 @@
     async function checkResourceType(tipoRecurso) {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tiporecurso', {
+            const response = await axios.get('http://10.30.153.34:3366/api/tiporecurso', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -407,7 +407,7 @@
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://backend-transporteccss.onrender.com/api/tiporecurso', data, {
+            await axios.post('http://10.30.153.34:3366/api/tiporecurso', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -425,7 +425,7 @@
     async function checkUnitType(tipoUnidad) {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipounidad', {
+            const response = await axios.get('http://10.30.153.34:3366/api/tipounidad', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -463,7 +463,7 @@
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://backend-transporteccss.onrender.com/api/tipounidad', data, {
+            await axios.post('http://10.30.153.34:3366/api/tipounidad', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -1,6 +1,6 @@
 (function () {
     const token = localStorage.getItem('token');
-    var url = 'https://backend-transporteccss.onrender.com/';
+    var url = 'http://10.30.153.34:3366/';
     const btnAdd = document.getElementById('btnGuardar');
     const btnRead = document.getElementById('btnBuscar');
     const btnUpdate = document.getElementById('btnActualizar');

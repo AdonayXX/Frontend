@@ -67,7 +67,7 @@ function openAccomp(acompanante1, acompanante2) {
   }
 
   async function obtenerUnidadAsignada(identificacion) {
-    const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
+    const API_CHOFERES_CON_UNIDADES = 'http://10.30.153.34:3366/api/chofer/unidades';
     try {
       const response = await axios.get(API_CHOFERES_CON_UNIDADES, {
         headers: {
@@ -82,7 +82,7 @@ function openAccomp(acompanante1, acompanante2) {
   }
 
   async function obtenerIdUnidad(numeroUnidad) {
-    const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades';
+    const API_UNIDADES = 'http://10.30.153.34:3366/api/unidades';
     try {
       const response = await axios.get(API_UNIDADES, {
         headers: {
@@ -108,7 +108,7 @@ function openAccomp(acompanante1, acompanante2) {
   }
 
   async function obtenerViajes(idUnidad, fechaValue) {
-    const apiURLViajes = `https://backend-transporteccss.onrender.com/api/viajeChofer/${idUnidad}/${fechaValue}`;
+    const apiURLViajes = `http://10.30.153.34:3366/api/viajeChofer/${idUnidad}/${fechaValue}`;
     try {
       const responseViajes = await axios.get(apiURLViajes, {
         headers: {
@@ -139,7 +139,7 @@ function openAccomp(acompanante1, acompanante2) {
   async function updateInitTrip(idUnidad, fechaValue, hourInitTrip) {
     const infoUsuario = await infoUser();
     const IdUsuario = infoUsuario?.usuario?.IdUsuario;
-    const API_INIT_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/start';
+    const API_INIT_TRIP = 'http://10.30.153.34:3366/api/viajeChofer/start';
 
     const hourInitTripFormatted = hourInitTrip.split(':').slice(0, 2).join(':') + ":00";
 
@@ -183,7 +183,7 @@ function openAccomp(acompanante1, acompanante2) {
     const hourFinishTrip = obtenerHoraActual();
     const idUnidad = await obtenerIdUnidad(document.getElementById('unidadAsignada').value);
 
-    const API_FINISH_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/end';
+    const API_FINISH_TRIP = 'http://10.30.153.34:3366/api/viajeChofer/end';
     try {
       await axios.put(API_FINISH_TRIP, {
         idUnidad,

@@ -1,6 +1,6 @@
 function openAccomp(cedula) {
     const token = localStorage.getItem('token');
-    const API_URL = `https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`;
+    const API_URL = `http://10.30.153.34:3366/api/chofer/cedula/${cedula}`;
     axios.get(API_URL,{
         headers: {
              'Authorization': `Bearer ${token}`
@@ -43,7 +43,7 @@ async function getChoferes() {
     try {
 
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer',{
+        const response = await axios.get('http://10.30.153.34:3366/api/chofer',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -66,7 +66,7 @@ async function getChoferes() {
                 pageLength: 25,
                 lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
                 language: {
-                    url: '/assets/json/Spanish.json'
+                    url: './assets/json/Spanish.json'
                 },
                 caseInsensitive: true,
                 smart: true

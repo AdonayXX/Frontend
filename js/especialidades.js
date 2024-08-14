@@ -1,7 +1,7 @@
 async function loadEspecialidades() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+        const response = await axios.get('http://10.30.153.34:3366/api/especialidad', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -24,7 +24,7 @@ async function loadEspecialidades() {
             pageLength: 25,
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true
@@ -69,7 +69,7 @@ async function deleteEspecialidad(idEspecialidad) {
     try {
         const token = localStorage.getItem('token');
 
-        await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`, {
+        await axios.delete(`http://10.30.153.34:3366/api/especialidad/${idEspecialidad}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -134,7 +134,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+        const response = await axios.get('http://10.30.153.34:3366/api/especialidad', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -154,7 +154,7 @@ document.getElementById('BtnGuardarEspe').addEventListener('click', async () => 
             Especialidad: nuevaEspecialidad
         };
 
-        await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData, {
+        await axios.post('http://10.30.153.34:3366/api/especialidad', especialidadData, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

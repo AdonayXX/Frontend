@@ -86,7 +86,7 @@ function getDataControlKm() {
 //Funcion post 
 async function postDataControlKm(dataControlKm,numplaca) {
     try {
-        const API_URL = "https://backend-transporteccss.onrender.com/api/mantenimientoATAP/";
+        const API_URL = "http://10.30.153.34:3366/api/mantenimientoATAP/";
         const response = await axios.post(API_URL, dataControlKm, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -113,7 +113,7 @@ async function postDataControlKm(dataControlKm,numplaca) {
 
 async function getUnidadPlaca(numUnidad) {
     try {
-        const API_URL = `https://backend-transporteccss.onrender.com/api/unidades/${numUnidad}`;
+        const API_URL = `http://10.30.153.34:3366/api/unidades/${numUnidad}`;
   
         const response = await axios.get(API_URL, {
             headers: {
@@ -173,7 +173,7 @@ async function actulizarUnidad( dataunidadplaca,kilometrajeActualizar,numplaca){
        valorFrecuenciaC,
        usuario
     }
-       const response = axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numplaca}`, dataUnidad, {
+       const response = axios.put(`http://10.30.153.34:3366/api/unidades/${numplaca}`, dataUnidad, {
         headers: {
             Authorization: `Bearer ${token}`
         },
@@ -232,7 +232,7 @@ function fillUnits(unidades){
 
 async function cargarUnidades() {
     try {
-        const API_URL = "https://backend-transporteccss.onrender.com/api/unidades";
+        const API_URL = "http://10.30.153.34:3366/api/unidades";
   
         const response = await axios.get(API_URL, {
             headers: {
@@ -274,7 +274,7 @@ function fillChoferes (choferes,idChofer){
 async function cargarChoferes() {
     try {
 
-        const API_URL = "https://backend-transporteccss.onrender.com/api/chofer";
+        const API_URL = "http://10.30.153.34:3366/api/chofer";
 
         // Hacer la solicitud con el token de autorización
         const response = await axios.get(API_URL, {

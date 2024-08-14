@@ -11,7 +11,7 @@ function ocultarSpinner() {
 async function getNombreChofer() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+        const response = await axios.get('http://10.30.153.34:3366/api/chofer', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -34,7 +34,7 @@ async function getNombreChofer() {
 async function getTiposRecurso() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/tipoRecurso', {
+        const response = await axios.get('http://10.30.153.34:3366/api/tipoRecurso', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -57,7 +57,7 @@ async function getTiposRecurso() {
 async function getEstadosUnidad() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/estadoUnidad', {
+        const response = await axios.get('http://10.30.153.34:3366/api/estadoUnidad', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -86,7 +86,7 @@ async function getUnidades() {
         ]);
 
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+        const response = await axios.get('http://10.30.153.34:3366/api/unidades', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -133,7 +133,7 @@ async function getUnidades() {
                 pageLength: 25, 
                 lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
                 language: {
-                    url: '/assets/json/Spanish.json'
+                    url: './assets/json/Spanish.json'
                 },
                 caseInsensitive: true,
                 smart: true

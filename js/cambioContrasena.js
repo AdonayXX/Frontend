@@ -35,7 +35,7 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
         if (tokenUpper.includes(sqlKeywords[i])) {
             showToast("Atención", "El token contiene caracteres inválidos, por favor ingrese un valor válido.");
             setTimeout(() => {
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }, 3000);
             return;
         }
@@ -51,11 +51,11 @@ document.getElementById("confirmar").addEventListener("click", function (event) 
             Contrasena: contra1
         };
 
-        axios.post('https://backend-transporteccss.onrender.com/api/reset-password/reset-password', payload)
+        axios.post('http://10.30.153.34:3366/api/reset-password/reset-password', payload)
             .then(function () {
                 showToast("¡Éxito!", "Contraseña actualizada correctamente.");
                 setTimeout(() => {
-                    window.location.href = "login.html";
+                    window.location.href = "index.html";
                 }, 2500);
             })
             .catch(function () {

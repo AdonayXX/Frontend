@@ -16,7 +16,7 @@
   }
 
   async function obtenerUnidadAsignada(identificacion) {
-      const API_CHOFERES_CON_UNIDADES = 'https://backend-transporteccss.onrender.com/api/chofer/unidades';
+      const API_CHOFERES_CON_UNIDADES = 'http://10.30.153.34:3366/api/chofer/unidades';
       try {
           const response = await axios.get(API_CHOFERES_CON_UNIDADES, {
               headers: {
@@ -31,7 +31,7 @@
   }
 
   async function fetchUnits() {
-      const API_UNIDADES = 'https://backend-transporteccss.onrender.com/api/unidades/tipoUnidad/Moto';
+      const API_UNIDADES = 'http://10.30.153.34:3366/api/unidades/tipoUnidad/Moto';
       try {
           const response = await axios.get(API_UNIDADES, {
               headers: {
@@ -105,7 +105,7 @@
 
   async function getUnitData() {
     const unidad = document.getElementById('unitSelect').value;
-    const API_UNIDAD = `https://backend-transporteccss.onrender.com/api/unidades/${unidad}`;
+    const API_UNIDAD = `http://10.30.153.34:3366/api/unidades/${unidad}`;
     
     try {
       const response = await axios.get(API_UNIDAD, {
@@ -153,7 +153,7 @@
     };
 
     try {
-      const response = await axios.post('https://backend-transporteccss.onrender.com/api/combustibleATAP', data, {
+      const response = await axios.post('http://10.30.153.34:3366/api/combustibleATAP', data, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -181,7 +181,7 @@
     }
 
     try {
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/combustibleATAP/numeroUnidad/${unidad}`, {
+        const response = await axios.get(`http://10.30.153.34:3366/api/combustibleATAP/numeroUnidad/${unidad}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -265,7 +265,7 @@ async function putRegistroCombustible() {
     console.log(data);
 
     try {
-        const response = await axios.put(`https://backend-transporteccss.onrender.com/api/combustibleATAP/${idCombustibleATAP}`, data, {
+        const response = await axios.put(`http://10.30.153.34:3366/api/combustibleATAP/${idCombustibleATAP}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -287,7 +287,7 @@ async function putRegistroCombustible() {
       }
 
       try {
-          await axios.delete(`https://backend-transporteccss.onrender.com/api/combustibleATAP/${idCombustibleATAP}`, {
+          await axios.delete(`http://10.30.153.34:3366/api/combustibleATAP/${idCombustibleATAP}`, {
               headers: {
                   'Authorization': `Bearer ${token}`
               }

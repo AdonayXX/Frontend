@@ -6,7 +6,7 @@ document.getElementById("confirmarCorreo").addEventListener("click", function (e
     if (emailPattern.test(email)) {
         const token = localStorage.getItem('token');
 
-        axios.post('https://backend-transporteccss.onrender.com/api/reset-password/forgot-password',
+        axios.post('http://10.30.153.34:3366/api/reset-password/forgot-password',
             { Correo: email },
             {
                 headers: {

@@ -4,7 +4,7 @@
   const token = localStorage.getItem('token');
   if (!token) {
     // Redirigir al usuario a la página de inicio de sesión
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   }
 
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
@@ -23,7 +23,7 @@
     error => {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
       }
       return Promise.reject(error);
     }
@@ -47,7 +47,7 @@
 
   async function cargarCitas() {
     try {
-      const URL_CITAS = 'https://backend-transporteccss.onrender.com/api/viajeCita';
+      const URL_CITAS = 'http://10.30.153.34:3366/api/viajeCita';
       const respuesta = await axios.get(URL_CITAS, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -60,7 +60,7 @@
 
   async function cargarViajes() {
     try {
-      const URL_VIAJES = 'https://backend-transporteccss.onrender.com/api/viaje';
+      const URL_VIAJES = 'http://10.30.153.34:3366/api/viaje';
       const respuesta = await axios.get(URL_VIAJES, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -73,7 +73,7 @@
 
   async function cargarRelacionesViajesCitas() {
     try {
-      const URL_RELACIONES = 'https://backend-transporteccss.onrender.com/api/viaje/relaciones';
+      const URL_RELACIONES = 'http://10.30.153.34:3366/api/viaje/relaciones';
       const respuesta = await axios.get(URL_RELACIONES, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -168,7 +168,7 @@
         searching: true,
         paging: true,
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
       });
 
@@ -225,7 +225,7 @@
   }
 
   async function desasociarCitaDelViaje(idCita) {
-    const url = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
+    const url = `http://10.30.153.34:3366/api/viaje/cita/${idCita}`;
 
     try {
       await axios.delete(url, {
@@ -260,7 +260,7 @@
 
   async function cargarUnidades() {
     try {
-      const URL_UNIDADES = 'https://backend-transporteccss.onrender.com/api/ViajeUnidades/ambulancia';
+      const URL_UNIDADES = 'http://10.30.153.34:3366/api/ViajeUnidades/ambulancia';
       const respuesta = await axios.get(URL_UNIDADES, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -389,12 +389,12 @@
       Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
     };
 
-    const getIdViaje = `https://backend-transporteccss.onrender.com/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
+    const getIdViaje = `http://10.30.153.34:3366/api/viaje/unidades/${idUnidad}/${fechaInicio}`;
     const idViaje = await returnIdViaje(getIdViaje);
 
     if (idViaje === "Error") {
       try {
-        await axios.post('https://backend-transporteccss.onrender.com/api/viaje', nuevoViaje, {
+        await axios.post('http://10.30.153.34:3366/api/viaje', nuevoViaje, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         showToast('Éxito', 'Viaje creado exitosamente');
@@ -409,7 +409,7 @@
         Citas: citasSeleccionadas.map(cita => ({ Idcita: cita.idCita }))
       };
       try {
-        await axios.put(`https://backend-transporteccss.onrender.com/api/viaje/actualizar/viajeCita`, asignarCita, {
+        await axios.put(`http://10.30.153.34:3366/api/viaje/actualizar/viajeCita`, asignarCita, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         showToast('Éxito', 'Citas asignadas al viaje exitosamente');
@@ -437,8 +437,8 @@
     const idCita = document.getElementById('ausenteCitaId').value;
     const motivoAusencia = document.getElementById('motivoAusencia').value;
 
-    const url = `https://backend-transporteccss.onrender.com/api/cita/${idCita}`;
-    const urlDesasociarCita = `https://backend-transporteccss.onrender.com/api/viaje/cita/${idCita}`;
+    const url = `http://10.30.153.34:3366/api/cita/${idCita}`;
+    const urlDesasociarCita = `http://10.30.153.34:3366/api/viaje/cita/${idCita}`;
 
     const datosAusencia = {
       ausente: motivoAusencia,

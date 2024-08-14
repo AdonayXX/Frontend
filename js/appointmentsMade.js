@@ -1,7 +1,7 @@
 async function loadCitas() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita', {
+        const response = await axios.get('http://10.30.153.34:3366/api/cita', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -20,7 +20,7 @@ async function loadCitas() {
             searching: true,
             paging: true,
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true,
@@ -167,7 +167,7 @@ function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
 
     const token = localStorage.getItem('token');
-    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', {
+    axios.get('http://10.30.153.34:3366/api/rutaEspecialidad', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -190,7 +190,7 @@ function getEspecialidadesByDestino(IdRuta, especialidadSeleccionada = '') {
     selectEspecialidad.innerHTML = '';
 
     const token = localStorage.getItem('token');
-    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`, {
+    axios.get(`http://10.30.153.34:3366/api/rutaEspecialidad/${IdRuta}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -242,7 +242,7 @@ async function updateCita(idCita) {
 
     try {
         const token = localStorage.getItem('token');
-        await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
+        await axios.put(`http://10.30.153.34:3366/api/cita/${idCita}`, updatedCitas, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

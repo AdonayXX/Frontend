@@ -16,7 +16,7 @@
   //Funcion para obtener los ultimos 20 mantenimientos para llenar la tabla
   async function getlastMaintenance() {
     try {
-      const Api_Url = "https://backend-transporteccss.onrender.com/";
+      const Api_Url = "http://10.30.153.34:3366/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -151,7 +151,7 @@
       pageLength: 25, 
       lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
       language: {
-        url: '/assets/json/Spanish.json'
+        url: './assets/json/Spanish.json'
     },
       caseInsensitive: true,
       smart: true,
@@ -169,7 +169,7 @@
   // Función para obtener todos los mantenimientos
   async function getMaintenance() {
     try {
-      const Api_Url = "https://backend-transporteccss.onrender.com/";
+      const Api_Url = "http://10.30.153.34:3366/";
       const token = localStorage.getItem("token");
 
       // Obtener datos de mantenimiento
@@ -341,7 +341,7 @@
   async function getActividades1() {
     try {
       const token = localStorage.getItem("token");
-      const API_URL = "https://backend-transporteccss.onrender.com/api/actividadMantenimiento";
+      const API_URL = "http://10.30.153.34:3366/api/actividadMantenimiento";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -373,7 +373,7 @@
       };
 
       const token = localStorage.getItem("token");
-      const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+      const API_URL = `http://10.30.153.34:3366/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
 
       const response = await axios.put(API_URL, ActividadData, {
         headers: {
@@ -536,7 +536,7 @@
     try {
       const token = localStorage.getItem("token");
       const API_URL =
-        "https://backend-transporteccss.onrender.com/api/tipounidad";
+        "http://10.30.153.34:3366/api/tipounidad";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -556,7 +556,7 @@
   async function getChoferNombre(idChofer) {
     try {
       const token = localStorage.getItem("token");
-      const API_URL = "https://backend-transporteccss.onrender.com/api/chofer";
+      const API_URL = "http://10.30.153.34:3366/api/chofer";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -576,7 +576,7 @@
     try {
       const token = localStorage.getItem("token");
       const API_URL =
-        "https://backend-transporteccss.onrender.com/api/unidades";
+        "http://10.30.153.34:3366/api/unidades";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -596,7 +596,7 @@
     try {
       const token = localStorage.getItem("token");
       const API_URL =
-        "https://backend-transporteccss.onrender.com/api/actividad/";
+        "http://10.30.153.34:3366/api/actividad/";
 
       const response = await axios.get(API_URL, {
         headers: {
@@ -664,7 +664,7 @@
 
       try {
         const token = localStorage.getItem("token");
-        const API_URL = "https://backend-transporteccss.onrender.com/api/mantenimiento";
+        const API_URL = "http://10.30.153.34:3366/api/mantenimiento";
         const response = await axios.post(API_URL, mantenimiento, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -807,8 +807,8 @@
 
      
 
-          const API_URL = `https://backend-transporteccss.onrender.com/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
-          const API_URL2 = `https://backend-transporteccss.onrender.com/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
+          const API_URL = `http://10.30.153.34:3366/api/actividadMantenimiento/${activ.foundActivity.IdActividadMantenimiento}`;
+          const API_URL2 = `http://10.30.153.34:3366/api/mantenimiento/${maintenanceItem.IdMantenimiento}`;
           const token = localStorage.getItem('token');
           const headers = { 'Authorization': `Bearer ${token}` };
 
@@ -995,7 +995,7 @@
   }
   async function getActividades() {
     try {
-      const Api_Url = "https://backend-transporteccss.onrender.com/";
+      const Api_Url = "http://10.30.153.34:3366/";
       const token = localStorage.getItem("token");
 
       const response = await axios.get(`${Api_Url}api/actividad`, {
@@ -1072,7 +1072,7 @@
   //Funcion para agregar una actividad
   async function addActivity(activityData) {
     try {
-      const API_URL = "https://backend-transporteccss.onrender.com/api/actividad";
+      const API_URL = "http://10.30.153.34:3366/api/actividad";
       const token = localStorage.getItem("token");
       const response = await axios.post(API_URL, activityData, {
         headers: {
@@ -1101,7 +1101,7 @@
   window.deleteActividad = async function (idActividad) {
     try {
       const token = localStorage.getItem('token');
-      const API_URL = `https://backend-transporteccss.onrender.com/api/actividad/${idActividad}`;
+      const API_URL = `http://10.30.153.34:3366/api/actividad/${idActividad}`;
       const response = await axios.delete(API_URL, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -1176,7 +1176,7 @@
       const token = localStorage.getItem("token"); // Obtén el token desde el almacenamiento local
 
       // Hacer la petición PUT para actualizar la unidad
-      const response = await axios.put(`https://backend-transporteccss.onrender.com/api/unidades/${numeroUnidad}`, unidadData, {
+      const response = await axios.put(`http://10.30.153.34:3366/api/unidades/${numeroUnidad}`, unidadData, {
         headers: {
           Authorization: `Bearer ${token}` // Añadir el token en el encabezado de la petición
         }

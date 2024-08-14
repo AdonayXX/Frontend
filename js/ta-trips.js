@@ -1,4 +1,4 @@
-const apiUrl = "https://backend-transporteccss.onrender.com/api/viaje";
+const apiUrl = "http://10.30.153.34:3366/api/viaje";
 
 document.addEventListener("DOMContentLoaded", () => {
     const unidadesSelect = document.getElementById('unidades');

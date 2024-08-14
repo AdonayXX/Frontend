@@ -25,7 +25,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
         try {
 
             const token = localStorage.getItem('token');
-            const API_URL = `https://backend-transporteccss.onrender.com/api/paciente`;
+            const API_URL = `http://10.30.153.34:3366/api/paciente`;
             const response = await axios.get(API_URL, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -71,7 +71,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
 
             const token = localStorage.getItem('token');
-            const API_URL_ACOMPANANTE = `https://backend-transporteccss.onrender.com/api/paciente/acompanantes/seguro/${identificacion}`;
+            const API_URL_ACOMPANANTE = `http://10.30.153.34:3366/api/paciente/acompanantes/seguro/${identificacion}`;
             const response = await axios.get(API_URL_ACOMPANANTE, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -283,7 +283,7 @@ document.getElementById('identificacion').addEventListener('blur', async functio
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.post('https://backend-transporteccss.onrender.com/api/cita', 
+                const response = await axios.post('http://10.30.153.34:3366/api/cita', 
                     citaData, {
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -321,7 +321,7 @@ function getRutas() {
     const selectDestino = document.getElementById('destino');
 
     const token = localStorage.getItem('token');
-    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad',{
+    axios.get('http://10.30.153.34:3366/api/rutaEspecialidad',{
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -351,7 +351,7 @@ function getEspecialidadesByDestino(IdRuta) {
     selectEspecialidad.appendChild(defaultOption);
 
     const token = localStorage.getItem('token');
-    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`,{
+    axios.get(`http://10.30.153.34:3366/api/rutaEspecialidad/${IdRuta}`,{
         headers: {
             'Authorization': `Bearer ${token}`
         }

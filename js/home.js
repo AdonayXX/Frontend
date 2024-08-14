@@ -21,7 +21,7 @@ async function mostrarProximosViajes() {
         document.getElementById('fecha').textContent = fechaFormateada;
 
         const token = localStorage.getItem('token');
-        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/destinos',{
+        const viajesRespuesta = await axios.get('http://10.30.153.34:3366/api/viaje/destinos',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -113,7 +113,7 @@ async function contarCitasHome() {
         // Obtener datos de citas
         const token = localStorage.getItem('token');
 
-        const citasRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/cita',{
+        const citasRespuesta = await axios.get('http://10.30.153.34:3366/api/cita',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -124,7 +124,7 @@ async function contarCitasHome() {
         const dataCitas = citasRespuesta.data;
 
         // Obtener datos de viajes
-        const viajesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/viaje',{
+        const viajesRespuesta = await axios.get('http://10.30.153.34:3366/api/viaje',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -167,7 +167,7 @@ async function mostrarUnidadesPorDekra() {
         const hoyUTC = ahora.toISOString().split('T')[0];
 
         const token = localStorage.getItem('token');
-        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades',{
+        const unidadesRespuesta = await axios.get('http://10.30.153.34:3366/api/unidades',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -222,7 +222,7 @@ async function mostrarChoferesPorVencer() {
 
         const token = localStorage.getItem('token');
 
-        const choferesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/chofer',{
+        const choferesRespuesta = await axios.get('http://10.30.153.34:3366/api/chofer',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -281,7 +281,7 @@ async function mostrarUnidadesPorKilometraje() {
         const hoyUTC = ahora.toISOString().split('T')[0];
 
         const token = localStorage.getItem('token');
-        const unidadesRespuesta = await axios.get('https://backend-transporteccss.onrender.com/api/unidades',{
+        const unidadesRespuesta = await axios.get('http://10.30.153.34:3366/api/unidades',{
             headers: {
                 'Authorization': `Bearer ${token}`
             }

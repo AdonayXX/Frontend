@@ -1,7 +1,7 @@
 async function loadDestinations() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutas', {
+        const response = await axios.get('http://10.30.153.34:3366/api/rutas', {
 
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -33,7 +33,7 @@ async function loadEspecialidades() {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+        const response = await axios.get('http://10.30.153.34:3366/api/especialidad', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -59,7 +59,7 @@ async function loadEspecialidades() {
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: '/assets/json/Spanish.json',
+                url: './assets/json/Spanish.json',
                 paginate: {
                     previous: 'Anterior',
                     next: 'Siguiente',
@@ -86,13 +86,13 @@ async function loadEspecialidades() {
         const handleSelectDestinosChange = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', {
+                const response = await axios.get('http://10.30.153.34:3366/api/rutaEspecialidad', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
                 const rutas = response.data;
-                const response2 = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
+                const response2 = await axios.get('http://10.30.153.34:3366/api/especialidad', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -202,7 +202,7 @@ async function loadEspecialidades() {
 
                 const token = localStorage.getItem('token');
 
-                await axios.post('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', data, {
+                await axios.post('http://10.30.153.34:3366/api/rutaEspecialidad', data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -331,7 +331,7 @@ function toggleDeleteButton(checkbox) {
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
     const nuevaAbreviacion = document.getElementById('AgregarAbre').value.trim();
-    const apiUrl = 'https://backend-transporteccss.onrender.com/api/rutas';
+    const apiUrl = 'http://10.30.153.34:3366/api/rutas';
 
     if (!nuevaUbicacion || !nuevaAbreviacion) {
         showToast('Error', 'Ambos campos son obligatorios.');
@@ -400,7 +400,7 @@ async function loadDestinations2() {
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/rutas', {
+        const response = await axios.get('http://10.30.153.34:3366/api/rutas', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -424,7 +424,7 @@ async function loadDestinations2() {
             pagingType: 'simple_numbers',
             autoWidth: false,
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true
@@ -480,7 +480,7 @@ function createDeleteModal(idDestino) {
 async function deleteDestination(idRuta) {
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://backend-transporteccss.onrender.com/api/rutas/${idRuta}`, {
+        await axios.delete(`http://10.30.153.34:3366/api/rutas/${idRuta}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -514,7 +514,7 @@ async function deleteEspecialidad(idEspecialidad, idRuta) {
 
         const token = localStorage.getItem('token');
 
-        await axios.delete(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${idRuta}/${idEspecialidad}`, {
+        await axios.delete(`http://10.30.153.34:3366/api/rutaEspecialidad/${idRuta}/${idEspecialidad}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

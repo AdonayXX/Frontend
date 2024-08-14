@@ -7,7 +7,7 @@ async function getPatientComp() {
   mostrarSpinner();
   try {
     const token = localStorage.getItem('token');
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/paciente/acompanantes/';
+    const API_URL = 'http://10.30.153.34:3366/api/paciente/acompanantes/';
 
     const response = await axios.get(API_URL, {
       headers: {
@@ -31,7 +31,7 @@ async function getPatientComp() {
         pageLength: 25,
         lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
         caseInsensitive: true,
         smart: true
@@ -249,7 +249,7 @@ window.editAccomp = function (button) {
 
     try {
       const token = localStorage.getItem('token');
-      const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+      const API_URL = `http://10.30.153.34:3366/api/acompanantes/${IdAcompanante}`;
       const response = await axios.put(API_URL, companionData, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -372,13 +372,13 @@ window.patientEdit = function (button) {
   async function editPatientPerson(personaData, pacienteData) {
     try {
       const token = localStorage.getItem('token');
-      const API_URL_PERSONA = `https://backend-transporteccss.onrender.com/api/persona/${IdPersona}`;
+      const API_URL_PERSONA = `http://10.30.153.34:3366/api/persona/${IdPersona}`;
       const responsePersona = await axios.put(API_URL_PERSONA, personaData, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      const API_URL_PACIENTE = `https://backend-transporteccss.onrender.com/api/paciente/${IdPaciente}`;
+      const API_URL_PACIENTE = `http://10.30.153.34:3366/api/paciente/${IdPaciente}`;
       const responsePaciente = await axios.put(API_URL_PACIENTE, pacienteData, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -562,7 +562,7 @@ window.patientDelete = function (idPatient, nombreCompleto, identificacion) {
 async function deletePatient(patientId) {
   try {
     const token = localStorage.getItem('token');
-    const API_URL = `https://backend-transporteccss.onrender.com/api/paciente/${patientId}`;
+    const API_URL = `http://10.30.153.34:3366/api/paciente/${patientId}`;
     const response = await axios.delete(API_URL, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -646,7 +646,7 @@ function addCompanion(idPacienteCapturado) {
 async function agregarAcompanante(companionData) {
   try {
 
-    const API_URL = 'https://backend-transporteccss.onrender.com/api/acompanantes';
+    const API_URL = 'http://10.30.153.34:3366/api/acompanantes';
 
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, companionData, {
@@ -863,7 +863,7 @@ async function companionDelete(IdAcompanante, nombreCompleto, Identificacion) {
 }
 async function deleteComp(IdAcompanante) {
   try {
-    const API_URL = `https://backend-transporteccss.onrender.com/api/acompanantes/${IdAcompanante}`;
+    const API_URL = `http://10.30.153.34:3366/api/acompanantes/${IdAcompanante}`;
     const token = localStorage.getItem('token');
     const response = await axios.delete(API_URL, {
       headers: {

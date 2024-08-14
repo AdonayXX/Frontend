@@ -11,7 +11,7 @@ function ocultarSpinner() {
 async function getRegistrosCombustibleATAP() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/combustibleATAP', {
+        const response = await axios.get('http://10.30.153.34:3366/api/combustibleATAP', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -56,7 +56,7 @@ async function getRegistrosCombustibleATAP() {
                 pageLength: 25, 
                 lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
                 language: {
-                    url: '/assets/json/Spanish.json'
+                    url: './assets/json/Spanish.json'
                 },
                 caseInsensitive: true,
                 smart: true

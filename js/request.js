@@ -1,5 +1,5 @@
 (function () {
-    var url = 'https://backend-transporteccss.onrender.com/';
+    var url = 'http://10.30.153.34:3366/';
     async function getVales() {
         try {
             const response = await axios.get(`${url}api/vales`);
@@ -45,7 +45,7 @@
             pageLength: 25, 
             lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true

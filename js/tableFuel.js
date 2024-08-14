@@ -11,7 +11,7 @@ function ocultarSpinner() {
 async function getRegistrosCombustble() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/registroCombustible', {
+        const response = await axios.get('http://10.30.153.34:3366/api/registroCombustible', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -58,7 +58,7 @@ async function getRegistrosCombustble() {
                 lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
                 paging: true,
                 language: {
-                    url: '/assets/json/Spanish.json'
+                    url: './assets/json/Spanish.json'
                 },
                 caseInsensitive: true,
                 smart: true

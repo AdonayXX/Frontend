@@ -2,7 +2,7 @@ async function loadChoferes() {
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/chofer', {
+        const response = await axios.get('http://10.30.153.34:3366/api/chofer', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -27,7 +27,7 @@ async function loadUnidades() {
     try {
         const token = localStorage.getItem('token');
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/unidades', {
+        const response = await axios.get('http://10.30.153.34:3366/api/unidades', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -49,7 +49,7 @@ async function loadUnidades() {
 async function loadViajes() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/viaje/registro', {
+        const response = await axios.get('http://10.30.153.34:3366/api/viaje/registro', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -70,7 +70,7 @@ async function loadViajes() {
             pageLength: 25,
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true

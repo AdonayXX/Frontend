@@ -10,10 +10,10 @@
     const btnclearForm = document.getElementById('btnLimpiar');
     const token = localStorage.getItem('token');
     const rol = infoUsuario?.usuario?.Rol;
-    const apiUrl = 'https://backend-transporteccss.onrender.com/api/';
+    const apiUrl = 'http://10.30.153.34:3366/api/';
 
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 
     form.addEventListener('submit', handleSubmit);

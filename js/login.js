@@ -124,7 +124,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
         });
     }
     
-    var url = 'https://backend-transporteccss.onrender.com/';
+    var url = 'http://10.30.153.34:3366/';
     //Obtener Unidades
     function ObtenerUnidades() {
     

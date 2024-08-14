@@ -117,8 +117,8 @@ function setupAutoLogout(token) {
 function logout() {
     localStorage.removeItem('token');
     localStorage.setItem('sessionExpired', 'true');
-    history.replaceState(null, '', 'login.html');
-    window.location.href = 'login.html';
+    history.replaceState(null, '', 'index.html');
+    window.location.href = 'index.html';
 }
 
 function tokenrol(token) {
@@ -132,7 +132,7 @@ function tokenrol(token) {
 }
 async function getCatForm(rolUser) {
     try {
-        const Api_Url = 'https://backend-transporteccss.onrender.com/';
+        const Api_Url = 'http://10.30.153.34:3366/';
         const token = localStorage.getItem('token');
         const response = await axios.get(`${Api_Url}api/rolesCatalogo/`, {
             headers: {
@@ -221,7 +221,7 @@ function createSessionExpiredModal() {
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
-                     <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                     <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="a5ModalLabel" style="text-align: center;">Sesión
                         Expirada</h5>
                 </div>
@@ -257,8 +257,8 @@ function createSessionExpiredModal() {
 function redirectToLogin() {
     localStorage.removeItem('token');
     localStorage.setItem('sessionExpired', 'true');
-    window.location.href = 'login.html';
-    history.replaceState(null, '', 'login.html');
+    window.location.href = 'index.html';
+    history.replaceState(null, '', 'index.html');
 }
 
 
