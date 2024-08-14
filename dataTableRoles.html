@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla de Roles</title>
+</head>
+
+<body>
+    <div id="spinnerContainer">
+        <div class="loader"></div>
+    </div>
+    
+    <div class="fade-in">
+        <div class=" row justify-content-between align-items-center border-bottom m-2 p-2">
+            <div class="col text-center">
+                <br>
+                <h1 class="text-wrap">Catálogo de Permisos para los Roles de Usuario</h1>
+            </div>
+
+            <div class=" col-sm-3 search-bar input-group m-2">
+                <span class="input-group-text" id="lupa">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" id="searchPermission" placeholder="Buscar...">
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success bi bi-person-plus mx-4" id="addNewPermission" data-bs-toggle="modal"
+                data-bs-placement="top" data-bs-target="#addPermission">
+                Agregar Permiso
+            </button>
+        </div>
+        <div class="table-responsive-xxl mt-3">
+                <table class="table table-light table-striped table-hover table-bordered" id="tablePermission"
+                style="margin-left: 20px; margin-block: 10px;">
+                <thead>
+                    <tr>
+                        <th class="text-center" id="color-th">Rol</th>
+                        <th  class="text-center" id="color-th">Permiso</th>
+                        <th class="text-center" id="color-th">Fecha de Creacion</th>
+                        <th class="text-center" id="color-th">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="permission-body" class="text-center">
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade mt-5" id="addPermission" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#094079; color: white;">
+                    <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Permisos a Roles</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-1">
+                    <form action="" id="formAddPermission" method="post" class="bg-light p-4 border rounded-3">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 mb-3">
+                                <label for="rol" class="form-label"><i class="bi bi-person-rolodex"></i> Rol:</label>
+                                <select id="rolSelect" name="rol" class="form-select" required>
+                                    <option selected disabled value="">Seleccionar...</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="2">Chófer</option>
+                                    <option value="3">Consulta</option>
+                                    <option value="4">Coordinador</option>
+                                    <option value="5">Atap</option>
+
+
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="item" class="form-label"><i class="bi bi-info-circle"></i> Permiso:</label>
+                                <select id="item" name="item" class="form-select" required>
+                                    <option selected disabled value="">Seleccionar...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    
+                        <div class="row justify-content-end">
+                            <div class="col-md-3 mt-3 ">
+                                <button id="savePermission" type="submit" class="btn btn-primary mb-3">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <div class="modal fade mt-5" id="confirmDeletePermission" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#094079; color: white;">
+                <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Confirmación de Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyConfirmPermission">
+                    <!-- El contenido se actualizará dinámicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDeleteBtnPermission" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div data-script="/js/permissionUsers.js"></div>
+</body>
+
+</html>

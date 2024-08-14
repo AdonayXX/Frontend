@@ -1,0 +1,58 @@
+<div class="container mt-5 fade-in">
+    <h1 class="mb-4 text-center">Registro de Viajes</h1>
+    <form id="4" class="bg-light p-4 border rounded-3" name="formRegisterTrips">
+        <div class="mb-3">
+            <label for="citasAsociadas" class="form-label"><i class="bi bi-calendar-check"></i> Citas Asociadas</label>
+            <select id="citasAsociadas" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+            <label for="choferAsignado" class="form-label"><i class="bi bi-person"></i> Chofer Asignado</label>
+            <select id="choferAsignado" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+            <label for="capacidadRestante" class="form-label"><i class="bi bi-truck"></i> Capacidad Restante</label>
+            <input type="number" id="capacidadRestante" class="form-control" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="estadoViaje" class="form-label"><i class="bi bi-info-circle"></i> Estado del Viaje</label>
+            <select id="estadoViaje" class="form-select" onclick="handleEstadoChange()">
+                <option>Abierto</option>
+                <option>En curso</option>
+                <option>Cerrado</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="kilometrajeInicial" class="form-label"><i class="bi bi-speedometer2"></i> Kilometraje Inicial</label>
+            <input type="number" id="kilometrajeInicial" class="form-control" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="kilometrajeFinal" class="form-label"><i class="bi bi-speedometer"></i> Kilometraje Final</label>
+            <input type="number" id="kilometrajeFinal" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="horaInicio" class="form-label"><i class="bi bi-clock"></i> Hora de inicio</label>
+            <input type="datetime-local" id="horaInicio" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="horaFin" class="form-label"><i class="bi bi-clock-fill"></i> Hora de finalización</label>
+            <input type="datetime-local" id="horaFin" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="consumoCombustible" class="form-label"><i class="bi bi-fuel-pump"></i> Consumo de Combustible</label>
+            <input type="number" id="consumoCombustible" class="form-control">
+        </div>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-between">
+            <button type="submit" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Guardar Viaje">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+            <button type="button" class="btn btn-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Actualizar Viaje" onclick="actualizar()">
+                <i class="bi bi-pencil-square"></i> Actualizar
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar Viaje" onclick="cancelar()">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </button>
+        </div>
+    </form>
+    <script src="./js/script.js"></script>
+    
+</div>

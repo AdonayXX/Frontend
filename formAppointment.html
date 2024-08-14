@@ -1,0 +1,264 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de citas</title>
+</head>
+
+<style>
+    /* .masked-input {
+        width: 100%;
+        box-sizing: border-box;
+    } */
+</style>
+
+<body>
+
+    <div class="container mt-5 fade-in" style="max-width: 1100px;">
+        <h1 class="mb-4 text-center">Agendar Cita</h1>
+        <form name="formAppointment" id="2" class="bg-light p-4 border rounded-3">
+            <div class="form-section mt-1">
+                <h2>Datos del paciente:</h2>
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-4 mt-2">
+                        <label for="tipoIdentificacion" class="form-label"><i class="bi bi-card-list"></i> Tipo de Identificación:</label>
+                <select id="tipoIdentificacion" class="form-control">
+                    <option value="Cedula de Identidad">Cédula de Identidad</option>
+                    <option value="Número de Asegurado">Número de Asegurado</option>
+                    <option value="Interno">Interno</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mt-2">
+                <label for="identificacion" class="form-label"><i class="bi bi-card-list"></i> Identificación:</label>
+                <input type="text" id="identificacion" name="identificacion" maxlength="20" class="form-control masked-input" inputmode="numeric">
+            </div>
+                    
+                    <div class="col-md-4 mt-2">
+                        <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                  
+                    <div class="col-md-4 mb-3">
+                        <label for="primerApellido" class="form-label"><i class="bi bi-person-badge"></i> Primer Apellido:</label>
+                        <input type="text" id="primerApellido" name="primerApellido" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="segundoApellido" class="form-label"><i class="bi bi-person-badge"></i> Segundo Apellido:</label>
+                        <input type="text" id="segundoApellido" name="segundoApellido" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="telefonos" class="form-label"><i class="bi bi-telephone"></i> Teléfonos:</label>
+                        <input type="text" id="telefonos" name="telefono1" class="form-control" readonly>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Provincia -->
+                    <div class="col-md-4 mb-3">
+                        <label for="provincia" class="form-label"><i class="bi bi-compass"></i>
+                            Provincia: </label>
+                            <input type="text" id="provincia" name="provincia" class="form-control" readonly>
+                    </div>
+
+                    <!-- canton -->
+                    <div class="col-md-4 mb-3">
+                        <label for="canton" class="form-label"><i class="bi bi-geo"></i> Cantón:
+                        </label>
+                        <input type="text" id="canton" name="canton" class="form-control" readonly>
+
+                    </div>
+
+                    <!-- distrito -->
+                    <div class="col-md-4 mb-3">
+                        <label for="distrito" class="form-label"><i class="bi bi-map"></i> Distrito:
+                        </label>
+                        <input type="text" id="distrito" name="distrito" class="form-control" readonly>
+
+                    </div>
+                </div>
+
+               
+                <div class="row">
+                    <!-- barrio -->
+                     <div class="col-md-4 mb-3">
+                        <label for="barrio" class="form-label"><i class="bi bi-building"></i> Barrio: </label>
+                        <input type="text" id="barrio" name="barrio" class="form-control" readonly></input>
+                     </div>
+                    <!-- Direccion -->
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label"><i class="bi bi-house"></i> Otras señas: </label>
+                        <textarea  id="direccion" name="direccion" class="form-control" readonly></textarea>
+                    </div>
+                  
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="diagnostico" class="form-label"><i class="bi bi-file-earmark-text"></i> Diagnostico:</label>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" required maxlength="250" style="height: 50px;"></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de Seguro:</label>
+                        <select required id="tipoSeguro" name="tipoSeguro" class="form-select">
+                            <option selected disabled value="">Seleccionar</option>
+                            <option value="Asalariado">Asalariado</option>
+                            <option value="Independiente">Trabajador Independiente</option>
+                            <option value="Voluntario">Voluntario</option>
+                            <option value="Pensionado">Pensionado</option>
+                            <option value="Leyes o Decretos">Leyes o Decretos</option>
+                            <option value="Beneficio Familiar">Beneficio Familiar</option>
+                            <option value="Seguro por el Estado">Seguro por el Estado</option>
+                            <option value="Cargo al Estado">Protección con cargo al Estado</option>
+                        </select>
+                    </div>
+                   
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Prioridad:</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="prelacion" disabled>
+                        <label class="form-check-label" for="prelacion">SI</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label"><i class="bi bi-exclamation-circle"></i> Camilla:</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="camilla">
+                            <label class="form-check-label" for="camilla">SI</label>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="row align-items-center">
+                    <h2 class="col-auto">Seleccione el acompañante:</h2>
+                    <div class="col-auto ms-auto">
+                        <button  id="addAcompananteBtn"  type="button" class="btn btn-outline-success">
+                            <i class="bi bi-person-fill-add"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" id="removeAcompananteBtn">
+                            <i class="bi bi-person-fill-dash"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <div class="companions-container d-flex flex-wrap">
+                    <div id="acompanante1" class="mb-2 flex-fill" style="display: none;">
+                        <label for="acompananteNombre1" class="form-label mt-1 mb-3"><i class="bi bi-person-check"></i> Acompañante 1:</label>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <select type="text" id="acompananteNombre1" name="acompananteNombre1" class="form-control" placeholder="Nombre">
+                                    <option disabled selected value>Seleccionar Acompañante</option>
+                                </select>
+                                
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <input type="text" id="acompananteApellido1_1" name="acompananteApellido1_1" class="form-control" placeholder="1° Apellido" readonly>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <input type="text" id="acompananteTelefono1_1" name="acompananteTelefono1_1" class="form-control" placeholder="Teléfonos" readonly>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <input type="text"  id="acompananteParentesco1" name="acompananteParentesco1"class="form-control" placeholder="Parentesco" readonly>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div id="acompanante2" class="mb-2 flex-fill" style="display: none;">
+                        <label for="acompananteNombre2" class="form-label mb-3"> <i class="bi bi-person-check"></i> Acompañante 2:</label>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <select type="text" id="acompananteNombre2" name="acompananteNombre2"
+                                    class="form-control" placeholder="Nombre">
+                                    <option disabled selected value>Seleccionar Acompañante</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <input type="text" id="acompananteApellido1_2" name="acompananteApellido1_2"
+                                    class="form-control" placeholder="1° Apellido" readonly>
+                            </div>
+                           
+
+                            <div class="col-md-3 mb-3">
+                                <input type="text" id="acompananteTelefono1_2" name="acompananteTelefono1_2"
+                                    class="form-control" placeholder="Teléfonos" readonly>
+                            </div>
+                          
+                          
+                            <div class="col-md-3 mb-3">
+                                <input type="text"  id="acompananteParentesco2" name="acompananteParentesco2"class="form-control" placeholder="Parentesco" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Datos de la Cita:</h2>
+                <div class="row mb-4 mt-5">
+                    <div class="col-md-3 mt-1">
+                        <label class="form-label" for="traslado"><i class="bi bi-geo"></i> Traslado:</label>
+                        <select id="traslado" name="traslado" class="form-select">
+                            <option value="Local">Local</option>
+                            <option value="Externo">Externo</option>
+                        </select>
+                    </div>
+                    
+                        <div class="col-md-3 mt-1">
+                        <label for="origen" class="form-label"><i class="bi bi-geo-alt"></i> Lugar de salida:</label>
+                        <select id="origen" name="origen" class="form-select">
+                            <option disabled selected value> -- Seleccione un origen -- </option>
+                            <option value="Ruta">Ruta</option>
+                            <option value="Domicilio">Domicilio</option>
+                            <option value="Sede">Sede</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="fechaCita" class="form-label"><i class="bi bi-calendar2-event"></i> Fecha:</label>
+                        <input type="date" id="fechaCita" name="fechaCita" class="form-control date-input">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="horaCita" class="form-label"><i class="bi bi-stopwatch"></i> Hora:</label>
+                        <input type="time" id="horaCita" name="horaCita" class="form-control">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <label for="destino" class="form-label"><i class="bi bi-hospital"></i> Destino:</label>
+                        <select id="destino" name="destino" class="form-select">
+                            <option disabled selected value> -- Seleccione un destino -- </option>
+                        </select>
+                    </div>
+                
+                    <div class="col-md-3 mt-1">
+                        <label for="especialidad" class="form-label"><i class="bi bi-files"></i> Especialidad:</label>
+                        <select id="especialidad" name="especialidad" class="form-select">
+                            <option disabled selected value> -- Seleccione una especialidad -- </option>
+                        </select>
+                    </div>
+                
+
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="button" class="btn btn-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Guardar Viaje" id="btnGuardar">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="./js/dates.js"></script>
+    <div data-script="./js/companions.js"></div>
+    <div data-script="./js/appointments.js"></div>
+
+
+
+</body>
+
+</html>
