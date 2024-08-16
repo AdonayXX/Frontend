@@ -231,6 +231,7 @@ async function getChofer(cedula) {
             return false;
         }
     } catch (error) {
+        console.error('Error al obtener los datos del chofer:', error.message);
         showToast('Error', 'Error al obtener los datos del chofer.');
         return false;
     }

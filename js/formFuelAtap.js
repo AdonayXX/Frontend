@@ -128,9 +128,6 @@
     const kilometrajeActual = unitData.kilometrajeActual;
     const kilometrajeIngresado = parseInt(document.getElementById('currentMileage').value);
 
-    console.log(kilometrajeActual);
-    console.log(kilometrajeIngresado);
-
     if (kilometrajeIngresado < kilometrajeActual) {
       showToast('Error', `El kilometraje ingresado no puede ser menor que el kilometraje actual de la unidad (${kilometrajeActual}).`);
       return;
@@ -189,6 +186,7 @@
 
         const registros = response.data.registro;
         if (!registros || registros.length === 0) {
+            console.error("No hay registros de combustible para la unidad ${unidad}.");
             showToast('Error', `No hay registros de combustible para la unidad ${unidad}.`);
             return;
         }
@@ -221,8 +219,10 @@
         }
     } catch (error) {
         if (error.response && error.response.status === 403) {
+            console.error("Acceso denegado. Verifique su token de autenticación.");
             showToast('Error', 'Acceso denegado. Verifique su token de autenticación.');
         } else {
+            console.error("Error al obtener el registro de combustible:", error);
             showToast('Error', 'Error al obtener el registro de combustible.');
         }
     }
@@ -241,6 +241,7 @@ async function putRegistroCombustible() {
   
     const idCombustibleATAP = window.idCombustibleATAP; 
     if (!idCombustibleATAP) {
+        console.error("No se encontró el id del registro de combustible.");
         showToast('Error', 'No se encontró el id del registro de combustible.');
   
         return;
