@@ -7,6 +7,7 @@
                     <label for="unidad" class="form-label"><i class="bi bi-truck"></i> Unidad</label>
                     <select id="unidades" class="form-select" disabled required>
                         <option selected>Seleccionar unidad</option>
+                        <!-- Aquí se cargan las unidades -->
                     </select>
                 </div>
             </div>
@@ -30,7 +31,7 @@
                 <div class="form-group mb-3">
                     <label for="chofer" class="form-label"><i class="bi bi-person"></i> Chofer</label>
                     <select id="choferes" class="form-select" disabled required>
-
+                        <!-- Aquí se cargan los choferes -->
                     </select>
                 </div>
             </div>
@@ -49,7 +50,7 @@
                 <div class="form-group mb-3">
                     <label for="litros" class="form-label"><i class="bi bi-droplet-half"></i> Litros
                         Aproximados</label>
-                    <input type="number" class="form-control" id="litros" name="litros" maxlength="10" min="1"
+                    <input type="number" class="form-control" id="litros" name="litros" maxlength="6" min="1"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                 </div>
@@ -59,7 +60,7 @@
                     <label for="monto" class="form-label"><i class="bi bi-cash-stack"></i> Monto</label>
                     <div class="input-group">
                         <span class="input-group-text">₡</span>
-                        <input type="number" class="form-control" id="monto" name="monto" maxlength="10" min="0"
+                        <input type="number" class="form-control" id="monto" name="monto" maxlength="9" min="0"
                             oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                             required>
                     </div>
@@ -71,7 +72,7 @@
                         Recarga</label>
                     <input type="number" class="form-control" id="kilometraje" name="kilometraje" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        required maxlength="10">
+                        required maxlength="7">
                 </div>
             </div>
             <div class="col-md-4">

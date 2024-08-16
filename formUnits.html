@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label for="unitNumber"><i class="bi bi-hash"></i> Número de Unidad</label>
-                <input type="text" class="form-control" id="unitNumber" maxlength="20" required>
+                <input type="text" class="form-control" id="unitNumber" maxlength="25" required>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="resourceType"><i class="bi bi-building"></i> Tipo de Recurso</label>
@@ -37,13 +37,13 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label for="initialMileage"><i class="bi bi-speedometer"></i> Kilometraje Inicial</label>
-                <input type="number" class="form-control" id="initialMileage" maxlength="6" min="0"
+                <input type="number" class="form-control" id="initialMileage" maxlength="7" min="0"
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     required>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="currentMileage"><i class="bi bi-speedometer"></i> Kilometraje Actual</label>
-                <input type="number" class="form-control" id="currentMileage" maxlength="6" min="0"
+                <input type="number" class="form-control" id="currentMileage" maxlength="7" min="0"
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     required>
             </div>
@@ -68,14 +68,14 @@
             <div class="col-md-4 mb-3" id="mileageField">
                 <label for="maintenanceMileage"><i class="bi bi-speedometer"></i> Kilometraje del Último
                     Mantenimiento</label>
-                <input type="number" class="form-control" id="maintenanceMileage" maxlength="6" min="0"
+                <input type="number" class="form-control" id="maintenanceMileage" maxlength="7" min="0"
                     oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     required>
             </div>
             <div class="col-md-4 mb-3" id="periodicityField">
                 <label for="periodicity"><i class="bi bi-arrow-repeat"></i> Frecuencia del Mantenimiento</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="periodicity" maxlength="6" min="0"
+                    <input type="number" class="form-control" id="periodicity" maxlength="7" min="0"
                         oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                         required>
                     <span class="input-group-text">km</span>

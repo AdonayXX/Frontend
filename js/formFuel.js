@@ -75,6 +75,7 @@
             });
             return response.data.choferesConUnidades.find(chofer => chofer.cedula === identificacion);
         } catch (error) {
+            console.error('Error al obtener la unidad asignada:', error);
             showToast('Error', 'Error al obtener la unidad asignada.');
         }
     }
@@ -127,6 +128,7 @@
             const registros = response.data.registros;
             return registros.some(registro => registro.numeroFactura === numeroFactura && registro.id !== idRegistro);
         } catch (error) {
+            console.error('Error al obtener los registros de combustible:', error);
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
         }
@@ -144,6 +146,7 @@
             const registros = response.data.registros;
             return registros.some(registro => registro.numeroAutorizacion === numeroAutorizacion && registro.id !== idRegistro);
         } catch (error) {
+            console.error('Error al obtener los registros de combustible:', error);
             showToast('Error', 'Error al obtener los registros de combustible.');
             return false;
         }
@@ -187,6 +190,7 @@
             choferesSelect.innerHTML = opcionDefaultChofer.outerHTML;
         } catch (error) {
             console.error('Error al obtener las unidades:', error);
+            showToast('Error', 'Error al obtener las unidades.');
         }
     }
 
@@ -212,6 +216,7 @@
             });
             return response.data.unidades[0];
         } catch (error) {
+            console.error('Error al obtener los datos de la unidad:', error);
             showToast('Error', 'Error al obtener los datos de la unidad.');
         }
     }
@@ -223,6 +228,7 @@
             });
             return response.data.unidades[0].kilometrajeActual;
         } catch (error) {
+            console.error('Error al obtener el kilometraje actual de la unidad:', error);
             showToast('Error', 'Error al obtener el kilometraje actual de la unidad.');
         }
     }
@@ -236,7 +242,7 @@
                 idTipoRecurso: unitData.idTipoRecurso,
                 tipoFrecuenciaCambio: unitData.tipoFrecuenciaCambio,
                 valorFrecuenciaC: unitData.valorFrecuenciaC,
-                ultimoMantenimientoFecha: unitData.ultimoMantenimientoFecha,
+                ultimoMantenimientoFecha: new Date(unitData.ultimoMantenimientoFecha).toISOString().split('T')[0],
                 ultimoMantenimientoKilometraje: unitData.ultimoMantenimientoKilometraje,
                 numeroUnidad: unidad,
                 choferDesignado: unitData.choferDesignado,
@@ -251,10 +257,13 @@
                 usuario: idUsuario
             };
 
+            console.log('Datos de la unidad:', data);
+
             await axios.put(`${apiUrl}unidades/${unidad}`, data, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) {
+            console.error('Error al actualizar el kilometraje actual de la unidad:', error);
             showToast('Error', 'Error al actualizar el kilometraje actual de la unidad.');
         }
     }
@@ -271,6 +280,7 @@
                 return registros[0].id;
             }
         } catch (error) {
+            console.error('Error al obtener el ID del registro de combustible:', error);
             showToast('Error', 'Error al obtener el registro de combustible.');
         }
     }
@@ -325,7 +335,10 @@
             document.getElementById('btnActualizar').disabled = false;
             document.getElementById('btnEliminar').disabled = false;
             document.getElementById('btnGuardar').disabled = true;
+
+            console.log('Registro de combustible:', latestLog);
         } catch (error) {
+            console.error('Error al obtener el registro de combustible:', error);
             showToast('Error', 'Error al obtener el registro de combustible.');
         }
     }
@@ -404,6 +417,7 @@
                     showToast('Éxito', `El registro de combustible de la unidad se ha eliminado exitosamente.`);
                 })
                 .catch(() => {
+                    console.error('Error al eliminar el registro de combustible.');
                     showToast('Error', 'Error al eliminar el registro de combustible.');
                 });
 
@@ -441,7 +455,7 @@
 
         if (fuelLogData.kilometraje < kilometrajeActual) {
             showToast('Error', `El kilometraje de recarga no puede ser inferior al kilometraje actual de la unidad (${kilometrajeActual} km).`);
-            return false;
+            return;
         }
 
         if (fuelLogData.fecha > new Date().toISOString().split('T')[0]) {
@@ -453,6 +467,10 @@
 
         if (fuelLogData.hora > horaActual && fuelLogData.fecha === new Date().toISOString().split('T')[0]) {
             showToast('Error', 'La hora del registro de combustible no puede ser posterior a la hora actual.');
+            return;
+        }
+
+        if (fuelLogData.numeroUnidad === 'Seleccionar unidad') {
             return;
         }
 
