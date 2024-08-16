@@ -3,16 +3,22 @@
 (function () {
   const token = localStorage.getItem('token');
   if (!token) {
-    // Redirigir al usuario a la página de inicio de sesión
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   }
 
   document.getElementById('searchTrips').addEventListener('keyup', debounce(handleSearchTrips, 300));
   document.getElementById('fechaInicio').addEventListener('change', aplicarFiltros);
   document.getElementById('unidades').addEventListener('change', function () {
+
+    citasSeleccionadasGlobal.clear();
+    document.querySelectorAll('.cita-checkbox:checked').forEach(checkbox => {
+      checkbox.checked = false;
+    });
+
     actualizarChofer();
     aplicarFiltros();
   });
+
 
   let citasCombinadas = [];
   let citasSeleccionadasGlobal = new Set();
@@ -168,7 +174,7 @@
         searching: true,
         paging: true,
         language: {
-          url: '/assets/json/Spanish.json'
+          url: './assets/json/Spanish.json'
       },
       });
 
@@ -449,7 +455,7 @@
       await axios.put(url, datosAusencia, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       showToast('Éxito', 'Cita marcada como ausente exitosamente');
       obtenerCitas();
     } catch (error) {
