@@ -257,8 +257,6 @@
                 usuario: idUsuario
             };
 
-            console.log('Datos de la unidad:', data);
-
             await axios.put(`${apiUrl}unidades/${unidad}`, data, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -335,8 +333,6 @@
             document.getElementById('btnActualizar').disabled = false;
             document.getElementById('btnEliminar').disabled = false;
             document.getElementById('btnGuardar').disabled = true;
-
-            console.log('Registro de combustible:', latestLog);
         } catch (error) {
             console.error('Error al obtener el registro de combustible:', error);
             showToast('Error', 'Error al obtener el registro de combustible.');
