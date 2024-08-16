@@ -113,7 +113,6 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response.data);
       return response.data.unidades[0]; 
       
     } catch (error) {
@@ -247,7 +246,6 @@ async function putRegistroCombustible() {
         return;
     }
 
-    console.log(idCombustibleATAP);
     const data = {
         montoColones: parseInt(document.getElementById('totalAmount').value),
         litrosAproximados: parseInt(document.getElementById('approxLiters').value),
@@ -262,8 +260,6 @@ async function putRegistroCombustible() {
         idUsuario: (await infoUser()).usuario.IdUsuario,
         estado: "Activo"
     };
-
-    console.log(data);
 
     try {
         const response = await axios.put(`https://backend-transporteccss.onrender.com/api/combustibleATAP/${idCombustibleATAP}`, data, {
