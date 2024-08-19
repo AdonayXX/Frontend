@@ -13,7 +13,7 @@
     const apiUrl = 'https://backend-transporteccss.onrender.com/api/';
 
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 
     form.addEventListener('submit', handleSubmit);

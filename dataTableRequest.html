@@ -29,6 +29,7 @@
                 <option value="Aprobado" class="text-center">Aprobado</option>
                 <option value="Rechazado" class="text-center">Rechazado</option>
                 <option value="Pendiente" class="text-center">Pendiente</option>
+                <option value="Completado" class="text-center">Completado</option>
             </select>
         </div>
 
@@ -39,11 +40,11 @@
         <div class="d-flex justify-content-end mb-3">
             <button id="saveBtn" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableRequest','Vales')" data-bs-toggle="tooltip"
                 data-bs-placement="top" title="Exportar a PDF">
-                <img src="img/icons8-pdf.svg" alt="PDF Icon">
+                <img src="./img/icons8-pdf.svg" alt="PDF Icon">
             </button>
             <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableRequest', 'Vales')" data-bs-toggle="tooltip"
                 data-bs-placement="top" title="Exportar a Excel">
-                <img src="img/icons8-excel.svg" alt="Excel Icon">
+                <img src="./img/icons8-excel.svg" alt="Excel Icon">
             </button>
         </div>
 
@@ -71,6 +72,6 @@
             </table>
         </div>
     </div>
-    <div data-script="js/request.js"></div>
-    <div data-script="js/dataexport.js"></div>
-    <div data-script="js/exportarpdf.js"></div>
+    <div data-script="./js/request.js"></div>
+    <div data-script="./js/dataexport.js"></div>
+    <div data-script="./js/exportarpdf.js"></div>

@@ -29,7 +29,7 @@
                     aria-describedby="basic-addon1">
             </div>
         </div>
-        <div class="row align-items-center" style="justify-content: center; text-align: center;">
+        <div class="row  align-items-center" style="justify-content: center; text-align: center;">
             <!-- Unidad -->
             <div class="col-md-4 mb-3">
                 <label for="unidadFiltro" class="form-label">Unidad:</label>
@@ -54,16 +54,16 @@
 
        
         <!-- Botón para abrir modal de tareas -->
-        <div class="row mt-3 ">
+        <div class="row mt-3">
             <div class="col d-flex justify-content-end">
+    
                 <button id="btnCita" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('tableMaintenance','Mantenimientos')" data-bs-toggle="tooltip"
                     data-bs-placement="top" title="Exportar a PDF">
-                    <img src="img/icons8-pdf.svg" alt="PDF Icon">
+                    <img src="./img/icons8-pdf.svg" alt="PDF Icon">
                 </button>
-                
-                <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableMaintenance', 'Mantenimiento')" data-bs-toggle="tooltip"
+                <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('tableMaintenance', 'Mantenimientos')" data-bs-toggle="tooltip"
                     data-bs-placement="top" title="Exportar a Excel">
-                    <img src="img/icons8-excel.svg" alt="Excel Icon">
+                    <img src="./img/icons8-excel.svg" alt="Excel Icon">
                 </button>
             </div>
         </div>
@@ -104,7 +104,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
-                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Agregar mantenimiento
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -245,7 +245,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
-                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="taskModalLabel" style="text-align: center;">Actividades</h5>
                     <button type="button" class="btn-close btn-close-white" id="btnCloseTask" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -332,7 +332,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#094079; color: white;">
-                    <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                    <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                     <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Agregar mantenimiento
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -428,11 +428,7 @@
                             </div>
                             <div class="col-auto ms-auto" style="margin-bottom: 10px;">
                                 <button id="addActividadBtn" type="button" class="btn btn-outline-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                        class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd"
-                                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                    </svg>
+                                    <i class="bi bi-plus-lg"></i>
                                 </button>
                             </div>
                         </div>
@@ -457,7 +453,7 @@
     <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                 <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Detalle</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -480,9 +476,9 @@
 
 
 
-    <div data-script="js/maintenance.js"></div>
-    <div data-script="js/exportarpdf.js"></div>
-    <div data-script="js/dataexport.js"></div>
+    <div data-script="./js/maintenance.js"></div>
+    <div data-script="./js/exportarpdf.js"></div>
+    <div data-script="./js/dataexport.js"></div>
 
 
 

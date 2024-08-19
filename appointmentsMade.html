@@ -13,7 +13,7 @@
             <span class="input-group-text" id="lupa">
                 <i class="bi bi-search"></i>
             </span>
-            <input type="text" class="form-control" placeholder="Buscar..." id="searchAppointment">
+            <input type="text" class="form-control" placeholder="Buscar..." id="searchAppointment" maxlength="40">
         </div>
     </div>
 
@@ -40,11 +40,11 @@
 
             <button id="btnCita" class="btn btn-secondary me-2 pdf" onclick="exportToPDF('TableAppointment','Citas')"
                 data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a PDF">
-                <img src="img/icons8-pdf.svg" alt="PDF Icon">
+                <img src="./img/icons8-pdf.svg" alt="PDF Icon">
             </button>
             <button class="btn btn-secondary me-2 excel" onclick="exportToExcel('TableAppointment', 'citas')"
                 data-bs-toggle="tooltip" data-bs-placement="top" title="Exportar a Excel">
-                <img src="img/icons8-excel.svg" alt="Excel Icon">
+                <img src="./img/icons8-excel.svg" alt="Excel Icon">
             </button>
         </div>
     </div>
@@ -80,7 +80,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                 <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Información Adicional
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -123,7 +123,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#094079; color: white;">
-                <img src="img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
+                <img src="./img/LogoCCSS.png" class="img-fluid p-md-1" alt="" width="50px" height="50px">
                 <h5 class="modal-title" id="ausenteModalLabel" style="text-align: center;">Editar Cita</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -163,6 +163,12 @@
                                         class="form-select"></select>
                                 </div>
                                 <div class="col-md-4 mb-3">
+                                    <label for="especialidad" class="form-label"><i class="bi bi-files"></i>
+                                        Especialidad:</label>
+                                    <select id="especialidad" name="especialidad" class="form-select">
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
                                     <label for="tipoSeguro" class="form-label"><i class="bi bi-shield"></i> Tipo de
                                         Seguro:</label>
                                     <select id="tipoSeguro" name="tipoSeguro" class="form-select">
@@ -197,9 +203,9 @@
     </div>
 </div>
 
-<div data-script="js/appointmentsMade.js"></div>
+<div data-script="./js/appointmentsMade.js"></div>
 
-<div data-script="js/exportarpdf.js"></div>
+<div data-script="./js/exportarpdf.js"></div>
 
 
-<div data-script="js/dataexport.js"></div>
+<div data-script="./js/dataexport.js"></div>

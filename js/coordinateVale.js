@@ -68,12 +68,12 @@
                             blockBtn();
                         }
                     }
-                    if (vale.Chofer === 0 || vale.Chofer === null) {
-                        let callChofer = 0;
+                    if (vale.Chofer === 1 || vale.Chofer === null) {
+                        let callChofer = 1;
                         readChofer(callChofer);
                         // selects(callChofer);
                     }else{
-                        let callChofer = 1;
+                        let callChofer = 0;
                         readChofer(callChofer);
                     }
                     acompanantes(vale);
@@ -340,4 +340,3 @@ function infoUser() {
   const idUsuario = infoUsuario.usuario.IdUsuario;
 */
 })();
-

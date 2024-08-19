@@ -20,7 +20,7 @@ async function loadCitas() {
             searching: true,
             paging: true,
             language: {
-                url: '/assets/json/Spanish.json'
+                url: './assets/json/Spanish.json'
             },
             caseInsensitive: true,
             smart: true,
@@ -28,6 +28,7 @@ async function loadCitas() {
             lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
             caseInsensitive: true,
             smart: true
+
         });
 
         $('#searchAppointment').on('keyup', function () {
@@ -57,7 +58,7 @@ async function loadCitas() {
         });
         setTimeout(function () {
             $('#TableAppointment').DataTable().search('iniciada').draw();
-        }, 1)
+        }, 1200)
         ocultarSpinner();
     } catch (error) {
         showToast("Error", "Error al obtener las citas.");
@@ -70,7 +71,6 @@ function renderTable(citas) {
     citas.sort((a, b) => {
         const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
         const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
-
         return fechaHoraB - fechaHoraA;
     });
 
@@ -106,6 +106,7 @@ function renderTable(citas) {
     });
 }
 
+
 function getAcompanantes(cita) {
     try {
         const tableBody = document.getElementById('AcompananteTableBody');
@@ -136,12 +137,6 @@ function getAcompanantes(cita) {
     }
 }
 
-document.querySelector('#searchAppointment').addEventListener('input', function (e) {
-    if (this.value.length > 15) {
-        this.value = this.value.slice(0, 15);
-    }
-});
-
 function editarCita(cita) {
     document.querySelector('#editarIdCita').value = cita.idCita;
     document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
@@ -149,43 +144,100 @@ function editarCita(cita) {
     document.querySelector('#editarHora').value = cita.horaCita;
     document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
     document.querySelector('#tipoSeguro').value = cita.tipoSeguro;
+
+    getEspecialidadesByDestino(cita.idUbicacionDestino, cita.especialidad);
+
     document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
         event.preventDefault();
+
+        const especialidadSeleccionada = document.querySelector('#especialidad').value;
+
+        if (!especialidadSeleccionada || especialidadSeleccionada === '-- Seleccione una especialidad --') {
+            showToast('Error', 'Debe seleccionar una especialidad antes de guardar los cambios.');
+            return;
+        }
+
         updateCita(cita.idCita);
     });
 }
 
+
+
 function getRutas() {
     const selectDestino = document.getElementById('seleccionar-destino');
 
-    axios.get('https://backend-transporteccss.onrender.com/api/rutas')
+    const token = localStorage.getItem('token');
+    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
-            const destinos = response.data;
-            destinos.forEach(destino => {
+            const rutas = response.data;
+            rutas.forEach(ruta => {
                 const option = document.createElement('option');
-                option.value = destino.IdRuta;
-                option.textContent = destino.Descripcion;
+                option.value = ruta.IdRuta;
+                option.textContent = ruta.Descripcion;
                 selectDestino.appendChild(option);
             });
         })
-        .catch(() => {
-            showToast("Error", "Error al obtener los destinos.");
-        });
 }
 
 getRutas();
+
+function getEspecialidadesByDestino(IdRuta, especialidadSeleccionada = '') {
+    const selectEspecialidad = document.getElementById('especialidad');
+    selectEspecialidad.innerHTML = '';
+
+    const token = localStorage.getItem('token');
+    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            const especialidades = response.data;
+            if (especialidades.length === 0 || !especialidadSeleccionada) {
+                const defaultOption = document.createElement('option');
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                defaultOption.textContent = '-- Seleccione una especialidad --';
+                selectEspecialidad.appendChild(defaultOption);
+            }
+
+            especialidades.forEach(especialidad => {
+                const option = document.createElement('option');
+                option.value = especialidad.idEspecialidad;
+                option.textContent = especialidad.Especialidad;
+                if (especialidad.Especialidad === especialidadSeleccionada) {
+                    option.selected = true;
+                }
+                selectEspecialidad.appendChild(option);
+            });
+        })
+}
+
+
+document.getElementById('seleccionar-destino').addEventListener('change', function () {
+    const IdRuta = this.value;
+    getEspecialidadesByDestino(IdRuta);
+});
+
+
 
 async function updateCita(idCita) {
     const fechaCita = document.querySelector('#editarFechaCita').value;
     const horaCita = document.querySelector('#editarHora').value;
     const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
     const tipoSeguro = document.querySelector("#tipoSeguro").value;
+    const especialidad = document.getElementById('especialidad').value;
 
     const updatedCitas = {
         idUbicacionDestino: idUbicacionDestino,
         fechaCita: fechaCita,
         horaCita: horaCita,
-        tipoSeguro: tipoSeguro
+        tipoSeguro: tipoSeguro,
+        idEspecialidad: especialidad
     };
 
     try {
@@ -199,13 +251,14 @@ async function updateCita(idCita) {
         $('#editarModal').modal('hide');
         setTimeout(function () {
             loadContent('appointmentsMade.html', 'mainContent');
-        }, 1500);
+        }, 2500);
         showToast("¡Éxito!", "Cita actualizada correctamente.");
     } catch (error) {
         $('#editarModal').modal('hide');
         showToast("Error", "Error al actualizar la cita.");
     }
 }
+
 
 function ocultarSpinner() {
     const spinnerContainer = document.getElementById('spinnerContainer');

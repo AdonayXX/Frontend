@@ -16,7 +16,7 @@ async function handleLogin() {
         const token = await loginUser(userEmail, userPassword);
         if (token) {
             saveTokenLS(token);
-            window.location.href = 'index.html';
+            window.location.href = 'indexH.html';
         } else {
             return;
         }
