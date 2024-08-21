@@ -34,7 +34,12 @@ async function loginUser(identificador, Contrasena) {
         });
         return response.data.usuario.token;
     } catch (error) {
-        showToast('Error', 'Usuario o Contraseña incorrectos')
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.error;
+                showToast('Ups!', errorMessage);
+        } else {
+            showToast('Error', 'Inesperado');
+        }
 
     }
 };
@@ -102,9 +107,7 @@ async function saveUser(userData) {
     } catch (error) {
         if (error.response && error.response.status === 400) {
             const errorMessage = error.response.data.error;
-            if (errorMessage.includes('Ya existe un usuario con esa identificación')) {
                 showToast('Ups!', errorMessage);
-            }
         } else {
             showToast('Ups!', 'Ocurrió un problema durante el envío de los datos.');
         }

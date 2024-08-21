@@ -382,6 +382,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
             .then(response => {
                 showToast("", "Se generó la solicitud exitosamente");
                 getVales();
+                saveFormData();
     
      })
             .catch(error => {
@@ -442,6 +443,28 @@ document.getElementById('addCompanion').addEventListener('click', function () {
             document.getElementById('valeId').textContent = 'Error al obtener vales';
         }
     }
+    // Funcion para guardar los datos de vales en localStorage
+    function saveFormData() {
+        const fields = [
+            'acompananteNombre1', 'acompananteNombre2', 'acompananteNombre3',
+            'acompananteNombre4', 'acompananteNombre5', 'Up', 'lugarSa', 'service',
+            'motivo', 'lugarDes', 'detalle', 'nameSoli', 'hora_salida', 'b_date',
+            'lugarSa2', 'lugarDes2'
+        ];
+    
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                localStorage.setItem(field, element.value);
+            }
+        });
+    
+        const choferElement = document.getElementById('chofer');
+        if (choferElement) {
+            localStorage.setItem('chofer', choferElement.checked ? '1' : '0');
+        }
+    }
+    
     
 
     function loadFormData() {
