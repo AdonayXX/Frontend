@@ -875,15 +875,16 @@ async function mantenimientoExcel() {
 async function exportarValeExcel() {
     try {
         const idVale = document.getElementById('idVale').value;
+    if (!idVale) {
+        showToast("Error", "Este campo no debe estar vacio ingrese el ID del vale que desea exportar.");
+        return;
+    }
         let datosVale;
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
-        console.log(datosVale);
         try {
             const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
-    
-
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado formato 2024-01.");
             return;
@@ -951,9 +952,14 @@ async function exportarValeExcel() {
 async function exportarValePdf() {
     try {
         const idVale = document.getElementById('idVale').value;
-        let datosVale;
+    if (!idVale) {
+        showToast("Error", "Este campo no debe estar vacio ingrese el ID del vale que desea exportar.");
+        return;
+    }
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
         try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/${idVale}`);
+            const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
         } catch (apiError) {
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado.");
@@ -971,72 +977,82 @@ async function exportarValePdf() {
         const valeData = datosVale.vale;
         const fechaSolicitud = new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0];
         const horaSalida = valeData.Hora_Salida.split(':').slice(0, 2).join(':');
+        const horaEntrada = valeData.HoraFinVale ? valeData.HoraFinVale.split(':').slice(0, 2).join(':') : '';
 
-        worksheet.drawText(String(fechaSolicitud), {
+        
+        worksheet.drawText(String(new Date().toISOString().split('T')[0]), {
             x: 75,
             y: height - 170,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
-
+        
         worksheet.drawText(String(valeData.IdUnidadProgramatica || ''), {
-            x: 480,
-            y: height - 175,
+            x: 490,
+            y: height - 170,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        worksheet.drawText(String(valeData.NombreUnidadProgramatica || ''), {
-            x: 180,
-            y: height - 175,
+        worksheet.drawText(String(vale = 'AAWER'), {
+            x: 480,
+            y: height - 130,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.NombreUnidad || ''), {
+            x: 260,
+            y: height - 170,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante1 || ''), {
-            x: 405,
-            y: height - 234,
+            x: 420,
+            y: height - 228,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante2 || ''), {
-            x: 405,
-            y: height - 248,
+            x: 420,
+            y: height - 242,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante3 || ''), {
-            x: 405,
-            y: height - 263,
+            x: 420,
+            y: height - 257,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante4 || ''), {
-            x: 405,
-            y: height - 278,
+            x: 420,
+            y: height - 270,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Acompanante5 || ''), {
-            x: 405,
-            y: height - 292,
+            x: 420,
+            y: height - 284,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        worksheet.drawText(String(valeData.NombreMotivo || ''), {
+        worksheet.drawText(String(valeData.DescripcionDestino || ''), {
             x: 260,
             y: height - 205,
             size: 10,
@@ -1044,25 +1060,34 @@ async function exportarValePdf() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
+        worksheet.drawText(String(valeData.DescripcionMotivo || ''), {
+            x: 170,
+            y: height - 260,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
         worksheet.drawText(String(valeData.NombreSolicitante || ''), {
-            x: 260,
-            y: height - 307,
+            x: 280,
+            y: height - 297,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
         worksheet.drawText(String(valeData.Detalle || ''), {
-            x: 348,
-            y: height - 325,
+            x: 365,
+            y: height - 315,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
 
+
         worksheet.drawText(String(horaSalida), {
             x: 115,
-            y: height - 355,
+            y: height - 345,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
@@ -1070,7 +1095,23 @@ async function exportarValePdf() {
 
         worksheet.drawText(String(fechaSolicitud), {
             x: 115,
-            y: height - 340,
+            y: height - 330,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 196,
+            y: height - 330,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaEntrada), {
+            x: 196,
+            y: height - 345,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
@@ -1078,7 +1119,7 @@ async function exportarValePdf() {
 
         worksheet.drawText(String(fechaSolicitud), {
             x: 90,
-            y: height - 425,
+            y: height - 415,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
@@ -1086,11 +1127,61 @@ async function exportarValePdf() {
 
         worksheet.drawText(String(horaSalida), {
             x: 245,
-            y: height - 425,
+            y: height - 415,
             size: 10,
             font: helveticaFont,
             color: PDFLib.rgb(0, 0, 0),
         });
+
+        worksheet.drawText(String(fechaSolicitud), {
+            x: 400,
+            y: height - 415,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(horaEntrada), {
+            x: 520,
+            y: height - 415,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.EncargadoCordinador), {
+            x: 380,
+            y: height - 430,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(vale = 'Matias Gutierrez'), {
+            x: 200,
+            y: height - 443,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+        
+        worksheet.drawText(String(valeData.kilometrajeInicioVale), {
+            x: 90,
+            y: height - 480,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+        worksheet.drawText(String(valeData.kilometrajeFinalVale), {
+            x: 250,
+            y: height - 480,
+            size: 10,
+            font: helveticaFont,
+            color: PDFLib.rgb(0, 0, 0),
+        });
+
+
 
         const pdfBytes = await pdfDoc.save();
         const firstPageBytes = await pdfDoc.saveAsBase64({ pages: [0] });
