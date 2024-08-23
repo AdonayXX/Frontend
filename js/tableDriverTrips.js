@@ -172,7 +172,7 @@ function openAccomp(acompanante1, acompanante2) {
   async function finishTrip() {
     const kilometrajeFinal = parseInt(inputKilometrajeFinal.value);
 
-    if (kilometrajeFinal < kilometrajeActualUnidad) {
+    if (kilometrajeFinal <= kilometrajeActualUnidad) {
       showToast('Error', 'El kilometraje final no puede ser menor que el kilometraje actual.');
       return;
     }
