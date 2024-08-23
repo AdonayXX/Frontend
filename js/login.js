@@ -380,7 +380,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
     
      axios.post(`${url}api/vales`, datos)
             .then(response => {
-                showToast("", "Se generó la solicitud exitosamente");
+                showToast("Éxito!", "Se generó la solicitud exitosamente");
                 getVales();
                 saveFormData();
     
