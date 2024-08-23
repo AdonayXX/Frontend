@@ -5,6 +5,7 @@
     var url = 'https://backend-transporteccss.onrender.com/';
     const btnAdd = document.getElementById('btn-agregarSoli');
     let isCero = 1;
+    
 
     if (idVale) {
         readVale(idVale);
@@ -67,8 +68,13 @@
                             blockBtn();
                         }
                     }
-                    if (vale.Chofer == 0 || null) {
-                        selects();
+                    if (vale.Chofer === 1 || vale.Chofer === null) {
+                        let callChofer = 1;
+                        readChofer(callChofer);
+                        // selects(callChofer);
+                    }else{
+                        let callChofer = 0;
+                        readChofer(callChofer);
                     }
                     acompanantes(vale);
                     valeObject = vale;
@@ -90,7 +96,7 @@
                 }
             });
             if (valeObject.Chofer == 0 || null) {
-                selects();
+                // selects();
             }
 
         } catch (error) {
@@ -98,17 +104,17 @@
         }
     }
 
-    function selects() {
-        const selectElement = document.getElementById('select-chofer');
-        const newOption = document.createElement('option');
-        newOption.id = '0';
-        newOption.value = '0';
-        newOption.textContent = 'Chofer ASU';
-        selectElement.appendChild(newOption);
-        selectElement.value = '0';
-        selectElement.disabled = true;
-        isCero = 0;
-    }
+    // function selects() {
+    //     const selectElement = document.getElementById('select-chofer');
+    //     const newOption = document.createElement('option');
+    //     newOption.id = '0';
+    //     newOption.value = '0';
+    //     newOption.textContent = 'Chofer ASU';
+    //     selectElement.appendChild(newOption);
+    //     selectElement.value = '0';
+    //     selectElement.disabled = true;
+    //     isCero = 0;
+    // }
 
     function acompanantes(vale) {
         if (vale.Acompanante1 != null) {
@@ -181,7 +187,7 @@
             });
     
             const dataTripVale = {
-                fecha: obtenerFechaActual(),
+                fecha: document.getElementById('input-fechaReq').value,
                 idUnidad: document.getElementById('select-placa').value
             };
             const tripValeResponse = await axios.post(`${url}api/viajeVale`, dataTripVale, {
@@ -199,6 +205,7 @@
             } else {
                 console.error('Error al guardar datos:', error.message);
             }
+            showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
     }
@@ -219,7 +226,7 @@
         }
     })
 
-    async function readChofer() {
+    async function readChofer(callChofer) {
         try {
             const response = await axios.get(`${url}api/chofer`, {
                 headers: {
@@ -229,7 +236,11 @@
             const choferes = response.data.choferes;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             choferes.forEach(chofer => {
-                body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                if (callChofer == chofer.autorizado ) {
+                    body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                } else if (callChofer == chofer.autorizado) {
+                    body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                }
             });
             document.getElementById('select-chofer').innerHTML = body;
 
@@ -329,4 +340,3 @@ function infoUser() {
   const idUsuario = infoUsuario.usuario.IdUsuario;
 */
 })();
-
