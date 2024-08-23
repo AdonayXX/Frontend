@@ -153,7 +153,6 @@
                     Contacto: contacto,
                     Correo: email
                 };
-                console.log(manager);
                 const response = await axios.put(`${url}api/funcionarios/cedula/${ced}`, manager, {
                     headers: {
                         'Authorization': `Bearer ${token}`

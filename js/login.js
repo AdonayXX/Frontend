@@ -387,7 +387,6 @@ document.getElementById('addCompanion').addEventListener('click', function () {
      })
             .catch(error => {
                 if (error.response) {
-                    console.log('Hubo un problema al guardar los datos:', error.response.data.message);
                     showToast("Error al guardar los datos", error.response.data.message);
                 } else {
                     console.error('Error desconocido:', error);

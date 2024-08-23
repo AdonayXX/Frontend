@@ -60,7 +60,6 @@ async function exportToPDF(tableId, page) {
                 break;    
                
             default:
-                console.log("No se requiere modificar");
                 columnasAEliminar = null;
                 break;
         }

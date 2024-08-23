@@ -179,7 +179,6 @@
             if (isCero == 0) {
                 coordinate.IdChofer = 25;
             }
-            console.log(coordinate);
             const response = await axios.post(`${url}api/revicionVale`, coordinate, {
                 headers: {
                     'Authorization': `Bearer ${token}`

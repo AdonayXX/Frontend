@@ -113,7 +113,6 @@
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response.data);
       return response.data.unidades[0]; 
       
     } catch (error) {
@@ -128,8 +127,6 @@
     const kilometrajeActual = unitData.kilometrajeActual;
     const kilometrajeIngresado = parseInt(document.getElementById('currentMileage').value);
 
-    console.log(kilometrajeActual);
-    console.log(kilometrajeIngresado);
 
     if (kilometrajeIngresado < kilometrajeActual) {
       showToast('Error', `El kilometraje ingresado no puede ser menor que el kilometraje actual de la unidad (${kilometrajeActual}).`);
@@ -246,7 +243,6 @@ async function putRegistroCombustible() {
         return;
     }
 
-    console.log(idCombustibleATAP);
     const data = {
         montoColones: parseInt(document.getElementById('totalAmount').value),
         litrosAproximados: parseInt(document.getElementById('approxLiters').value),
@@ -262,7 +258,7 @@ async function putRegistroCombustible() {
         estado: "Activo"
     };
 
-    console.log(data);
+   
 
     try {
         const response = await axios.put(`https://backend-transporteccss.onrender.com/api/combustibleATAP/${idCombustibleATAP}`, data, {

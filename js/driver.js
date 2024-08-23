@@ -85,7 +85,6 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "usuario": idUsuario
         };
 
-        console.log('Datos enviados:', choferData);
 
         try {
             const token = localStorage.getItem('token');
