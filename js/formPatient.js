@@ -97,7 +97,6 @@ async function addPerson(personaData) {
 //3 Agregar Persona
 async function addPeople(personaData) {
   try {
-    console.log(personaData)
     const API_URL = 'https://backend-transporteccss.onrender.com/api/persona';
     const token = localStorage.getItem('token');
     const response = await axios.post(API_URL, personaData, {
@@ -180,7 +179,6 @@ function addDataPatient(IdPersonaCreada) {
     "Barrio": barrio,
     "OtrasSenas": direccion
   }
-  console.log(pacienteData)
 
   addPatient(pacienteData);
 
@@ -197,7 +195,6 @@ async function addPatient(pacienteData) {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response)
     const idPaciente = (response.data.paciente.insertId);
     addCompanion(idPaciente);
     showToast('Paciente Registrado', 'El registro se ha realizado exitosamente.');
@@ -621,7 +618,6 @@ function cargarDatos() {
                       cantonSelect.appendChild(option);
                   });
               }
-              console.log(provinciaSeleccionada)
           });
 
           // Evento para cargar distritos al seleccionar un cantón
@@ -644,7 +640,6 @@ function cargarDatos() {
                       distritoSelect.appendChild(option);
                   });
               }
-              console.log(cantonSeleccionado)
           });
        
       })

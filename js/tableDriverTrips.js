@@ -92,7 +92,6 @@ function openAccomp(acompanante1, acompanante2) {
       const unidad = response.data.unidades.find(unidad => unidad.numeroUnidad === numeroUnidad);
       if (unidad) {
         kilometrajeActualUnidad = unidad.kilometrajeActual;  // Asignación de kilometraje actual
-        // console.log('Kilometraje actual asignado:', kilometrajeActualUnidad);
         validarKilometrajeFinal(kilometrajeActualUnidad);  // Validar inmediatamente
         return unidad.id;
       } else {
@@ -360,7 +359,6 @@ function openAccomp(acompanante1, acompanante2) {
     if (kilometrajeActual) {
       inputKilometrajeFinal.value = kilometrajeActual;
       inputKilometrajeFinal.min = kilometrajeActual;
-      // console.log('Kilometraje actual:', kilometrajeActual);
     } else {
       console.error('El kilometraje actual no está definido.');
       showToast('Error', 'El kilometraje actual no está disponible.');

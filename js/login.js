@@ -380,14 +380,13 @@ document.getElementById('addCompanion').addEventListener('click', function () {
     
      axios.post(`${url}api/vales`, datos)
             .then(response => {
-                showToast("", "Se generó la solicitud exitosamente");
+                showToast("Éxito!", "Se generó la solicitud exitosamente");
                 getVales();
                 saveFormData();
     
      })
             .catch(error => {
                 if (error.response) {
-                    console.log('Hubo un problema al guardar los datos:', error.response.data.message);
                     showToast("Error al guardar los datos", error.response.data.message);
                 } else {
                     console.error('Error desconocido:', error);

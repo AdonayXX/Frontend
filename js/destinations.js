@@ -327,11 +327,11 @@ function toggleDeleteButton(checkbox) {
         deleteButton.disabled = true;
     }
 }
-
 document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     const nuevaUbicacion = document.getElementById('AgregarUbi').value.trim();
     const nuevaAbreviacion = document.getElementById('AgregarAbre').value.trim();
     const apiUrl = 'https://backend-transporteccss.onrender.com/api/rutas';
+    const token = localStorage.getItem('token');
 
     if (!nuevaUbicacion || !nuevaAbreviacion) {
         showToast('Error', 'Ambos campos son obligatorios.');
@@ -339,7 +339,11 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
     }
 
     try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const ubicaciones = response.data;
 
         const ubicacionExistente = ubicaciones.find(ubi =>
@@ -350,6 +354,10 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             await axios.post(apiUrl, {
                 IdRuta: nuevaAbreviacion,
                 Descripcion: nuevaUbicacion
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             $('#AgregarUbiModal').modal('hide');
@@ -366,11 +374,11 @@ document.getElementById('BtnGuardarUbi').addEventListener('click', async () => {
             const modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
         } else {
-
             showToast('Error', 'La ubicación ya existe.');
         }
     } catch (error) {
         showToast('Error', 'Error al agregar la ubicación.');
+        console.error('Error:', error);
     }
 });
 
