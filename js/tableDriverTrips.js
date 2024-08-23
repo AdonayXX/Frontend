@@ -185,16 +185,16 @@ function openAccomp(acompanante1, acompanante2) {
     const API_FINISH_TRIP = 'https://backend-transporteccss.onrender.com/api/viajeChofer/end';
     try {
       await axios.put(API_FINISH_TRIP, {
-        idUnidad,
-        horaFinViaje: hourFinishTrip,
-        kilometrajeFinal,
-        horasExtras,
-        viaticos
+      idUnidad,
+      horaFinViaje: hourFinishTrip,
+      kilometrajeFinal,
+      horasExtras: horasExtras || 0,
+      viaticos: viaticos || 0
       }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
       });
       showToast('Éxito', 'El viaje ha sido finalizado correctamente');
       localStorage.removeItem('viajeIniciado');
