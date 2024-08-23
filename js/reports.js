@@ -871,25 +871,24 @@ async function mantenimientoExcel() {
     }
 }
 
-//REPORTE DE VALES
+//REPORTE DE VALES EXCEL
 async function exportarValeExcel() {
     try {
         const idVale = document.getElementById('idVale').value;
         let datosVale;
         const token = localStorage.getItem('token');
         const headers = { 'Authorization': `Bearer ${token}` };
-
+        console.log(datosVale);
         try {
             const response = await axios.get(`https:/backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
     
 
         } catch (apiError) {
-            console.error("Error al obtener los datos del vale:", apiError);
-            showToast("Error", "No se encontró el ID del vale o hubo un problema con la conexión.");
+            showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado formato 2024-01.");
             return;
         }
-
+        console.log(datosVale);
 
         const responseExcel = await fetch('documents/ReporteVale.xlsx');
         if (!responseExcel.ok) {
@@ -904,6 +903,8 @@ async function exportarValeExcel() {
         const valeData = datosVale.vale;
         const fechaSolicitud = valeData.Fecha_Solicitud ? new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0] : '';
         const horaSalida = valeData.Hora_Salida ? valeData.Hora_Salida.split(':').slice(0, 2).join(':') : '';
+        const horaEntrada = valeData.HoraFinVale ? valeData.HoraFinVale.split(':').slice(0, 2).join(':') : '';
+        
 
         worksheet.getCell('B8:C8').value = new Date().toISOString().split('T')[0];
         worksheet.getCell('K8').value = valeData.IdUnidadProgramatica || '';
@@ -922,15 +923,16 @@ async function exportarValeExcel() {
         worksheet.getCell('C9').value = valeData.NombreEbais || '';
         worksheet.getCell('C20').value = horaSalida;
         worksheet.getCell('C19').value = fechaSolicitud;
-        worksheet.getCell('K25').value = valeData.HoraFinVale || '';
+        worksheet.getCell('K25').value = horaEntrada || '';
         worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
         worksheet.getCell('G30').value = valeData.kilometrajeFinalVale || '';
-        worksheet.getCell('E20').value = valeData.HoraFinVale || '';
+        worksheet.getCell('E20').value = horaEntrada || '';
         worksheet.getCell('E19').value = fechaSolicitud;
         worksheet.getCell('I25').value = fechaSolicitud;
-
-
-
+        worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
+        worksheet.getCell('G26').value = valeData.EncargadoCordinador || '';
+        worksheet.getCell('G28').value = 'Matias Gutierrez';
+        worksheet.getCell('K5').value = 'AAWER';
 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -942,9 +944,9 @@ async function exportarValeExcel() {
         console.error("Error al exportar el archivo Excel:", error);
     }
 }
+//FIN DE REPORTE DE VALES EXCEL
 
-
-//REPORTE DE VALES EXCEL
+//REPORTE DE VALES PDF
 
 async function exportarValePdf() {
     try {
@@ -1113,82 +1115,9 @@ async function exportarValePdf() {
         console.error("Error al exportar el archivo PDF:", error);
     }
 }
-
-async function exportarValeExcel() {
-    try {
-        const idVale = document.getElementById('idVale').value;
-        let datosVale;
-        const token = localStorage.getItem('token');
-        const headers = { 'Authorization': `Bearer ${token}` };
-
-        try {
-            const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
-            datosVale = response.data;
-    
-
-        } catch (apiError) {
-            console.error("Error al obtener los datos del vale:", apiError);
-            showToast("Error", "No se encontró el ID del vale o hubo un problema con la conexión.");
-            return;
-        }
-
-
-        const responseExcel = await fetch('./documents/ReporteVale.xlsx');
-        if (!responseExcel.ok) {
-            throw new Error('No se pudo descargar el archivo Excel');
-        }
-
-        const arrayBuffer = await responseExcel.arrayBuffer();
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.load(arrayBuffer);
-
-        const worksheet = workbook.getWorksheet(1);
-        const valeData = datosVale.vale;
-        const fechaSolicitud = valeData.Fecha_Solicitud ? new Date(valeData.Fecha_Solicitud).toISOString().split('T')[0] : '';
-        const horaSalida = valeData.Hora_Salida ? valeData.Hora_Salida.split(':').slice(0, 2).join(':') : '';
-
-        worksheet.getCell('B8:C8').value = new Date().toISOString().split('T')[0];
-        worksheet.getCell('K8').value = valeData.IdUnidadProgramatica || '';
-        worksheet.getCell('F7:G7:H7:I7:J7').value = valeData.NombreUnidad || '';
-        worksheet.getCell('I12:J12:K12').value = valeData.Acompanante1 || '';
-        worksheet.getCell('I13:J13:K13').value = valeData.Acompanante2 || '';
-        worksheet.getCell('I14:J14:K14').value = valeData.Acompanante3 || '';
-        worksheet.getCell('I15:J15:K15').value = valeData.Acompanante4 || '';
-        worksheet.getCell('I16:J16:K16').value = valeData.Acompanante5 || '';
-        worksheet.getCell('B13:C13:D13:E13:F13:G13:H13').value = valeData.DescripcionMotivo;
-        worksheet.getCell('G17:H17:I17:J17:K17').value = valeData.NombreSolicitante || '';
-        worksheet.getCell('H18:I18:J18:K18').value = valeData.Detalle || '';
-        worksheet.getCell('G25').value = horaSalida;
-        worksheet.getCell('C25:D25:E25').value = fechaSolicitud;
-        worksheet.getCell('C9').value = valeData.DescripcionDestino || '';
-        worksheet.getCell('C9').value = valeData.NombreEbais || '';
-        worksheet.getCell('C20').value = horaSalida;
-        worksheet.getCell('C19').value = fechaSolicitud;
-        worksheet.getCell('K25').value = valeData.HoraFinVale || '';
-        worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
-        worksheet.getCell('G30').value = valeData.kilometrajeFinalVale || '';
-        worksheet.getCell('E20').value = valeData.HoraFinVale || '';
-        worksheet.getCell('E19').value = fechaSolicitud;
-        worksheet.getCell('I25').value = fechaSolicitud;
-
-
-
-
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'Reporte_Vale.xlsx';
-        link.click();
-    } catch (error) {
-        console.error("Error al exportar el archivo Excel:", error);
-    }
-}
-
+//FIN EXPORTAR VALE PDF
 
 // REPORTE VEHICULAR 
-
-
         async function viajesPdf() {
             try {
                 // Obtener las fechas del modal
