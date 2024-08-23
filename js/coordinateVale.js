@@ -68,12 +68,12 @@
                             blockBtn();
                         }
                     }
-                    if (vale.Chofer === 1 || vale.Chofer === null) {
-                        let callChofer = 1;
+                    if (vale.Chofer === 0 || vale.Chofer === null) {
+                        let callChofer = 0;
                         readChofer(callChofer);
                         // selects(callChofer);
                     }else{
-                        let callChofer = 0;
+                        let callChofer = 1;
                         readChofer(callChofer);
                     }
                     acompanantes(vale);

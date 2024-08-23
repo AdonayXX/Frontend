@@ -33,7 +33,7 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
         const tipoLicencia = document.getElementById('tipoLicencia').value;
         const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value;
         const estadoChofer = document.getElementById('estado').value;
-        const autorizado = document.getElementById('autorizado').value === 'Sí' ? 1 : 0;
+        const autorizado = document.getElementById('autorizado').value;
 
         //A1
         const contactoEmergencia = document.getElementById('contactoEmergencia').value || null;
@@ -81,10 +81,9 @@ document.getElementById('btnGuardar').addEventListener('click', async function (
             "apellido1CE2": apellido1CE2,
             "apellido2CE2": apellido2CE2,
             "estadoChofer": estadoChofer,
-            "autorizado": parseInt(autorizado),
+            "autorizado": autorizado,
             "usuario": idUsuario
         };
-
 
         try {
             const token = localStorage.getItem('token');
@@ -194,7 +193,7 @@ async function getChofer(cedula) {
             document.getElementById('apellido1CE2').value = choferEncontrado.apellido1CE2 || '';
             document.getElementById('apellido2CE2').value = choferEncontrado.apellido2CE2 || '';
             document.getElementById('contactoEmergencia2').value = choferEncontrado.contactoEmergencia2 || '';
-            document.getElementById('autorizado').value = choferEncontrado.autorizado === 1 ? 'Si' : 'No';
+            document.getElementById('autorizado').value = choferEncontrado.autorizado;
 
             document.getElementById('nombre').disabled = false;
             document.getElementById('apellido1').disabled = false;
@@ -257,7 +256,7 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
     const nombreCE2 = document.getElementById('acompananteNombreN2').value || null;
     const apellido1CE2 = document.getElementById('apellido1CE2').value || null;
     const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
-    const autorizado = document.getElementById('autorizado').value === 'Sí' ? 1 : 0;
+    const autorizado = document.getElementById('autorizado').value;
 
 
 
@@ -284,7 +283,7 @@ document.getElementById('btnActualizar').addEventListener('click', function (eve
         "apellido1CE2": apellido1CE2,
         "apellido2CE2": apellido2CE2,
         "estadoChofer": estadoChofer,
-        "autorizado": parseInt(autorizado),
+        "autorizado": autorizado,
         "usuario": idUsuario
     };
 
