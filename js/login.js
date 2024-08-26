@@ -396,8 +396,7 @@ document.getElementById('addCompanion').addEventListener('click', function () {
     }
     
     document.getElementById('btn-limpiar').addEventListener('click', function () {
-    
-     const fields = [
+        const fields = [
             'acompananteNombre1', 'acompananteNombre2', 'acompananteNombre3',
             'acompananteNombre4', 'acompananteNombre5', 'Up', 'lugarSa', 'service',
             'motivo', 'lugarDes', 'detalle', 'nameSoli', 'hora_salida', 'b_date',
@@ -413,10 +412,11 @@ document.getElementById('addCompanion').addEventListener('click', function () {
             }
         });
     
-        document.addEventListener('DOMContentLoaded', getVales);
-    
-     localStorage.clear();
+        fields.forEach(field => {
+            localStorage.removeItem(field);
+        });
     });
+    
     
     var error;
     
