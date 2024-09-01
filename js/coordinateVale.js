@@ -199,7 +199,6 @@
             } else {
                 console.error('Error al guardar datos:', error.message);
             }
-            showToast('Error', 'Error al guardar la revisión.');
             return false;
         }
     }
