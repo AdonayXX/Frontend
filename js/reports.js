@@ -886,6 +886,7 @@ async function exportarValeExcel() {
             const response = await axios.get(`https://backend-transporteccss.onrender.com/api/vales/exportar/vale/${idVale}`, { headers });
             datosVale = response.data;
         } catch (apiError) {
+            console.log(apiError);
             showToast("Error", "No se encontró el ID del vale. Por favor, verifique el número ingresado formato 2024-01.");
             return;
         }
@@ -932,8 +933,8 @@ async function exportarValeExcel() {
         worksheet.getCell('I25').value = fechaSolicitud;
         worksheet.getCell('C30').value = valeData.kilometrajeInicioVale || '';
         worksheet.getCell('G26').value = valeData.EncargadoCordinador || '';
-        worksheet.getCell('G28').value = 'Matias Gutierrez';
-        worksheet.getCell('K5').value = 'AAWER';
+        worksheet.getCell('G28').value = valeData.NombreCompletoChofer || '';
+        worksheet.getCell('K5').value = valeData.numeroUnidad || '';
 
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -996,7 +997,7 @@ async function exportarValePdf() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        worksheet.drawText(String(vale = 'AAWER'), {
+        worksheet.drawText(String(valeData.numeroUnidad || ''), {
             x: 480,
             y: height - 130,
             size: 10,
@@ -1157,7 +1158,7 @@ async function exportarValePdf() {
             color: PDFLib.rgb(0, 0, 0),
         });
 
-        worksheet.drawText(String(vale = 'Matias Gutierrez'), {
+        worksheet.drawText(String(valeData.NombreCompletoChofer), {
             x: 200,
             y: height - 443,
             size: 10,
