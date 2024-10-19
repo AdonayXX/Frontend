@@ -237,7 +237,8 @@
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             choferes.forEach(chofer => {
                 if (callChofer == chofer.autorizado ) {
-                    body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
+                    body += `<option value="${chofer.idChofer}">${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}</option>`;
+
                 } else if (callChofer == chofer.autorizado) {
                     body += `<option value="${chofer.idChofer}">${chofer.nombre}</option>`;
                 }
@@ -277,7 +278,7 @@
             const unidades = response.data.unidades;
             let body = '<option selected disabled value="">Seleccione una opción</option>';
             unidades.forEach(unidad => {
-                body += `<option value="${unidad.id}">${unidad.numeroUnidad}</option>`;
+                body += `<option value="${unidad.id}">${unidad.tipoUnidadNombre} / ${unidad.numeroUnidad}</option>`;
             });
             document.getElementById('select-placa').innerHTML = body;
 
