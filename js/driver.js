@@ -113,6 +113,7 @@ function infoUser() {
     try {
       const token = localStorage.getItem('token');
       const decodedToken = jwt_decode(token);
+      console.log(decodedToken);
       return (decodedToken);
     } catch (error) {
       console.error(error);
