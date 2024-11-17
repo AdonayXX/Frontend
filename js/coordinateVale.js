@@ -1,8 +1,13 @@
 (function () {
   const token = localStorage.getItem("token");
   const idVale = sessionStorage.getItem("selectedIdVale");
-  var url = "https://backend-transporteccss.onrender.com/";
+  var url = "http://localhost:18026/";
+  //BOTONES
   const btnAdd = document.getElementById("btn-agregarSoli");
+  const btnimprimirVale = document.getElementById("btn-imprimirVale");
+  const btnCancel = document.getElementById("btn-rechazarSoli");
+  blockBtn();
+  btnimprimirVale.disabled = true;
   let isCero = 1;
 
   if (idVale) {
@@ -48,15 +53,12 @@
       document.getElementById("input-destino").value = destino;
 
       const estadoId = vale.EstadoId;
-      if (estadoId === 3 || estadoId === 5) {
+      if (estadoId !== 1) {
         blockBtn();
         disableSelects();
-        showToast(
-          "Vale Rechazado o Completado",
-          "No se pueden modificar datos."
-        );
-      } else if (estadoId === 2) {
-        blockBtn();
+        showToast("Vale Revisado", "No se pueden modificar datos.");
+      } else {
+        enableBtn();
       }
       acompanantes(vale);
 
@@ -145,43 +147,48 @@
 
     return `${horas}:${minutos}`;
   };
-
   async function addCoordinate() {
+    const idVale = document.getElementById("input-id").value;
+    const idUnidad = document.getElementById("select-placa").value;
+    const idChofer = document.getElementById("select-chofer").value;
+    const encargado = document.getElementById("select-encargado").value;
+
+    if (!idVale || !idUnidad || !idChofer || !encargado) {
+      showToast(
+        "Advertencia",
+        "Por favor, selecciona todos los campos requeridos."
+      );
+      return false;
+    }
+
+    const coordinate = {
+      IdVale: idVale,
+      IdUnidad: idUnidad,
+      IdChofer: idChofer,
+      Encargado: encargado,
+      FechaRevision: obtenerFechaActual(),
+      HoraRevision: obtenerHoraActual(),
+      Observaciones: "Agregando datos",
+    };
+
+    if (typeof isCero !== "undefined" && isCero === 0) {
+      coordinate.IdChofer = 25;
+    }
+
+    console.log(coordinate);
     try {
-      const coordinate = {
-        IdVale: idVale,
-        IdUnidad: document.getElementById("select-placa").value,
-        IdChofer: document.getElementById("select-chofer").value,
-        Encargado: document.getElementById("select-encargado").value,
-        FechaRevision: obtenerFechaActual(),
-        HoraRevision: obtenerHoraActual(),
-        Observaciones: "Agregando datos",
-      };
-      if (isCero == 0) {
-        coordinate.IdChofer = 25;
-      }
-      console.log(coordinate);
       const response = await axios.post(`${url}api/revicionVale`, coordinate, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      const dataTripVale = {
-        fecha: document.getElementById("input-fechaReq").value,
-        idUnidad: document.getElementById("select-placa").value,
-      };
-      const tripValeResponse = await axios.post(
-        `${url}api/viajeVale`,
-        dataTripVale,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return true;
+      console.log(response);
+      if (response.status === 200 || response.status == 201) {
+        return true;
+      } else {
+        showToast("Error", "Error en el servidor. Intenta de nuevo.");
+        return false;
+      }
     } catch (error) {
       if (error.response) {
         console.error("Error al guardar datos:", error.response.data);
@@ -198,8 +205,8 @@
     }
   }
 
-  btnAdd.addEventListener("click", function () {
-    if (addCoordinate()) {
+  btnAdd.addEventListener("click", async function () {
+    if (await addCoordinate()) {
       const selectPlaca = document.getElementById("select-placa");
       const selectChofer = document.getElementById("select-chofer");
       const selectEncargado = document.getElementById("select-encargado");
@@ -215,30 +222,76 @@
   });
 
   async function readChofer(callChofer) {
-    let body;
-    if (callChofer === 1) {
-      try {
-        const response = await axios.get(`${url}api/chofer`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const choferes = response.data.choferes;
-        body =
-          '<option selected disabled value="">Seleccione una opción</option>';
-        choferes.forEach((chofer) => {
-          body += `<option value="${chofer.idChofer}">${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}</option>`;
-        });
-        document.getElementById("select-chofer").innerHTML = body;
-      } catch (error) {
-        console.error("No se cargaron los datos", error);
-      }
-      return;
+    let body, urlChofer;
+    if (callChofer === 0) {
+      urlChofer = "api/chofer/autorizados";
+    } else {
+      urlChofer = "api/chofer";
     }
-    body =
-    '<option selected disabled value="">No requiere Chofer</option>';
-    document.getElementById("select-chofer").innerHTML = body;
+
+    try {
+      const response = await axios.get(`${url}${urlChofer}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const choferes = response.data.choferes;
+      body =
+        '<option selected disabled value="">Seleccione una opción</option>';
+      choferes.forEach((chofer) => {
+        body += `<option value="${chofer.idChofer}">${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}</option>`;
+      });
+      document.getElementById("select-chofer").innerHTML = body;
+    } catch (error) {
+      console.error("No se cargaron los datos", error);
+    }
+    return;
   }
+
+  document
+    .getElementById("select-placa")
+    .addEventListener("change", async function () {
+      const selectedValue = this.value; // Valor seleccionado
+
+      try {
+        // Petición GET a la API con el valor seleccionado
+        const response = await axios.get(
+          `${url}api/unidades/id/${selectedValue}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Token de autorización
+            },
+          }
+        );
+
+        const unidadAsignada = response.data.unidade; // Datos recibidos de la API
+        console.log(unidadAsignada); // Imprimir en consola
+
+        // Crear un nuevo optgroup para los choferes asignados
+        const choferesGroup = document.createElement("optgroup");
+        choferesGroup.label = "Choferes asignados";
+
+        // Suponiendo que los datos de chofer están en unidadAsignada.choferes
+        unidadAsignada.forEach((chofer) => {
+          const option = document.createElement("option");
+          option.value = chofer.idChofer;
+          option.textContent = `${chofer.nombre} ${chofer.apellido1} ${chofer.apellido2}`;
+          choferesGroup.appendChild(option);
+        });
+
+        // Eliminar el optgroup anterior, si existe, para no duplicar
+        const existingGroup = document.querySelector(
+          "#select-chofer optgroup[label='Choferes asignados']"
+        );
+        if (existingGroup) existingGroup.remove();
+
+        // Añadir el nuevo grupo de choferes asignados al inicio del select
+        const selectChofer = document.getElementById("select-chofer");
+        selectChofer.insertBefore(choferesGroup, selectChofer.firstChild);
+      } catch (error) {
+        console.error("No se cargaron los datos", error); // Manejo de errores
+      }
+    });
 
   async function readManager() {
     try {
@@ -258,7 +311,6 @@
       console.error("No se cargaron los datos", error);
     }
   }
-
   async function readUnidad() {
     try {
       const response = await axios.get(`${url}api/unidades`, {
@@ -266,13 +318,23 @@
           Authorization: `Bearer ${token}`,
         },
       });
+
       const unidades = response.data.unidades;
-      let body =
-        '<option selected disabled value="">Seleccione una opción</option>';
+      const selectPlaca = document.getElementById("select-placa");
+
+      // Inicializar el contenido del select con la opción predeterminada
+      let body = '<option selected disabled value="">Seleccionar</option>';
+
+      // Agregar un encabezado como opción para "Choferes asignados"
+      body += "<option disabled>Choferes asignados</option>"; // Subtítulo
+
+      // Agregar opciones de las unidades
       unidades.forEach((unidad) => {
         body += `<option value="${unidad.id}">${unidad.tipoUnidadNombre} / ${unidad.numeroUnidad}</option>`;
       });
-      document.getElementById("select-placa").innerHTML = body;
+
+      // Actualizar el contenido del select
+      selectPlaca.innerHTML = body;
     } catch (error) {
       console.error("No se cargaron los datos", error);
     }
@@ -293,7 +355,6 @@
     }
   }
 
-  const btnCancel = document.getElementById("btn-rechazarSoli");
   btnCancel.addEventListener("click", function () {
     event.preventDefault();
     const newIdEstado = 3;
@@ -310,6 +371,121 @@
   function blockBtn() {
     btnCancel.disabled = true;
     btnAdd.disabled = true;
+    btnimprimirVale.disabled = false;
+  }
+
+  function enableBtn() {
+    btnCancel.disabled = false;
+    btnAdd.disabled = false;
+    btnimprimirVale.disabled = true;
+  }
+
+  btnimprimirVale.addEventListener("click", async function () {
+    exportarValeExcel(idVale);
+  });
+
+  async function exportarValeExcel(idVale) {
+    try {
+      if (!idVale) {
+        showToast(
+          "Error",
+          "Este campo no debe estar vacio ingrese el ID del vale que desea exportar."
+        );
+        return;
+      }
+
+      let datosVale;
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+      try {
+        const response = await axios.get(
+          `http://localhost:18026/api/vales/exportar/vale/${idVale}`,
+          { headers }
+        );
+        datosVale = response.data;
+      } catch (apiError) {
+        showToast(
+          "Error",
+          "No se encontró el ID del vale. Por favor, verifique el número ingresado formato 2024-01."
+        );
+        return;
+      }
+
+      const responseExcel = await fetch("documents/ReporteVale.xlsx");
+      if (!responseExcel.ok) {
+        throw new Error("No se pudo descargar el archivo Excel");
+      }
+
+      const arrayBuffer = await responseExcel.arrayBuffer();
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(arrayBuffer);
+
+      const worksheet = workbook.getWorksheet(1);
+      worksheet.name = `${idVale}`;
+
+      const valeData = datosVale.vale;
+      const fechaSolicitud = valeData.Fecha_Solicitud
+        ? new Date(valeData.Fecha_Solicitud).toISOString().split("T")[0]
+        : "";
+      const horaSalida = valeData.Hora_Salida
+        ? valeData.Hora_Salida.split(":").slice(0, 2).join(":")
+        : "";
+      const horaEntrada = valeData.HoraFinVale
+        ? valeData.HoraFinVale.split(":").slice(0, 2).join(":")
+        : "";
+
+      let destino = valeData.DescripcionDestino || valeData.NombreEbais;
+
+      worksheet.getCell("B8:C8").value = new Date().toISOString().split("T")[0];
+      worksheet.getCell("K8").value = valeData.IdUnidadProgramatica || "";
+      worksheet.getCell("F7:G7:H7:I7:J7").value = valeData.NombreUnidad || "";
+      worksheet.getCell("I12:J12:K12").value = valeData.Acompanante1 || "";
+      worksheet.getCell("I13:J13:K13").value = valeData.Acompanante2 || "";
+      worksheet.getCell("I14:J14:K14").value = valeData.Acompanante3 || "";
+      worksheet.getCell("I15:J15:K15").value = valeData.Acompanante4 || "";
+      worksheet.getCell("I16:J16:K16").value = valeData.Acompanante5 || "";
+      worksheet.getCell("B13:C13:D13:E13:F13:G13:H13").value =
+        valeData.DescripcionMotivo;
+      worksheet.getCell("G17:H17:I17:J17:K17").value =
+        valeData.NombreSolicitante || "";
+      worksheet.getCell("H18:I18:J18:K18").value = valeData.Detalle || "";
+      worksheet.getCell("G25").value = horaSalida;
+      worksheet.getCell("C25:D25:E25").value = fechaSolicitud;
+      worksheet.getCell("C9").value = destino || "";
+      worksheet.getCell("C20").value = horaSalida;
+      worksheet.getCell("C19").value = fechaSolicitud;
+      worksheet.getCell("K25").value = horaEntrada || "";
+      worksheet.getCell("C30").value = valeData.kilometrajeInicioVale || "";
+      worksheet.getCell("G30").value = valeData.kilometrajeFinalVale || "";
+      worksheet.getCell("E20").value = horaEntrada || "";
+      worksheet.getCell("E19").value = fechaSolicitud;
+      worksheet.getCell("I25").value = fechaSolicitud;
+      worksheet.getCell("C30").value = valeData.kilometrajeInicioVale || "";
+      worksheet.getCell("G26").value = valeData.EncargadoCordinador || "";
+      worksheet.getCell("G28").value = valeData.NombreCompletoChofer || "";
+      worksheet.getCell("K5").value = valeData.numeroUnidad || "";
+      worksheet.getCell("C30").value = `${
+        valeData.KilometrajeInicialViaje || ""
+      } km`;
+      worksheet.getCell("G30").value = `${
+        valeData.KilometrajeFinalViaje || ""
+      } km`;
+
+      worksheet.getCell("K25").value = valeData.HoraFinViaje || "";
+      worksheet.getCell("E20").value = valeData.HoraFinViaje || "";
+
+      // Export the workbook
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Reporte_Vale_${idVale}.xlsx`;
+      link.click();
+    } catch (error) {
+      console.error("Error al exportar el archivo Excel:", error);
+    }
   }
 
   /*

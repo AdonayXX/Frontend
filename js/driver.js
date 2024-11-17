@@ -1,329 +1,485 @@
-(function() {
-    var acompananteCount = 0;
+(function () {
+  var acompananteCount = 0;
 
-    document.getElementById('btnAddAcompanante').addEventListener('click', function() {
-        if (acompananteCount < 2) {
-            acompananteCount++;
-            document.getElementById('acompanante' + acompananteCount).style.display = 'block';
-        }
+  document
+    .getElementById("btnAddAcompanante")
+    .addEventListener("click", function () {
+      if (acompananteCount < 2) {
+        acompananteCount++;
+        document.getElementById(
+          "acompanante" + acompananteCount
+        ).style.display = "block";
+      }
     });
 
-    document.getElementById('btnRemoveAcompanante').addEventListener('click', function() {
-        if (acompananteCount > 0) {
-            document.getElementById('acompanante' + acompananteCount).style.display = 'none';
-            acompananteCount--;
-        }
+  document
+    .getElementById("btnRemoveAcompanante")
+    .addEventListener("click", function () {
+      if (acompananteCount > 0) {
+        document.getElementById(
+          "acompanante" + acompananteCount
+        ).style.display = "none";
+        acompananteCount--;
+      }
     });
 
+  // ---------------------------------POST------------------------------------------------ //
+  document.getElementById("btnActualizar").disabled = true;
 
-// ---------------------------------POST------------------------------------------------ //
-document.getElementById('btnActualizar').disabled = true;
+  document
+    .getElementById("btnGuardar")
+    .addEventListener("click", async function (event) {
+      event.preventDefault();
+      this.disabled = true;
 
-document.getElementById('btnGuardar').addEventListener('click', async function (event) {
-    event.preventDefault();
-    this.disabled = true;
-
-    const guardarChofer = async () => {
-        const cedula =  document.getElementById('cedula').value;
-        const nombre = document.getElementById('nombre').value;
-        const apellido1 = document.getElementById('apellido1').value;
-        const apellido2 = document.getElementById('apellido2').value;
-        const contacto = document.getElementById('contacto').value;
-        const tipoSangre = document.getElementById('tipoSangre').value;
-        const tipoLicencia = document.getElementById('tipoLicencia').value;
-        const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value;
-        const estadoChofer = document.getElementById('estado').value;
-        const autorizado = document.getElementById('autorizado').value;
+      const guardarChofer = async () => {
+        const cedula = document.getElementById("cedula").value;
+        const nombre = document.getElementById("nombre").value;
+        const apellido1 = document.getElementById("apellido1").value;
+        const apellido2 = document.getElementById("apellido2").value;
+        const contacto = document.getElementById("contacto").value;
+        const correo = document.getElementById("correo").value;
+        const tipoSangre = document.getElementById("tipoSangre").value;
+        const tipoLicencia = document.getElementById("tipoLicencia").value;
+        const fechaVencimientoLicencia = document.getElementById(
+          "fechaVencimientoLicencia"
+        ).value;
+        const estadoChofer = document.getElementById("estado").value;
+        const autorizado = document.getElementById("autorizado").value;
 
         //A1
-        const contactoEmergencia = document.getElementById('contactoEmergencia').value || null;
-        const nombreCE = document.getElementById('acompananteNombreN1').value || null;
-        const apellido1CE = document.getElementById('apellido1CE1').value || null;
-        const apellido2CE = document.getElementById('apellido2CE1').value || null;
+        const contactoEmergencia =
+          document.getElementById("contactoEmergencia").value || null;
+        const nombreCE =
+          document.getElementById("acompananteNombreN1").value || null;
+        const apellido1CE =
+          document.getElementById("apellido1CE1").value || null;
+        const apellido2CE =
+          document.getElementById("apellido2CE1").value || null;
 
         //A2
-        const contactoEmergencia2 = document.getElementById('contactoEmergencia2').value || null;
-        const nombreCE2 = document.getElementById('acompananteNombreN2').value || null;
-        const apellido1CE2 = document.getElementById('apellido1CE2').value || null;
-        const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
+        const contactoEmergencia2 =
+          document.getElementById("contactoEmergencia2").value || null;
+        const nombreCE2 =
+          document.getElementById("acompananteNombreN2").value || null;
+        const apellido1CE2 =
+          document.getElementById("apellido1CE2").value || null;
+        const apellido2CE2 =
+          document.getElementById("apellido2CE2").value || null;
 
-        if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoSangre || !tipoLicencia || !fechaVencimientoLicencia) {
-            const camposFaltantes = [];
-            if (!cedula) camposFaltantes.push('Cédula');
-            if (!nombre) camposFaltantes.push('Nombre');
-            if (!apellido1) camposFaltantes.push('Primer apellido');
-            if (!apellido2) camposFaltantes.push('Segundo apellido');
-            if (!tipoSangre) camposFaltantes.push('Tipo de sangre');
-            if (!tipoLicencia) camposFaltantes.push('Tipo de licencia');
-            if (!fechaVencimientoLicencia) camposFaltantes.push('Fecha de vencimiento de la licencia');
-            
-            const mensaje = `Por favor, complete los siguientes campos requeridos: ${camposFaltantes.join(', ')}.`;
-            showToast('Aviso', mensaje);
-            this.disabled = false;
-            return;
+        if (
+          !cedula ||
+          !nombre ||
+          !apellido1 ||
+          !apellido2 ||
+          !tipoSangre ||
+          !tipoLicencia ||
+          !fechaVencimientoLicencia ||
+          !correo
+        ) {
+          const camposFaltantes = [];
+          if (!cedula) camposFaltantes.push("Cédula");
+          if (!nombre) camposFaltantes.push("Nombre");
+          if (!apellido1) camposFaltantes.push("Primer apellido");
+          if (!apellido2) camposFaltantes.push("Segundo apellido");
+          if (!tipoSangre) camposFaltantes.push("Tipo de sangre");
+          if (!tipoLicencia) camposFaltantes.push("Tipo de licencia");
+          if (!correo) camposFaltantes.push("Correo");
+          if (!fechaVencimientoLicencia)
+            camposFaltantes.push("Fecha de vencimiento de la licencia");
+
+          const mensaje = `Por favor, complete los siguientes campos requeridos: ${camposFaltantes.join(
+            ", "
+          )}.`;
+          showToast("Aviso", mensaje);
+          this.disabled = false;
+          return;
         }
 
         const choferData = {
-            "cedula": cedula,
-            "nombre": nombre,
-            "apellido1": apellido1,
-            "apellido2": apellido2,
-            "contacto": contacto,
-            "tipoSangre": tipoSangre,
-            "tipoLicencia": tipoLicencia,
-            "vencimientoLicencia": fechaVencimientoLicencia,
-            "contactoEmergencia1": contactoEmergencia,
-            "nombreCE1": nombreCE,
-            "apellido1CE1": apellido1CE,
-            "apellido2CE1": apellido2CE,
-            "contactoEmergencia2": contactoEmergencia2,
-            "nombreCE2": nombreCE2,
-            "apellido1CE2": apellido1CE2,
-            "apellido2CE2": apellido2CE2,
-            "estadoChofer": estadoChofer,
-            "autorizado": autorizado,
-            "usuario": idUsuario
+          cedula: cedula,
+          nombre: nombre,
+          apellido1: apellido1,
+          apellido2: apellido2,
+          contacto: contacto,
+          tipoSangre: tipoSangre,
+          tipoLicencia: tipoLicencia,
+          vencimientoLicencia: fechaVencimientoLicencia,
+          contactoEmergencia1: contactoEmergencia,
+          nombreCE1: nombreCE,
+          apellido1CE1: apellido1CE,
+          apellido2CE1: apellido2CE,
+          contactoEmergencia2: contactoEmergencia2,
+          nombreCE2: nombreCE2,
+          apellido1CE2: apellido1CE2,
+          apellido2CE2: apellido2CE2,
+          estadoChofer: estadoChofer,
+          autorizado: autorizado,
+          usuario: idUsuario,
         };
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post('https://backend-transporteccss.onrender.com/api/chofer', choferData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.status === 201) {
-                showToast('Éxito', 'Chofer registrado exitosamente.');
-                setTimeout(() => {
-                    loadContent('formdriver.html', 'mainContent');
-                }, 2000);
+          const token = localStorage.getItem("token");
+          const response = await axios.post(
+            "http://localhost:18026/api/chofer",
+            choferData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
+          );
+
+          if (response.status === 201) {
+            crearUsuario(choferData, correo);
+            showToast("Éxito", "Chofer registrado exitosamente.");
+            setTimeout(() => {
+              loadContent("formdriver.html", "mainContent");
+            }, 2000);
+          }
         } catch (error) {
-            console.error('Error al registrar el chofer:', error.response ? error.response.data : error.message);
-            showToast('Error', 'Error al registrar el chofer.');
-            this.disabled = false;
+          console.error(
+            "Error al registrar el chofer:",
+            error.response ? error.response.data : error.message
+          );
+          showToast("Error", "Error al registrar el chofer.");
+          this.disabled = false;
         }
-    }
+      };
 
-    await guardarChofer();
-});
+      await guardarChofer();
+    });
 
-function infoUser() {
+  async function crearUsuario(datosChofe, correo) {
+    const contrasena = await generarContrasenaChofer(
+      datosChofe.cedula,
+      datosChofe.nombre,
+      datosChofe.apellido1,
+      datosChofe.apellido2
+    );
+    const chofer = {
+      Identificacion: datosChofe.cedula,
+      Nombre: datosChofe.nombre,
+      Apellido1: datosChofe.apellido1,
+      Apellido2: datosChofe.apellido2,
+      Rol: 2,
+      Contrasena: contrasena,
+      Correo: correo,
+      Estado: "Activo",
+    };
+
+    saveUser(chofer);
+  }
+
+  async function saveUser(userData) {
     try {
-      const token = localStorage.getItem('token');
-      const decodedToken = jwt_decode(token);
-      console.log(decodedToken);
-      return (decodedToken);
+      const API_URL = "http://localhost:18026/api/usuario";
+      const response = await axios.post(API_URL, userData);
+      console.log(response);
+      const userExist = response.data.usuario;
+
+      if (response.status === 201) {
+        showToast("Éxito!", "Usuario registrado correctamente");
+      }
     } catch (error) {
-      console.error(error);
-      showToast('Error', 'Ocurrio un problema al obtener los datos del usuario')
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        showToast("Ups!", errorMessage);
+      } else {
+        showToast("Ups!", "Ocurrió un problema durante el envío de los datos.");
+      }
     }
   }
 
-const infoUsuario = infoUser();
-const idUsuario = infoUsuario.usuario.IdUsuario;
+  function generarContrasenaChofer(cedula, nombre, apellido1, apellido2) {
+    // Tomar las iniciales
+    const iniciales =
+      nombre[0].toUpperCase() +
+      apellido1[0].toLowerCase() +
+      apellido2[0].toUpperCase();
 
-document.getElementById('contacto').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 4) {
-        value = value.slice(0, 4) + '-' + value.slice(4);
-    }
-    e.target.value = value;
-});
+    // Tomar las últimas 4 cifras de la cédula
+    const ultimasCifras = cedula.substring(cedula.length - 4);
 
-document.getElementById('contactoEmergencia').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 4) {
-        value = value.slice(0, 4) + '-' + value.slice(4);
-    }
-    e.target.value = value;
-});
+    // Seleccionar un carácter especial aleatorio
+    const caracterEspecial = "!";
 
-document.getElementById('contactoEmergencia2').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 4) {
-        value = value.slice(0, 4) + '-' + value.slice(4);
-    }
-    e.target.value = value;
-});
+    // Crear la contraseña base
+    let contrasenaBase = iniciales + ultimasCifras + caracterEspecial;
 
-// ---------------------------------GET------------------------------------------------ //
+    // Agregar un número aleatorio
 
-document.getElementById('cedula').addEventListener('blur', async function (event) {
-    const cedula = this.value.trim();
-    if (cedula === '') {
-        limpiarCampos();
-        document.getElementById('btnGuardar').disabled = false;
-        document.getElementById('btnActualizar').disabled = true;
-        return;
-    }
-    await getChofer(cedula);
-});
+    return contrasenaBase;
+  }
+  //console.log(generarContrasenaChofer("504460403", "Joan", "Bravo", "Solano"));
 
-async function getChofer(cedula) {
+  function infoUser() {
     try {
-
-
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`https://backend-transporteccss.onrender.com/api/chofer/cedula/${cedula}`,{
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-          
-
-        const choferes = response.data.chofer;
-
-        const choferEncontrado = choferes[0]; 
-        if (choferEncontrado) {
-            document.getElementById('nombre').value = choferEncontrado.nombre || '';
-            document.getElementById('apellido1').value = choferEncontrado.apellido1 || '';
-            document.getElementById('apellido2').value = choferEncontrado.apellido2 || '';
-            document.getElementById('contacto').value = choferEncontrado.contacto || '';
-            document.getElementById('tipoSangre').value = choferEncontrado.tipoSangre || '';
-            document.getElementById('tipoLicencia').value = choferEncontrado.tipoLicencia || '';
-            document.getElementById('fechaVencimientoLicencia').value = choferEncontrado.vencimientoLicencia ? new Date(choferEncontrado.vencimientoLicencia).toISOString().split('T')[0] : '';
-            document.getElementById('estado').value = choferEncontrado.estadoChofer || '';
-            document.getElementById('acompananteNombreN1').value = choferEncontrado.nombreCE1 || ''; 
-            document.getElementById('apellido1CE1').value = choferEncontrado.apellido1CE1 || '';
-            document.getElementById('apellido2CE1').value = choferEncontrado.apellido2CE1 || '';
-            document.getElementById('contactoEmergencia').value = choferEncontrado.contactoEmergencia1 || '';
-            document.getElementById('acompananteNombreN2').value = choferEncontrado.nombreCE2 || ''; 
-            document.getElementById('apellido1CE2').value = choferEncontrado.apellido1CE2 || '';
-            document.getElementById('apellido2CE2').value = choferEncontrado.apellido2CE2 || '';
-            document.getElementById('contactoEmergencia2').value = choferEncontrado.contactoEmergencia2 || '';
-            document.getElementById('autorizado').value = choferEncontrado.autorizado;
-
-            document.getElementById('nombre').disabled = false;
-            document.getElementById('apellido1').disabled = false;
-            document.getElementById('apellido2').disabled = false;
-            document.getElementById('contacto').disabled = false;
-            document.getElementById('tipoLicencia').disabled = false;
-            document.getElementById('fechaVencimientoLicencia').disabled = false;
-            document.getElementById('estado').disabled = false;
-            document.getElementById('acompananteNombreN1').disabled = false;
-            document.getElementById('apellido1CE1').disabled = false;
-            document.getElementById('apellido2CE1').disabled = false;
-            document.getElementById('contactoEmergencia').disabled = false;
-
-            document.getElementById('acompananteNombreN2').disabled = false;
-            document.getElementById('apellido1CE2').disabled = false;
-            document.getElementById('apellido2CE2').disabled = false;
-            document.getElementById('contactoEmergencia2').disabled = false;
-
-            showToast('Datos del chofer', 'Datos del chofer cargados correctamente.');
-            document.getElementById('btnGuardar').disabled = true;
-            document.getElementById('btnActualizar').disabled = false;
-            return true;
-
-
-
-        } else {
-            setTimeout(() => {
-            showToast('Error', 'No se encuentra ningun chofer registrado con la cédula ingresada.');
-            document.getElementById('btnGuardar').disabled = false;
-            document.getElementById('btnActualizar').disabled = true;
-            }
-            , 0);
-            return false;
-        }
+      const token = localStorage.getItem("token");
+      const decodedToken = jwt_decode(token);
+      console.log(decodedToken);
+      return decodedToken;
     } catch (error) {
-        showToast('Error', 'Error al obtener los datos del chofer.');
-        return false;
+      console.error(error);
+      showToast(
+        "Error",
+        "Ocurrio un problema al obtener los datos del usuario"
+      );
     }
-}
-// ---------------------------------PUT------------------------------------------------ //
+  }
 
-document.getElementById('btnActualizar').addEventListener('click', function (event) {
-    event.preventDefault();
-    this.disabled = true;
+  const infoUsuario = infoUser();
+  const idUsuario = infoUsuario.usuario.IdUsuario;
 
-    const cedula = document.getElementById('cedula').value;
-    const nombre = document.getElementById('nombre').value;
-    const apellido1 = document.getElementById('apellido1').value;
-    const apellido2 = document.getElementById('apellido2').value;
-    const contacto = document.getElementById('contacto').value;
-    const tipoLicencia = document.getElementById('tipoLicencia').value;
-    const tipoSangre = document.getElementById('tipoSangre').value;
-    const fechaVencimientoLicencia = document.getElementById('fechaVencimientoLicencia').value;
-    const estadoChofer = document.getElementById('estado').value;
-    const contactoEmergencia1 = document.getElementById('contactoEmergencia').value || null;
-    const nombreCE1 = document.getElementById('acompananteNombreN1').value || null;
-    const apellido1CE1 = document.getElementById('apellido1CE1').value || null;
-    const apellido2CE1 = document.getElementById('apellido2CE1').value || null;
-    const contactoEmergencia2 = document.getElementById('contactoEmergencia2').value || null;
-    const nombreCE2 = document.getElementById('acompananteNombreN2').value || null;
-    const apellido1CE2 = document.getElementById('apellido1CE2').value || null;
-    const apellido2CE2 = document.getElementById('apellido2CE2').value || null;
-    const autorizado = document.getElementById('autorizado').value;
+  document.getElementById("contacto").addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 4) {
+      value = value.slice(0, 4) + "-" + value.slice(4);
+    }
+    e.target.value = value;
+  });
 
+  document
+    .getElementById("contactoEmergencia")
+    .addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 4) {
+        value = value.slice(0, 4) + "-" + value.slice(4);
+      }
+      e.target.value = value;
+    });
 
+  document
+    .getElementById("contactoEmergencia2")
+    .addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 4) {
+        value = value.slice(0, 4) + "-" + value.slice(4);
+      }
+      e.target.value = value;
+    });
 
-    if (!cedula || !nombre || !apellido1 || !apellido2 || !tipoLicencia || !fechaVencimientoLicencia) {
-        showToast('Error', 'Por favor, complete todos los campos requeridos.');
+  // ---------------------------------GET------------------------------------------------ //
+
+  document
+    .getElementById("cedula")
+    .addEventListener("blur", async function (event) {
+      const cedula = this.value.trim();
+      if (cedula === "") {
+        limpiarCampos();
+        document.getElementById("btnGuardar").disabled = false;
+        document.getElementById("btnActualizar").disabled = true;
+        return;
+      }
+      await getChofer(cedula);
+    });
+
+  async function getChofer(cedula) {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:18026/api/chofer/cedula/${cedula}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const choferes = response.data.chofer;
+
+      const choferEncontrado = choferes[0];
+      if (choferEncontrado) {
+        document.getElementById("nombre").value = choferEncontrado.nombre || "";
+        document.getElementById("correo").value = choferEncontrado.correo || "";
+        document.getElementById("apellido1").value =
+          choferEncontrado.apellido1 || "";
+        document.getElementById("apellido2").value =
+          choferEncontrado.apellido2 || "";
+        document.getElementById("contacto").value =
+          choferEncontrado.contacto || "";
+        document.getElementById("tipoSangre").value =
+          choferEncontrado.tipoSangre || "";
+        document.getElementById("tipoLicencia").value =
+          choferEncontrado.tipoLicencia || "";
+        document.getElementById("fechaVencimientoLicencia").value =
+          choferEncontrado.vencimientoLicencia
+            ? new Date(choferEncontrado.vencimientoLicencia)
+                .toISOString()
+                .split("T")[0]
+            : "";
+        document.getElementById("estado").value =
+          choferEncontrado.estadoChofer || "";
+        document.getElementById("acompananteNombreN1").value =
+          choferEncontrado.nombreCE1 || "";
+        document.getElementById("apellido1CE1").value =
+          choferEncontrado.apellido1CE1 || "";
+        document.getElementById("apellido2CE1").value =
+          choferEncontrado.apellido2CE1 || "";
+        document.getElementById("contactoEmergencia").value =
+          choferEncontrado.contactoEmergencia1 || "";
+        document.getElementById("acompananteNombreN2").value =
+          choferEncontrado.nombreCE2 || "";
+        document.getElementById("apellido1CE2").value =
+          choferEncontrado.apellido1CE2 || "";
+        document.getElementById("apellido2CE2").value =
+          choferEncontrado.apellido2CE2 || "";
+        document.getElementById("contactoEmergencia2").value =
+          choferEncontrado.contactoEmergencia2 || "";
+        document.getElementById("autorizado").value =
+          choferEncontrado.autorizado;
+
+        document.getElementById("nombre").disabled = false;
+        document.getElementById("apellido1").disabled = false;
+        document.getElementById("apellido2").disabled = false;
+        document.getElementById("contacto").disabled = false;
+        document.getElementById("tipoLicencia").disabled = false;
+        document.getElementById("fechaVencimientoLicencia").disabled = false;
+        document.getElementById("estado").disabled = false;
+        document.getElementById("acompananteNombreN1").disabled = false;
+        document.getElementById("apellido1CE1").disabled = false;
+        document.getElementById("apellido2CE1").disabled = false;
+        document.getElementById("contactoEmergencia").disabled = false;
+
+        document.getElementById("acompananteNombreN2").disabled = false;
+        document.getElementById("apellido1CE2").disabled = false;
+        document.getElementById("apellido2CE2").disabled = false;
+        document.getElementById("contactoEmergencia2").disabled = false;
+
+        showToast(
+          "Datos del chofer",
+          "Datos del chofer cargados correctamente."
+        );
+        document.getElementById("btnGuardar").disabled = true;
+        document.getElementById("btnActualizar").disabled = false;
+        return true;
+      } else {
+        setTimeout(() => {
+          showToast(
+            "Error",
+            "No se encuentra ningun chofer registrado con la cédula ingresada."
+          );
+          document.getElementById("btnGuardar").disabled = false;
+          document.getElementById("btnActualizar").disabled = true;
+        }, 0);
+        return false;
+      }
+    } catch (error) {
+      showToast("Error", "Error al obtener los datos del chofer.");
+      return false;
+    }
+  }
+  // ---------------------------------PUT------------------------------------------------ //
+
+  document
+    .getElementById("btnActualizar")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      this.disabled = true;
+
+      const cedula = document.getElementById("cedula").value;
+      const nombre = document.getElementById("nombre").value;
+      const apellido1 = document.getElementById("apellido1").value;
+      const apellido2 = document.getElementById("apellido2").value;
+      const correo = document.getElementById("correo").value;
+      const contacto = document.getElementById("contacto").value;
+      const tipoLicencia = document.getElementById("tipoLicencia").value;
+      const tipoSangre = document.getElementById("tipoSangre").value;
+      const fechaVencimientoLicencia = document.getElementById(
+        "fechaVencimientoLicencia"
+      ).value;
+      const estadoChofer = document.getElementById("estado").value;
+      const contactoEmergencia1 =
+        document.getElementById("contactoEmergencia").value || null;
+      const nombreCE1 =
+        document.getElementById("acompananteNombreN1").value || null;
+      const apellido1CE1 =
+        document.getElementById("apellido1CE1").value || null;
+      const apellido2CE1 =
+        document.getElementById("apellido2CE1").value || null;
+      const contactoEmergencia2 =
+        document.getElementById("contactoEmergencia2").value || null;
+      const nombreCE2 =
+        document.getElementById("acompananteNombreN2").value || null;
+      const apellido1CE2 =
+        document.getElementById("apellido1CE2").value || null;
+      const apellido2CE2 =
+        document.getElementById("apellido2CE2").value || null;
+      const autorizado = document.getElementById("autorizado").value;
+
+      if (
+        !cedula ||
+        !nombre ||
+        !apellido1 ||
+        !apellido2 ||
+        !tipoLicencia ||
+        !fechaVencimientoLicencia ||
+        !correo
+      ) {
+        showToast("Error", "Por favor, complete todos los campos requeridos.");
         this.disabled = false;
         return;
-    }
+      }
 
-    const updatedDataChofer = {
-        "nombre": nombre,
-        "apellido1": apellido1,
-        "apellido2": apellido2,
-        "contacto": contacto,
-        "tipoSangre": tipoSangre,
-        "tipoLicencia": tipoLicencia,
-        "vencimientoLicencia": fechaVencimientoLicencia,
-        "contactoEmergencia1": contactoEmergencia1,
-        "nombreCE1": nombreCE1,
-        "apellido1CE1": apellido1CE1,
-        "apellido2CE1": apellido2CE1,
-        "contactoEmergencia2": contactoEmergencia2,
-        "nombreCE2": nombreCE2,
-        "apellido1CE2": apellido1CE2,
-        "apellido2CE2": apellido2CE2,
-        "estadoChofer": estadoChofer,
-        "autorizado": autorizado,
-        "usuario": idUsuario
-    };
+      const updatedDataChofer = {
+        nombre: nombre,
+        apellido1: apellido1,
+        apellido2: apellido2,
+        contacto: contacto,
+        correo: correo,
+        tipoSangre: tipoSangre,
+        tipoLicencia: tipoLicencia,
+        vencimientoLicencia: fechaVencimientoLicencia,
+        contactoEmergencia1: contactoEmergencia1,
+        nombreCE1: nombreCE1,
+        apellido1CE1: apellido1CE1,
+        apellido2CE1: apellido2CE1,
+        contactoEmergencia2: contactoEmergencia2,
+        nombreCE2: nombreCE2,
+        apellido1CE2: apellido1CE2,
+        apellido2CE2: apellido2CE2,
+        estadoChofer: estadoChofer,
+        autorizado: autorizado,
+        usuario: idUsuario,
+      };
 
-    const token = localStorage.getItem('token');
-    axios.put(`https://backend-transporteccss.onrender.com/api/chofer/${cedula}`, updatedDataChofer, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }).then(response => {
-        showToast('Éxito', 'Chofer actualizado exitosamente.');
-        setTimeout(() => {
-            loadContent('formdriver.html', 'mainContent');
-        }, 2000);
-    })
-    .catch(error => {
-        console.error('Error al actualizar el chofer:', error.message);
-        showToast('Error', 'Error al actualizar el chofer.');
-    })
-   
-});
+      const token = localStorage.getItem("token");
+      axios
+        .put(`http://localhost:18026/api/chofer/${cedula}`, updatedDataChofer, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          showToast("Éxito", "Chofer actualizado exitosamente.");
+          setTimeout(() => {
+            loadContent("formdriver.html", "mainContent");
+          }, 2000);
+        })
+        .catch((error) => {
+          console.error("Error al actualizar el chofer:", error.message);
+          showToast("Error", "Error al actualizar el chofer.");
+        });
+    });
 
-// ---------------------------------LIMPIAR CAMPOS------------------------------------------------ //
-function limpiarCampos() {
+  // ---------------------------------LIMPIAR CAMPOS------------------------------------------------ //
+  function limpiarCampos() {
     // document.getElementById('cedula').value = '';
-    document.getElementById('nombre').value = '';
-    document.getElementById('apellido1').value = '';
-    document.getElementById('apellido2').value = '';
-    document.getElementById('contacto').value = '';
-    document.getElementById('tipoSangre').value = 'A+';
-    document.getElementById('tipoLicencia').value = '';
-    document.getElementById('fechaVencimientoLicencia').value = '';
-    document.getElementById('estado').value = 'Activo';
-    document.getElementById('acompananteNombreN1').value = '';
-    document.getElementById('apellido1CE1').value = '';
-    document.getElementById('apellido2CE1').value = '';
-    document.getElementById('contactoEmergencia').value = '';
-    document.getElementById('acompananteNombreN2').value = '';
-    document.getElementById('apellido1CE2').value = '';
-    document.getElementById('apellido2CE2').value = '';
-    document.getElementById('contactoEmergencia2').value = '';
-}
+    document.getElementById("nombre").value = "";
+    document.getElementById("apellido1").value = "";
+    document.getElementById("apellido2").value = "";
+    document.getElementById("contacto").value = "";
+    document.getElementById("tipoSangre").value = "A+";
+    document.getElementById("tipoLicencia").value = "";
+    document.getElementById("fechaVencimientoLicencia").value = "";
+    document.getElementById("estado").value = "Activo";
+    document.getElementById("acompananteNombreN1").value = "";
+    document.getElementById("apellido1CE1").value = "";
+    document.getElementById("apellido2CE1").value = "";
+    document.getElementById("contactoEmergencia").value = "";
+    document.getElementById("acompananteNombreN2").value = "";
+    document.getElementById("apellido1CE2").value = "";
+    document.getElementById("apellido2CE2").value = "";
+    document.getElementById("contactoEmergencia2").value = "";
+  }
 })();

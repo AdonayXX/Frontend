@@ -434,3 +434,12 @@ tr {
 } 
 
 /* FIN DE CSS REPORTS */
+
+
+
+/* TABLA DE VALES EN VIAJES VALES */
+
+.estado_Activo_vale {
+    background-color: #004085; /* Color de fondo */
+    color: #fff;
+  }

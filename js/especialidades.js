@@ -1,58 +1,64 @@
 async function loadEspecialidades() {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const especialidades = response.data.Especialidad;
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      "http://localhost:18026/api/especialidad",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const especialidades = response.data.Especialidad;
 
-        renderTableEspecialidades(especialidades);
+    renderTableEspecialidades(especialidades);
 
-        if ($.fn.DataTable.isDataTable('#tableEspecialidades')) {
-            $('#tableEspecialidades').DataTable().clear().destroy();
-        }
-
-        let table = $('#tableEspecialidades').DataTable({
-            dom: "<'row'<'col-sm-6'l>" +
-                "<'row'<'col-sm-12't>>" +
-                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-            ordering: false,
-            searching: true,
-            paging: true,
-            pageLength: 25,
-            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
-            language: {
-                url: './assets/json/Spanish.json'
-            },
-            caseInsensitive: true,
-            smart: true
-        });
-
-        $('#searchEspecialidad').on('keyup', function () {
-            let inputValue = $(this).val().toLowerCase();
-            table.search(inputValue).draw();
-        });
-
-        ocultarSpinner()
-
-    } catch (error) {
-        showToast("Error", "Error al obtener las especialidades.")
+    if ($.fn.DataTable.isDataTable("#tableEspecialidades")) {
+      $("#tableEspecialidades").DataTable().clear().destroy();
     }
+
+    let table = $("#tableEspecialidades").DataTable({
+      dom:
+        "<'row'<'col-sm-6'l>" +
+        "<'row'<'col-sm-12't>>" +
+        "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+      ordering: false,
+      searching: true,
+      paging: true,
+      pageLength: 25,
+      lengthMenu: [
+        [25, 50, 100, -1],
+        [25, 50, 100, "Todo"],
+      ],
+      language: {
+        url: "./assets/json/Spanish.json",
+      },
+      caseInsensitive: true,
+      smart: true,
+    });
+
+    $("#searchEspecialidad").on("keyup", function () {
+      let inputValue = $(this).val().toLowerCase();
+      table.search(inputValue).draw();
+    });
+
+    ocultarSpinner();
+  } catch (error) {
+    showToast("Error", "Error al obtener las especialidades.");
+  }
 }
 
 loadEspecialidades();
 
 function renderTableEspecialidades(especialidades) {
-    const tableBody = document.getElementById('especialidadesTableBody');
-    tableBody.innerHTML = '';
+  const tableBody = document.getElementById("especialidadesTableBody");
+  tableBody.innerHTML = "";
 
-    especialidades.forEach(especialidad => {
-        const row = document.createElement('tr');
-        const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
+  especialidades.forEach((especialidad) => {
+    const row = document.createElement("tr");
+    const idEspecialidadStr = JSON.stringify(especialidad.idEspecialidad);
 
-        row.innerHTML = `
+    row.innerHTML = `
             <td class="text-center">${especialidad.idEspecialidad}</td>
             <td class="text-center">${especialidad.Especialidad}</td>
             <td>
@@ -61,41 +67,43 @@ function renderTableEspecialidades(especialidades) {
                 </button>
             </td>
         `;
-        tableBody.appendChild(row);
-    });
+    tableBody.appendChild(row);
+  });
 }
 
 async function deleteEspecialidad(idEspecialidad) {
-    try {
-        const token = localStorage.getItem('token');
+  try {
+    const token = localStorage.getItem("token");
 
-        await axios.delete(`https://backend-transporteccss.onrender.com/api/especialidad/${idEspecialidad}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+    await axios.delete(
+      `http://localhost:18026/api/especialidad/${idEspecialidad}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-        $('#confirmarEliminarModal2').modal('hide');
+    $("#confirmarEliminarModal2").modal("hide");
 
-        setTimeout(function () {
-            loadContent('especialidades.html', 'mainContent');
-        }, 1400);
-        showToast('¡Éxito!', 'Especialidad eliminada correctamente.');
-
-    } catch (error) {
-        showToast('Error', 'No se pudo eliminar la especialidad.');
-        $('#confirmarEliminarModal2').modal('hide');
-    }
+    setTimeout(function () {
+      loadContent("especialidades.html", "mainContent");
+    }, 1400);
+    showToast("¡Éxito!", "Especialidad eliminada correctamente.");
+  } catch (error) {
+    showToast("Error", "No se pudo eliminar la especialidad.");
+    $("#confirmarEliminarModal2").modal("hide");
+  }
 }
 
 function createDeleteModal2(idEspecialidad) {
-    const existingModal = document.getElementById('confirmarEliminarModal2');
-    if (existingModal) {
-        existingModal.remove();
-    }
+  const existingModal = document.getElementById("confirmarEliminarModal2");
+  if (existingModal) {
+    existingModal.remove();
+  }
 
-    const modalContainer = document.createElement('div');
-    modalContainer.innerHTML = `
+  const modalContainer = document.createElement("div");
+  modalContainer.innerHTML = `
         <div class="modal fade" id="confirmarEliminarModal2" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -109,76 +117,90 @@ function createDeleteModal2(idEspecialidad) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button"  class="btn btn-danger" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(idEspecialidad)})'>Eliminar</button>
+                        <button type="button"  class="btn btn-danger" id="eliminarEspecialidad" onclick='deleteEspecialidad(${JSON.stringify(
+                          idEspecialidad
+                        )})'>Eliminar</button>
                     </div>
                 </div>
             </div>
         </div>
     `;
 
-    document.body.appendChild(modalContainer);
+  document.body.appendChild(modalContainer);
 
-    const modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal2'));
-    modal.show();
+  const modal = new bootstrap.Modal(
+    document.getElementById("confirmarEliminarModal2")
+  );
+  modal.show();
 }
 
-
-document.getElementById('BtnGuardarEspe').addEventListener('click', async () => {
-    const nuevaEspecialidad = document.getElementById('AgregarEspe').value.trim();
+document
+  .getElementById("BtnGuardarEspe")
+  .addEventListener("click", async () => {
+    const nuevaEspecialidad = document
+      .getElementById("AgregarEspe")
+      .value.trim();
 
     if (!nuevaEspecialidad) {
-        showToast('Error', 'El campo es obligatorio.');
-        return;
+      showToast("Error", "El campo es obligatorio.");
+      return;
     }
 
     try {
-        const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/especialidad', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const especialidades = response.data.Especialidad;
-
-        const especialidadExistente = especialidades.find(
-            especialidad => especialidad.Especialidad.toLowerCase() === nuevaEspecialidad.toLowerCase()
-        );
-
-        if (especialidadExistente) {
-            showToast('Error', 'La especialidad ya existe.');
-            return;
+      const response = await axios.get(
+        "http://localhost:18026/api/especialidad",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      const especialidades = response.data.Especialidad;
 
-        const especialidadData = {
-            Especialidad: nuevaEspecialidad
-        };
+      const especialidadExistente = especialidades.find(
+        (especialidad) =>
+          especialidad.Especialidad.toLowerCase() ===
+          nuevaEspecialidad.toLowerCase()
+      );
 
-        await axios.post('https://backend-transporteccss.onrender.com/api/especialidad', especialidadData, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+      if (especialidadExistente) {
+        showToast("Error", "La especialidad ya existe.");
+        return;
+      }
 
-        $('#AgregarEspeModal').modal('hide');
-        setTimeout(function () {
-            loadContent('especialidades.html', 'mainContent');
-        }, 1400);
-        showToast('¡Éxito!', 'Especialidad agregada correctamente.');
+      const especialidadData = {
+        Especialidad: nuevaEspecialidad,
+      };
 
-        document.getElementById('AgregarEspe').value = '';
+      await axios.post(
+        "http://localhost:18026/api/especialidad",
+        especialidadData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-        const modalElement = document.getElementById('AgregarEspeModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      $("#AgregarEspeModal").modal("hide");
+      setTimeout(function () {
+        loadContent("especialidades.html", "mainContent");
+      }, 1400);
+      showToast("¡Éxito!", "Especialidad agregada correctamente.");
 
-        modalInstance.hide();
+      document.getElementById("AgregarEspe").value = "";
 
+      const modalElement = document.getElementById("AgregarEspeModal");
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+      modalInstance.hide();
     } catch (error) {
-        showToast("Error", "Error al agregar la especialidad.")
+      showToast("Error", "Error al agregar la especialidad.");
     }
-});
-
+  });
 
 function ocultarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'none';
+  document.getElementById("spinnerContainer").style.display = "none";
 }

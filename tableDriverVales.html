@@ -30,6 +30,7 @@
         <table class="table table-light table-striped table-hover table-bordered" id="tableTrips">
             <thead>
                 <tr class="text-center">
+                    <th id="color-th">Unidad</th>
                     <th id="color-th">Motivo</th>
                     <th id="color-th">Lugar de Salida</th>
                     <th id="color-th">Lugar de Destino</th>
@@ -71,12 +72,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnIniciarValeConfirm">Iniciar
-                    Vale</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnIniciarValeConfirm">
+                    Iniciar Vale
+                </button>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="finalizarValeModal" tabindex="-1" aria-labelledby="finalizarValeModalLabel"
     aria-hidden="true">
@@ -138,7 +141,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                    id="btnConfirmarFinalizarVale">Finalizar Vale</button>
+                    id="btnConfirmarFinalizarVale" onclick="window.finalizarVale()">Finalizar Vale</button>
             </div>
         </div>
     </div>

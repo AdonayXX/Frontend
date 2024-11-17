@@ -1,78 +1,93 @@
 "use strict";
 
 function mostrarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'flex';
+  document.getElementById("spinnerContainer").style.display = "flex";
 }
 
 function ocultarSpinner() {
-    document.getElementById('spinnerContainer').style.display = 'none';
+  document.getElementById("spinnerContainer").style.display = "none";
 }
 
 async function getRegistrosCombustibleATAP() {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/combustibleATAP', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      "http://localhost:18026/api/combustibleATAP",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-        const registros = response.data.registros;
+    const registros = response.data.registros;
 
-        $(document).ready(function () {
-            if ($.fn.DataTable.isDataTable('#fuelTable')) {
-                $('#fuelTable').DataTable().destroy();
-            }
+    $(document).ready(function () {
+      if ($.fn.DataTable.isDataTable("#fuelTable")) {
+        $("#fuelTable").DataTable().destroy();
+      }
 
-            const tableBody = document.getElementById('fuelTableBody');
-            tableBody.innerHTML = '';
+      const tableBody = document.getElementById("fuelTableBody");
+      tableBody.innerHTML = "";
 
-            registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      registros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-            registros.forEach(record => {
-                const row = document.createElement('tr');
+      registros.forEach((record) => {
+        const row = document.createElement("tr");
 
-                row.innerHTML = `
-                <td class="text-center">${record.chofer || 'N/A'}</td>
-                <td class="text-center">${record.numeroUnidad || 'N/A'}</td>
-                <td class="text-center">${record.numeroFactura || 'N/A'}</td>
-                <td class="text-center">${record.numeroAutorizacion || 'N/A'}</td>
-                <td class="text-center">${record.kilometraje || 'N/A'}</td>
-                <td class="text-center">${new Date(record.fecha).toISOString().split('T')[0] || 'N/A'}</td>
-                <td class="text-center">${record.litrosAproximados || 'N/A'}</td>
-                <td class="text-center">${record.montoColones || 'N/A'}</td>
+        row.innerHTML = `
+                <td class="text-center">${record.chofer || "N/A"}</td>
+                <td class="text-center">${record.numeroUnidad || "N/A"}</td>
+                <td class="text-center">${record.numeroFactura || "N/A"}</td>
+                <td class="text-center">${
+                  record.numeroAutorizacion || "N/A"
+                }</td>
+                <td class="text-center">${record.kilometraje || "N/A"}</td>
+                <td class="text-center">${
+                  new Date(record.fecha).toISOString().split("T")[0] || "N/A"
+                }</td>
+                <td class="text-center">${
+                  record.litrosAproximados || "N/A"
+                }</td>
+                <td class="text-center">${record.montoColones || "N/A"}</td>
             `;
 
-                tableBody.appendChild(row);
-            });
+        tableBody.appendChild(row);
+      });
 
-            $('#fuelTable').DataTable({
-                dom: "<'row'<'col-sm-6'l>" +
-                    "<'row'<'col-sm-12't>>" +
-                    "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-                ordering: false,
-                searching: true,
-                paging: true,
-                pageLength: 25, 
-                lengthMenu: [ [25, 50, 100, -1], [25, 50, 100, "Todo"] ],
-                language: {
-                    url: './assets/json/Spanish.json'
-                },
-                caseInsensitive: true,
-                smart: true
-            });
+      $("#fuelTable").DataTable({
+        dom:
+          "<'row'<'col-sm-6'l>" +
+          "<'row'<'col-sm-12't>>" +
+          "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+        ordering: false,
+        searching: true,
+        paging: true,
+        pageLength: 25,
+        lengthMenu: [
+          [25, 50, 100, -1],
+          [25, 50, 100, "Todo"],
+        ],
+        language: {
+          url: "./assets/json/Spanish.json",
+        },
+        caseInsensitive: true,
+        smart: true,
+      });
 
-            $('#searchFuel').on('keyup', function () {
-                let inputValue = $(this).val().toLowerCase();
-                $('#fuelTable').DataTable().search(inputValue).draw();
-            });
-
-        });
-        ocultarSpinner();
-    } catch (error) {
-        showToast('Error', 'No se pudo cargar la información de los registros de combustible ATAP');
-        ocultarSpinner();
-    }
+      $("#searchFuel").on("keyup", function () {
+        let inputValue = $(this).val().toLowerCase();
+        $("#fuelTable").DataTable().search(inputValue).draw();
+      });
+    });
+    ocultarSpinner();
+  } catch (error) {
+    showToast(
+      "Error",
+      "No se pudo cargar la información de los registros de combustible ATAP"
+    );
+    ocultarSpinner();
+  }
 }
 
 getRegistrosCombustibleATAP();

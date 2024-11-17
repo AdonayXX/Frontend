@@ -1,89 +1,106 @@
 async function loadCitas() {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('https://backend-transporteccss.onrender.com/api/cita', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const citas = response.data;
-        renderTable(citas);
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("http://localhost:18026/api/cita", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const citas = response.data;
+    renderTable(citas);
 
-        if ($.fn.DataTable.isDataTable('#TableAppointment')) {
-            $('#TableAppointment').DataTable().clear().destroy();
-        }
-        $('#TableAppointment').DataTable({
-            dom: "<'row'<'col-sm-6'l>" +
-                "<'row'<'col-sm-12't>>" +
-                "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-            ordering: false,
-            searching: true,
-            paging: true,
-            language: {
-                url: './assets/json/Spanish.json'
-            },
-            caseInsensitive: true,
-            smart: true,
-            pageLength: 25,
-            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Todo"]],
-            caseInsensitive: true,
-            smart: true
-
-        });
-
-        $('#searchAppointment').on('keyup', function () {
-            let inputValue = $(this).val().toLowerCase();
-            let selectedState = $('#seleccionar-estado').val().toLowerCase();
-            $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
-        });
-
-        $('#fechaCita').on('change', function () {
-            let fechaInput = $('#fechaCita').val();
-            $('#TableAppointment').DataTable().column(2).search(fechaInput).draw();
-        });
-
-        $(document).ready(function () {
-            $('#seleccionar-estado').val('Iniciada').trigger('change');
-
-            $('#seleccionar-estado').on('change', function () {
-                let selectedState = $(this).val().toLowerCase();
-                $('#TableAppointment').DataTable().column(6).search(selectedState).draw();
-
-                let tituloCitas = document.getElementById('tituloCitas');
-                tituloCitas.textContent = `Citas ${selectedState.charAt(0).toUpperCase() + selectedState.slice(1)}s`;
-
-                let inputValue = $('#searchAppointment').val().toLowerCase();
-                $('#TableAppointment').DataTable().search(inputValue + ' ' + selectedState).draw();
-            });
-        });
-        setTimeout(function () {
-            $('#TableAppointment').DataTable().search('iniciada').draw();
-        }, 1200)
-        ocultarSpinner();
-    } catch (error) {
-        showToast("Error", "Error al obtener las citas.");
+    if ($.fn.DataTable.isDataTable("#TableAppointment")) {
+      $("#TableAppointment").DataTable().clear().destroy();
     }
+    $("#TableAppointment").DataTable({
+      dom:
+        "<'row'<'col-sm-6'l>" +
+        "<'row'<'col-sm-12't>>" +
+        "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+      ordering: false,
+      searching: true,
+      paging: true,
+      language: {
+        url: "./assets/json/Spanish.json",
+      },
+      caseInsensitive: true,
+      smart: true,
+      pageLength: 25,
+      lengthMenu: [
+        [25, 50, 100, -1],
+        [25, 50, 100, "Todo"],
+      ],
+      caseInsensitive: true,
+      smart: true,
+    });
+
+    $("#searchAppointment").on("keyup", function () {
+      let inputValue = $(this).val().toLowerCase();
+      let selectedState = $("#seleccionar-estado").val().toLowerCase();
+      $("#TableAppointment")
+        .DataTable()
+        .search(inputValue + " " + selectedState)
+        .draw();
+    });
+
+    $("#fechaCita").on("change", function () {
+      let fechaInput = $("#fechaCita").val();
+      $("#TableAppointment").DataTable().column(2).search(fechaInput).draw();
+    });
+
+    $(document).ready(function () {
+      $("#seleccionar-estado").val("Iniciada").trigger("change");
+
+      $("#seleccionar-estado").on("change", function () {
+        let selectedState = $(this).val().toLowerCase();
+        $("#TableAppointment")
+          .DataTable()
+          .column(6)
+          .search(selectedState)
+          .draw();
+
+        let tituloCitas = document.getElementById("tituloCitas");
+        tituloCitas.textContent = `Citas ${
+          selectedState.charAt(0).toUpperCase() + selectedState.slice(1)
+        }s`;
+
+        let inputValue = $("#searchAppointment").val().toLowerCase();
+        $("#TableAppointment")
+          .DataTable()
+          .search(inputValue + " " + selectedState)
+          .draw();
+      });
+    });
+    setTimeout(function () {
+      $("#TableAppointment").DataTable().search("iniciada").draw();
+    }, 1200);
+    ocultarSpinner();
+  } catch (error) {
+    showToast("Error", "Error al obtener las citas.");
+  }
 }
 
 loadCitas();
 
 function renderTable(citas) {
-    citas.sort((a, b) => {
-        const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
-        const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
-        return fechaHoraB - fechaHoraA;
-    });
+  citas.sort((a, b) => {
+    const fechaHoraA = new Date(`${a.fechaCita} ${a.horaCita}`);
+    const fechaHoraB = new Date(`${b.fechaCita} ${b.horaCita}`);
+    return fechaHoraB - fechaHoraA;
+  });
 
-    const tableBody = document.getElementById('viajesTableBody');
-    tableBody.innerHTML = '';
+  const tableBody = document.getElementById("viajesTableBody");
+  tableBody.innerHTML = "";
 
-    citas.forEach(cita => {
-        const row = document.createElement('tr');
+  citas.forEach((cita) => {
+    const row = document.createElement("tr");
 
-        const isDisabled = (cita.estadoCita.toLowerCase() === 'finalizada' || cita.estadoCita.toLowerCase() === 'cancelada');
-        const disabledAttribute = isDisabled ? 'disabled' : '';
+    const isDisabled =
+      cita.estadoCita.toLowerCase() === "finalizada" ||
+      cita.estadoCita.toLowerCase() === "cancelada";
+    const disabledAttribute = isDisabled ? "disabled" : "";
 
-        row.innerHTML = `
+    row.innerHTML = `
             <td class="text-center">${cita.idCita}</td>
             <td class="text-center">${cita.nombreCompletoPaciente}</td>
             <td class="text-center">${cita.fechaCita}</td>
@@ -92,177 +109,191 @@ function renderTable(citas) {
             <td class="text-center">${cita.tipoSeguro}</td>
             <td class="text-center">${cita.estadoCita}</td>
             <td>
-                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(cita)})'>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AcompananteModal" onclick='getAcompanantes(${JSON.stringify(
+                  cita
+                )})'>
                     <i class="bi bi-eye"></i>
                 </button>
             </td>
             <td>
-                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(cita)})' ${disabledAttribute}>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick='editarCita(${JSON.stringify(
+                  cita
+                )})' ${disabledAttribute}>
                     <i class="bi bi-pencil"></i>
                 </button>
             </td>
         `;
-        tableBody.appendChild(row);
-    });
+    tableBody.appendChild(row);
+  });
 }
 
-
 function getAcompanantes(cita) {
-    try {
-        const tableBody = document.getElementById('AcompananteTableBody');
-        tableBody.innerHTML = '';
+  try {
+    const tableBody = document.getElementById("AcompananteTableBody");
+    tableBody.innerHTML = "";
 
-        const row = document.createElement('tr');
+    const row = document.createElement("tr");
 
-        const infoAdicional = [
-            cita.ubicacionOrigen,
-            cita.transladoCita,
-            cita.camilla,
-            cita.diagnostico,
-            cita.especialidad,
-            cita.prioridad,
-            cita.nombreCompletoAcompanante1 || 'No posee.',
-            cita.nombreCompletoAcompanante2 || 'No posee.'
-        ];
+    const infoAdicional = [
+      cita.ubicacionOrigen,
+      cita.transladoCita,
+      cita.camilla,
+      cita.diagnostico,
+      cita.especialidad,
+      cita.prioridad,
+      cita.nombreCompletoAcompanante1 || "No posee.",
+      cita.nombreCompletoAcompanante2 || "No posee.",
+    ];
 
-        infoAdicional.forEach(info => {
-            const cell = document.createElement('td');
-            cell.textContent = info;
-            row.appendChild(cell);
-        });
+    infoAdicional.forEach((info) => {
+      const cell = document.createElement("td");
+      cell.textContent = info;
+      row.appendChild(cell);
+    });
 
-        tableBody.appendChild(row);
-    } catch (error) {
-        showToast("Error", 'Error al obtener los acompañantes.');
-    }
+    tableBody.appendChild(row);
+  } catch (error) {
+    showToast("Error", "Error al obtener los acompañantes.");
+  }
 }
 
 function editarCita(cita) {
-    document.querySelector('#editarIdCita').value = cita.idCita;
-    document.querySelector('#editarNombrePaciente').value = cita.nombreCompletoPaciente;
-    document.querySelector('#editarFechaCita').value = cita.fechaCita;
-    document.querySelector('#editarHora').value = cita.horaCita;
-    document.querySelector('#seleccionar-destino').value = cita.idUbicacionDestino;
-    document.querySelector('#tipoSeguro').value = cita.tipoSeguro;
+  document.querySelector("#editarIdCita").value = cita.idCita;
+  document.querySelector("#editarNombrePaciente").value =
+    cita.nombreCompletoPaciente;
+  document.querySelector("#editarFechaCita").value = cita.fechaCita;
+  document.querySelector("#editarHora").value = cita.horaCita;
+  document.querySelector("#seleccionar-destino").value =
+    cita.idUbicacionDestino;
+  document.querySelector("#tipoSeguro").value = cita.tipoSeguro;
 
-    getEspecialidadesByDestino(cita.idUbicacionDestino, cita.especialidad);
+  getEspecialidadesByDestino(cita.idUbicacionDestino, cita.especialidad);
 
-    document.querySelector('#formEditarCita').addEventListener('submit', function (event) {
-        event.preventDefault();
+  document
+    .querySelector("#formEditarCita")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
 
-        const especialidadSeleccionada = document.querySelector('#especialidad').value;
+      const especialidadSeleccionada =
+        document.querySelector("#especialidad").value;
 
-        if (!especialidadSeleccionada || especialidadSeleccionada === '-- Seleccione una especialidad --') {
-            showToast('Error', 'Debe seleccionar una especialidad antes de guardar los cambios.');
-            return;
-        }
+      if (
+        !especialidadSeleccionada ||
+        especialidadSeleccionada === "-- Seleccione una especialidad --"
+      ) {
+        showToast(
+          "Error",
+          "Debe seleccionar una especialidad antes de guardar los cambios."
+        );
+        return;
+      }
 
-        updateCita(cita.idCita);
+      updateCita(cita.idCita);
     });
 }
 
-
-
 function getRutas() {
-    const selectDestino = document.getElementById('seleccionar-destino');
+  const selectDestino = document.getElementById("seleccionar-destino");
 
-    const token = localStorage.getItem('token');
-    axios.get('https://backend-transporteccss.onrender.com/api/rutaEspecialidad', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+  const token = localStorage.getItem("token");
+  axios
+    .get("http://localhost:18026/api/rutaEspecialidad", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-        .then(response => {
-            const rutas = response.data;
-            rutas.forEach(ruta => {
-                const option = document.createElement('option');
-                option.value = ruta.IdRuta;
-                option.textContent = ruta.Descripcion;
-                selectDestino.appendChild(option);
-            });
-        })
+    .then((response) => {
+      const rutas = response.data;
+      rutas.forEach((ruta) => {
+        const option = document.createElement("option");
+        option.value = ruta.IdRuta;
+        option.textContent = ruta.Descripcion;
+        selectDestino.appendChild(option);
+      });
+    });
 }
 
 getRutas();
 
-function getEspecialidadesByDestino(IdRuta, especialidadSeleccionada = '') {
-    const selectEspecialidad = document.getElementById('especialidad');
-    selectEspecialidad.innerHTML = '';
+function getEspecialidadesByDestino(IdRuta, especialidadSeleccionada = "") {
+  const selectEspecialidad = document.getElementById("especialidad");
+  selectEspecialidad.innerHTML = "";
 
-    const token = localStorage.getItem('token');
-    axios.get(`https://backend-transporteccss.onrender.com/api/rutaEspecialidad/${IdRuta}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+  const token = localStorage.getItem("token");
+  axios
+    .get(`http://localhost:18026/api/rutaEspecialidad/${IdRuta}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-        .then(response => {
-            const especialidades = response.data;
-            if (especialidades.length === 0 || !especialidadSeleccionada) {
-                const defaultOption = document.createElement('option');
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                defaultOption.textContent = '-- Seleccione una especialidad --';
-                selectEspecialidad.appendChild(defaultOption);
-            }
+    .then((response) => {
+      const especialidades = response.data;
+      if (especialidades.length === 0 || !especialidadSeleccionada) {
+        const defaultOption = document.createElement("option");
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = "-- Seleccione una especialidad --";
+        selectEspecialidad.appendChild(defaultOption);
+      }
 
-            especialidades.forEach(especialidad => {
-                const option = document.createElement('option');
-                option.value = especialidad.idEspecialidad;
-                option.textContent = especialidad.Especialidad;
-                if (especialidad.Especialidad === especialidadSeleccionada) {
-                    option.selected = true;
-                }
-                selectEspecialidad.appendChild(option);
-            });
-        })
+      especialidades.forEach((especialidad) => {
+        const option = document.createElement("option");
+        option.value = especialidad.idEspecialidad;
+        option.textContent = especialidad.Especialidad;
+        if (especialidad.Especialidad === especialidadSeleccionada) {
+          option.selected = true;
+        }
+        selectEspecialidad.appendChild(option);
+      });
+    });
 }
 
-
-document.getElementById('seleccionar-destino').addEventListener('change', function () {
+document
+  .getElementById("seleccionar-destino")
+  .addEventListener("change", function () {
     const IdRuta = this.value;
     getEspecialidadesByDestino(IdRuta);
-});
-
-
+  });
 
 async function updateCita(idCita) {
-    const fechaCita = document.querySelector('#editarFechaCita').value;
-    const horaCita = document.querySelector('#editarHora').value;
-    const idUbicacionDestino = document.querySelector('#seleccionar-destino').value;
-    const tipoSeguro = document.querySelector("#tipoSeguro").value;
-    const especialidad = document.getElementById('especialidad').value;
+  const fechaCita = document.querySelector("#editarFechaCita").value;
+  const horaCita = document.querySelector("#editarHora").value;
+  const idUbicacionDestino = document.querySelector(
+    "#seleccionar-destino"
+  ).value;
+  const tipoSeguro = document.querySelector("#tipoSeguro").value;
+  const especialidad = document.getElementById("especialidad").value;
 
-    const updatedCitas = {
-        idUbicacionDestino: idUbicacionDestino,
-        fechaCita: fechaCita,
-        horaCita: horaCita,
-        tipoSeguro: tipoSeguro,
-        idEspecialidad: especialidad
-    };
+  const updatedCitas = {
+    idUbicacionDestino: idUbicacionDestino,
+    fechaCita: fechaCita,
+    horaCita: horaCita,
+    tipoSeguro: tipoSeguro,
+    idEspecialidad: especialidad,
+  };
 
-    try {
-        const token = localStorage.getItem('token');
-        await axios.put(`https://backend-transporteccss.onrender.com/api/cita/${idCita}`, updatedCitas, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+  try {
+    const token = localStorage.getItem("token");
+    await axios.put(`http://localhost:18026/api/cita/${idCita}`, updatedCitas, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-        $('#editarModal').modal('hide');
-        setTimeout(function () {
-            loadContent('appointmentsMade.html', 'mainContent');
-        }, 2500);
-        showToast("¡Éxito!", "Cita actualizada correctamente.");
-    } catch (error) {
-        $('#editarModal').modal('hide');
-        showToast("Error", "Error al actualizar la cita.");
-    }
+    $("#editarModal").modal("hide");
+    setTimeout(function () {
+      loadContent("appointmentsMade.html", "mainContent");
+    }, 2500);
+    showToast("¡Éxito!", "Cita actualizada correctamente.");
+  } catch (error) {
+    $("#editarModal").modal("hide");
+    showToast("Error", "Error al actualizar la cita.");
+  }
 }
 
-
 function ocultarSpinner() {
-    const spinnerContainer = document.getElementById('spinnerContainer');
-    if (spinnerContainer) {
-        spinnerContainer.style.display = 'none';
-    }
+  const spinnerContainer = document.getElementById("spinnerContainer");
+  if (spinnerContainer) {
+    spinnerContainer.style.display = "none";
+  }
 }
